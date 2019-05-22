@@ -2061,9 +2061,14 @@ impl CloudTrailClient {
 impl CloudTrail for CloudTrailClient {
     /// <p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>
     fn add_tags(&self, input: AddTagsRequest) -> RusotoFuture<AddTagsResponse, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.AddTags",
@@ -2092,9 +2097,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: CreateTrailRequest,
     ) -> RusotoFuture<CreateTrailResponse, CreateTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.CreateTrail",
@@ -2124,9 +2134,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: DeleteTrailRequest,
     ) -> RusotoFuture<DeleteTrailResponse, DeleteTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.DeleteTrail",
@@ -2156,9 +2171,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: DescribeTrailsRequest,
     ) -> RusotoFuture<DescribeTrailsResponse, DescribeTrailsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.DescribeTrails",
@@ -2188,9 +2208,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: GetEventSelectorsRequest,
     ) -> RusotoFuture<GetEventSelectorsResponse, GetEventSelectorsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.GetEventSelectors",
@@ -2220,9 +2245,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: GetTrailStatusRequest,
     ) -> RusotoFuture<GetTrailStatusResponse, GetTrailStatusError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.GetTrailStatus",
@@ -2252,9 +2282,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: ListPublicKeysRequest,
     ) -> RusotoFuture<ListPublicKeysResponse, ListPublicKeysError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.ListPublicKeys",
@@ -2281,9 +2316,14 @@ impl CloudTrail for CloudTrailClient {
 
     /// <p>Lists the tags for the trail in the current region.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.ListTags",
@@ -2313,9 +2353,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: LookupEventsRequest,
     ) -> RusotoFuture<LookupEventsResponse, LookupEventsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.LookupEvents",
@@ -2345,9 +2390,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: PutEventSelectorsRequest,
     ) -> RusotoFuture<PutEventSelectorsResponse, PutEventSelectorsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.PutEventSelectors",
@@ -2377,9 +2427,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: RemoveTagsRequest,
     ) -> RusotoFuture<RemoveTagsResponse, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.RemoveTags",
@@ -2409,9 +2464,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: StartLoggingRequest,
     ) -> RusotoFuture<StartLoggingResponse, StartLoggingError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.StartLogging",
@@ -2441,9 +2501,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: StopLoggingRequest,
     ) -> RusotoFuture<StopLoggingResponse, StopLoggingError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.StopLogging",
@@ -2473,9 +2538,14 @@ impl CloudTrail for CloudTrailClient {
         &self,
         input: UpdateTrailRequest,
     ) -> RusotoFuture<UpdateTrailResponse, UpdateTrailError> {
-        let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudtrail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "com.amazonaws.cloudtrail.v20131101.CloudTrail_20131101.UpdateTrail",

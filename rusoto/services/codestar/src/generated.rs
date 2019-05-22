@@ -1667,9 +1667,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: AssociateTeamMemberRequest,
     ) -> RusotoFuture<AssociateTeamMemberResult, AssociateTeamMemberError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.AssociateTeamMember");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1695,9 +1700,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: CreateProjectRequest,
     ) -> RusotoFuture<CreateProjectResult, CreateProjectError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.CreateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1724,9 +1734,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: CreateUserProfileRequest,
     ) -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.CreateUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1753,9 +1768,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DeleteProjectRequest,
     ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.DeleteProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1782,9 +1802,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DeleteUserProfileRequest,
     ) -> RusotoFuture<DeleteUserProfileResult, DeleteUserProfileError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.DeleteUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1811,9 +1836,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DescribeProjectRequest,
     ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.DescribeProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1840,9 +1870,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DescribeUserProfileRequest,
     ) -> RusotoFuture<DescribeUserProfileResult, DescribeUserProfileError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.DescribeUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1868,9 +1903,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: DisassociateTeamMemberRequest,
     ) -> RusotoFuture<DisassociateTeamMemberResult, DisassociateTeamMemberError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.DisassociateTeamMember");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1896,9 +1936,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListProjectsRequest,
     ) -> RusotoFuture<ListProjectsResult, ListProjectsError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.ListProjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1925,9 +1970,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListResourcesRequest,
     ) -> RusotoFuture<ListResourcesResult, ListResourcesError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.ListResources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1954,9 +2004,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListTagsForProjectRequest,
     ) -> RusotoFuture<ListTagsForProjectResult, ListTagsForProjectError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.ListTagsForProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1983,9 +2038,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListTeamMembersRequest,
     ) -> RusotoFuture<ListTeamMembersResult, ListTeamMembersError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.ListTeamMembers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2012,9 +2072,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: ListUserProfilesRequest,
     ) -> RusotoFuture<ListUserProfilesResult, ListUserProfilesError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.ListUserProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2041,9 +2106,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: TagProjectRequest,
     ) -> RusotoFuture<TagProjectResult, TagProjectError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.TagProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2070,9 +2140,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: UntagProjectRequest,
     ) -> RusotoFuture<UntagProjectResult, UntagProjectError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.UntagProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2099,9 +2174,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: UpdateProjectRequest,
     ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.UpdateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2128,9 +2208,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: UpdateTeamMemberRequest,
     ) -> RusotoFuture<UpdateTeamMemberResult, UpdateTeamMemberError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.UpdateTeamMember");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2157,9 +2242,14 @@ impl CodeStar for CodeStarClient {
         &self,
         input: UpdateUserProfileRequest,
     ) -> RusotoFuture<UpdateUserProfileResult, UpdateUserProfileError> {
-        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codestar",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeStar_20170419.UpdateUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

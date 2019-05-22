@@ -96,6 +96,14 @@ impl SignedRequest {
         }
     }
 
+    /// Create a SignedRequest with specified content type
+    pub fn new_with_content_type(method: &str, service: &str, region: &Region, path: &str, content_type: &str) -> SignedRequest {
+        let mut s = SignedRequest::new(method, service, region, path);
+
+        s.set_content_type(content_type.to_owned());
+        s
+    }
+
     /// Sets the value of the "content-type" header.
     pub fn set_content_type(&mut self, content_type: String) {
         self.add_header("content-type", &content_type);

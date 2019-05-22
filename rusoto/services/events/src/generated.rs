@@ -1447,9 +1447,14 @@ impl CloudWatchEventsClient {
 impl CloudWatchEvents for CloudWatchEventsClient {
     /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you are sure the other service is not still using that rule.</p>
     fn delete_rule(&self, input: DeleteRuleRequest) -> RusotoFuture<(), DeleteRuleError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.DeleteRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1470,9 +1475,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
     /// <p>Displays the external AWS accounts that are permitted to write events to your account using your account's event bus, and the associated policy. To enable your account to receive events from other accounts, use <a>PutPermission</a>.</p>
     fn describe_event_bus(&self) -> RusotoFuture<DescribeEventBusResponse, DescribeEventBusError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.DescribeEventBus");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1498,9 +1508,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: DescribeRuleRequest,
     ) -> RusotoFuture<DescribeRuleResponse, DescribeRuleError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.DescribeRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1524,9 +1539,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
     /// <p>Disables the specified rule. A disabled rule won't match any events, and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Allow a short period of time for changes to take effect.</p>
     fn disable_rule(&self, input: DisableRuleRequest) -> RusotoFuture<(), DisableRuleError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.DisableRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1547,9 +1567,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
     /// <p>Enables the specified rule. If the rule does not exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Allow a short period of time for changes to take effect.</p>
     fn enable_rule(&self, input: EnableRuleRequest) -> RusotoFuture<(), EnableRuleError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.EnableRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1573,9 +1598,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: ListRuleNamesByTargetRequest,
     ) -> RusotoFuture<ListRuleNamesByTargetResponse, ListRuleNamesByTargetError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.ListRuleNamesByTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1601,9 +1631,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: ListRulesRequest,
     ) -> RusotoFuture<ListRulesResponse, ListRulesError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.ListRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1630,9 +1665,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: ListTargetsByRuleRequest,
     ) -> RusotoFuture<ListTargetsByRuleResponse, ListTargetsByRuleError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.ListTargetsByRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1659,9 +1699,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: PutEventsRequest,
     ) -> RusotoFuture<PutEventsResponse, PutEventsError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.PutEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1685,9 +1730,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
     /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEvents-CrossAccountEventDelivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>The permission policy on the default event bus cannot exceed 10 KB in size.</p>
     fn put_permission(&self, input: PutPermissionRequest) -> RusotoFuture<(), PutPermissionError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.PutPermission");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1708,9 +1758,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
 
     /// <p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>If you are updating an existing rule, the rule is replaced with what you specify in this <code>PutRule</code> command. If you omit arguments in <code>PutRule</code>, the old values for those arguments are not kept. Instead, they are replaced with null values.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p> <p>In CloudWatch Events, it is possible to create rules that lead to infinite loops, where a rule is fired repeatedly. For example, a rule might detect that ACLs have changed on an S3 bucket, and trigger software to change them to the desired state. If the rule is not written carefully, the subsequent change to the ACLs fires the rule again, creating an infinite loop.</p> <p>To prevent this, write the rules so that the triggered actions do not re-fire the same rule. For example, your rule could fire only if ACLs are found to be in a bad state, instead of after any change. </p> <p>An infinite loop can quickly cause higher than expected charges. We recommend that you use budgeting, which alerts you when charges exceed your specified limit. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html">Managing Your Costs with Budgets</a>.</p>
     fn put_rule(&self, input: PutRuleRequest) -> RusotoFuture<PutRuleResponse, PutRuleError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.PutRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1736,9 +1791,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: PutTargetsRequest,
     ) -> RusotoFuture<PutTargetsResponse, PutTargetsError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.PutTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1765,9 +1825,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: RemovePermissionRequest,
     ) -> RusotoFuture<(), RemovePermissionError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.RemovePermission");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1791,9 +1856,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: RemoveTargetsRequest,
     ) -> RusotoFuture<RemoveTargetsResponse, RemoveTargetsError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.RemoveTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1820,9 +1890,14 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         &self,
         input: TestEventPatternRequest,
     ) -> RusotoFuture<TestEventPatternResponse, TestEventPatternError> {
-        let mut request = SignedRequest::new("POST", "events", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "events",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSEvents.TestEventPattern");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

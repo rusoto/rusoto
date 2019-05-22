@@ -4787,9 +4787,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: AddTagsToResourceMessage,
     ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.AddTagsToResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4816,9 +4821,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: CreateEndpointMessage,
     ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4845,9 +4855,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: CreateEventSubscriptionMessage,
     ) -> RusotoFuture<CreateEventSubscriptionResponse, CreateEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateEventSubscription");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4871,9 +4886,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: CreateReplicationInstanceMessage,
     ) -> RusotoFuture<CreateReplicationInstanceResponse, CreateReplicationInstanceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.CreateReplicationInstance",
@@ -4900,9 +4920,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: CreateReplicationSubnetGroupMessage,
     ) -> RusotoFuture<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.CreateReplicationSubnetGroup",
@@ -4929,9 +4954,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: CreateReplicationTaskMessage,
     ) -> RusotoFuture<CreateReplicationTaskResponse, CreateReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.CreateReplicationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4957,9 +4987,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DeleteCertificateMessage,
     ) -> RusotoFuture<DeleteCertificateResponse, DeleteCertificateError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4986,9 +5021,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DeleteEndpointMessage,
     ) -> RusotoFuture<DeleteEndpointResponse, DeleteEndpointError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5015,9 +5055,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DeleteEventSubscriptionMessage,
     ) -> RusotoFuture<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteEventSubscription");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5041,9 +5086,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DeleteReplicationInstanceMessage,
     ) -> RusotoFuture<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DeleteReplicationInstance",
@@ -5070,9 +5120,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DeleteReplicationSubnetGroupMessage,
     ) -> RusotoFuture<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DeleteReplicationSubnetGroup",
@@ -5099,9 +5154,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DeleteReplicationTaskMessage,
     ) -> RusotoFuture<DeleteReplicationTaskResponse, DeleteReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DeleteReplicationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5126,9 +5186,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
     fn describe_account_attributes(
         &self,
     ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeAccountAttributes",
@@ -5154,9 +5219,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeCertificatesMessage,
     ) -> RusotoFuture<DescribeCertificatesResponse, DescribeCertificatesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeCertificates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5182,9 +5252,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeConnectionsMessage,
     ) -> RusotoFuture<DescribeConnectionsResponse, DescribeConnectionsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeConnections");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5210,9 +5285,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeEndpointTypesMessage,
     ) -> RusotoFuture<DescribeEndpointTypesResponse, DescribeEndpointTypesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEndpointTypes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5238,9 +5318,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeEndpointsMessage,
     ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEndpoints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5267,9 +5352,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeEventCategoriesMessage,
     ) -> RusotoFuture<DescribeEventCategoriesResponse, DescribeEventCategoriesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEventCategories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5293,9 +5383,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeEventSubscriptionsMessage,
     ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeEventSubscriptions",
@@ -5322,9 +5417,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeEventsMessage,
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5354,9 +5454,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         DescribeOrderableReplicationInstancesResponse,
         DescribeOrderableReplicationInstancesError,
     > {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeOrderableReplicationInstances",
@@ -5385,9 +5490,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeRefreshSchemasStatusMessage,
     ) -> RusotoFuture<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeRefreshSchemasStatus",
@@ -5417,9 +5527,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         DescribeReplicationInstanceTaskLogsResponse,
         DescribeReplicationInstanceTaskLogsError,
     > {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationInstanceTaskLogs",
@@ -5448,9 +5563,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeReplicationInstancesMessage,
     ) -> RusotoFuture<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationInstances",
@@ -5478,9 +5598,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         input: DescribeReplicationSubnetGroupsMessage,
     ) -> RusotoFuture<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>
     {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationSubnetGroups",
@@ -5512,9 +5637,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         DescribeReplicationTaskAssessmentResultsResponse,
         DescribeReplicationTaskAssessmentResultsError,
     > {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationTaskAssessmentResults",
@@ -5541,9 +5671,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeReplicationTasksMessage,
     ) -> RusotoFuture<DescribeReplicationTasksResponse, DescribeReplicationTasksError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.DescribeReplicationTasks",
@@ -5570,9 +5705,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeSchemasMessage,
     ) -> RusotoFuture<DescribeSchemasResponse, DescribeSchemasError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeSchemas");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5599,9 +5739,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: DescribeTableStatisticsMessage,
     ) -> RusotoFuture<DescribeTableStatisticsResponse, DescribeTableStatisticsError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.DescribeTableStatistics");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5625,9 +5770,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: ImportCertificateMessage,
     ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ImportCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5654,9 +5804,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: ListTagsForResourceMessage,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5682,9 +5837,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: ModifyEndpointMessage,
     ) -> RusotoFuture<ModifyEndpointResponse, ModifyEndpointError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5711,9 +5871,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: ModifyEventSubscriptionMessage,
     ) -> RusotoFuture<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyEventSubscription");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5737,9 +5902,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: ModifyReplicationInstanceMessage,
     ) -> RusotoFuture<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.ModifyReplicationInstance",
@@ -5766,9 +5936,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: ModifyReplicationSubnetGroupMessage,
     ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.ModifyReplicationSubnetGroup",
@@ -5795,9 +5970,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: ModifyReplicationTaskMessage,
     ) -> RusotoFuture<ModifyReplicationTaskResponse, ModifyReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ModifyReplicationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5823,9 +6003,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: RebootReplicationInstanceMessage,
     ) -> RusotoFuture<RebootReplicationInstanceResponse, RebootReplicationInstanceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.RebootReplicationInstance",
@@ -5852,9 +6037,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: RefreshSchemasMessage,
     ) -> RusotoFuture<RefreshSchemasResponse, RefreshSchemasError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.RefreshSchemas");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5881,9 +6071,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: ReloadTablesMessage,
     ) -> RusotoFuture<ReloadTablesResponse, ReloadTablesError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.ReloadTables");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5910,9 +6105,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: RemoveTagsFromResourceMessage,
     ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.RemoveTagsFromResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5938,9 +6138,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: StartReplicationTaskMessage,
     ) -> RusotoFuture<StartReplicationTaskResponse, StartReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.StartReplicationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5967,9 +6172,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         input: StartReplicationTaskAssessmentMessage,
     ) -> RusotoFuture<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>
     {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonDMSv20160101.StartReplicationTaskAssessment",
@@ -5996,9 +6206,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: StopReplicationTaskMessage,
     ) -> RusotoFuture<StopReplicationTaskResponse, StopReplicationTaskError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.StopReplicationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6024,9 +6239,14 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         &self,
         input: TestConnectionMessage,
     ) -> RusotoFuture<TestConnectionResponse, TestConnectionError> {
-        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDMSv20160101.TestConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

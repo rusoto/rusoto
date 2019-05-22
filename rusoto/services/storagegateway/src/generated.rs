@@ -6042,9 +6042,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ActivateGatewayInput,
     ) -> RusotoFuture<ActivateGatewayOutput, ActivateGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ActivateGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6068,9 +6073,14 @@ impl StorageGateway for StorageGatewayClient {
 
     /// <p>Configures one or more gateway local disks as cache for a gateway. This operation is only supported in the cached volume, tape and file gateway type (see <a href="http://docs.aws.amazon.com/storagegateway/latest/userguide/StorageGatewayConcepts.html">Storage Gateway Concepts</a>).</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add cache, and one or more disk IDs that you want to configure as cache.</p>
     fn add_cache(&self, input: AddCacheInput) -> RusotoFuture<AddCacheOutput, AddCacheError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddCache");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6096,9 +6106,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: AddTagsToResourceInput,
     ) -> RusotoFuture<AddTagsToResourceOutput, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddTagsToResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6125,9 +6140,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: AddUploadBufferInput,
     ) -> RusotoFuture<AddUploadBufferOutput, AddUploadBufferError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddUploadBuffer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6154,9 +6174,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: AddWorkingStorageInput,
     ) -> RusotoFuture<AddWorkingStorageOutput, AddWorkingStorageError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AddWorkingStorage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6183,9 +6208,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: AttachVolumeInput,
     ) -> RusotoFuture<AttachVolumeOutput, AttachVolumeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.AttachVolume");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6212,9 +6242,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CancelArchivalInput,
     ) -> RusotoFuture<CancelArchivalOutput, CancelArchivalError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CancelArchival");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6241,9 +6276,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CancelRetrievalInput,
     ) -> RusotoFuture<CancelRetrievalOutput, CancelRetrievalError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CancelRetrieval");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6270,9 +6310,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CreateCachediSCSIVolumeInput,
     ) -> RusotoFuture<CreateCachediSCSIVolumeOutput, CreateCachediSCSIVolumeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.CreateCachediSCSIVolume",
@@ -6299,9 +6344,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CreateNFSFileShareInput,
     ) -> RusotoFuture<CreateNFSFileShareOutput, CreateNFSFileShareError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateNFSFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6328,9 +6378,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CreateSMBFileShareInput,
     ) -> RusotoFuture<CreateSMBFileShareOutput, CreateSMBFileShareError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateSMBFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6357,9 +6412,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CreateSnapshotInput,
     ) -> RusotoFuture<CreateSnapshotOutput, CreateSnapshotError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6389,9 +6449,14 @@ impl StorageGateway for StorageGatewayClient {
         CreateSnapshotFromVolumeRecoveryPointOutput,
         CreateSnapshotFromVolumeRecoveryPointError,
     > {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.CreateSnapshotFromVolumeRecoveryPoint",
@@ -6420,9 +6485,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CreateStorediSCSIVolumeInput,
     ) -> RusotoFuture<CreateStorediSCSIVolumeOutput, CreateStorediSCSIVolumeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.CreateStorediSCSIVolume",
@@ -6449,9 +6519,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CreateTapeWithBarcodeInput,
     ) -> RusotoFuture<CreateTapeWithBarcodeOutput, CreateTapeWithBarcodeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.CreateTapeWithBarcode",
@@ -6480,9 +6555,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: CreateTapesInput,
     ) -> RusotoFuture<CreateTapesOutput, CreateTapesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.CreateTapes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6509,9 +6589,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DeleteBandwidthRateLimitInput,
     ) -> RusotoFuture<DeleteBandwidthRateLimitOutput, DeleteBandwidthRateLimitError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DeleteBandwidthRateLimit",
@@ -6538,9 +6623,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DeleteChapCredentialsInput,
     ) -> RusotoFuture<DeleteChapCredentialsOutput, DeleteChapCredentialsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DeleteChapCredentials",
@@ -6569,9 +6659,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DeleteFileShareInput,
     ) -> RusotoFuture<DeleteFileShareOutput, DeleteFileShareError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6598,9 +6693,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DeleteGatewayInput,
     ) -> RusotoFuture<DeleteGatewayOutput, DeleteGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6627,9 +6727,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DeleteSnapshotScheduleInput,
     ) -> RusotoFuture<DeleteSnapshotScheduleOutput, DeleteSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DeleteSnapshotSchedule",
@@ -6658,9 +6763,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DeleteTapeInput,
     ) -> RusotoFuture<DeleteTapeOutput, DeleteTapeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteTape");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6687,9 +6797,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DeleteTapeArchiveInput,
     ) -> RusotoFuture<DeleteTapeArchiveOutput, DeleteTapeArchiveError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteTapeArchive");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6716,9 +6831,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DeleteVolumeInput,
     ) -> RusotoFuture<DeleteVolumeOutput, DeleteVolumeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DeleteVolume");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6745,9 +6865,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeBandwidthRateLimitInput,
     ) -> RusotoFuture<DescribeBandwidthRateLimitOutput, DescribeBandwidthRateLimitError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeBandwidthRateLimit",
@@ -6774,9 +6899,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeCacheInput,
     ) -> RusotoFuture<DescribeCacheOutput, DescribeCacheError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeCache");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6803,9 +6933,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeCachediSCSIVolumesInput,
     ) -> RusotoFuture<DescribeCachediSCSIVolumesOutput, DescribeCachediSCSIVolumesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeCachediSCSIVolumes",
@@ -6832,9 +6967,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeChapCredentialsInput,
     ) -> RusotoFuture<DescribeChapCredentialsOutput, DescribeChapCredentialsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeChapCredentials",
@@ -6861,9 +7001,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeGatewayInformationInput,
     ) -> RusotoFuture<DescribeGatewayInformationOutput, DescribeGatewayInformationError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeGatewayInformation",
@@ -6890,9 +7035,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeMaintenanceStartTimeInput,
     ) -> RusotoFuture<DescribeMaintenanceStartTimeOutput, DescribeMaintenanceStartTimeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeMaintenanceStartTime",
@@ -6919,9 +7069,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeNFSFileSharesInput,
     ) -> RusotoFuture<DescribeNFSFileSharesOutput, DescribeNFSFileSharesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeNFSFileShares",
@@ -6950,9 +7105,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeSMBFileSharesInput,
     ) -> RusotoFuture<DescribeSMBFileSharesOutput, DescribeSMBFileSharesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeSMBFileShares",
@@ -6981,9 +7141,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeSMBSettingsInput,
     ) -> RusotoFuture<DescribeSMBSettingsOutput, DescribeSMBSettingsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeSMBSettings",
@@ -7012,9 +7177,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeSnapshotScheduleInput,
     ) -> RusotoFuture<DescribeSnapshotScheduleOutput, DescribeSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeSnapshotSchedule",
@@ -7041,9 +7211,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeStorediSCSIVolumesInput,
     ) -> RusotoFuture<DescribeStorediSCSIVolumesOutput, DescribeStorediSCSIVolumesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeStorediSCSIVolumes",
@@ -7070,9 +7245,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeTapeArchivesInput,
     ) -> RusotoFuture<DescribeTapeArchivesOutput, DescribeTapeArchivesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeTapeArchives",
@@ -7101,9 +7281,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeTapeRecoveryPointsInput,
     ) -> RusotoFuture<DescribeTapeRecoveryPointsOutput, DescribeTapeRecoveryPointsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeTapeRecoveryPoints",
@@ -7130,9 +7315,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeTapesInput,
     ) -> RusotoFuture<DescribeTapesOutput, DescribeTapesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeTapes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7159,9 +7349,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeUploadBufferInput,
     ) -> RusotoFuture<DescribeUploadBufferOutput, DescribeUploadBufferError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeUploadBuffer",
@@ -7190,9 +7385,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeVTLDevicesInput,
     ) -> RusotoFuture<DescribeVTLDevicesOutput, DescribeVTLDevicesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DescribeVTLDevices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7219,9 +7419,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DescribeWorkingStorageInput,
     ) -> RusotoFuture<DescribeWorkingStorageOutput, DescribeWorkingStorageError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.DescribeWorkingStorage",
@@ -7250,9 +7455,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DetachVolumeInput,
     ) -> RusotoFuture<DetachVolumeOutput, DetachVolumeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DetachVolume");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7279,9 +7489,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: DisableGatewayInput,
     ) -> RusotoFuture<DisableGatewayOutput, DisableGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.DisableGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7308,9 +7523,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: JoinDomainInput,
     ) -> RusotoFuture<JoinDomainOutput, JoinDomainError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.JoinDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7337,9 +7557,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ListFileSharesInput,
     ) -> RusotoFuture<ListFileSharesOutput, ListFileSharesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListFileShares");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7366,9 +7591,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ListGatewaysInput,
     ) -> RusotoFuture<ListGatewaysOutput, ListGatewaysError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListGateways");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7395,9 +7625,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ListLocalDisksInput,
     ) -> RusotoFuture<ListLocalDisksOutput, ListLocalDisksError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListLocalDisks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7424,9 +7659,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ListTagsForResourceInput,
     ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.ListTagsForResource",
@@ -7452,9 +7692,14 @@ impl StorageGateway for StorageGatewayClient {
 
     /// <p>Lists virtual tapes in your virtual tape library (VTL) and your virtual tape shelf (VTS). You specify the tapes to list by specifying one or more tape Amazon Resource Names (ARNs). If you don't specify a tape ARN, the operation lists all virtual tapes in both your VTL and VTS.</p> <p>This operation supports pagination. By default, the operation returns a maximum of up to 100 tapes. You can optionally specify the <code>Limit</code> parameter in the body to limit the number of tapes in the response. If the number of tapes returned in the response is truncated, the response includes a <code>Marker</code> element that you can use in your subsequent request to retrieve the next set of tapes. This operation is only supported in the tape gateway type.</p>
     fn list_tapes(&self, input: ListTapesInput) -> RusotoFuture<ListTapesOutput, ListTapesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListTapes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7480,9 +7725,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ListVolumeInitiatorsInput,
     ) -> RusotoFuture<ListVolumeInitiatorsOutput, ListVolumeInitiatorsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.ListVolumeInitiators",
@@ -7511,9 +7761,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ListVolumeRecoveryPointsInput,
     ) -> RusotoFuture<ListVolumeRecoveryPointsOutput, ListVolumeRecoveryPointsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.ListVolumeRecoveryPoints",
@@ -7540,9 +7795,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ListVolumesInput,
     ) -> RusotoFuture<ListVolumesOutput, ListVolumesError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ListVolumes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7569,9 +7829,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: NotifyWhenUploadedInput,
     ) -> RusotoFuture<NotifyWhenUploadedOutput, NotifyWhenUploadedError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.NotifyWhenUploaded");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7598,9 +7863,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: RefreshCacheInput,
     ) -> RusotoFuture<RefreshCacheOutput, RefreshCacheError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.RefreshCache");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7627,9 +7897,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: RemoveTagsFromResourceInput,
     ) -> RusotoFuture<RemoveTagsFromResourceOutput, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.RemoveTagsFromResource",
@@ -7658,9 +7933,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ResetCacheInput,
     ) -> RusotoFuture<ResetCacheOutput, ResetCacheError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ResetCache");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7687,9 +7967,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: RetrieveTapeArchiveInput,
     ) -> RusotoFuture<RetrieveTapeArchiveOutput, RetrieveTapeArchiveError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.RetrieveTapeArchive",
@@ -7718,9 +8003,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: RetrieveTapeRecoveryPointInput,
     ) -> RusotoFuture<RetrieveTapeRecoveryPointOutput, RetrieveTapeRecoveryPointError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.RetrieveTapeRecoveryPoint",
@@ -7747,9 +8037,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: SetLocalConsolePasswordInput,
     ) -> RusotoFuture<SetLocalConsolePasswordOutput, SetLocalConsolePasswordError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.SetLocalConsolePassword",
@@ -7776,9 +8071,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: SetSMBGuestPasswordInput,
     ) -> RusotoFuture<SetSMBGuestPasswordOutput, SetSMBGuestPasswordError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.SetSMBGuestPassword",
@@ -7807,9 +8107,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: ShutdownGatewayInput,
     ) -> RusotoFuture<ShutdownGatewayOutput, ShutdownGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.ShutdownGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7836,9 +8141,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: StartGatewayInput,
     ) -> RusotoFuture<StartGatewayOutput, StartGatewayError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.StartGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7865,9 +8175,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateBandwidthRateLimitInput,
     ) -> RusotoFuture<UpdateBandwidthRateLimitOutput, UpdateBandwidthRateLimitError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.UpdateBandwidthRateLimit",
@@ -7894,9 +8209,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateChapCredentialsInput,
     ) -> RusotoFuture<UpdateChapCredentialsOutput, UpdateChapCredentialsError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.UpdateChapCredentials",
@@ -7925,9 +8245,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateGatewayInformationInput,
     ) -> RusotoFuture<UpdateGatewayInformationOutput, UpdateGatewayInformationError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.UpdateGatewayInformation",
@@ -7954,9 +8279,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateGatewaySoftwareNowInput,
     ) -> RusotoFuture<UpdateGatewaySoftwareNowOutput, UpdateGatewaySoftwareNowError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.UpdateGatewaySoftwareNow",
@@ -7983,9 +8313,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateMaintenanceStartTimeInput,
     ) -> RusotoFuture<UpdateMaintenanceStartTimeOutput, UpdateMaintenanceStartTimeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.UpdateMaintenanceStartTime",
@@ -8012,9 +8347,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateNFSFileShareInput,
     ) -> RusotoFuture<UpdateNFSFileShareOutput, UpdateNFSFileShareError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.UpdateNFSFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8041,9 +8381,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateSMBFileShareInput,
     ) -> RusotoFuture<UpdateSMBFileShareOutput, UpdateSMBFileShareError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StorageGateway_20130630.UpdateSMBFileShare");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8070,9 +8415,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateSnapshotScheduleInput,
     ) -> RusotoFuture<UpdateSnapshotScheduleOutput, UpdateSnapshotScheduleError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.UpdateSnapshotSchedule",
@@ -8101,9 +8451,14 @@ impl StorageGateway for StorageGatewayClient {
         &self,
         input: UpdateVTLDeviceTypeInput,
     ) -> RusotoFuture<UpdateVTLDeviceTypeOutput, UpdateVTLDeviceTypeError> {
-        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "storagegateway",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StorageGateway_20130630.UpdateVTLDeviceType",

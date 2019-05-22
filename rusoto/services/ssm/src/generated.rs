@@ -13846,9 +13846,14 @@ impl Ssm for SsmClient {
         &self,
         input: AddTagsToResourceRequest,
     ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.AddTagsToResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13875,9 +13880,14 @@ impl Ssm for SsmClient {
         &self,
         input: CancelCommandRequest,
     ) -> RusotoFuture<CancelCommandResult, CancelCommandError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CancelCommand");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13905,9 +13915,14 @@ impl Ssm for SsmClient {
         input: CancelMaintenanceWindowExecutionRequest,
     ) -> RusotoFuture<CancelMaintenanceWindowExecutionResult, CancelMaintenanceWindowExecutionError>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CancelMaintenanceWindowExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13933,9 +13948,14 @@ impl Ssm for SsmClient {
         &self,
         input: CreateActivationRequest,
     ) -> RusotoFuture<CreateActivationResult, CreateActivationError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateActivation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13962,9 +13982,14 @@ impl Ssm for SsmClient {
         &self,
         input: CreateAssociationRequest,
     ) -> RusotoFuture<CreateAssociationResult, CreateAssociationError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateAssociation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13991,9 +14016,14 @@ impl Ssm for SsmClient {
         &self,
         input: CreateAssociationBatchRequest,
     ) -> RusotoFuture<CreateAssociationBatchResult, CreateAssociationBatchError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateAssociationBatch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14019,9 +14049,14 @@ impl Ssm for SsmClient {
         &self,
         input: CreateDocumentRequest,
     ) -> RusotoFuture<CreateDocumentResult, CreateDocumentError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14048,9 +14083,14 @@ impl Ssm for SsmClient {
         &self,
         input: CreateMaintenanceWindowRequest,
     ) -> RusotoFuture<CreateMaintenanceWindowResult, CreateMaintenanceWindowError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateMaintenanceWindow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14074,9 +14114,14 @@ impl Ssm for SsmClient {
         &self,
         input: CreatePatchBaselineRequest,
     ) -> RusotoFuture<CreatePatchBaselineResult, CreatePatchBaselineError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreatePatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14102,9 +14147,14 @@ impl Ssm for SsmClient {
         &self,
         input: CreateResourceDataSyncRequest,
     ) -> RusotoFuture<CreateResourceDataSyncResult, CreateResourceDataSyncError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.CreateResourceDataSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14130,9 +14180,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteActivationRequest,
     ) -> RusotoFuture<DeleteActivationResult, DeleteActivationError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteActivation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14159,9 +14214,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteAssociationRequest,
     ) -> RusotoFuture<DeleteAssociationResult, DeleteAssociationError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteAssociation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14188,9 +14248,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteDocumentRequest,
     ) -> RusotoFuture<DeleteDocumentResult, DeleteDocumentError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14217,9 +14282,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteInventoryRequest,
     ) -> RusotoFuture<DeleteInventoryResult, DeleteInventoryError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteInventory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14246,9 +14316,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteMaintenanceWindowRequest,
     ) -> RusotoFuture<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteMaintenanceWindow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14272,9 +14347,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteParameterRequest,
     ) -> RusotoFuture<DeleteParameterResult, DeleteParameterError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14301,9 +14381,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteParametersRequest,
     ) -> RusotoFuture<DeleteParametersResult, DeleteParametersError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteParameters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14330,9 +14415,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeletePatchBaselineRequest,
     ) -> RusotoFuture<DeletePatchBaselineResult, DeletePatchBaselineError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeletePatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14358,9 +14448,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeleteResourceDataSyncRequest,
     ) -> RusotoFuture<DeleteResourceDataSyncResult, DeleteResourceDataSyncError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeleteResourceDataSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14386,9 +14481,14 @@ impl Ssm for SsmClient {
         &self,
         input: DeregisterManagedInstanceRequest,
     ) -> RusotoFuture<DeregisterManagedInstanceResult, DeregisterManagedInstanceError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DeregisterManagedInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14415,9 +14515,14 @@ impl Ssm for SsmClient {
         DeregisterPatchBaselineForPatchGroupResult,
         DeregisterPatchBaselineForPatchGroupError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DeregisterPatchBaselineForPatchGroup",
@@ -14449,9 +14554,14 @@ impl Ssm for SsmClient {
         DeregisterTargetFromMaintenanceWindowResult,
         DeregisterTargetFromMaintenanceWindowError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DeregisterTargetFromMaintenanceWindow",
@@ -14483,9 +14593,14 @@ impl Ssm for SsmClient {
         DeregisterTaskFromMaintenanceWindowResult,
         DeregisterTaskFromMaintenanceWindowError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DeregisterTaskFromMaintenanceWindow",
@@ -14514,9 +14629,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeActivationsRequest,
     ) -> RusotoFuture<DescribeActivationsResult, DescribeActivationsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeActivations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14542,9 +14662,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeAssociationRequest,
     ) -> RusotoFuture<DescribeAssociationResult, DescribeAssociationError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAssociation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14573,9 +14698,14 @@ impl Ssm for SsmClient {
         DescribeAssociationExecutionTargetsResult,
         DescribeAssociationExecutionTargetsError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeAssociationExecutionTargets",
@@ -14604,9 +14734,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeAssociationExecutionsRequest,
     ) -> RusotoFuture<DescribeAssociationExecutionsResult, DescribeAssociationExecutionsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAssociationExecutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14630,9 +14765,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeAutomationExecutionsRequest,
     ) -> RusotoFuture<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAutomationExecutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14657,9 +14797,14 @@ impl Ssm for SsmClient {
         input: DescribeAutomationStepExecutionsRequest,
     ) -> RusotoFuture<DescribeAutomationStepExecutionsResult, DescribeAutomationStepExecutionsError>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAutomationStepExecutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14685,9 +14830,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeAvailablePatchesRequest,
     ) -> RusotoFuture<DescribeAvailablePatchesResult, DescribeAvailablePatchesError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeAvailablePatches");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14711,9 +14861,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeDocumentRequest,
     ) -> RusotoFuture<DescribeDocumentResult, DescribeDocumentError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14740,9 +14895,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeDocumentPermissionRequest,
     ) -> RusotoFuture<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeDocumentPermission");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14769,9 +14929,14 @@ impl Ssm for SsmClient {
         DescribeEffectiveInstanceAssociationsResult,
         DescribeEffectiveInstanceAssociationsError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeEffectiveInstanceAssociations",
@@ -14803,9 +14968,14 @@ impl Ssm for SsmClient {
         DescribeEffectivePatchesForPatchBaselineResult,
         DescribeEffectivePatchesForPatchBaselineError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeEffectivePatchesForPatchBaseline",
@@ -14835,9 +15005,14 @@ impl Ssm for SsmClient {
         DescribeInstanceAssociationsStatusResult,
         DescribeInstanceAssociationsStatusError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeInstanceAssociationsStatus",
@@ -14866,9 +15041,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeInstanceInformationRequest,
     ) -> RusotoFuture<DescribeInstanceInformationResult, DescribeInstanceInformationError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstanceInformation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14892,9 +15072,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeInstancePatchStatesRequest,
     ) -> RusotoFuture<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstancePatchStates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14921,9 +15106,14 @@ impl Ssm for SsmClient {
         DescribeInstancePatchStatesForPatchGroupResult,
         DescribeInstancePatchStatesForPatchGroupError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeInstancePatchStatesForPatchGroup",
@@ -14950,9 +15140,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeInstancePatchesRequest,
     ) -> RusotoFuture<DescribeInstancePatchesResult, DescribeInstancePatchesError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeInstancePatches");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14976,9 +15171,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeInventoryDeletionsRequest,
     ) -> RusotoFuture<DescribeInventoryDeletionsResult, DescribeInventoryDeletionsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeInventoryDeletions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15005,9 +15205,14 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowExecutionTaskInvocationsResult,
         DescribeMaintenanceWindowExecutionTaskInvocationsError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutionTaskInvocations",
@@ -15036,9 +15241,14 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowExecutionTasksResult,
         DescribeMaintenanceWindowExecutionTasksError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutionTasks",
@@ -15070,9 +15280,14 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowExecutionsResult,
         DescribeMaintenanceWindowExecutionsError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowExecutions",
@@ -15102,9 +15317,14 @@ impl Ssm for SsmClient {
         input: DescribeMaintenanceWindowScheduleRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowScheduleResult, DescribeMaintenanceWindowScheduleError>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowSchedule",
@@ -15134,9 +15354,14 @@ impl Ssm for SsmClient {
         input: DescribeMaintenanceWindowTargetsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindowTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15163,9 +15388,14 @@ impl Ssm for SsmClient {
         input: DescribeMaintenanceWindowTasksRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindowTasks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15189,9 +15419,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeMaintenanceWindowsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeMaintenanceWindows");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15218,9 +15453,14 @@ impl Ssm for SsmClient {
         DescribeMaintenanceWindowsForTargetResult,
         DescribeMaintenanceWindowsForTargetError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.DescribeMaintenanceWindowsForTarget",
@@ -15249,9 +15489,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeParametersRequest,
     ) -> RusotoFuture<DescribeParametersResult, DescribeParametersError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeParameters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15278,9 +15523,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribePatchBaselinesRequest,
     ) -> RusotoFuture<DescribePatchBaselinesResult, DescribePatchBaselinesError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchBaselines");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15306,9 +15556,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribePatchGroupStateRequest,
     ) -> RusotoFuture<DescribePatchGroupStateResult, DescribePatchGroupStateError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchGroupState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15332,9 +15587,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribePatchGroupsRequest,
     ) -> RusotoFuture<DescribePatchGroupsResult, DescribePatchGroupsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribePatchGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15360,9 +15620,14 @@ impl Ssm for SsmClient {
         &self,
         input: DescribeSessionsRequest,
     ) -> RusotoFuture<DescribeSessionsResponse, DescribeSessionsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.DescribeSessions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15389,9 +15654,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetAutomationExecutionRequest,
     ) -> RusotoFuture<GetAutomationExecutionResult, GetAutomationExecutionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetAutomationExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15417,9 +15687,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetCommandInvocationRequest,
     ) -> RusotoFuture<GetCommandInvocationResult, GetCommandInvocationError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetCommandInvocation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15445,9 +15720,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetConnectionStatusRequest,
     ) -> RusotoFuture<GetConnectionStatusResponse, GetConnectionStatusError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetConnectionStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15473,9 +15753,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetDefaultPatchBaselineRequest,
     ) -> RusotoFuture<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetDefaultPatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15502,9 +15787,14 @@ impl Ssm for SsmClient {
         GetDeployablePatchSnapshotForInstanceResult,
         GetDeployablePatchSnapshotForInstanceError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.GetDeployablePatchSnapshotForInstance",
@@ -15533,9 +15823,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetDocumentRequest,
     ) -> RusotoFuture<GetDocumentResult, GetDocumentError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15562,9 +15857,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetInventoryRequest,
     ) -> RusotoFuture<GetInventoryResult, GetInventoryError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetInventory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15591,9 +15891,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetInventorySchemaRequest,
     ) -> RusotoFuture<GetInventorySchemaResult, GetInventorySchemaError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetInventorySchema");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15620,9 +15925,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetMaintenanceWindowRequest,
     ) -> RusotoFuture<GetMaintenanceWindowResult, GetMaintenanceWindowError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15648,9 +15958,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetMaintenanceWindowExecutionRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindowExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15675,9 +15990,14 @@ impl Ssm for SsmClient {
         input: GetMaintenanceWindowExecutionTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.GetMaintenanceWindowExecutionTask",
@@ -15709,9 +16029,14 @@ impl Ssm for SsmClient {
         GetMaintenanceWindowExecutionTaskInvocationResult,
         GetMaintenanceWindowExecutionTaskInvocationError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.GetMaintenanceWindowExecutionTaskInvocation",
@@ -15738,9 +16063,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetMaintenanceWindowTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15764,9 +16094,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetParameterRequest,
     ) -> RusotoFuture<GetParameterResult, GetParameterError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15793,9 +16128,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetParameterHistoryRequest,
     ) -> RusotoFuture<GetParameterHistoryResult, GetParameterHistoryError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetParameterHistory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15821,9 +16161,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetParametersRequest,
     ) -> RusotoFuture<GetParametersResult, GetParametersError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetParameters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15850,9 +16195,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetParametersByPathRequest,
     ) -> RusotoFuture<GetParametersByPathResult, GetParametersByPathError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetParametersByPath");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15878,9 +16228,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetPatchBaselineRequest,
     ) -> RusotoFuture<GetPatchBaselineResult, GetPatchBaselineError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetPatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15907,9 +16262,14 @@ impl Ssm for SsmClient {
         &self,
         input: GetPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.GetPatchBaselineForPatchGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15933,9 +16293,14 @@ impl Ssm for SsmClient {
         &self,
         input: LabelParameterVersionRequest,
     ) -> RusotoFuture<LabelParameterVersionResult, LabelParameterVersionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.LabelParameterVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15961,9 +16326,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListAssociationVersionsRequest,
     ) -> RusotoFuture<ListAssociationVersionsResult, ListAssociationVersionsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListAssociationVersions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -15987,9 +16357,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListAssociationsRequest,
     ) -> RusotoFuture<ListAssociationsResult, ListAssociationsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListAssociations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16016,9 +16391,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListCommandInvocationsRequest,
     ) -> RusotoFuture<ListCommandInvocationsResult, ListCommandInvocationsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListCommandInvocations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16044,9 +16424,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListCommandsRequest,
     ) -> RusotoFuture<ListCommandsResult, ListCommandsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListCommands");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16073,9 +16458,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListComplianceItemsRequest,
     ) -> RusotoFuture<ListComplianceItemsResult, ListComplianceItemsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListComplianceItems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16101,9 +16491,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListComplianceSummariesRequest,
     ) -> RusotoFuture<ListComplianceSummariesResult, ListComplianceSummariesError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListComplianceSummaries");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16127,9 +16522,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListDocumentVersionsRequest,
     ) -> RusotoFuture<ListDocumentVersionsResult, ListDocumentVersionsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListDocumentVersions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16155,9 +16555,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListDocumentsRequest,
     ) -> RusotoFuture<ListDocumentsResult, ListDocumentsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListDocuments");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16184,9 +16589,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListInventoryEntriesRequest,
     ) -> RusotoFuture<ListInventoryEntriesResult, ListInventoryEntriesError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListInventoryEntries");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16213,9 +16623,14 @@ impl Ssm for SsmClient {
         input: ListResourceComplianceSummariesRequest,
     ) -> RusotoFuture<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListResourceComplianceSummaries");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16241,9 +16656,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListResourceDataSyncRequest,
     ) -> RusotoFuture<ListResourceDataSyncResult, ListResourceDataSyncError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListResourceDataSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16269,9 +16689,14 @@ impl Ssm for SsmClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16297,9 +16722,14 @@ impl Ssm for SsmClient {
         &self,
         input: ModifyDocumentPermissionRequest,
     ) -> RusotoFuture<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ModifyDocumentPermission");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16323,9 +16753,14 @@ impl Ssm for SsmClient {
         &self,
         input: PutComplianceItemsRequest,
     ) -> RusotoFuture<PutComplianceItemsResult, PutComplianceItemsError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.PutComplianceItems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16352,9 +16787,14 @@ impl Ssm for SsmClient {
         &self,
         input: PutInventoryRequest,
     ) -> RusotoFuture<PutInventoryResult, PutInventoryError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.PutInventory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16381,9 +16821,14 @@ impl Ssm for SsmClient {
         &self,
         input: PutParameterRequest,
     ) -> RusotoFuture<PutParameterResult, PutParameterError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.PutParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16410,9 +16855,14 @@ impl Ssm for SsmClient {
         &self,
         input: RegisterDefaultPatchBaselineRequest,
     ) -> RusotoFuture<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.RegisterDefaultPatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16439,9 +16889,14 @@ impl Ssm for SsmClient {
         RegisterPatchBaselineForPatchGroupResult,
         RegisterPatchBaselineForPatchGroupError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.RegisterPatchBaselineForPatchGroup",
@@ -16473,9 +16928,14 @@ impl Ssm for SsmClient {
         RegisterTargetWithMaintenanceWindowResult,
         RegisterTargetWithMaintenanceWindowError,
     > {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.RegisterTargetWithMaintenanceWindow",
@@ -16505,9 +16965,14 @@ impl Ssm for SsmClient {
         input: RegisterTaskWithMaintenanceWindowRequest,
     ) -> RusotoFuture<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>
     {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonSSM.RegisterTaskWithMaintenanceWindow",
@@ -16536,9 +17001,14 @@ impl Ssm for SsmClient {
         &self,
         input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.RemoveTagsFromResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16564,9 +17034,14 @@ impl Ssm for SsmClient {
         &self,
         input: ResumeSessionRequest,
     ) -> RusotoFuture<ResumeSessionResponse, ResumeSessionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.ResumeSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16593,9 +17068,14 @@ impl Ssm for SsmClient {
         &self,
         input: SendAutomationSignalRequest,
     ) -> RusotoFuture<SendAutomationSignalResult, SendAutomationSignalError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.SendAutomationSignal");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16621,9 +17101,14 @@ impl Ssm for SsmClient {
         &self,
         input: SendCommandRequest,
     ) -> RusotoFuture<SendCommandResult, SendCommandError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.SendCommand");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16650,9 +17135,14 @@ impl Ssm for SsmClient {
         &self,
         input: StartAssociationsOnceRequest,
     ) -> RusotoFuture<StartAssociationsOnceResult, StartAssociationsOnceError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.StartAssociationsOnce");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16678,9 +17168,14 @@ impl Ssm for SsmClient {
         &self,
         input: StartAutomationExecutionRequest,
     ) -> RusotoFuture<StartAutomationExecutionResult, StartAutomationExecutionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.StartAutomationExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16704,9 +17199,14 @@ impl Ssm for SsmClient {
         &self,
         input: StartSessionRequest,
     ) -> RusotoFuture<StartSessionResponse, StartSessionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.StartSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16733,9 +17233,14 @@ impl Ssm for SsmClient {
         &self,
         input: StopAutomationExecutionRequest,
     ) -> RusotoFuture<StopAutomationExecutionResult, StopAutomationExecutionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.StopAutomationExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16759,9 +17264,14 @@ impl Ssm for SsmClient {
         &self,
         input: TerminateSessionRequest,
     ) -> RusotoFuture<TerminateSessionResponse, TerminateSessionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.TerminateSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16788,9 +17298,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateAssociationRequest,
     ) -> RusotoFuture<UpdateAssociationResult, UpdateAssociationError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateAssociation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16817,9 +17332,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateAssociationStatusRequest,
     ) -> RusotoFuture<UpdateAssociationStatusResult, UpdateAssociationStatusError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateAssociationStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16843,9 +17363,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateDocumentRequest,
     ) -> RusotoFuture<UpdateDocumentResult, UpdateDocumentError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateDocument");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16872,9 +17397,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateDocumentDefaultVersionRequest,
     ) -> RusotoFuture<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateDocumentDefaultVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16898,9 +17428,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateMaintenanceWindowRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16924,9 +17459,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateMaintenanceWindowTargetRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindowTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16950,9 +17490,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateMaintenanceWindowTaskRequest,
     ) -> RusotoFuture<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateMaintenanceWindowTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -16976,9 +17521,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdateManagedInstanceRoleRequest,
     ) -> RusotoFuture<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdateManagedInstanceRole");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -17002,9 +17552,14 @@ impl Ssm for SsmClient {
         &self,
         input: UpdatePatchBaselineRequest,
     ) -> RusotoFuture<UpdatePatchBaselineResult, UpdatePatchBaselineError> {
-        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ssm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonSSM.UpdatePatchBaseline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

@@ -4682,9 +4682,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: BatchGetItemInput,
     ) -> RusotoFuture<BatchGetItemOutput, BatchGetItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.BatchGetItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4711,9 +4716,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: BatchWriteItemInput,
     ) -> RusotoFuture<BatchWriteItemOutput, BatchWriteItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.BatchWriteItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4740,9 +4750,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: CreateBackupInput,
     ) -> RusotoFuture<CreateBackupOutput, CreateBackupError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.CreateBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4769,9 +4784,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: CreateGlobalTableInput,
     ) -> RusotoFuture<CreateGlobalTableOutput, CreateGlobalTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.CreateGlobalTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4798,9 +4818,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: CreateTableInput,
     ) -> RusotoFuture<CreateTableOutput, CreateTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.CreateTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4827,9 +4852,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DeleteBackupInput,
     ) -> RusotoFuture<DeleteBackupOutput, DeleteBackupError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DeleteBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4856,9 +4886,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DeleteItemInput,
     ) -> RusotoFuture<DeleteItemOutput, DeleteItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DeleteItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4885,9 +4920,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DeleteTableInput,
     ) -> RusotoFuture<DeleteTableOutput, DeleteTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DeleteTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4914,9 +4954,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DescribeBackupInput,
     ) -> RusotoFuture<DescribeBackupOutput, DescribeBackupError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4943,9 +4988,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DescribeContinuousBackupsInput,
     ) -> RusotoFuture<DescribeContinuousBackupsOutput, DescribeContinuousBackupsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "DynamoDB_20120810.DescribeContinuousBackups",
@@ -4971,9 +5021,14 @@ impl DynamoDb for DynamoDbClient {
     fn describe_endpoints(
         &self,
     ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeEndpoints");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -4999,9 +5054,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DescribeGlobalTableInput,
     ) -> RusotoFuture<DescribeGlobalTableOutput, DescribeGlobalTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeGlobalTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5027,9 +5087,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DescribeGlobalTableSettingsInput,
     ) -> RusotoFuture<DescribeGlobalTableSettingsOutput, DescribeGlobalTableSettingsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "DynamoDB_20120810.DescribeGlobalTableSettings",
@@ -5053,9 +5118,14 @@ impl DynamoDb for DynamoDbClient {
 
     /// <p>Returns the current provisioned-capacity limits for your AWS account in a region, both for the region as a whole and for any one DynamoDB table that you create there.</p> <p>When you establish an AWS account, the account has initial limits on the maximum read capacity units and write capacity units that you can provision across all of your DynamoDB tables in a given region. Also, there are per-table limits that apply when you create a table there. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> page in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Although you can increase these limits by filing a case at <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, obtaining the increase is not instantaneous. The <code>DescribeLimits</code> action lets you write code to compare the capacity you are currently using to those limits imposed by your account so that you have enough time to apply for an increase before you hit a limit.</p> <p>For example, you could use one of the AWS SDKs to do the following:</p> <ol> <li> <p>Call <code>DescribeLimits</code> for a particular region to obtain your current account limits on provisioned capacity there.</p> </li> <li> <p>Create a variable to hold the aggregate read capacity units provisioned for all your tables in that region, and one to hold the aggregate write capacity units. Zero them both.</p> </li> <li> <p>Call <code>ListTables</code> to obtain a list of all your DynamoDB tables.</p> </li> <li> <p>For each table name listed by <code>ListTables</code>, do the following:</p> <ul> <li> <p>Call <code>DescribeTable</code> with the table name.</p> </li> <li> <p>Use the data returned by <code>DescribeTable</code> to add the read capacity units and write capacity units provisioned for the table itself to your variables.</p> </li> <li> <p>If the table has one or more global secondary indexes (GSIs), loop over these GSIs and add their provisioned capacity values to your variables as well.</p> </li> </ul> </li> <li> <p>Report the account limits for that region returned by <code>DescribeLimits</code>, along with the total current provisioned capacity levels you have calculated.</p> </li> </ol> <p>This will let you see whether you are getting close to your account-level limits.</p> <p>The per-table limits apply only when you are creating a new table. They restrict the sum of the provisioned capacity of the new table itself and all its global secondary indexes.</p> <p>For existing tables and their GSIs, DynamoDB will not let you increase provisioned capacity extremely rapidly, but the only upper limit that applies is that the aggregate provisioned capacity over all your tables and GSIs cannot exceed either of the per-account limits.</p> <note> <p> <code>DescribeLimits</code> should only be called periodically. You can expect throttling errors if you call it more than once in a minute.</p> </note> <p>The <code>DescribeLimits</code> Request element has no content.</p>
     fn describe_limits(&self) -> RusotoFuture<DescribeLimitsOutput, DescribeLimitsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeLimits");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -5081,9 +5151,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DescribeTableInput,
     ) -> RusotoFuture<DescribeTableOutput, DescribeTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5110,9 +5185,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: DescribeTimeToLiveInput,
     ) -> RusotoFuture<DescribeTimeToLiveOutput, DescribeTimeToLiveError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.DescribeTimeToLive");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5136,9 +5216,14 @@ impl DynamoDb for DynamoDbClient {
 
     /// <p>The <code>GetItem</code> operation returns a set of attributes for the item with the given primary key. If there is no matching item, <code>GetItem</code> does not return any data and there will be no <code>Item</code> element in the response.</p> <p> <code>GetItem</code> provides an eventually consistent read by default. If your application requires a strongly consistent read, set <code>ConsistentRead</code> to <code>true</code>. Although a strongly consistent read might take more time than an eventually consistent read, it always returns the last updated value.</p>
     fn get_item(&self, input: GetItemInput) -> RusotoFuture<GetItemOutput, GetItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.GetItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5164,9 +5249,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: ListBackupsInput,
     ) -> RusotoFuture<ListBackupsOutput, ListBackupsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListBackups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5193,9 +5283,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: ListGlobalTablesInput,
     ) -> RusotoFuture<ListGlobalTablesOutput, ListGlobalTablesError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListGlobalTables");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5222,9 +5317,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: ListTablesInput,
     ) -> RusotoFuture<ListTablesOutput, ListTablesError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListTables");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5251,9 +5351,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: ListTagsOfResourceInput,
     ) -> RusotoFuture<ListTagsOfResourceOutput, ListTagsOfResourceError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.ListTagsOfResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5277,9 +5382,14 @@ impl DynamoDb for DynamoDbClient {
 
     /// <p>Creates a new item, or replaces an old item with a new item. If an item that has the same primary key as the new item already exists in the specified table, the new item completely replaces the existing item. You can perform a conditional put operation (add a new item if one with the specified primary key doesn't exist), or replace an existing item if it has certain attribute values. You can return the item's attribute values in the same operation, using the <code>ReturnValues</code> parameter.</p> <important> <p>This topic provides general information about the <code>PutItem</code> API.</p> <p>For information on how to call the <code>PutItem</code> API using the AWS SDK in specific languages, see the following:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/goto/aws-cli/dynamodb-2012-08-10/PutItem"> PutItem in the AWS Command Line Interface </a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/DotNetSDKV3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for .NET </a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForCpp/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for C++ </a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForGoV1/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Go </a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForJava/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Java </a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/AWSJavaScriptSDK/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for JavaScript </a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForPHPV3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for PHP V3 </a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/boto3/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Python </a> </p> </li> <li> <p> <a href="http://docs.aws.amazon.com/goto/SdkForRubyV2/dynamodb-2012-08-10/PutItem"> PutItem in the AWS SDK for Ruby V2 </a> </p> </li> </ul> </important> <p>When you add an item, the primary key attribute(s) are the only required attributes. Attribute values cannot be null. String and Binary type attributes must have lengths greater than zero. Set type attributes cannot be empty. Requests with empty values will be rejected with a <code>ValidationException</code> exception.</p> <note> <p>To prevent a new item from replacing an existing item, use a conditional expression that contains the <code>attribute_not_exists</code> function with the name of the attribute being used as the partition key for the table. Since every record must contain that attribute, the <code>attribute_not_exists</code> function will only succeed if no matching item exists.</p> </note> <p>For more information about <code>PutItem</code>, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithItems.html">Working with Items</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn put_item(&self, input: PutItemInput) -> RusotoFuture<PutItemOutput, PutItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.PutItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5302,9 +5412,14 @@ impl DynamoDb for DynamoDbClient {
 
     /// <p>The <code>Query</code> operation finds items based on primary key values. You can query any table or secondary index that has a composite primary key (a partition key and a sort key). </p> <p>Use the <code>KeyConditionExpression</code> parameter to provide a specific value for the partition key. The <code>Query</code> operation will return all of the items from the table or index with that partition key value. You can optionally narrow the scope of the <code>Query</code> operation by specifying a sort key value and a comparison operator in <code>KeyConditionExpression</code>. To further refine the <code>Query</code> results, you can optionally provide a <code>FilterExpression</code>. A <code>FilterExpression</code> determines which items within the results should be returned to you. All of the other results are discarded. </p> <p> A <code>Query</code> operation always returns a result set. If no matching items are found, the result set will be empty. Queries that do not return results consume the minimum number of read capacity units for that type of read operation. </p> <note> <p> DynamoDB calculates the number of read capacity units consumed based on item size, not on the amount of data that is returned to an application. The number of capacity units consumed will be the same whether you request all of the attributes (the default behavior) or just some of them (using a projection expression). The number will also be the same whether or not you use a <code>FilterExpression</code>. </p> </note> <p> <code>Query</code> results are always sorted by the sort key value. If the data type of the sort key is Number, the results are returned in numeric order; otherwise, the results are returned in order of UTF-8 bytes. By default, the sort order is ascending. To reverse the order, set the <code>ScanIndexForward</code> parameter to false. </p> <p> A single <code>Query</code> operation will read up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you will need to paginate the result set. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html#Query.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>FilterExpression</code> is applied after a <code>Query</code> finishes, but before the results are returned. A <code>FilterExpression</code> cannot contain partition key or sort key attributes. You need to specify those attributes in the <code>KeyConditionExpression</code>. </p> <note> <p> A <code>Query</code> operation can return an empty result set and a <code>LastEvaluatedKey</code> if all the items read for the page of results are filtered out. </p> </note> <p>You can query a table, a local secondary index, or a global secondary index. For a query on a table or on a local secondary index, you can set the <code>ConsistentRead</code> parameter to <code>true</code> and obtain a strongly consistent result. Global secondary indexes support eventually consistent reads only, so do not specify <code>ConsistentRead</code> when querying a global secondary index.</p>
     fn query(&self, input: QueryInput) -> RusotoFuture<QueryOutput, QueryError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.Query");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5330,9 +5445,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: RestoreTableFromBackupInput,
     ) -> RusotoFuture<RestoreTableFromBackupOutput, RestoreTableFromBackupError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.RestoreTableFromBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5358,9 +5478,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: RestoreTableToPointInTimeInput,
     ) -> RusotoFuture<RestoreTableToPointInTimeOutput, RestoreTableToPointInTimeError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "DynamoDB_20120810.RestoreTableToPointInTime",
@@ -5384,9 +5509,14 @@ impl DynamoDb for DynamoDbClient {
 
     /// <p>The <code>Scan</code> operation returns one or more items and item attributes by accessing every item in a table or a secondary index. To have DynamoDB return fewer items, you can provide a <code>FilterExpression</code> operation.</p> <p>If the total number of scanned items exceeds the maximum data set size limit of 1 MB, the scan stops and results are returned to the user as a <code>LastEvaluatedKey</code> value to continue the scan in a subsequent operation. The results also include the number of items exceeding the limit. A scan can result in no table data meeting the filter criteria. </p> <p>A single <code>Scan</code> operation will read up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you will need to paginate the result set. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>Scan</code> operations proceed sequentially; however, for faster performance on a large table or secondary index, applications can request a parallel <code>Scan</code> operation by providing the <code>Segment</code> and <code>TotalSegments</code> parameters. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.ParallelScan">Parallel Scan</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p> <code>Scan</code> uses eventually consistent reads when accessing the data in a table; therefore, the result set might not include the changes to data in the table immediately before the operation began. If you need a consistent copy of the data, as of the time that the <code>Scan</code> begins, you can set the <code>ConsistentRead</code> parameter to <code>true</code>.</p>
     fn scan(&self, input: ScanInput) -> RusotoFuture<ScanOutput, ScanError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.Scan");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5409,9 +5539,14 @@ impl DynamoDb for DynamoDbClient {
 
     /// <p>Associate a set of tags with an Amazon DynamoDB resource. You can then activate these user-defined tags so that they appear on the Billing and Cost Management console for cost allocation tracking. You can call TagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn tag_resource(&self, input: TagResourceInput) -> RusotoFuture<(), TagResourceError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5435,9 +5570,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: TransactGetItemsInput,
     ) -> RusotoFuture<TransactGetItemsOutput, TransactGetItemsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.TransactGetItems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5464,9 +5604,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: TransactWriteItemsInput,
     ) -> RusotoFuture<TransactWriteItemsOutput, TransactWriteItemsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.TransactWriteItems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5490,9 +5635,14 @@ impl DynamoDb for DynamoDbClient {
 
     /// <p>Removes the association of tags from an Amazon DynamoDB resource. You can call UntagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn untag_resource(&self, input: UntagResourceInput) -> RusotoFuture<(), UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5516,9 +5666,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: UpdateContinuousBackupsInput,
     ) -> RusotoFuture<UpdateContinuousBackupsOutput, UpdateContinuousBackupsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateContinuousBackups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5542,9 +5697,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: UpdateGlobalTableInput,
     ) -> RusotoFuture<UpdateGlobalTableOutput, UpdateGlobalTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateGlobalTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5571,9 +5731,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: UpdateGlobalTableSettingsInput,
     ) -> RusotoFuture<UpdateGlobalTableSettingsOutput, UpdateGlobalTableSettingsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "DynamoDB_20120810.UpdateGlobalTableSettings",
@@ -5600,9 +5765,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: UpdateItemInput,
     ) -> RusotoFuture<UpdateItemOutput, UpdateItemError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateItem");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5629,9 +5799,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: UpdateTableInput,
     ) -> RusotoFuture<UpdateTableOutput, UpdateTableError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5658,9 +5833,14 @@ impl DynamoDb for DynamoDbClient {
         &self,
         input: UpdateTimeToLiveInput,
     ) -> RusotoFuture<UpdateTimeToLiveOutput, UpdateTimeToLiveError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDB_20120810.UpdateTimeToLive");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

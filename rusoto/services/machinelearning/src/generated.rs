@@ -3126,9 +3126,14 @@ impl MachineLearningClient {
 impl MachineLearning for MachineLearningClient {
     /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
     fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.AddTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3154,9 +3159,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: CreateBatchPredictionInput,
     ) -> RusotoFuture<CreateBatchPredictionOutput, CreateBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateBatchPrediction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3182,9 +3192,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: CreateDataSourceFromRDSInput,
     ) -> RusotoFuture<CreateDataSourceFromRDSOutput, CreateDataSourceFromRDSError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateDataSourceFromRDS");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3208,9 +3223,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: CreateDataSourceFromRedshiftInput,
     ) -> RusotoFuture<CreateDataSourceFromRedshiftOutput, CreateDataSourceFromRedshiftError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonML_20141212.CreateDataSourceFromRedshift",
@@ -3237,9 +3257,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: CreateDataSourceFromS3Input,
     ) -> RusotoFuture<CreateDataSourceFromS3Output, CreateDataSourceFromS3Error> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateDataSourceFromS3");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3265,9 +3290,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: CreateEvaluationInput,
     ) -> RusotoFuture<CreateEvaluationOutput, CreateEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateEvaluation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3294,9 +3324,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: CreateMLModelInput,
     ) -> RusotoFuture<CreateMLModelOutput, CreateMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateMLModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3323,9 +3358,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: CreateRealtimeEndpointInput,
     ) -> RusotoFuture<CreateRealtimeEndpointOutput, CreateRealtimeEndpointError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.CreateRealtimeEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3351,9 +3391,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DeleteBatchPredictionInput,
     ) -> RusotoFuture<DeleteBatchPredictionOutput, DeleteBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteBatchPrediction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3379,9 +3424,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DeleteDataSourceInput,
     ) -> RusotoFuture<DeleteDataSourceOutput, DeleteDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteDataSource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3408,9 +3458,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DeleteEvaluationInput,
     ) -> RusotoFuture<DeleteEvaluationOutput, DeleteEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteEvaluation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3437,9 +3492,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DeleteMLModelInput,
     ) -> RusotoFuture<DeleteMLModelOutput, DeleteMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteMLModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3466,9 +3526,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DeleteRealtimeEndpointInput,
     ) -> RusotoFuture<DeleteRealtimeEndpointOutput, DeleteRealtimeEndpointError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteRealtimeEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3494,9 +3559,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DeleteTagsInput,
     ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DeleteTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3523,9 +3593,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DescribeBatchPredictionsInput,
     ) -> RusotoFuture<DescribeBatchPredictionsOutput, DescribeBatchPredictionsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeBatchPredictions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3549,9 +3624,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DescribeDataSourcesInput,
     ) -> RusotoFuture<DescribeDataSourcesOutput, DescribeDataSourcesError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeDataSources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3577,9 +3657,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DescribeEvaluationsInput,
     ) -> RusotoFuture<DescribeEvaluationsOutput, DescribeEvaluationsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeEvaluations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3605,9 +3690,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DescribeMLModelsInput,
     ) -> RusotoFuture<DescribeMLModelsOutput, DescribeMLModelsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeMLModels");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3634,9 +3724,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: DescribeTagsInput,
     ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.DescribeTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3663,9 +3758,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: GetBatchPredictionInput,
     ) -> RusotoFuture<GetBatchPredictionOutput, GetBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetBatchPrediction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3692,9 +3792,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: GetDataSourceInput,
     ) -> RusotoFuture<GetDataSourceOutput, GetDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetDataSource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3721,9 +3826,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: GetEvaluationInput,
     ) -> RusotoFuture<GetEvaluationOutput, GetEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetEvaluation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3750,9 +3860,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: GetMLModelInput,
     ) -> RusotoFuture<GetMLModelOutput, GetMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.GetMLModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3776,9 +3891,14 @@ impl MachineLearning for MachineLearningClient {
 
     /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
     fn predict(&self, input: PredictInput) -> RusotoFuture<PredictOutput, PredictError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.Predict");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3804,9 +3924,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: UpdateBatchPredictionInput,
     ) -> RusotoFuture<UpdateBatchPredictionOutput, UpdateBatchPredictionError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateBatchPrediction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3832,9 +3957,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: UpdateDataSourceInput,
     ) -> RusotoFuture<UpdateDataSourceOutput, UpdateDataSourceError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateDataSource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3861,9 +3991,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: UpdateEvaluationInput,
     ) -> RusotoFuture<UpdateEvaluationOutput, UpdateEvaluationError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateEvaluation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3890,9 +4025,14 @@ impl MachineLearning for MachineLearningClient {
         &self,
         input: UpdateMLModelInput,
     ) -> RusotoFuture<UpdateMLModelOutput, UpdateMLModelError> {
-        let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "machinelearning",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonML_20141212.UpdateMLModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

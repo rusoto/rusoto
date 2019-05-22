@@ -2253,9 +2253,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: CheckDomainAvailabilityRequest,
     ) -> RusotoFuture<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.CheckDomainAvailability",
@@ -2282,9 +2287,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: CheckDomainTransferabilityRequest,
     ) -> RusotoFuture<CheckDomainTransferabilityResponse, CheckDomainTransferabilityError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.CheckDomainTransferability",
@@ -2311,9 +2321,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: DeleteTagsForDomainRequest,
     ) -> RusotoFuture<DeleteTagsForDomainResponse, DeleteTagsForDomainError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.DeleteTagsForDomain",
@@ -2342,9 +2357,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: DisableDomainAutoRenewRequest,
     ) -> RusotoFuture<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.DisableDomainAutoRenew",
@@ -2373,9 +2393,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: DisableDomainTransferLockRequest,
     ) -> RusotoFuture<DisableDomainTransferLockResponse, DisableDomainTransferLockError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.DisableDomainTransferLock",
@@ -2402,9 +2427,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: EnableDomainAutoRenewRequest,
     ) -> RusotoFuture<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.EnableDomainAutoRenew",
@@ -2433,9 +2463,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: EnableDomainTransferLockRequest,
     ) -> RusotoFuture<EnableDomainTransferLockResponse, EnableDomainTransferLockError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.EnableDomainTransferLock",
@@ -2462,9 +2497,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: GetContactReachabilityStatusRequest,
     ) -> RusotoFuture<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.GetContactReachabilityStatus",
@@ -2491,9 +2531,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: GetDomainDetailRequest,
     ) -> RusotoFuture<GetDomainDetailResponse, GetDomainDetailError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53Domains_v20140515.GetDomainDetail");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2520,9 +2565,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: GetDomainSuggestionsRequest,
     ) -> RusotoFuture<GetDomainSuggestionsResponse, GetDomainSuggestionsError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.GetDomainSuggestions",
@@ -2551,9 +2601,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: GetOperationDetailRequest,
     ) -> RusotoFuture<GetOperationDetailResponse, GetOperationDetailError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.GetOperationDetail",
@@ -2583,9 +2638,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: ListDomainsRequest,
     ) -> RusotoFuture<ListDomainsResponse, ListDomainsError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53Domains_v20140515.ListDomains");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2612,9 +2672,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: ListOperationsRequest,
     ) -> RusotoFuture<ListOperationsResponse, ListOperationsError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53Domains_v20140515.ListOperations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2641,9 +2706,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: ListTagsForDomainRequest,
     ) -> RusotoFuture<ListTagsForDomainResponse, ListTagsForDomainError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53Domains_v20140515.ListTagsForDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2670,9 +2740,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: RegisterDomainRequest,
     ) -> RusotoFuture<RegisterDomainResponse, RegisterDomainError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53Domains_v20140515.RegisterDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2699,9 +2774,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: RenewDomainRequest,
     ) -> RusotoFuture<RenewDomainResponse, RenewDomainError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53Domains_v20140515.RenewDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2729,9 +2809,14 @@ impl Route53Domains for Route53DomainsClient {
         input: ResendContactReachabilityEmailRequest,
     ) -> RusotoFuture<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError>
     {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.ResendContactReachabilityEmail",
@@ -2758,9 +2843,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: RetrieveDomainAuthCodeRequest,
     ) -> RusotoFuture<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.RetrieveDomainAuthCode",
@@ -2789,9 +2879,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: TransferDomainRequest,
     ) -> RusotoFuture<TransferDomainResponse, TransferDomainError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53Domains_v20140515.TransferDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2818,9 +2913,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: UpdateDomainContactRequest,
     ) -> RusotoFuture<UpdateDomainContactResponse, UpdateDomainContactError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.UpdateDomainContact",
@@ -2849,9 +2949,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: UpdateDomainContactPrivacyRequest,
     ) -> RusotoFuture<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.UpdateDomainContactPrivacy",
@@ -2878,9 +2983,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: UpdateDomainNameserversRequest,
     ) -> RusotoFuture<UpdateDomainNameserversResponse, UpdateDomainNameserversError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.UpdateDomainNameservers",
@@ -2907,9 +3017,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: UpdateTagsForDomainRequest,
     ) -> RusotoFuture<UpdateTagsForDomainResponse, UpdateTagsForDomainError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53Domains_v20140515.UpdateTagsForDomain",
@@ -2938,9 +3053,14 @@ impl Route53Domains for Route53DomainsClient {
         &self,
         input: ViewBillingRequest,
     ) -> RusotoFuture<ViewBillingResponse, ViewBillingError> {
-        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "route53domains",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53Domains_v20140515.ViewBilling");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

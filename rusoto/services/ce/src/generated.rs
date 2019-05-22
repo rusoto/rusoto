@@ -1489,9 +1489,14 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetCostAndUsageRequest,
     ) -> RusotoFuture<GetCostAndUsageResponse, GetCostAndUsageError> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetCostAndUsage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1518,9 +1523,14 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetCostForecastRequest,
     ) -> RusotoFuture<GetCostForecastResponse, GetCostForecastError> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetCostForecast");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1547,9 +1557,14 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetDimensionValuesRequest,
     ) -> RusotoFuture<GetDimensionValuesResponse, GetDimensionValuesError> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetDimensionValues");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1576,9 +1591,14 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetReservationCoverageRequest,
     ) -> RusotoFuture<GetReservationCoverageResponse, GetReservationCoverageError> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetReservationCoverage",
@@ -1610,9 +1630,14 @@ impl CostExplorer for CostExplorerClient {
         GetReservationPurchaseRecommendationResponse,
         GetReservationPurchaseRecommendationError,
     > {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetReservationPurchaseRecommendation",
@@ -1641,9 +1666,14 @@ impl CostExplorer for CostExplorerClient {
         &self,
         input: GetReservationUtilizationRequest,
     ) -> RusotoFuture<GetReservationUtilizationResponse, GetReservationUtilizationError> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSInsightsIndexService.GetReservationUtilization",
@@ -1667,9 +1697,14 @@ impl CostExplorer for CostExplorerClient {
 
     /// <p>Queries for available tag keys and tag values for a specified period. You can search the tag values for an arbitrary string. </p>
     fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError> {
-        let mut request = SignedRequest::new("POST", "ce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSInsightsIndexService.GetTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

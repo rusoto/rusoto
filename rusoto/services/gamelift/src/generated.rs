@@ -7298,9 +7298,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: AcceptMatchInput,
     ) -> RusotoFuture<AcceptMatchOutput, AcceptMatchError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.AcceptMatch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7327,9 +7332,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreateAliasInput,
     ) -> RusotoFuture<CreateAliasOutput, CreateAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7356,9 +7366,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreateBuildInput,
     ) -> RusotoFuture<CreateBuildOutput, CreateBuildError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateBuild");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7385,9 +7400,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreateFleetInput,
     ) -> RusotoFuture<CreateFleetOutput, CreateFleetError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7414,9 +7434,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreateGameSessionInput,
     ) -> RusotoFuture<CreateGameSessionOutput, CreateGameSessionError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateGameSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7443,9 +7468,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreateGameSessionQueueInput,
     ) -> RusotoFuture<CreateGameSessionQueueOutput, CreateGameSessionQueueError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateGameSessionQueue");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7472,9 +7502,14 @@ impl GameLift for GameLiftClient {
         input: CreateMatchmakingConfigurationInput,
     ) -> RusotoFuture<CreateMatchmakingConfigurationOutput, CreateMatchmakingConfigurationError>
     {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateMatchmakingConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7498,9 +7533,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreateMatchmakingRuleSetInput,
     ) -> RusotoFuture<CreateMatchmakingRuleSetOutput, CreateMatchmakingRuleSetError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateMatchmakingRuleSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7524,9 +7564,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreatePlayerSessionInput,
     ) -> RusotoFuture<CreatePlayerSessionOutput, CreatePlayerSessionError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreatePlayerSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7552,9 +7597,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreatePlayerSessionsInput,
     ) -> RusotoFuture<CreatePlayerSessionsOutput, CreatePlayerSessionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreatePlayerSessions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7580,9 +7630,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreateVpcPeeringAuthorizationInput,
     ) -> RusotoFuture<CreateVpcPeeringAuthorizationOutput, CreateVpcPeeringAuthorizationError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateVpcPeeringAuthorization");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7606,9 +7661,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: CreateVpcPeeringConnectionInput,
     ) -> RusotoFuture<CreateVpcPeeringConnectionOutput, CreateVpcPeeringConnectionError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.CreateVpcPeeringConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7629,9 +7689,14 @@ impl GameLift for GameLiftClient {
 
     /// <p><p>Deletes an alias. This action removes all record of the alias. Game clients attempting to access a server process using the deleted alias receive an error. To delete an alias, specify the alias ID to be deleted.</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul></p>
     fn delete_alias(&self, input: DeleteAliasInput) -> RusotoFuture<(), DeleteAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7652,9 +7717,14 @@ impl GameLift for GameLiftClient {
 
     /// <p><p>Deletes a build. This action permanently deletes the build record and any uploaded build files.</p> <p>To delete a build, specify its ID. Deleting a build does not affect the status of any active fleets using the build, but you can no longer create new fleets with the deleted build.</p> <ul> <li> <p> <a>CreateBuild</a> </p> </li> <li> <p> <a>ListBuilds</a> </p> </li> <li> <p> <a>DescribeBuild</a> </p> </li> <li> <p> <a>UpdateBuild</a> </p> </li> <li> <p> <a>DeleteBuild</a> </p> </li> </ul></p>
     fn delete_build(&self, input: DeleteBuildInput) -> RusotoFuture<(), DeleteBuildError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteBuild");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7675,9 +7745,14 @@ impl GameLift for GameLiftClient {
 
     /// <p><p>Deletes everything related to a fleet. Before deleting a fleet, you must set the fleet&#39;s desired capacity to zero. See <a>UpdateFleetCapacity</a>.</p> <p>This action removes the fleet&#39;s resources and the fleet record. Once a fleet is deleted, you can no longer use that fleet.</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p> <a>DeleteFleet</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet actions:</p> <ul> <li> <p> <a>StartFleetActions</a> </p> </li> <li> <p> <a>StopFleetActions</a> </p> </li> </ul> </li> </ul></p>
     fn delete_fleet(&self, input: DeleteFleetInput) -> RusotoFuture<(), DeleteFleetError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7701,9 +7776,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DeleteGameSessionQueueInput,
     ) -> RusotoFuture<DeleteGameSessionQueueOutput, DeleteGameSessionQueueError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteGameSessionQueue");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7730,9 +7810,14 @@ impl GameLift for GameLiftClient {
         input: DeleteMatchmakingConfigurationInput,
     ) -> RusotoFuture<DeleteMatchmakingConfigurationOutput, DeleteMatchmakingConfigurationError>
     {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteMatchmakingConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7756,9 +7841,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DeleteMatchmakingRuleSetInput,
     ) -> RusotoFuture<DeleteMatchmakingRuleSetOutput, DeleteMatchmakingRuleSetError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteMatchmakingRuleSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7782,9 +7872,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DeleteScalingPolicyInput,
     ) -> RusotoFuture<(), DeleteScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7807,9 +7902,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DeleteVpcPeeringAuthorizationInput,
     ) -> RusotoFuture<DeleteVpcPeeringAuthorizationOutput, DeleteVpcPeeringAuthorizationError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteVpcPeeringAuthorization");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7833,9 +7933,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DeleteVpcPeeringConnectionInput,
     ) -> RusotoFuture<DeleteVpcPeeringConnectionOutput, DeleteVpcPeeringConnectionError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DeleteVpcPeeringConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7859,9 +7964,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeAliasInput,
     ) -> RusotoFuture<DescribeAliasOutput, DescribeAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7888,9 +7998,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeBuildInput,
     ) -> RusotoFuture<DescribeBuildOutput, DescribeBuildError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeBuild");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7917,9 +8032,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeEC2InstanceLimitsInput,
     ) -> RusotoFuture<DescribeEC2InstanceLimitsOutput, DescribeEC2InstanceLimitsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeEC2InstanceLimits");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7943,9 +8063,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeFleetAttributesInput,
     ) -> RusotoFuture<DescribeFleetAttributesOutput, DescribeFleetAttributesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetAttributes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7969,9 +8094,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeFleetCapacityInput,
     ) -> RusotoFuture<DescribeFleetCapacityOutput, DescribeFleetCapacityError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetCapacity");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7997,9 +8127,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeFleetEventsInput,
     ) -> RusotoFuture<DescribeFleetEventsOutput, DescribeFleetEventsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8025,9 +8160,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeFleetPortSettingsInput,
     ) -> RusotoFuture<DescribeFleetPortSettingsOutput, DescribeFleetPortSettingsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetPortSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8051,9 +8191,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeFleetUtilizationInput,
     ) -> RusotoFuture<DescribeFleetUtilizationOutput, DescribeFleetUtilizationError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeFleetUtilization");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8077,9 +8222,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeGameSessionDetailsInput,
     ) -> RusotoFuture<DescribeGameSessionDetailsOutput, DescribeGameSessionDetailsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeGameSessionDetails");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8103,9 +8253,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeGameSessionPlacementInput,
     ) -> RusotoFuture<DescribeGameSessionPlacementOutput, DescribeGameSessionPlacementError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeGameSessionPlacement");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8129,9 +8284,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeGameSessionQueuesInput,
     ) -> RusotoFuture<DescribeGameSessionQueuesOutput, DescribeGameSessionQueuesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeGameSessionQueues");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8155,9 +8315,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeGameSessionsInput,
     ) -> RusotoFuture<DescribeGameSessionsOutput, DescribeGameSessionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeGameSessions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8183,9 +8348,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeInstancesInput,
     ) -> RusotoFuture<DescribeInstancesOutput, DescribeInstancesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8212,9 +8382,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeMatchmakingInput,
     ) -> RusotoFuture<DescribeMatchmakingOutput, DescribeMatchmakingError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeMatchmaking");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8241,9 +8416,14 @@ impl GameLift for GameLiftClient {
         input: DescribeMatchmakingConfigurationsInput,
     ) -> RusotoFuture<DescribeMatchmakingConfigurationsOutput, DescribeMatchmakingConfigurationsError>
     {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeMatchmakingConfigurations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8269,9 +8449,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeMatchmakingRuleSetsInput,
     ) -> RusotoFuture<DescribeMatchmakingRuleSetsOutput, DescribeMatchmakingRuleSetsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeMatchmakingRuleSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8295,9 +8480,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribePlayerSessionsInput,
     ) -> RusotoFuture<DescribePlayerSessionsOutput, DescribePlayerSessionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribePlayerSessions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8323,9 +8513,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeRuntimeConfigurationInput,
     ) -> RusotoFuture<DescribeRuntimeConfigurationOutput, DescribeRuntimeConfigurationError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeRuntimeConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8349,9 +8544,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeScalingPoliciesInput,
     ) -> RusotoFuture<DescribeScalingPoliciesOutput, DescribeScalingPoliciesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeScalingPolicies");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8375,9 +8575,14 @@ impl GameLift for GameLiftClient {
         &self,
     ) -> RusotoFuture<DescribeVpcPeeringAuthorizationsOutput, DescribeVpcPeeringAuthorizationsError>
     {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeVpcPeeringAuthorizations");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -8402,9 +8607,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: DescribeVpcPeeringConnectionsInput,
     ) -> RusotoFuture<DescribeVpcPeeringConnectionsOutput, DescribeVpcPeeringConnectionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.DescribeVpcPeeringConnections");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8428,9 +8638,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: GetGameSessionLogUrlInput,
     ) -> RusotoFuture<GetGameSessionLogUrlOutput, GetGameSessionLogUrlError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.GetGameSessionLogUrl");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8456,9 +8671,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: GetInstanceAccessInput,
     ) -> RusotoFuture<GetInstanceAccessOutput, GetInstanceAccessError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.GetInstanceAccess");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8485,9 +8705,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: ListAliasesInput,
     ) -> RusotoFuture<ListAliasesOutput, ListAliasesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ListAliases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8514,9 +8739,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: ListBuildsInput,
     ) -> RusotoFuture<ListBuildsOutput, ListBuildsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ListBuilds");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8543,9 +8773,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: ListFleetsInput,
     ) -> RusotoFuture<ListFleetsOutput, ListFleetsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ListFleets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8572,9 +8807,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: PutScalingPolicyInput,
     ) -> RusotoFuture<PutScalingPolicyOutput, PutScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.PutScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8601,9 +8841,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: RequestUploadCredentialsInput,
     ) -> RusotoFuture<RequestUploadCredentialsOutput, RequestUploadCredentialsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.RequestUploadCredentials");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8627,9 +8872,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: ResolveAliasInput,
     ) -> RusotoFuture<ResolveAliasOutput, ResolveAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ResolveAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8656,9 +8906,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: SearchGameSessionsInput,
     ) -> RusotoFuture<SearchGameSessionsOutput, SearchGameSessionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.SearchGameSessions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8685,9 +8940,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: StartFleetActionsInput,
     ) -> RusotoFuture<StartFleetActionsOutput, StartFleetActionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StartFleetActions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8714,9 +8974,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: StartGameSessionPlacementInput,
     ) -> RusotoFuture<StartGameSessionPlacementOutput, StartGameSessionPlacementError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StartGameSessionPlacement");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8740,9 +9005,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: StartMatchBackfillInput,
     ) -> RusotoFuture<StartMatchBackfillOutput, StartMatchBackfillError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StartMatchBackfill");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8769,9 +9039,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: StartMatchmakingInput,
     ) -> RusotoFuture<StartMatchmakingOutput, StartMatchmakingError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StartMatchmaking");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8798,9 +9073,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: StopFleetActionsInput,
     ) -> RusotoFuture<StopFleetActionsOutput, StopFleetActionsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StopFleetActions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8827,9 +9107,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: StopGameSessionPlacementInput,
     ) -> RusotoFuture<StopGameSessionPlacementOutput, StopGameSessionPlacementError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StopGameSessionPlacement");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8853,9 +9138,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: StopMatchmakingInput,
     ) -> RusotoFuture<StopMatchmakingOutput, StopMatchmakingError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.StopMatchmaking");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8882,9 +9172,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: UpdateAliasInput,
     ) -> RusotoFuture<UpdateAliasOutput, UpdateAliasError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8911,9 +9206,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: UpdateBuildInput,
     ) -> RusotoFuture<UpdateBuildOutput, UpdateBuildError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateBuild");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8940,9 +9240,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: UpdateFleetAttributesInput,
     ) -> RusotoFuture<UpdateFleetAttributesOutput, UpdateFleetAttributesError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateFleetAttributes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8968,9 +9273,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: UpdateFleetCapacityInput,
     ) -> RusotoFuture<UpdateFleetCapacityOutput, UpdateFleetCapacityError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateFleetCapacity");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8996,9 +9306,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: UpdateFleetPortSettingsInput,
     ) -> RusotoFuture<UpdateFleetPortSettingsOutput, UpdateFleetPortSettingsError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateFleetPortSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9022,9 +9337,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: UpdateGameSessionInput,
     ) -> RusotoFuture<UpdateGameSessionOutput, UpdateGameSessionError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateGameSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9051,9 +9371,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: UpdateGameSessionQueueInput,
     ) -> RusotoFuture<UpdateGameSessionQueueOutput, UpdateGameSessionQueueError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateGameSessionQueue");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9080,9 +9405,14 @@ impl GameLift for GameLiftClient {
         input: UpdateMatchmakingConfigurationInput,
     ) -> RusotoFuture<UpdateMatchmakingConfigurationOutput, UpdateMatchmakingConfigurationError>
     {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateMatchmakingConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9106,9 +9436,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: UpdateRuntimeConfigurationInput,
     ) -> RusotoFuture<UpdateRuntimeConfigurationOutput, UpdateRuntimeConfigurationError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.UpdateRuntimeConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9132,9 +9467,14 @@ impl GameLift for GameLiftClient {
         &self,
         input: ValidateMatchmakingRuleSetInput,
     ) -> RusotoFuture<ValidateMatchmakingRuleSetOutput, ValidateMatchmakingRuleSetError> {
-        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "gamelift",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "GameLift.ValidateMatchmakingRuleSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

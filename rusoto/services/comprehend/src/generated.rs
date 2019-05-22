@@ -4739,9 +4739,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectDominantLanguageRequest,
     ) -> RusotoFuture<BatchDetectDominantLanguageResponse, BatchDetectDominantLanguageError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.BatchDetectDominantLanguage",
@@ -4768,9 +4773,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectEntitiesRequest,
     ) -> RusotoFuture<BatchDetectEntitiesResponse, BatchDetectEntitiesError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectEntities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4796,9 +4806,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectKeyPhrasesRequest,
     ) -> RusotoFuture<BatchDetectKeyPhrasesResponse, BatchDetectKeyPhrasesError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectKeyPhrases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4824,9 +4839,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectSentimentRequest,
     ) -> RusotoFuture<BatchDetectSentimentResponse, BatchDetectSentimentError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectSentiment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4852,9 +4872,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: BatchDetectSyntaxRequest,
     ) -> RusotoFuture<BatchDetectSyntaxResponse, BatchDetectSyntaxError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.BatchDetectSyntax");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4881,9 +4906,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: CreateDocumentClassifierRequest,
     ) -> RusotoFuture<CreateDocumentClassifierResponse, CreateDocumentClassifierError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.CreateDocumentClassifier",
@@ -4910,9 +4940,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: CreateEntityRecognizerRequest,
     ) -> RusotoFuture<CreateEntityRecognizerResponse, CreateEntityRecognizerError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.CreateEntityRecognizer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4938,9 +4973,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DeleteDocumentClassifierRequest,
     ) -> RusotoFuture<DeleteDocumentClassifierResponse, DeleteDocumentClassifierError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DeleteDocumentClassifier",
@@ -4967,9 +5007,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DeleteEntityRecognizerRequest,
     ) -> RusotoFuture<DeleteEntityRecognizerResponse, DeleteEntityRecognizerError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DeleteEntityRecognizer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4998,9 +5043,14 @@ impl Comprehend for ComprehendClient {
         DescribeDocumentClassificationJobResponse,
         DescribeDocumentClassificationJobError,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDocumentClassificationJob",
@@ -5029,9 +5079,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DescribeDocumentClassifierRequest,
     ) -> RusotoFuture<DescribeDocumentClassifierResponse, DescribeDocumentClassifierError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDocumentClassifier",
@@ -5061,9 +5116,14 @@ impl Comprehend for ComprehendClient {
         DescribeDominantLanguageDetectionJobResponse,
         DescribeDominantLanguageDetectionJobError,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeDominantLanguageDetectionJob",
@@ -5092,9 +5152,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DescribeEntitiesDetectionJobRequest,
     ) -> RusotoFuture<DescribeEntitiesDetectionJobResponse, DescribeEntitiesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeEntitiesDetectionJob",
@@ -5121,9 +5186,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DescribeEntityRecognizerRequest,
     ) -> RusotoFuture<DescribeEntityRecognizerResponse, DescribeEntityRecognizerError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeEntityRecognizer",
@@ -5151,9 +5221,14 @@ impl Comprehend for ComprehendClient {
         input: DescribeKeyPhrasesDetectionJobRequest,
     ) -> RusotoFuture<DescribeKeyPhrasesDetectionJobResponse, DescribeKeyPhrasesDetectionJobError>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeKeyPhrasesDetectionJob",
@@ -5181,9 +5256,14 @@ impl Comprehend for ComprehendClient {
         input: DescribeSentimentDetectionJobRequest,
     ) -> RusotoFuture<DescribeSentimentDetectionJobResponse, DescribeSentimentDetectionJobError>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeSentimentDetectionJob",
@@ -5210,9 +5290,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DescribeTopicsDetectionJobRequest,
     ) -> RusotoFuture<DescribeTopicsDetectionJobResponse, DescribeTopicsDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.DescribeTopicsDetectionJob",
@@ -5239,9 +5324,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectDominantLanguageRequest,
     ) -> RusotoFuture<DetectDominantLanguageResponse, DetectDominantLanguageError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectDominantLanguage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5267,9 +5357,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectEntitiesRequest,
     ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectEntities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5296,9 +5391,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectKeyPhrasesRequest,
     ) -> RusotoFuture<DetectKeyPhrasesResponse, DetectKeyPhrasesError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectKeyPhrases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5325,9 +5425,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectSentimentRequest,
     ) -> RusotoFuture<DetectSentimentResponse, DetectSentimentError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectSentiment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5354,9 +5459,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: DetectSyntaxRequest,
     ) -> RusotoFuture<DetectSyntaxResponse, DetectSyntaxError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.DetectSyntax");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5384,9 +5494,14 @@ impl Comprehend for ComprehendClient {
         input: ListDocumentClassificationJobsRequest,
     ) -> RusotoFuture<ListDocumentClassificationJobsResponse, ListDocumentClassificationJobsError>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDocumentClassificationJobs",
@@ -5413,9 +5528,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListDocumentClassifiersRequest,
     ) -> RusotoFuture<ListDocumentClassifiersResponse, ListDocumentClassifiersError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDocumentClassifiers",
@@ -5445,9 +5565,14 @@ impl Comprehend for ComprehendClient {
         ListDominantLanguageDetectionJobsResponse,
         ListDominantLanguageDetectionJobsError,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListDominantLanguageDetectionJobs",
@@ -5476,9 +5601,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListEntitiesDetectionJobsRequest,
     ) -> RusotoFuture<ListEntitiesDetectionJobsResponse, ListEntitiesDetectionJobsError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListEntitiesDetectionJobs",
@@ -5505,9 +5635,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListEntityRecognizersRequest,
     ) -> RusotoFuture<ListEntityRecognizersResponse, ListEntityRecognizersError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Comprehend_20171127.ListEntityRecognizers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5533,9 +5668,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListKeyPhrasesDetectionJobsRequest,
     ) -> RusotoFuture<ListKeyPhrasesDetectionJobsResponse, ListKeyPhrasesDetectionJobsError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListKeyPhrasesDetectionJobs",
@@ -5562,9 +5702,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListSentimentDetectionJobsRequest,
     ) -> RusotoFuture<ListSentimentDetectionJobsResponse, ListSentimentDetectionJobsError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListSentimentDetectionJobs",
@@ -5591,9 +5736,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: ListTopicsDetectionJobsRequest,
     ) -> RusotoFuture<ListTopicsDetectionJobsResponse, ListTopicsDetectionJobsError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.ListTopicsDetectionJobs",
@@ -5621,9 +5771,14 @@ impl Comprehend for ComprehendClient {
         input: StartDocumentClassificationJobRequest,
     ) -> RusotoFuture<StartDocumentClassificationJobResponse, StartDocumentClassificationJobError>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartDocumentClassificationJob",
@@ -5653,9 +5808,14 @@ impl Comprehend for ComprehendClient {
         StartDominantLanguageDetectionJobResponse,
         StartDominantLanguageDetectionJobError,
     > {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartDominantLanguageDetectionJob",
@@ -5684,9 +5844,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StartEntitiesDetectionJobRequest,
     ) -> RusotoFuture<StartEntitiesDetectionJobResponse, StartEntitiesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartEntitiesDetectionJob",
@@ -5713,9 +5878,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StartKeyPhrasesDetectionJobRequest,
     ) -> RusotoFuture<StartKeyPhrasesDetectionJobResponse, StartKeyPhrasesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartKeyPhrasesDetectionJob",
@@ -5742,9 +5912,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StartSentimentDetectionJobRequest,
     ) -> RusotoFuture<StartSentimentDetectionJobResponse, StartSentimentDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartSentimentDetectionJob",
@@ -5771,9 +5946,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StartTopicsDetectionJobRequest,
     ) -> RusotoFuture<StartTopicsDetectionJobResponse, StartTopicsDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StartTopicsDetectionJob",
@@ -5801,9 +5981,14 @@ impl Comprehend for ComprehendClient {
         input: StopDominantLanguageDetectionJobRequest,
     ) -> RusotoFuture<StopDominantLanguageDetectionJobResponse, StopDominantLanguageDetectionJobError>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopDominantLanguageDetectionJob",
@@ -5832,9 +6017,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StopEntitiesDetectionJobRequest,
     ) -> RusotoFuture<StopEntitiesDetectionJobResponse, StopEntitiesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopEntitiesDetectionJob",
@@ -5861,9 +6051,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StopKeyPhrasesDetectionJobRequest,
     ) -> RusotoFuture<StopKeyPhrasesDetectionJobResponse, StopKeyPhrasesDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopKeyPhrasesDetectionJob",
@@ -5890,9 +6085,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StopSentimentDetectionJobRequest,
     ) -> RusotoFuture<StopSentimentDetectionJobResponse, StopSentimentDetectionJobError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopSentimentDetectionJob",
@@ -5920,9 +6120,14 @@ impl Comprehend for ComprehendClient {
         input: StopTrainingDocumentClassifierRequest,
     ) -> RusotoFuture<StopTrainingDocumentClassifierResponse, StopTrainingDocumentClassifierError>
     {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopTrainingDocumentClassifier",
@@ -5949,9 +6154,14 @@ impl Comprehend for ComprehendClient {
         &self,
         input: StopTrainingEntityRecognizerRequest,
     ) -> RusotoFuture<StopTrainingEntityRecognizerResponse, StopTrainingEntityRecognizerError> {
-        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehend",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Comprehend_20171127.StopTrainingEntityRecognizer",

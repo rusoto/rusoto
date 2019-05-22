@@ -1169,9 +1169,14 @@ impl Fms for FmsClient {
         &self,
         input: AssociateAdminAccountRequest,
     ) -> RusotoFuture<(), AssociateAdminAccountError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.AssociateAdminAccount");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1191,9 +1196,14 @@ impl Fms for FmsClient {
 
     /// <p>Deletes an AWS Firewall Manager association with the IAM role and the Amazon Simple Notification Service (SNS) topic that is used to record AWS Firewall Manager SNS logs.</p>
     fn delete_notification_channel(&self) -> RusotoFuture<(), DeleteNotificationChannelError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.DeleteNotificationChannel");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1210,9 +1220,14 @@ impl Fms for FmsClient {
 
     /// <p>Permanently deletes an AWS Firewall Manager policy. </p>
     fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.DeletePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1233,9 +1248,14 @@ impl Fms for FmsClient {
 
     /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. To set a different account as the administrator account, you must submit an <code>AssociateAdminAccount</code> request .</p>
     fn disassociate_admin_account(&self) -> RusotoFuture<(), DisassociateAdminAccountError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.DisassociateAdminAccount");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1252,9 +1272,14 @@ impl Fms for FmsClient {
 
     /// <p>Returns the AWS Organizations master account that is associated with AWS Firewall Manager as the AWS Firewall Manager administrator.</p>
     fn get_admin_account(&self) -> RusotoFuture<GetAdminAccountResponse, GetAdminAccountError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetAdminAccount");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1280,9 +1305,14 @@ impl Fms for FmsClient {
         &self,
         input: GetComplianceDetailRequest,
     ) -> RusotoFuture<GetComplianceDetailResponse, GetComplianceDetailError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetComplianceDetail");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1307,9 +1337,14 @@ impl Fms for FmsClient {
     fn get_notification_channel(
         &self,
     ) -> RusotoFuture<GetNotificationChannelResponse, GetNotificationChannelError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetNotificationChannel");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1334,9 +1369,14 @@ impl Fms for FmsClient {
         &self,
         input: GetPolicyRequest,
     ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.GetPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1363,9 +1403,14 @@ impl Fms for FmsClient {
         &self,
         input: ListComplianceStatusRequest,
     ) -> RusotoFuture<ListComplianceStatusResponse, ListComplianceStatusError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.ListComplianceStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1391,9 +1436,14 @@ impl Fms for FmsClient {
         &self,
         input: ListMemberAccountsRequest,
     ) -> RusotoFuture<ListMemberAccountsResponse, ListMemberAccountsError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.ListMemberAccounts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1420,9 +1470,14 @@ impl Fms for FmsClient {
         &self,
         input: ListPoliciesRequest,
     ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.ListPolicies");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1449,9 +1504,14 @@ impl Fms for FmsClient {
         &self,
         input: PutNotificationChannelRequest,
     ) -> RusotoFuture<(), PutNotificationChannelError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.PutNotificationChannel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1474,9 +1534,14 @@ impl Fms for FmsClient {
         &self,
         input: PutPolicyRequest,
     ) -> RusotoFuture<PutPolicyResponse, PutPolicyError> {
-        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSFMS_20180101.PutPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

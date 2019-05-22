@@ -12229,9 +12229,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AddCustomAttributesRequest,
     ) -> RusotoFuture<AddCustomAttributesResponse, AddCustomAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AddCustomAttributes",
@@ -12260,9 +12265,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminAddUserToGroupRequest,
     ) -> RusotoFuture<(), AdminAddUserToGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminAddUserToGroup",
@@ -12288,9 +12298,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminConfirmSignUpRequest,
     ) -> RusotoFuture<AdminConfirmSignUpResponse, AdminConfirmSignUpError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminConfirmSignUp",
@@ -12320,9 +12335,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminCreateUserRequest,
     ) -> RusotoFuture<AdminCreateUserResponse, AdminCreateUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminCreateUser",
@@ -12352,9 +12372,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminDeleteUserRequest,
     ) -> RusotoFuture<(), AdminDeleteUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminDeleteUser",
@@ -12381,9 +12406,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminDeleteUserAttributesRequest,
     ) -> RusotoFuture<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminDeleteUserAttributes",
@@ -12410,9 +12440,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminDisableProviderForUserRequest,
     ) -> RusotoFuture<AdminDisableProviderForUserResponse, AdminDisableProviderForUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminDisableProviderForUser",
@@ -12439,9 +12474,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminDisableUserRequest,
     ) -> RusotoFuture<AdminDisableUserResponse, AdminDisableUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminDisableUser",
@@ -12471,9 +12511,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminEnableUserRequest,
     ) -> RusotoFuture<AdminEnableUserResponse, AdminEnableUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminEnableUser",
@@ -12503,9 +12548,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminForgetDeviceRequest,
     ) -> RusotoFuture<(), AdminForgetDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminForgetDevice",
@@ -12532,9 +12582,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminGetDeviceRequest,
     ) -> RusotoFuture<AdminGetDeviceResponse, AdminGetDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminGetDevice",
@@ -12564,9 +12619,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminGetUserRequest,
     ) -> RusotoFuture<AdminGetUserResponse, AdminGetUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminGetUser",
@@ -12596,9 +12656,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminInitiateAuthRequest,
     ) -> RusotoFuture<AdminInitiateAuthResponse, AdminInitiateAuthError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminInitiateAuth",
@@ -12628,9 +12693,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminLinkProviderForUserRequest,
     ) -> RusotoFuture<AdminLinkProviderForUserResponse, AdminLinkProviderForUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminLinkProviderForUser",
@@ -12657,9 +12727,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminListDevicesRequest,
     ) -> RusotoFuture<AdminListDevicesResponse, AdminListDevicesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminListDevices",
@@ -12689,9 +12764,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminListGroupsForUserRequest,
     ) -> RusotoFuture<AdminListGroupsForUserResponse, AdminListGroupsForUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminListGroupsForUser",
@@ -12720,9 +12800,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminListUserAuthEventsRequest,
     ) -> RusotoFuture<AdminListUserAuthEventsResponse, AdminListUserAuthEventsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminListUserAuthEvents",
@@ -12749,9 +12834,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminRemoveUserFromGroupRequest,
     ) -> RusotoFuture<(), AdminRemoveUserFromGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminRemoveUserFromGroup",
@@ -12775,9 +12865,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminResetUserPasswordRequest,
     ) -> RusotoFuture<AdminResetUserPasswordResponse, AdminResetUserPasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminResetUserPassword",
@@ -12806,9 +12901,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminRespondToAuthChallengeRequest,
     ) -> RusotoFuture<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminRespondToAuthChallenge",
@@ -12835,9 +12935,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminSetUserMFAPreferenceRequest,
     ) -> RusotoFuture<AdminSetUserMFAPreferenceResponse, AdminSetUserMFAPreferenceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminSetUserMFAPreference",
@@ -12864,9 +12969,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminSetUserSettingsRequest,
     ) -> RusotoFuture<AdminSetUserSettingsResponse, AdminSetUserSettingsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminSetUserSettings",
@@ -12895,9 +13005,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminUpdateAuthEventFeedbackRequest,
     ) -> RusotoFuture<AdminUpdateAuthEventFeedbackResponse, AdminUpdateAuthEventFeedbackError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminUpdateAuthEventFeedback",
@@ -12924,9 +13039,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminUpdateDeviceStatusRequest,
     ) -> RusotoFuture<AdminUpdateDeviceStatusResponse, AdminUpdateDeviceStatusError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminUpdateDeviceStatus",
@@ -12953,9 +13073,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminUpdateUserAttributesRequest,
     ) -> RusotoFuture<AdminUpdateUserAttributesResponse, AdminUpdateUserAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminUpdateUserAttributes",
@@ -12982,9 +13107,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AdminUserGlobalSignOutRequest,
     ) -> RusotoFuture<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AdminUserGlobalSignOut",
@@ -13013,9 +13143,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: AssociateSoftwareTokenRequest,
     ) -> RusotoFuture<AssociateSoftwareTokenResponse, AssociateSoftwareTokenError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.AssociateSoftwareToken",
@@ -13044,9 +13179,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ChangePasswordRequest,
     ) -> RusotoFuture<ChangePasswordResponse, ChangePasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ChangePassword",
@@ -13076,9 +13216,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ConfirmDeviceRequest,
     ) -> RusotoFuture<ConfirmDeviceResponse, ConfirmDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ConfirmDevice",
@@ -13108,9 +13253,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ConfirmForgotPasswordRequest,
     ) -> RusotoFuture<ConfirmForgotPasswordResponse, ConfirmForgotPasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ConfirmForgotPassword",
@@ -13139,9 +13289,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ConfirmSignUpRequest,
     ) -> RusotoFuture<ConfirmSignUpResponse, ConfirmSignUpError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ConfirmSignUp",
@@ -13171,9 +13326,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: CreateGroupRequest,
     ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateGroup",
@@ -13203,9 +13363,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: CreateIdentityProviderRequest,
     ) -> RusotoFuture<CreateIdentityProviderResponse, CreateIdentityProviderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateIdentityProvider",
@@ -13234,9 +13399,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: CreateResourceServerRequest,
     ) -> RusotoFuture<CreateResourceServerResponse, CreateResourceServerError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateResourceServer",
@@ -13265,9 +13435,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: CreateUserImportJobRequest,
     ) -> RusotoFuture<CreateUserImportJobResponse, CreateUserImportJobError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateUserImportJob",
@@ -13296,9 +13471,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: CreateUserPoolRequest,
     ) -> RusotoFuture<CreateUserPoolResponse, CreateUserPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateUserPool",
@@ -13328,9 +13508,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: CreateUserPoolClientRequest,
     ) -> RusotoFuture<CreateUserPoolClientResponse, CreateUserPoolClientError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateUserPoolClient",
@@ -13359,9 +13544,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: CreateUserPoolDomainRequest,
     ) -> RusotoFuture<CreateUserPoolDomainResponse, CreateUserPoolDomainError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.CreateUserPoolDomain",
@@ -13387,9 +13577,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
     /// <p>Deletes a group. Currently only groups with no members can be deleted.</p> <p>Requires developer credentials.</p>
     fn delete_group(&self, input: DeleteGroupRequest) -> RusotoFuture<(), DeleteGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteGroup",
@@ -13416,9 +13611,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DeleteIdentityProviderRequest,
     ) -> RusotoFuture<(), DeleteIdentityProviderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteIdentityProvider",
@@ -13444,9 +13644,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DeleteResourceServerRequest,
     ) -> RusotoFuture<(), DeleteResourceServerError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteResourceServer",
@@ -13469,9 +13674,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
     /// <p>Allows a user to delete himself or herself.</p>
     fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUser",
@@ -13498,9 +13708,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DeleteUserAttributesRequest,
     ) -> RusotoFuture<DeleteUserAttributesResponse, DeleteUserAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUserAttributes",
@@ -13529,9 +13744,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DeleteUserPoolRequest,
     ) -> RusotoFuture<(), DeleteUserPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUserPool",
@@ -13558,9 +13778,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DeleteUserPoolClientRequest,
     ) -> RusotoFuture<(), DeleteUserPoolClientError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUserPoolClient",
@@ -13586,9 +13811,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DeleteUserPoolDomainRequest,
     ) -> RusotoFuture<DeleteUserPoolDomainResponse, DeleteUserPoolDomainError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DeleteUserPoolDomain",
@@ -13617,9 +13847,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DescribeIdentityProviderRequest,
     ) -> RusotoFuture<DescribeIdentityProviderResponse, DescribeIdentityProviderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeIdentityProvider",
@@ -13646,9 +13881,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DescribeResourceServerRequest,
     ) -> RusotoFuture<DescribeResourceServerResponse, DescribeResourceServerError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeResourceServer",
@@ -13677,9 +13917,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DescribeRiskConfigurationRequest,
     ) -> RusotoFuture<DescribeRiskConfigurationResponse, DescribeRiskConfigurationError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeRiskConfiguration",
@@ -13706,9 +13951,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DescribeUserImportJobRequest,
     ) -> RusotoFuture<DescribeUserImportJobResponse, DescribeUserImportJobError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeUserImportJob",
@@ -13737,9 +13987,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DescribeUserPoolRequest,
     ) -> RusotoFuture<DescribeUserPoolResponse, DescribeUserPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeUserPool",
@@ -13769,9 +14024,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DescribeUserPoolClientRequest,
     ) -> RusotoFuture<DescribeUserPoolClientResponse, DescribeUserPoolClientError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeUserPoolClient",
@@ -13800,9 +14060,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: DescribeUserPoolDomainRequest,
     ) -> RusotoFuture<DescribeUserPoolDomainResponse, DescribeUserPoolDomainError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.DescribeUserPoolDomain",
@@ -13828,9 +14093,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
     /// <p>Forgets the specified device.</p>
     fn forget_device(&self, input: ForgetDeviceRequest) -> RusotoFuture<(), ForgetDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ForgetDevice",
@@ -13857,9 +14127,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ForgotPasswordRequest,
     ) -> RusotoFuture<ForgotPasswordResponse, ForgotPasswordError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ForgotPassword",
@@ -13889,9 +14164,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: GetCSVHeaderRequest,
     ) -> RusotoFuture<GetCSVHeaderResponse, GetCSVHeaderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetCSVHeader",
@@ -13921,9 +14201,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: GetDeviceRequest,
     ) -> RusotoFuture<GetDeviceResponse, GetDeviceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetDevice",
@@ -13950,9 +14235,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
     /// <p>Gets a group.</p> <p>Requires developer credentials.</p>
     fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityProviderService.GetGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13980,9 +14270,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         input: GetIdentityProviderByIdentifierRequest,
     ) -> RusotoFuture<GetIdentityProviderByIdentifierResponse, GetIdentityProviderByIdentifierError>
     {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetIdentityProviderByIdentifier",
@@ -14011,9 +14306,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: GetSigningCertificateRequest,
     ) -> RusotoFuture<GetSigningCertificateResponse, GetSigningCertificateError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetSigningCertificate",
@@ -14042,9 +14342,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: GetUICustomizationRequest,
     ) -> RusotoFuture<GetUICustomizationResponse, GetUICustomizationError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetUICustomization",
@@ -14071,9 +14376,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
     /// <p>Gets the user attributes and metadata for a user.</p>
     fn get_user(&self, input: GetUserRequest) -> RusotoFuture<GetUserResponse, GetUserError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityProviderService.GetUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14100,9 +14410,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         input: GetUserAttributeVerificationCodeRequest,
     ) -> RusotoFuture<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>
     {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetUserAttributeVerificationCode",
@@ -14131,9 +14446,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: GetUserPoolMfaConfigRequest,
     ) -> RusotoFuture<GetUserPoolMfaConfigResponse, GetUserPoolMfaConfigError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GetUserPoolMfaConfig",
@@ -14162,9 +14482,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: GlobalSignOutRequest,
     ) -> RusotoFuture<GlobalSignOutResponse, GlobalSignOutError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.GlobalSignOut",
@@ -14194,9 +14519,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: InitiateAuthRequest,
     ) -> RusotoFuture<InitiateAuthResponse, InitiateAuthError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.InitiateAuth",
@@ -14226,9 +14556,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListDevicesRequest,
     ) -> RusotoFuture<ListDevicesResponse, ListDevicesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListDevices",
@@ -14258,9 +14593,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListGroupsRequest,
     ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListGroups",
@@ -14290,9 +14630,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListIdentityProvidersRequest,
     ) -> RusotoFuture<ListIdentityProvidersResponse, ListIdentityProvidersError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListIdentityProviders",
@@ -14321,9 +14666,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListResourceServersRequest,
     ) -> RusotoFuture<ListResourceServersResponse, ListResourceServersError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListResourceServers",
@@ -14352,9 +14702,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListUserImportJobsRequest,
     ) -> RusotoFuture<ListUserImportJobsResponse, ListUserImportJobsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUserImportJobs",
@@ -14384,9 +14739,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListUserPoolClientsRequest,
     ) -> RusotoFuture<ListUserPoolClientsResponse, ListUserPoolClientsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUserPoolClients",
@@ -14415,9 +14775,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListUserPoolsRequest,
     ) -> RusotoFuture<ListUserPoolsResponse, ListUserPoolsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUserPools",
@@ -14447,9 +14812,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListUsersRequest,
     ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUsers",
@@ -14479,9 +14849,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ListUsersInGroupRequest,
     ) -> RusotoFuture<ListUsersInGroupResponse, ListUsersInGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ListUsersInGroup",
@@ -14511,9 +14886,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: ResendConfirmationCodeRequest,
     ) -> RusotoFuture<ResendConfirmationCodeResponse, ResendConfirmationCodeError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.ResendConfirmationCode",
@@ -14542,9 +14922,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: RespondToAuthChallengeRequest,
     ) -> RusotoFuture<RespondToAuthChallengeResponse, RespondToAuthChallengeError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.RespondToAuthChallenge",
@@ -14573,9 +14958,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: SetRiskConfigurationRequest,
     ) -> RusotoFuture<SetRiskConfigurationResponse, SetRiskConfigurationError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetRiskConfiguration",
@@ -14604,9 +14994,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: SetUICustomizationRequest,
     ) -> RusotoFuture<SetUICustomizationResponse, SetUICustomizationError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetUICustomization",
@@ -14636,9 +15031,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: SetUserMFAPreferenceRequest,
     ) -> RusotoFuture<SetUserMFAPreferenceResponse, SetUserMFAPreferenceError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetUserMFAPreference",
@@ -14667,9 +15067,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: SetUserPoolMfaConfigRequest,
     ) -> RusotoFuture<SetUserPoolMfaConfigResponse, SetUserPoolMfaConfigError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetUserPoolMfaConfig",
@@ -14698,9 +15103,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: SetUserSettingsRequest,
     ) -> RusotoFuture<SetUserSettingsResponse, SetUserSettingsError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.SetUserSettings",
@@ -14727,9 +15137,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
 
     /// <p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>
     fn sign_up(&self, input: SignUpRequest) -> RusotoFuture<SignUpResponse, SignUpError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityProviderService.SignUp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14755,9 +15170,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: StartUserImportJobRequest,
     ) -> RusotoFuture<StartUserImportJobResponse, StartUserImportJobError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.StartUserImportJob",
@@ -14787,9 +15207,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: StopUserImportJobRequest,
     ) -> RusotoFuture<StopUserImportJobResponse, StopUserImportJobError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.StopUserImportJob",
@@ -14819,9 +15244,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateAuthEventFeedbackRequest,
     ) -> RusotoFuture<UpdateAuthEventFeedbackResponse, UpdateAuthEventFeedbackError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateAuthEventFeedback",
@@ -14848,9 +15278,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateDeviceStatusRequest,
     ) -> RusotoFuture<UpdateDeviceStatusResponse, UpdateDeviceStatusError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateDeviceStatus",
@@ -14880,9 +15315,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateGroupRequest,
     ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateGroup",
@@ -14912,9 +15352,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateIdentityProviderRequest,
     ) -> RusotoFuture<UpdateIdentityProviderResponse, UpdateIdentityProviderError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateIdentityProvider",
@@ -14943,9 +15388,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateResourceServerRequest,
     ) -> RusotoFuture<UpdateResourceServerResponse, UpdateResourceServerError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateResourceServer",
@@ -14974,9 +15424,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateUserAttributesRequest,
     ) -> RusotoFuture<UpdateUserAttributesResponse, UpdateUserAttributesError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateUserAttributes",
@@ -15005,9 +15460,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateUserPoolRequest,
     ) -> RusotoFuture<UpdateUserPoolResponse, UpdateUserPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateUserPool",
@@ -15037,9 +15497,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateUserPoolClientRequest,
     ) -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateUserPoolClient",
@@ -15068,9 +15533,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: UpdateUserPoolDomainRequest,
     ) -> RusotoFuture<UpdateUserPoolDomainResponse, UpdateUserPoolDomainError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.UpdateUserPoolDomain",
@@ -15099,9 +15569,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: VerifySoftwareTokenRequest,
     ) -> RusotoFuture<VerifySoftwareTokenResponse, VerifySoftwareTokenError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.VerifySoftwareToken",
@@ -15130,9 +15605,14 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         &self,
         input: VerifyUserAttributeRequest,
     ) -> RusotoFuture<VerifyUserAttributeResponse, VerifyUserAttributeError> {
-        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-idp",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityProviderService.VerifyUserAttribute",

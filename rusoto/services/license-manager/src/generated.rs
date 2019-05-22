@@ -1842,9 +1842,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: CreateLicenseConfigurationRequest,
     ) -> RusotoFuture<CreateLicenseConfigurationResponse, CreateLicenseConfigurationError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.CreateLicenseConfiguration",
@@ -1871,9 +1876,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: DeleteLicenseConfigurationRequest,
     ) -> RusotoFuture<DeleteLicenseConfigurationResponse, DeleteLicenseConfigurationError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.DeleteLicenseConfiguration",
@@ -1900,9 +1910,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: GetLicenseConfigurationRequest,
     ) -> RusotoFuture<GetLicenseConfigurationResponse, GetLicenseConfigurationError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.GetLicenseConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1925,9 +1940,14 @@ impl LicenseManager for LicenseManagerClient {
     fn get_service_settings(
         &self,
     ) -> RusotoFuture<GetServiceSettingsResponse, GetServiceSettingsError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.GetServiceSettings");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1956,9 +1976,14 @@ impl LicenseManager for LicenseManagerClient {
         ListAssociationsForLicenseConfigurationResponse,
         ListAssociationsForLicenseConfigurationError,
     > {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.ListAssociationsForLicenseConfiguration",
@@ -1987,9 +2012,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: ListLicenseConfigurationsRequest,
     ) -> RusotoFuture<ListLicenseConfigurationsResponse, ListLicenseConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.ListLicenseConfigurations",
@@ -2019,9 +2049,14 @@ impl LicenseManager for LicenseManagerClient {
         ListLicenseSpecificationsForResourceResponse,
         ListLicenseSpecificationsForResourceError,
     > {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.ListLicenseSpecificationsForResource",
@@ -2050,9 +2085,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: ListResourceInventoryRequest,
     ) -> RusotoFuture<ListResourceInventoryResponse, ListResourceInventoryError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.ListResourceInventory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2078,9 +2118,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2107,9 +2152,14 @@ impl LicenseManager for LicenseManagerClient {
         input: ListUsageForLicenseConfigurationRequest,
     ) -> RusotoFuture<ListUsageForLicenseConfigurationResponse, ListUsageForLicenseConfigurationError>
     {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.ListUsageForLicenseConfiguration",
@@ -2138,9 +2188,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2167,9 +2222,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2196,9 +2256,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: UpdateLicenseConfigurationRequest,
     ) -> RusotoFuture<UpdateLicenseConfigurationResponse, UpdateLicenseConfigurationError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.UpdateLicenseConfiguration",
@@ -2228,9 +2293,14 @@ impl LicenseManager for LicenseManagerClient {
         UpdateLicenseSpecificationsForResourceResponse,
         UpdateLicenseSpecificationsForResourceError,
     > {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSLicenseManager.UpdateLicenseSpecificationsForResource",
@@ -2259,9 +2329,14 @@ impl LicenseManager for LicenseManagerClient {
         &self,
         input: UpdateServiceSettingsRequest,
     ) -> RusotoFuture<UpdateServiceSettingsResponse, UpdateServiceSettingsError> {
-        let mut request = SignedRequest::new("POST", "license-manager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "license-manager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSLicenseManager.UpdateServiceSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

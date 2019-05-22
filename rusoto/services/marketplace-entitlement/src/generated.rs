@@ -203,9 +203,14 @@ impl MarketplaceEntitlement for MarketplaceEntitlementClient {
         &self,
         input: GetEntitlementsRequest,
     ) -> RusotoFuture<GetEntitlementsResult, GetEntitlementsError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "aws-marketplace",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("entitlement.marketplace".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPEntitlementService.GetEntitlements");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

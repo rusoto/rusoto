@@ -226,10 +226,14 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         &self,
         input: GenerateDataSetRequest,
     ) -> RusotoFuture<GenerateDataSetResult, GenerateDataSetError> {
-        let mut request =
-            SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "marketplacecommerceanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MarketplaceCommerceAnalytics20150701.GenerateDataSet",
@@ -259,10 +263,14 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         &self,
         input: StartSupportDataExportRequest,
     ) -> RusotoFuture<StartSupportDataExportResult, StartSupportDataExportError> {
-        let mut request =
-            SignedRequest::new("POST", "marketplacecommerceanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "marketplacecommerceanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MarketplaceCommerceAnalytics20150701.StartSupportDataExport",

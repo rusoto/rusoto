@@ -404,9 +404,14 @@ impl Pricing for PricingClient {
         &self,
         input: DescribeServicesRequest,
     ) -> RusotoFuture<DescribeServicesResponse, DescribeServicesError> {
-        let mut request = SignedRequest::new("POST", "pricing", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "pricing",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.pricing".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPriceListService.DescribeServices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -433,9 +438,14 @@ impl Pricing for PricingClient {
         &self,
         input: GetAttributeValuesRequest,
     ) -> RusotoFuture<GetAttributeValuesResponse, GetAttributeValuesError> {
-        let mut request = SignedRequest::new("POST", "pricing", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "pricing",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.pricing".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPriceListService.GetAttributeValues");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -462,9 +472,14 @@ impl Pricing for PricingClient {
         &self,
         input: GetProductsRequest,
     ) -> RusotoFuture<GetProductsResponse, GetProductsError> {
-        let mut request = SignedRequest::new("POST", "pricing", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "pricing",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.pricing".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPriceListService.GetProducts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

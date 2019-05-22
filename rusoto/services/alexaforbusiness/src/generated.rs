@@ -5706,9 +5706,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ApproveSkillRequest,
     ) -> RusotoFuture<ApproveSkillResponse, ApproveSkillError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ApproveSkill");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5736,9 +5741,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: AssociateContactWithAddressBookRequest,
     ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.AssociateContactWithAddressBook",
@@ -5767,9 +5777,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: AssociateDeviceWithRoomRequest,
     ) -> RusotoFuture<AssociateDeviceWithRoomResponse, AssociateDeviceWithRoomError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.AssociateDeviceWithRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5793,9 +5808,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: AssociateSkillGroupWithRoomRequest,
     ) -> RusotoFuture<AssociateSkillGroupWithRoomResponse, AssociateSkillGroupWithRoomError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.AssociateSkillGroupWithRoom",
@@ -5822,9 +5842,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: AssociateSkillWithSkillGroupRequest,
     ) -> RusotoFuture<AssociateSkillWithSkillGroupResponse, AssociateSkillWithSkillGroupError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.AssociateSkillWithSkillGroup",
@@ -5851,9 +5876,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: AssociateSkillWithUsersRequest,
     ) -> RusotoFuture<AssociateSkillWithUsersResponse, AssociateSkillWithUsersError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.AssociateSkillWithUsers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5877,9 +5907,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateAddressBookRequest,
     ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateAddressBook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5906,9 +5941,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateBusinessReportScheduleRequest,
     ) -> RusotoFuture<CreateBusinessReportScheduleResponse, CreateBusinessReportScheduleError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.CreateBusinessReportSchedule",
@@ -5935,9 +5975,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateConferenceProviderRequest,
     ) -> RusotoFuture<CreateConferenceProviderResponse, CreateConferenceProviderError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateConferenceProvider");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5961,9 +6006,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateContactRequest,
     ) -> RusotoFuture<CreateContactResponse, CreateContactError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateContact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5990,9 +6040,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateProfileRequest,
     ) -> RusotoFuture<CreateProfileResponse, CreateProfileError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6019,9 +6074,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateRoomRequest,
     ) -> RusotoFuture<CreateRoomResponse, CreateRoomError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6048,9 +6108,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateSkillGroupRequest,
     ) -> RusotoFuture<CreateSkillGroupResponse, CreateSkillGroupError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateSkillGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6077,9 +6142,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: CreateUserRequest,
     ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.CreateUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6106,9 +6176,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteAddressBookRequest,
     ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteAddressBook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6135,9 +6210,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteBusinessReportScheduleRequest,
     ) -> RusotoFuture<DeleteBusinessReportScheduleResponse, DeleteBusinessReportScheduleError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DeleteBusinessReportSchedule",
@@ -6164,9 +6244,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteConferenceProviderRequest,
     ) -> RusotoFuture<DeleteConferenceProviderResponse, DeleteConferenceProviderError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteConferenceProvider");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6190,9 +6275,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteContactRequest,
     ) -> RusotoFuture<DeleteContactResponse, DeleteContactError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteContact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6219,9 +6309,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteDeviceRequest,
     ) -> RusotoFuture<DeleteDeviceResponse, DeleteDeviceError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6248,9 +6343,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteProfileRequest,
     ) -> RusotoFuture<DeleteProfileResponse, DeleteProfileError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6277,9 +6377,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteRoomRequest,
     ) -> RusotoFuture<DeleteRoomResponse, DeleteRoomError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6306,9 +6411,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteRoomSkillParameterRequest,
     ) -> RusotoFuture<DeleteRoomSkillParameterResponse, DeleteRoomSkillParameterError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteRoomSkillParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6332,9 +6442,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteSkillAuthorizationRequest,
     ) -> RusotoFuture<DeleteSkillAuthorizationResponse, DeleteSkillAuthorizationError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteSkillAuthorization");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6358,9 +6473,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteSkillGroupRequest,
     ) -> RusotoFuture<DeleteSkillGroupResponse, DeleteSkillGroupError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteSkillGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6387,9 +6507,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DeleteUserRequest,
     ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.DeleteUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6419,9 +6544,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         DisassociateContactFromAddressBookResponse,
         DisassociateContactFromAddressBookError,
     > {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateContactFromAddressBook",
@@ -6450,9 +6580,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DisassociateDeviceFromRoomRequest,
     ) -> RusotoFuture<DisassociateDeviceFromRoomResponse, DisassociateDeviceFromRoomError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateDeviceFromRoom",
@@ -6480,9 +6615,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: DisassociateSkillFromSkillGroupRequest,
     ) -> RusotoFuture<DisassociateSkillFromSkillGroupResponse, DisassociateSkillFromSkillGroupError>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateSkillFromSkillGroup",
@@ -6511,9 +6651,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: DisassociateSkillFromUsersRequest,
     ) -> RusotoFuture<DisassociateSkillFromUsersResponse, DisassociateSkillFromUsersError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateSkillFromUsers",
@@ -6541,9 +6686,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: DisassociateSkillGroupFromRoomRequest,
     ) -> RusotoFuture<DisassociateSkillGroupFromRoomResponse, DisassociateSkillGroupFromRoomError>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.DisassociateSkillGroupFromRoom",
@@ -6570,9 +6720,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ForgetSmartHomeAppliancesRequest,
     ) -> RusotoFuture<ForgetSmartHomeAppliancesResponse, ForgetSmartHomeAppliancesError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ForgetSmartHomeAppliances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6596,9 +6751,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetAddressBookRequest,
     ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetAddressBook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6624,9 +6784,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
     fn get_conference_preference(
         &self,
     ) -> RusotoFuture<GetConferencePreferenceResponse, GetConferencePreferenceError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetConferencePreference");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -6649,9 +6814,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetConferenceProviderRequest,
     ) -> RusotoFuture<GetConferenceProviderResponse, GetConferenceProviderError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetConferenceProvider");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6677,9 +6847,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetContactRequest,
     ) -> RusotoFuture<GetContactResponse, GetContactError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetContact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6706,9 +6881,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetDeviceRequest,
     ) -> RusotoFuture<GetDeviceResponse, GetDeviceError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6735,9 +6915,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetProfileRequest,
     ) -> RusotoFuture<GetProfileResponse, GetProfileError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6761,9 +6946,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
     /// <p>Gets room details by room ARN.</p>
     fn get_room(&self, input: GetRoomRequest) -> RusotoFuture<GetRoomResponse, GetRoomError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6789,9 +6979,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetRoomSkillParameterRequest,
     ) -> RusotoFuture<GetRoomSkillParameterResponse, GetRoomSkillParameterError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetRoomSkillParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6817,9 +7012,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: GetSkillGroupRequest,
     ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.GetSkillGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6846,9 +7046,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListBusinessReportSchedulesRequest,
     ) -> RusotoFuture<ListBusinessReportSchedulesResponse, ListBusinessReportSchedulesError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.ListBusinessReportSchedules",
@@ -6875,9 +7080,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListConferenceProvidersRequest,
     ) -> RusotoFuture<ListConferenceProvidersResponse, ListConferenceProvidersError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ListConferenceProviders");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6901,9 +7111,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListDeviceEventsRequest,
     ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ListDeviceEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6930,9 +7145,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListSkillsRequest,
     ) -> RusotoFuture<ListSkillsResponse, ListSkillsError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ListSkills");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6959,9 +7179,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListSkillsStoreCategoriesRequest,
     ) -> RusotoFuture<ListSkillsStoreCategoriesResponse, ListSkillsStoreCategoriesError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ListSkillsStoreCategories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6986,9 +7211,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: ListSkillsStoreSkillsByCategoryRequest,
     ) -> RusotoFuture<ListSkillsStoreSkillsByCategoryResponse, ListSkillsStoreSkillsByCategoryError>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.ListSkillsStoreSkillsByCategory",
@@ -7017,9 +7247,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ListSmartHomeAppliancesRequest,
     ) -> RusotoFuture<ListSmartHomeAppliancesResponse, ListSmartHomeAppliancesError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ListSmartHomeAppliances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7040,9 +7275,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
 
     /// <p>Lists all tags for the specified resource.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7069,9 +7309,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: PutConferencePreferenceRequest,
     ) -> RusotoFuture<PutConferencePreferenceResponse, PutConferencePreferenceError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.PutConferencePreference");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7095,9 +7340,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: PutRoomSkillParameterRequest,
     ) -> RusotoFuture<PutRoomSkillParameterResponse, PutRoomSkillParameterError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.PutRoomSkillParameter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7123,9 +7373,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: PutSkillAuthorizationRequest,
     ) -> RusotoFuture<PutSkillAuthorizationResponse, PutSkillAuthorizationError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.PutSkillAuthorization");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7151,9 +7406,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: RegisterAVSDeviceRequest,
     ) -> RusotoFuture<RegisterAVSDeviceResponse, RegisterAVSDeviceError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.RegisterAVSDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7180,9 +7440,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: RejectSkillRequest,
     ) -> RusotoFuture<RejectSkillResponse, RejectSkillError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.RejectSkill");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7209,9 +7474,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: ResolveRoomRequest,
     ) -> RusotoFuture<ResolveRoomResponse, ResolveRoomError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.ResolveRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7238,9 +7508,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: RevokeInvitationRequest,
     ) -> RusotoFuture<RevokeInvitationResponse, RevokeInvitationError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.RevokeInvitation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7267,9 +7542,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchAddressBooksRequest,
     ) -> RusotoFuture<SearchAddressBooksResponse, SearchAddressBooksError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchAddressBooks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7296,9 +7576,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchContactsRequest,
     ) -> RusotoFuture<SearchContactsResponse, SearchContactsError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchContacts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7325,9 +7610,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchDevicesRequest,
     ) -> RusotoFuture<SearchDevicesResponse, SearchDevicesError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchDevices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7354,9 +7644,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchProfilesRequest,
     ) -> RusotoFuture<SearchProfilesResponse, SearchProfilesError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7383,9 +7678,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchRoomsRequest,
     ) -> RusotoFuture<SearchRoomsResponse, SearchRoomsError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchRooms");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7412,9 +7712,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchSkillGroupsRequest,
     ) -> RusotoFuture<SearchSkillGroupsResponse, SearchSkillGroupsError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchSkillGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7441,9 +7746,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SearchUsersRequest,
     ) -> RusotoFuture<SearchUsersResponse, SearchUsersError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SearchUsers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7470,9 +7780,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: SendInvitationRequest,
     ) -> RusotoFuture<SendInvitationResponse, SendInvitationError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.SendInvitation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7499,9 +7814,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: StartDeviceSyncRequest,
     ) -> RusotoFuture<StartDeviceSyncResponse, StartDeviceSyncError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.StartDeviceSync");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7529,9 +7849,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         input: StartSmartHomeApplianceDiscoveryRequest,
     ) -> RusotoFuture<StartSmartHomeApplianceDiscoveryResponse, StartSmartHomeApplianceDiscoveryError>
     {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.StartSmartHomeApplianceDiscovery",
@@ -7560,9 +7885,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7589,9 +7919,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7618,9 +7953,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateAddressBookRequest,
     ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateAddressBook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7647,9 +7987,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateBusinessReportScheduleRequest,
     ) -> RusotoFuture<UpdateBusinessReportScheduleResponse, UpdateBusinessReportScheduleError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AlexaForBusiness.UpdateBusinessReportSchedule",
@@ -7676,9 +8021,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateConferenceProviderRequest,
     ) -> RusotoFuture<UpdateConferenceProviderResponse, UpdateConferenceProviderError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateConferenceProvider");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7702,9 +8052,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateContactRequest,
     ) -> RusotoFuture<UpdateContactResponse, UpdateContactError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateContact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7731,9 +8086,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateDeviceRequest,
     ) -> RusotoFuture<UpdateDeviceResponse, UpdateDeviceError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7760,9 +8120,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateProfileRequest,
     ) -> RusotoFuture<UpdateProfileResponse, UpdateProfileError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7789,9 +8154,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateRoomRequest,
     ) -> RusotoFuture<UpdateRoomResponse, UpdateRoomError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateRoom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7818,9 +8188,14 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         &self,
         input: UpdateSkillGroupRequest,
     ) -> RusotoFuture<UpdateSkillGroupResponse, UpdateSkillGroupError> {
-        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "a4b",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AlexaForBusiness.UpdateSkillGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

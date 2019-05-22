@@ -35,9 +35,8 @@ impl GenerateProtocol for JsonGenerator {
                      "
                 {documentation}
                 {method_signature} -> RusotoFuture<{output_type}, {error_type}> {{
-                    let mut request = SignedRequest::new(\"{http_method}\", \"{signing_name}\", &self.region, \"{request_uri}\");
+                    let mut request = SignedRequest::new_with_content_type(\"{http_method}\", \"{signing_name}\", &self.region, \"{request_uri}\", \"application/x-amz-json-{json_version}\");
                     {modify_endpoint_prefix}
-                    request.set_content_type(\"application/x-amz-json-{json_version}\".to_owned());
                     request.add_header(\"x-amz-target\", \"{target_prefix}.{name}\");
                     {payload}
 

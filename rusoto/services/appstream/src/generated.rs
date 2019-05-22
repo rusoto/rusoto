@@ -4144,9 +4144,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: AssociateFleetRequest,
     ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.AssociateFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4173,9 +4178,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: BatchAssociateUserStackRequest,
     ) -> RusotoFuture<BatchAssociateUserStackResult, BatchAssociateUserStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.BatchAssociateUserStack",
@@ -4202,9 +4212,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: BatchDisassociateUserStackRequest,
     ) -> RusotoFuture<BatchDisassociateUserStackResult, BatchDisassociateUserStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.BatchDisassociateUserStack",
@@ -4231,9 +4246,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: CopyImageRequest,
     ) -> RusotoFuture<CopyImageResponse, CopyImageError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CopyImage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4260,9 +4280,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: CreateDirectoryConfigRequest,
     ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.CreateDirectoryConfig",
@@ -4291,9 +4316,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: CreateFleetRequest,
     ) -> RusotoFuture<CreateFleetResult, CreateFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4320,9 +4350,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: CreateImageBuilderRequest,
     ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateImageBuilder");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4350,9 +4385,14 @@ impl AppStream for AppStreamClient {
         input: CreateImageBuilderStreamingURLRequest,
     ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>
     {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.CreateImageBuilderStreamingURL",
@@ -4379,9 +4419,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: CreateStackRequest,
     ) -> RusotoFuture<CreateStackResult, CreateStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4408,9 +4453,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: CreateStreamingURLRequest,
     ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateStreamingURL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4437,9 +4487,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: CreateUserRequest,
     ) -> RusotoFuture<CreateUserResult, CreateUserError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.CreateUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4466,9 +4521,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DeleteDirectoryConfigRequest,
     ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DeleteDirectoryConfig",
@@ -4497,9 +4557,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DeleteFleetRequest,
     ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4526,9 +4591,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DeleteImageRequest,
     ) -> RusotoFuture<DeleteImageResult, DeleteImageError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteImage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4555,9 +4625,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DeleteImageBuilderRequest,
     ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteImageBuilder");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4584,9 +4659,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DeleteImagePermissionsRequest,
     ) -> RusotoFuture<DeleteImagePermissionsResult, DeleteImagePermissionsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DeleteImagePermissions",
@@ -4615,9 +4695,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DeleteStackRequest,
     ) -> RusotoFuture<DeleteStackResult, DeleteStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4644,9 +4729,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DeleteUserRequest,
     ) -> RusotoFuture<DeleteUserResult, DeleteUserError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4673,9 +4763,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeDirectoryConfigsRequest,
     ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeDirectoryConfigs",
@@ -4702,9 +4797,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeFleetsRequest,
     ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeFleets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4731,9 +4831,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeImageBuildersRequest,
     ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeImageBuilders",
@@ -4762,9 +4867,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeImagePermissionsRequest,
     ) -> RusotoFuture<DescribeImagePermissionsResult, DescribeImagePermissionsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeImagePermissions",
@@ -4791,9 +4901,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeImages");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4820,9 +4935,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeSessionsRequest,
     ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeSessions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4849,9 +4969,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeStacksRequest,
     ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeStacks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4878,9 +5003,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeUserStackAssociationsRequest,
     ) -> RusotoFuture<DescribeUserStackAssociationsResult, DescribeUserStackAssociationsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.DescribeUserStackAssociations",
@@ -4907,9 +5037,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DescribeUsersRequest,
     ) -> RusotoFuture<DescribeUsersResult, DescribeUsersError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DescribeUsers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4936,9 +5071,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DisableUserRequest,
     ) -> RusotoFuture<DisableUserResult, DisableUserError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DisableUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4965,9 +5105,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: DisassociateFleetRequest,
     ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.DisassociateFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4994,9 +5139,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: EnableUserRequest,
     ) -> RusotoFuture<EnableUserResult, EnableUserError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.EnableUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5023,9 +5173,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: ExpireSessionRequest,
     ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.ExpireSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5052,9 +5207,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: ListAssociatedFleetsRequest,
     ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.ListAssociatedFleets",
@@ -5083,9 +5243,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: ListAssociatedStacksRequest,
     ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.ListAssociatedStacks",
@@ -5114,9 +5279,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.ListTagsForResource",
@@ -5145,9 +5315,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: StartFleetRequest,
     ) -> RusotoFuture<StartFleetResult, StartFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StartFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5174,9 +5349,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: StartImageBuilderRequest,
     ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StartImageBuilder");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5200,9 +5380,14 @@ impl AppStream for AppStreamClient {
 
     /// <p>Stops the specified fleet.</p>
     fn stop_fleet(&self, input: StopFleetRequest) -> RusotoFuture<StopFleetResult, StopFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StopFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5228,9 +5413,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: StopImageBuilderRequest,
     ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.StopImageBuilder");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5257,9 +5447,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5286,9 +5481,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5315,9 +5515,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: UpdateDirectoryConfigRequest,
     ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.UpdateDirectoryConfig",
@@ -5346,9 +5551,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: UpdateFleetRequest,
     ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UpdateFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5375,9 +5585,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: UpdateImagePermissionsRequest,
     ) -> RusotoFuture<UpdateImagePermissionsResult, UpdateImagePermissionsError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PhotonAdminProxyService.UpdateImagePermissions",
@@ -5406,9 +5621,14 @@ impl AppStream for AppStreamClient {
         &self,
         input: UpdateStackRequest,
     ) -> RusotoFuture<UpdateStackResult, UpdateStackError> {
-        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "appstream",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("appstream2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "PhotonAdminProxyService.UpdateStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

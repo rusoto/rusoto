@@ -9175,9 +9175,14 @@ impl Glue for GlueClient {
         &self,
         input: BatchCreatePartitionRequest,
     ) -> RusotoFuture<BatchCreatePartitionResponse, BatchCreatePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchCreatePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9203,9 +9208,14 @@ impl Glue for GlueClient {
         &self,
         input: BatchDeleteConnectionRequest,
     ) -> RusotoFuture<BatchDeleteConnectionResponse, BatchDeleteConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9231,9 +9241,14 @@ impl Glue for GlueClient {
         &self,
         input: BatchDeletePartitionRequest,
     ) -> RusotoFuture<BatchDeletePartitionResponse, BatchDeletePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeletePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9259,9 +9274,14 @@ impl Glue for GlueClient {
         &self,
         input: BatchDeleteTableRequest,
     ) -> RusotoFuture<BatchDeleteTableResponse, BatchDeleteTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9288,9 +9308,14 @@ impl Glue for GlueClient {
         &self,
         input: BatchDeleteTableVersionRequest,
     ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchDeleteTableVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9314,9 +9339,14 @@ impl Glue for GlueClient {
         &self,
         input: BatchGetPartitionRequest,
     ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchGetPartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9343,9 +9373,14 @@ impl Glue for GlueClient {
         &self,
         input: BatchStopJobRunRequest,
     ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.BatchStopJobRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9371,9 +9406,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateClassifierRequest,
     ) -> RusotoFuture<CreateClassifierResponse, CreateClassifierError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateClassifier");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9400,9 +9440,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateConnectionRequest,
     ) -> RusotoFuture<CreateConnectionResponse, CreateConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9429,9 +9474,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateCrawlerRequest,
     ) -> RusotoFuture<CreateCrawlerResponse, CreateCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9458,9 +9508,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateDatabaseRequest,
     ) -> RusotoFuture<CreateDatabaseResponse, CreateDatabaseError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9487,9 +9542,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateDevEndpointRequest,
     ) -> RusotoFuture<CreateDevEndpointResponse, CreateDevEndpointError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateDevEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9516,9 +9576,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateJobRequest,
     ) -> RusotoFuture<CreateJobResponse, CreateJobError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9545,9 +9610,14 @@ impl Glue for GlueClient {
         &self,
         input: CreatePartitionRequest,
     ) -> RusotoFuture<CreatePartitionResponse, CreatePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreatePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9574,9 +9644,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateScriptRequest,
     ) -> RusotoFuture<CreateScriptResponse, CreateScriptError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateScript");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9603,9 +9678,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateSecurityConfigurationRequest,
     ) -> RusotoFuture<CreateSecurityConfigurationResponse, CreateSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateSecurityConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9629,9 +9709,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateTableRequest,
     ) -> RusotoFuture<CreateTableResponse, CreateTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9658,9 +9743,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateTriggerRequest,
     ) -> RusotoFuture<CreateTriggerResponse, CreateTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9687,9 +9777,14 @@ impl Glue for GlueClient {
         &self,
         input: CreateUserDefinedFunctionRequest,
     ) -> RusotoFuture<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.CreateUserDefinedFunction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9713,9 +9808,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteClassifierRequest,
     ) -> RusotoFuture<DeleteClassifierResponse, DeleteClassifierError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteClassifier");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9742,9 +9842,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteConnectionRequest,
     ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9771,9 +9876,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteCrawlerRequest,
     ) -> RusotoFuture<DeleteCrawlerResponse, DeleteCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9800,9 +9910,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteDatabaseRequest,
     ) -> RusotoFuture<DeleteDatabaseResponse, DeleteDatabaseError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9829,9 +9944,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteDevEndpointRequest,
     ) -> RusotoFuture<DeleteDevEndpointResponse, DeleteDevEndpointError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteDevEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9858,9 +9978,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteJobRequest,
     ) -> RusotoFuture<DeleteJobResponse, DeleteJobError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9887,9 +10012,14 @@ impl Glue for GlueClient {
         &self,
         input: DeletePartitionRequest,
     ) -> RusotoFuture<DeletePartitionResponse, DeletePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeletePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9916,9 +10046,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteResourcePolicyRequest,
     ) -> RusotoFuture<DeleteResourcePolicyResponse, DeleteResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9944,9 +10079,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteSecurityConfigurationRequest,
     ) -> RusotoFuture<DeleteSecurityConfigurationResponse, DeleteSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteSecurityConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9970,9 +10110,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteTableRequest,
     ) -> RusotoFuture<DeleteTableResponse, DeleteTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9999,9 +10144,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteTableVersionRequest,
     ) -> RusotoFuture<DeleteTableVersionResponse, DeleteTableVersionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTableVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10028,9 +10178,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteTriggerRequest,
     ) -> RusotoFuture<DeleteTriggerResponse, DeleteTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10057,9 +10212,14 @@ impl Glue for GlueClient {
         &self,
         input: DeleteUserDefinedFunctionRequest,
     ) -> RusotoFuture<DeleteUserDefinedFunctionResponse, DeleteUserDefinedFunctionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.DeleteUserDefinedFunction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10083,9 +10243,14 @@ impl Glue for GlueClient {
         &self,
         input: GetCatalogImportStatusRequest,
     ) -> RusotoFuture<GetCatalogImportStatusResponse, GetCatalogImportStatusError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCatalogImportStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10111,9 +10276,14 @@ impl Glue for GlueClient {
         &self,
         input: GetClassifierRequest,
     ) -> RusotoFuture<GetClassifierResponse, GetClassifierError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetClassifier");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10140,9 +10310,14 @@ impl Glue for GlueClient {
         &self,
         input: GetClassifiersRequest,
     ) -> RusotoFuture<GetClassifiersResponse, GetClassifiersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetClassifiers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10169,9 +10344,14 @@ impl Glue for GlueClient {
         &self,
         input: GetConnectionRequest,
     ) -> RusotoFuture<GetConnectionResponse, GetConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10198,9 +10378,14 @@ impl Glue for GlueClient {
         &self,
         input: GetConnectionsRequest,
     ) -> RusotoFuture<GetConnectionsResponse, GetConnectionsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetConnections");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10227,9 +10412,14 @@ impl Glue for GlueClient {
         &self,
         input: GetCrawlerRequest,
     ) -> RusotoFuture<GetCrawlerResponse, GetCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10256,9 +10446,14 @@ impl Glue for GlueClient {
         &self,
         input: GetCrawlerMetricsRequest,
     ) -> RusotoFuture<GetCrawlerMetricsResponse, GetCrawlerMetricsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawlerMetrics");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10285,9 +10480,14 @@ impl Glue for GlueClient {
         &self,
         input: GetCrawlersRequest,
     ) -> RusotoFuture<GetCrawlersResponse, GetCrawlersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetCrawlers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10315,9 +10515,14 @@ impl Glue for GlueClient {
         input: GetDataCatalogEncryptionSettingsRequest,
     ) -> RusotoFuture<GetDataCatalogEncryptionSettingsResponse, GetDataCatalogEncryptionSettingsError>
     {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDataCatalogEncryptionSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10343,9 +10548,14 @@ impl Glue for GlueClient {
         &self,
         input: GetDatabaseRequest,
     ) -> RusotoFuture<GetDatabaseResponse, GetDatabaseError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10372,9 +10582,14 @@ impl Glue for GlueClient {
         &self,
         input: GetDatabasesRequest,
     ) -> RusotoFuture<GetDatabasesResponse, GetDatabasesError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDatabases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10401,9 +10616,14 @@ impl Glue for GlueClient {
         &self,
         input: GetDataflowGraphRequest,
     ) -> RusotoFuture<GetDataflowGraphResponse, GetDataflowGraphError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDataflowGraph");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10430,9 +10650,14 @@ impl Glue for GlueClient {
         &self,
         input: GetDevEndpointRequest,
     ) -> RusotoFuture<GetDevEndpointResponse, GetDevEndpointError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDevEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10459,9 +10684,14 @@ impl Glue for GlueClient {
         &self,
         input: GetDevEndpointsRequest,
     ) -> RusotoFuture<GetDevEndpointsResponse, GetDevEndpointsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetDevEndpoints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10485,9 +10715,14 @@ impl Glue for GlueClient {
 
     /// <p>Retrieves an existing job definition.</p>
     fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10513,9 +10748,14 @@ impl Glue for GlueClient {
         &self,
         input: GetJobRunRequest,
     ) -> RusotoFuture<GetJobRunResponse, GetJobRunError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10542,9 +10782,14 @@ impl Glue for GlueClient {
         &self,
         input: GetJobRunsRequest,
     ) -> RusotoFuture<GetJobRunsResponse, GetJobRunsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10568,9 +10813,14 @@ impl Glue for GlueClient {
 
     /// <p>Retrieves all current job definitions.</p>
     fn get_jobs(&self, input: GetJobsRequest) -> RusotoFuture<GetJobsResponse, GetJobsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10596,9 +10846,14 @@ impl Glue for GlueClient {
         &self,
         input: GetMappingRequest,
     ) -> RusotoFuture<GetMappingResponse, GetMappingError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetMapping");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10625,9 +10880,14 @@ impl Glue for GlueClient {
         &self,
         input: GetPartitionRequest,
     ) -> RusotoFuture<GetPartitionResponse, GetPartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10654,9 +10914,14 @@ impl Glue for GlueClient {
         &self,
         input: GetPartitionsRequest,
     ) -> RusotoFuture<GetPartitionsResponse, GetPartitionsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPartitions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10680,9 +10945,14 @@ impl Glue for GlueClient {
 
     /// <p>Gets code to perform a specified mapping.</p>
     fn get_plan(&self, input: GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetPlan");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10707,9 +10977,14 @@ impl Glue for GlueClient {
     fn get_resource_policy(
         &self,
     ) -> RusotoFuture<GetResourcePolicyResponse, GetResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetResourcePolicy");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -10735,9 +11010,14 @@ impl Glue for GlueClient {
         &self,
         input: GetSecurityConfigurationRequest,
     ) -> RusotoFuture<GetSecurityConfigurationResponse, GetSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetSecurityConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10761,9 +11041,14 @@ impl Glue for GlueClient {
         &self,
         input: GetSecurityConfigurationsRequest,
     ) -> RusotoFuture<GetSecurityConfigurationsResponse, GetSecurityConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetSecurityConfigurations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10784,9 +11069,14 @@ impl Glue for GlueClient {
 
     /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
     fn get_table(&self, input: GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10813,9 +11103,14 @@ impl Glue for GlueClient {
         &self,
         input: GetTableVersionRequest,
     ) -> RusotoFuture<GetTableVersionResponse, GetTableVersionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTableVersion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10842,9 +11137,14 @@ impl Glue for GlueClient {
         &self,
         input: GetTableVersionsRequest,
     ) -> RusotoFuture<GetTableVersionsResponse, GetTableVersionsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTableVersions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10871,9 +11171,14 @@ impl Glue for GlueClient {
         &self,
         input: GetTablesRequest,
     ) -> RusotoFuture<GetTablesResponse, GetTablesError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTables");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10900,9 +11205,14 @@ impl Glue for GlueClient {
         &self,
         input: GetTriggerRequest,
     ) -> RusotoFuture<GetTriggerResponse, GetTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10929,9 +11239,14 @@ impl Glue for GlueClient {
         &self,
         input: GetTriggersRequest,
     ) -> RusotoFuture<GetTriggersResponse, GetTriggersError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10958,9 +11273,14 @@ impl Glue for GlueClient {
         &self,
         input: GetUserDefinedFunctionRequest,
     ) -> RusotoFuture<GetUserDefinedFunctionResponse, GetUserDefinedFunctionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetUserDefinedFunction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -10986,9 +11306,14 @@ impl Glue for GlueClient {
         &self,
         input: GetUserDefinedFunctionsRequest,
     ) -> RusotoFuture<GetUserDefinedFunctionsResponse, GetUserDefinedFunctionsError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.GetUserDefinedFunctions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11012,9 +11337,14 @@ impl Glue for GlueClient {
         &self,
         input: ImportCatalogToGlueRequest,
     ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ImportCatalogToGlue");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11041,9 +11371,14 @@ impl Glue for GlueClient {
         input: PutDataCatalogEncryptionSettingsRequest,
     ) -> RusotoFuture<PutDataCatalogEncryptionSettingsResponse, PutDataCatalogEncryptionSettingsError>
     {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.PutDataCatalogEncryptionSettings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11069,9 +11404,14 @@ impl Glue for GlueClient {
         &self,
         input: PutResourcePolicyRequest,
     ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.PutResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11098,9 +11438,14 @@ impl Glue for GlueClient {
         &self,
         input: ResetJobBookmarkRequest,
     ) -> RusotoFuture<ResetJobBookmarkResponse, ResetJobBookmarkError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.ResetJobBookmark");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11127,9 +11472,14 @@ impl Glue for GlueClient {
         &self,
         input: StartCrawlerRequest,
     ) -> RusotoFuture<StartCrawlerResponse, StartCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11156,9 +11506,14 @@ impl Glue for GlueClient {
         &self,
         input: StartCrawlerScheduleRequest,
     ) -> RusotoFuture<StartCrawlerScheduleResponse, StartCrawlerScheduleError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartCrawlerSchedule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11184,9 +11539,14 @@ impl Glue for GlueClient {
         &self,
         input: StartJobRunRequest,
     ) -> RusotoFuture<StartJobRunResponse, StartJobRunError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartJobRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11213,9 +11573,14 @@ impl Glue for GlueClient {
         &self,
         input: StartTriggerRequest,
     ) -> RusotoFuture<StartTriggerResponse, StartTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StartTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11242,9 +11607,14 @@ impl Glue for GlueClient {
         &self,
         input: StopCrawlerRequest,
     ) -> RusotoFuture<StopCrawlerResponse, StopCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11271,9 +11641,14 @@ impl Glue for GlueClient {
         &self,
         input: StopCrawlerScheduleRequest,
     ) -> RusotoFuture<StopCrawlerScheduleResponse, StopCrawlerScheduleError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopCrawlerSchedule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11299,9 +11674,14 @@ impl Glue for GlueClient {
         &self,
         input: StopTriggerRequest,
     ) -> RusotoFuture<StopTriggerResponse, StopTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.StopTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11328,9 +11708,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateClassifierRequest,
     ) -> RusotoFuture<UpdateClassifierResponse, UpdateClassifierError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateClassifier");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11357,9 +11742,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateConnectionRequest,
     ) -> RusotoFuture<UpdateConnectionResponse, UpdateConnectionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11386,9 +11776,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateCrawlerRequest,
     ) -> RusotoFuture<UpdateCrawlerResponse, UpdateCrawlerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateCrawler");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11415,9 +11810,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateCrawlerScheduleRequest,
     ) -> RusotoFuture<UpdateCrawlerScheduleResponse, UpdateCrawlerScheduleError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateCrawlerSchedule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11443,9 +11843,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateDatabaseRequest,
     ) -> RusotoFuture<UpdateDatabaseResponse, UpdateDatabaseError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11472,9 +11877,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateDevEndpointRequest,
     ) -> RusotoFuture<UpdateDevEndpointResponse, UpdateDevEndpointError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateDevEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11501,9 +11911,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateJobRequest,
     ) -> RusotoFuture<UpdateJobResponse, UpdateJobError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11530,9 +11945,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdatePartitionRequest,
     ) -> RusotoFuture<UpdatePartitionResponse, UpdatePartitionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdatePartition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11559,9 +11979,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateTableRequest,
     ) -> RusotoFuture<UpdateTableResponse, UpdateTableError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateTable");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11588,9 +12013,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateTriggerRequest,
     ) -> RusotoFuture<UpdateTriggerResponse, UpdateTriggerError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateTrigger");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -11617,9 +12047,14 @@ impl Glue for GlueClient {
         &self,
         input: UpdateUserDefinedFunctionRequest,
     ) -> RusotoFuture<UpdateUserDefinedFunctionResponse, UpdateUserDefinedFunctionError> {
-        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "glue",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSGlue.UpdateUserDefinedFunction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

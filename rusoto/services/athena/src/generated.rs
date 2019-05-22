@@ -1519,9 +1519,14 @@ impl Athena for AthenaClient {
         &self,
         input: BatchGetNamedQueryInput,
     ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.BatchGetNamedQuery");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1548,9 +1553,14 @@ impl Athena for AthenaClient {
         &self,
         input: BatchGetQueryExecutionInput,
     ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.BatchGetQueryExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1576,9 +1586,14 @@ impl Athena for AthenaClient {
         &self,
         input: CreateNamedQueryInput,
     ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.CreateNamedQuery");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1605,9 +1620,14 @@ impl Athena for AthenaClient {
         &self,
         input: CreateWorkGroupInput,
     ) -> RusotoFuture<CreateWorkGroupOutput, CreateWorkGroupError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.CreateWorkGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1634,9 +1654,14 @@ impl Athena for AthenaClient {
         &self,
         input: DeleteNamedQueryInput,
     ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.DeleteNamedQuery");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1663,9 +1688,14 @@ impl Athena for AthenaClient {
         &self,
         input: DeleteWorkGroupInput,
     ) -> RusotoFuture<DeleteWorkGroupOutput, DeleteWorkGroupError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.DeleteWorkGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1692,9 +1722,14 @@ impl Athena for AthenaClient {
         &self,
         input: GetNamedQueryInput,
     ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetNamedQuery");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1721,9 +1756,14 @@ impl Athena for AthenaClient {
         &self,
         input: GetQueryExecutionInput,
     ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetQueryExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1750,9 +1790,14 @@ impl Athena for AthenaClient {
         &self,
         input: GetQueryResultsInput,
     ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetQueryResults");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1779,9 +1824,14 @@ impl Athena for AthenaClient {
         &self,
         input: GetWorkGroupInput,
     ) -> RusotoFuture<GetWorkGroupOutput, GetWorkGroupError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.GetWorkGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1808,9 +1858,14 @@ impl Athena for AthenaClient {
         &self,
         input: ListNamedQueriesInput,
     ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListNamedQueries");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1837,9 +1892,14 @@ impl Athena for AthenaClient {
         &self,
         input: ListQueryExecutionsInput,
     ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListQueryExecutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1865,9 +1925,14 @@ impl Athena for AthenaClient {
         &self,
         input: ListWorkGroupsInput,
     ) -> RusotoFuture<ListWorkGroupsOutput, ListWorkGroupsError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.ListWorkGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1894,9 +1959,14 @@ impl Athena for AthenaClient {
         &self,
         input: StartQueryExecutionInput,
     ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.StartQueryExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1922,9 +1992,14 @@ impl Athena for AthenaClient {
         &self,
         input: StopQueryExecutionInput,
     ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.StopQueryExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1951,9 +2026,14 @@ impl Athena for AthenaClient {
         &self,
         input: UpdateWorkGroupInput,
     ) -> RusotoFuture<UpdateWorkGroupOutput, UpdateWorkGroupError> {
-        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "athena",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonAthena.UpdateWorkGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

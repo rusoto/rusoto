@@ -608,9 +608,14 @@ impl Translate for TranslateClient {
         &self,
         input: DeleteTerminologyRequest,
     ) -> RusotoFuture<(), DeleteTerminologyError> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "translate",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.DeleteTerminology",
@@ -637,9 +642,14 @@ impl Translate for TranslateClient {
         &self,
         input: GetTerminologyRequest,
     ) -> RusotoFuture<GetTerminologyResponse, GetTerminologyError> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "translate",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.GetTerminology",
@@ -669,9 +679,14 @@ impl Translate for TranslateClient {
         &self,
         input: ImportTerminologyRequest,
     ) -> RusotoFuture<ImportTerminologyResponse, ImportTerminologyError> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "translate",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.ImportTerminology",
@@ -701,9 +716,14 @@ impl Translate for TranslateClient {
         &self,
         input: ListTerminologiesRequest,
     ) -> RusotoFuture<ListTerminologiesResponse, ListTerminologiesError> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "translate",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.ListTerminologies",
@@ -733,9 +753,14 @@ impl Translate for TranslateClient {
         &self,
         input: TranslateTextRequest,
     ) -> RusotoFuture<TranslateTextResponse, TranslateTextError> {
-        let mut request = SignedRequest::new("POST", "translate", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "translate",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSShineFrontendService_20170701.TranslateText",

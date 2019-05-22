@@ -759,9 +759,14 @@ impl AWSHealth for AWSHealthClient {
         &self,
         input: DescribeAffectedEntitiesRequest,
     ) -> RusotoFuture<DescribeAffectedEntitiesResponse, DescribeAffectedEntitiesError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "health",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSHealth_20160804.DescribeAffectedEntities",
@@ -788,9 +793,14 @@ impl AWSHealth for AWSHealthClient {
         &self,
         input: DescribeEntityAggregatesRequest,
     ) -> RusotoFuture<DescribeEntityAggregatesResponse, DescribeEntityAggregatesError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "health",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSHealth_20160804.DescribeEntityAggregates",
@@ -817,9 +827,14 @@ impl AWSHealth for AWSHealthClient {
         &self,
         input: DescribeEventAggregatesRequest,
     ) -> RusotoFuture<DescribeEventAggregatesResponse, DescribeEventAggregatesError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "health",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventAggregates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -843,9 +858,14 @@ impl AWSHealth for AWSHealthClient {
         &self,
         input: DescribeEventDetailsRequest,
     ) -> RusotoFuture<DescribeEventDetailsResponse, DescribeEventDetailsError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "health",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventDetails");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -871,9 +891,14 @@ impl AWSHealth for AWSHealthClient {
         &self,
         input: DescribeEventTypesRequest,
     ) -> RusotoFuture<DescribeEventTypesResponse, DescribeEventTypesError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "health",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEventTypes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -900,9 +925,14 @@ impl AWSHealth for AWSHealthClient {
         &self,
         input: DescribeEventsRequest,
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "health", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "health",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSHealth_20160804.DescribeEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

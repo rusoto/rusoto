@@ -6145,9 +6145,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: AssignInstanceRequest,
     ) -> RusotoFuture<(), AssignInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssignInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6168,9 +6173,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Assigns one of the stack's registered Amazon EBS volumes to a specified instance. The volume must first be registered with the stack by calling <a>RegisterVolume</a>. After you register the volume, you must call <a>UpdateVolume</a> to specify a mount point before calling <code>AssignVolume</code>. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn assign_volume(&self, input: AssignVolumeRequest) -> RusotoFuture<(), AssignVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssignVolume");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6194,9 +6204,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: AssociateElasticIpRequest,
     ) -> RusotoFuture<(), AssociateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.AssociateElasticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6220,9 +6235,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: AttachElasticLoadBalancerRequest,
     ) -> RusotoFuture<(), AttachElasticLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.AttachElasticLoadBalancer",
@@ -6246,9 +6266,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: CloneStackRequest,
     ) -> RusotoFuture<CloneStackResult, CloneStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CloneStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6272,9 +6297,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Creates an app for a specified stack. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingapps-creating.html">Creating Apps</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn create_app(&self, input: CreateAppRequest) -> RusotoFuture<CreateAppResult, CreateAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateApp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6300,9 +6330,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: CreateDeploymentRequest,
     ) -> RusotoFuture<CreateDeploymentResult, CreateDeploymentError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6329,9 +6364,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: CreateInstanceRequest,
     ) -> RusotoFuture<CreateInstanceResult, CreateInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6358,9 +6398,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: CreateLayerRequest,
     ) -> RusotoFuture<CreateLayerResult, CreateLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateLayer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6387,9 +6432,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: CreateStackRequest,
     ) -> RusotoFuture<CreateStackResult, CreateStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6416,9 +6466,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: CreateUserProfileRequest,
     ) -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.CreateUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6442,9 +6497,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Deletes a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn delete_app(&self, input: DeleteAppRequest) -> RusotoFuture<(), DeleteAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteApp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6468,9 +6528,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DeleteInstanceRequest,
     ) -> RusotoFuture<(), DeleteInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6491,9 +6556,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Deletes a specified layer. You must first stop and then delete all associated instances or unassign registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinglayers-basics-delete.html">How to Delete a Layer</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn delete_layer(&self, input: DeleteLayerRequest) -> RusotoFuture<(), DeleteLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteLayer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6514,9 +6584,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Deletes a specified stack. You must first delete all instances, layers, and apps or deregister registered instances. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingstacks-shutting.html">Shut Down a Stack</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn delete_stack(&self, input: DeleteStackRequest) -> RusotoFuture<(), DeleteStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6540,9 +6615,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DeleteUserProfileRequest,
     ) -> RusotoFuture<(), DeleteUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeleteUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6566,9 +6646,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DeregisterEcsClusterRequest,
     ) -> RusotoFuture<(), DeregisterEcsClusterError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterEcsCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6591,9 +6676,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DeregisterElasticIpRequest,
     ) -> RusotoFuture<(), DeregisterElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterElasticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6616,9 +6706,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DeregisterInstanceRequest,
     ) -> RusotoFuture<(), DeregisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6642,9 +6737,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DeregisterRdsDbInstanceRequest,
     ) -> RusotoFuture<(), DeregisterRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterRdsDbInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6665,9 +6765,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DeregisterVolumeRequest,
     ) -> RusotoFuture<(), DeregisterVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DeregisterVolume");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6691,9 +6796,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeAgentVersionsRequest,
     ) -> RusotoFuture<DescribeAgentVersionsResult, DescribeAgentVersionsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeAgentVersions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6719,9 +6829,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeAppsRequest,
     ) -> RusotoFuture<DescribeAppsResult, DescribeAppsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeApps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6748,9 +6863,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeCommandsRequest,
     ) -> RusotoFuture<DescribeCommandsResult, DescribeCommandsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeCommands");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6777,9 +6897,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeDeploymentsRequest,
     ) -> RusotoFuture<DescribeDeploymentsResult, DescribeDeploymentsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeDeployments");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6805,9 +6930,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeEcsClustersRequest,
     ) -> RusotoFuture<DescribeEcsClustersResult, DescribeEcsClustersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeEcsClusters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6833,9 +6963,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeElasticIpsRequest,
     ) -> RusotoFuture<DescribeElasticIpsResult, DescribeElasticIpsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeElasticIps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6862,9 +6997,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeElasticLoadBalancersRequest,
     ) -> RusotoFuture<DescribeElasticLoadBalancersResult, DescribeElasticLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DescribeElasticLoadBalancers",
@@ -6891,9 +7031,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeInstancesRequest,
     ) -> RusotoFuture<DescribeInstancesResult, DescribeInstancesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6920,9 +7065,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeLayersRequest,
     ) -> RusotoFuture<DescribeLayersResult, DescribeLayersError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeLayers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6949,9 +7099,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeLoadBasedAutoScalingRequest,
     ) -> RusotoFuture<DescribeLoadBasedAutoScalingResult, DescribeLoadBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DescribeLoadBasedAutoScaling",
@@ -6977,9 +7132,14 @@ impl OpsWorks for OpsWorksClient {
     fn describe_my_user_profile(
         &self,
     ) -> RusotoFuture<DescribeMyUserProfileResult, DescribeMyUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeMyUserProfile");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -7003,9 +7163,14 @@ impl OpsWorks for OpsWorksClient {
     fn describe_operating_systems(
         &self,
     ) -> RusotoFuture<DescribeOperatingSystemsResponse, DescribeOperatingSystemsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeOperatingSystems");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -7028,9 +7193,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribePermissionsRequest,
     ) -> RusotoFuture<DescribePermissionsResult, DescribePermissionsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribePermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7056,9 +7226,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeRaidArraysRequest,
     ) -> RusotoFuture<DescribeRaidArraysResult, DescribeRaidArraysError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeRaidArrays");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7085,9 +7260,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeRdsDbInstancesRequest,
     ) -> RusotoFuture<DescribeRdsDbInstancesResult, DescribeRdsDbInstancesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeRdsDbInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7113,9 +7293,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeServiceErrorsRequest,
     ) -> RusotoFuture<DescribeServiceErrorsResult, DescribeServiceErrorsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeServiceErrors");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7144,9 +7329,14 @@ impl OpsWorks for OpsWorksClient {
         DescribeStackProvisioningParametersResult,
         DescribeStackProvisioningParametersError,
     > {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DescribeStackProvisioningParameters",
@@ -7175,9 +7365,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeStackSummaryRequest,
     ) -> RusotoFuture<DescribeStackSummaryResult, DescribeStackSummaryError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeStackSummary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7203,9 +7398,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeStacksRequest,
     ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeStacks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7232,9 +7432,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeTimeBasedAutoScalingRequest,
     ) -> RusotoFuture<DescribeTimeBasedAutoScalingResult, DescribeTimeBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DescribeTimeBasedAutoScaling",
@@ -7261,9 +7466,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeUserProfilesRequest,
     ) -> RusotoFuture<DescribeUserProfilesResult, DescribeUserProfilesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeUserProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7289,9 +7499,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DescribeVolumesRequest,
     ) -> RusotoFuture<DescribeVolumesResult, DescribeVolumesError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DescribeVolumes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7318,9 +7533,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DetachElasticLoadBalancerRequest,
     ) -> RusotoFuture<(), DetachElasticLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorks_20130218.DetachElasticLoadBalancer",
@@ -7344,9 +7564,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: DisassociateElasticIpRequest,
     ) -> RusotoFuture<(), DisassociateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.DisassociateElasticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7369,9 +7594,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: GetHostnameSuggestionRequest,
     ) -> RusotoFuture<GetHostnameSuggestionResult, GetHostnameSuggestionError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.GetHostnameSuggestion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7397,9 +7627,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: GrantAccessRequest,
     ) -> RusotoFuture<GrantAccessResult, GrantAccessError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.GrantAccess");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7423,9 +7658,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Returns a list of tags that are applied to the specified stack or layer.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResult, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7451,9 +7691,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: RebootInstanceRequest,
     ) -> RusotoFuture<(), RebootInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RebootInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7477,9 +7722,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: RegisterEcsClusterRequest,
     ) -> RusotoFuture<RegisterEcsClusterResult, RegisterEcsClusterError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterEcsCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7506,9 +7756,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: RegisterElasticIpRequest,
     ) -> RusotoFuture<RegisterElasticIpResult, RegisterElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterElasticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7535,9 +7790,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: RegisterInstanceRequest,
     ) -> RusotoFuture<RegisterInstanceResult, RegisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7564,9 +7824,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: RegisterRdsDbInstanceRequest,
     ) -> RusotoFuture<(), RegisterRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterRdsDbInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7589,9 +7854,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: RegisterVolumeRequest,
     ) -> RusotoFuture<RegisterVolumeResult, RegisterVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.RegisterVolume");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7618,9 +7888,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: SetLoadBasedAutoScalingRequest,
     ) -> RusotoFuture<(), SetLoadBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetLoadBasedAutoScaling");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7638,9 +7913,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Specifies a user's permissions. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workingsecurity.html">Security and Permissions</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn set_permission(&self, input: SetPermissionRequest) -> RusotoFuture<(), SetPermissionError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetPermission");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7664,9 +7944,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: SetTimeBasedAutoScalingRequest,
     ) -> RusotoFuture<(), SetTimeBasedAutoScalingError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.SetTimeBasedAutoScaling");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7684,9 +7969,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Starts a specified instance. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn start_instance(&self, input: StartInstanceRequest) -> RusotoFuture<(), StartInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StartInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7707,9 +7997,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Starts a stack's instances.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn start_stack(&self, input: StartStackRequest) -> RusotoFuture<(), StartStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StartStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7730,9 +8025,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Stops a specified instance. When you stop a standard instance, the data disappears and must be reinstalled when you restart the instance. You can stop an Amazon EBS-backed instance without losing data. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-starting.html">Starting, Stopping, and Rebooting Instances</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn stop_instance(&self, input: StopInstanceRequest) -> RusotoFuture<(), StopInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StopInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7753,9 +8053,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Stops a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn stop_stack(&self, input: StopStackRequest) -> RusotoFuture<(), StopStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.StopStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7776,9 +8081,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Apply cost-allocation tags to a specified stack or layer in AWS OpsWorks Stacks. For more information about how tagging works, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/tagging.html">Tags</a> in the AWS OpsWorks User Guide.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7802,9 +8112,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: UnassignInstanceRequest,
     ) -> RusotoFuture<(), UnassignInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UnassignInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7828,9 +8143,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: UnassignVolumeRequest,
     ) -> RusotoFuture<(), UnassignVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UnassignVolume");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7851,9 +8171,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Removes tags from a specified stack or layer.</p>
     fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7874,9 +8199,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Updates a specified app.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Deploy or Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn update_app(&self, input: UpdateAppRequest) -> RusotoFuture<(), UpdateAppError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateApp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7900,9 +8230,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: UpdateElasticIpRequest,
     ) -> RusotoFuture<(), UpdateElasticIpError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateElasticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7926,9 +8261,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: UpdateInstanceRequest,
     ) -> RusotoFuture<(), UpdateInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7949,9 +8289,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Updates a specified layer.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn update_layer(&self, input: UpdateLayerRequest) -> RusotoFuture<(), UpdateLayerError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateLayer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7975,9 +8320,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: UpdateMyUserProfileRequest,
     ) -> RusotoFuture<(), UpdateMyUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateMyUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8000,9 +8350,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: UpdateRdsDbInstanceRequest,
     ) -> RusotoFuture<(), UpdateRdsDbInstanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateRdsDbInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8022,9 +8377,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Updates a specified stack.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn update_stack(&self, input: UpdateStackRequest) -> RusotoFuture<(), UpdateStackError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateStack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8048,9 +8408,14 @@ impl OpsWorks for OpsWorksClient {
         &self,
         input: UpdateUserProfileRequest,
     ) -> RusotoFuture<(), UpdateUserProfileError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateUserProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8071,9 +8436,14 @@ impl OpsWorks for OpsWorksClient {
 
     /// <p>Updates an Amazon EBS volume's name or mount point. For more information, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/resources.html">Resource Management</a>.</p> <p> <b>Required Permissions</b>: To use this action, an IAM user must have a Manage permissions level for the stack, or an attached policy that explicitly grants permissions. For more information on user permissions, see <a href="http://docs.aws.amazon.com/opsworks/latest/userguide/opsworks-security-users.html">Managing User Permissions</a>.</p>
     fn update_volume(&self, input: UpdateVolumeRequest) -> RusotoFuture<(), UpdateVolumeError> {
-        let mut request = SignedRequest::new("POST", "opsworks", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorks_20130218.UpdateVolume");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

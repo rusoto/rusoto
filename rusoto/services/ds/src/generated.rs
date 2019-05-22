@@ -5189,9 +5189,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: AcceptSharedDirectoryRequest,
     ) -> RusotoFuture<AcceptSharedDirectoryResult, AcceptSharedDirectoryError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.AcceptSharedDirectory",
@@ -5220,9 +5225,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: AddIpRoutesRequest,
     ) -> RusotoFuture<AddIpRoutesResult, AddIpRoutesError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.AddIpRoutes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5249,9 +5259,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: AddTagsToResourceRequest,
     ) -> RusotoFuture<AddTagsToResourceResult, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.AddTagsToResource",
@@ -5281,9 +5296,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CancelSchemaExtensionRequest,
     ) -> RusotoFuture<CancelSchemaExtensionResult, CancelSchemaExtensionError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.CancelSchemaExtension",
@@ -5312,9 +5332,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: ConnectDirectoryRequest,
     ) -> RusotoFuture<ConnectDirectoryResult, ConnectDirectoryError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.ConnectDirectory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5341,9 +5366,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CreateAliasRequest,
     ) -> RusotoFuture<CreateAliasResult, CreateAliasError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5370,9 +5400,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CreateComputerRequest,
     ) -> RusotoFuture<CreateComputerResult, CreateComputerError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateComputer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5399,9 +5434,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CreateConditionalForwarderRequest,
     ) -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.CreateConditionalForwarder",
@@ -5428,9 +5468,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CreateDirectoryRequest,
     ) -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateDirectory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5457,9 +5502,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CreateLogSubscriptionRequest,
     ) -> RusotoFuture<CreateLogSubscriptionResult, CreateLogSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.CreateLogSubscription",
@@ -5488,9 +5538,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CreateMicrosoftADRequest,
     ) -> RusotoFuture<CreateMicrosoftADResult, CreateMicrosoftADError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.CreateMicrosoftAD",
@@ -5520,9 +5575,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CreateSnapshotRequest,
     ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5549,9 +5609,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: CreateTrustRequest,
     ) -> RusotoFuture<CreateTrustResult, CreateTrustError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.CreateTrust");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5578,9 +5643,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DeleteConditionalForwarderRequest,
     ) -> RusotoFuture<DeleteConditionalForwarderResult, DeleteConditionalForwarderError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DeleteConditionalForwarder",
@@ -5607,9 +5677,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DeleteDirectoryRequest,
     ) -> RusotoFuture<DeleteDirectoryResult, DeleteDirectoryError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DeleteDirectory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5636,9 +5711,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DeleteLogSubscriptionRequest,
     ) -> RusotoFuture<DeleteLogSubscriptionResult, DeleteLogSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DeleteLogSubscription",
@@ -5667,9 +5747,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DeleteSnapshotRequest,
     ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DeleteSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5696,9 +5781,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DeleteTrustRequest,
     ) -> RusotoFuture<DeleteTrustResult, DeleteTrustError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DeleteTrust");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5725,9 +5815,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DeregisterEventTopicRequest,
     ) -> RusotoFuture<DeregisterEventTopicResult, DeregisterEventTopicError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DeregisterEventTopic",
@@ -5756,9 +5851,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DescribeConditionalForwardersRequest,
     ) -> RusotoFuture<DescribeConditionalForwardersResult, DescribeConditionalForwardersError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DescribeConditionalForwarders",
@@ -5785,9 +5885,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DescribeDirectoriesRequest,
     ) -> RusotoFuture<DescribeDirectoriesResult, DescribeDirectoriesError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DescribeDirectories",
@@ -5816,9 +5921,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DescribeDomainControllersRequest,
     ) -> RusotoFuture<DescribeDomainControllersResult, DescribeDomainControllersError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DescribeDomainControllers",
@@ -5845,9 +5955,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DescribeEventTopicsRequest,
     ) -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DescribeEventTopics",
@@ -5876,9 +5991,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DescribeSharedDirectoriesRequest,
     ) -> RusotoFuture<DescribeSharedDirectoriesResult, DescribeSharedDirectoriesError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DescribeSharedDirectories",
@@ -5905,9 +6025,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DescribeSnapshotsRequest,
     ) -> RusotoFuture<DescribeSnapshotsResult, DescribeSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.DescribeSnapshots",
@@ -5937,9 +6062,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DescribeTrustsRequest,
     ) -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DescribeTrusts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5966,9 +6096,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DisableRadiusRequest,
     ) -> RusotoFuture<DisableRadiusResult, DisableRadiusError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DisableRadius");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5995,9 +6130,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: DisableSsoRequest,
     ) -> RusotoFuture<DisableSsoResult, DisableSsoError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.DisableSso");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6024,9 +6164,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: EnableRadiusRequest,
     ) -> RusotoFuture<EnableRadiusResult, EnableRadiusError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.EnableRadius");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6050,9 +6195,14 @@ impl DirectoryService for DirectoryServiceClient {
 
     /// <p>Enables single sign-on for a directory.</p>
     fn enable_sso(&self, input: EnableSsoRequest) -> RusotoFuture<EnableSsoResult, EnableSsoError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.EnableSso");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6077,9 +6227,14 @@ impl DirectoryService for DirectoryServiceClient {
     fn get_directory_limits(
         &self,
     ) -> RusotoFuture<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.GetDirectoryLimits",
@@ -6108,9 +6263,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: GetSnapshotLimitsRequest,
     ) -> RusotoFuture<GetSnapshotLimitsResult, GetSnapshotLimitsError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.GetSnapshotLimits",
@@ -6140,9 +6300,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: ListIpRoutesRequest,
     ) -> RusotoFuture<ListIpRoutesResult, ListIpRoutesError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.ListIpRoutes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6169,9 +6334,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: ListLogSubscriptionsRequest,
     ) -> RusotoFuture<ListLogSubscriptionsResult, ListLogSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.ListLogSubscriptions",
@@ -6200,9 +6370,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: ListSchemaExtensionsRequest,
     ) -> RusotoFuture<ListSchemaExtensionsResult, ListSchemaExtensionsError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.ListSchemaExtensions",
@@ -6231,9 +6406,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResult, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.ListTagsForResource",
@@ -6262,9 +6442,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: RegisterEventTopicRequest,
     ) -> RusotoFuture<RegisterEventTopicResult, RegisterEventTopicError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.RegisterEventTopic",
@@ -6294,9 +6479,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: RejectSharedDirectoryRequest,
     ) -> RusotoFuture<RejectSharedDirectoryResult, RejectSharedDirectoryError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.RejectSharedDirectory",
@@ -6325,9 +6515,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: RemoveIpRoutesRequest,
     ) -> RusotoFuture<RemoveIpRoutesResult, RemoveIpRoutesError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.RemoveIpRoutes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6354,9 +6549,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.RemoveTagsFromResource",
@@ -6385,9 +6585,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: ResetUserPasswordRequest,
     ) -> RusotoFuture<ResetUserPasswordResult, ResetUserPasswordError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.ResetUserPassword",
@@ -6417,9 +6622,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: RestoreFromSnapshotRequest,
     ) -> RusotoFuture<RestoreFromSnapshotResult, RestoreFromSnapshotError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.RestoreFromSnapshot",
@@ -6448,9 +6658,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: ShareDirectoryRequest,
     ) -> RusotoFuture<ShareDirectoryResult, ShareDirectoryError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.ShareDirectory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6477,9 +6692,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: StartSchemaExtensionRequest,
     ) -> RusotoFuture<StartSchemaExtensionResult, StartSchemaExtensionError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.StartSchemaExtension",
@@ -6508,9 +6728,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: UnshareDirectoryRequest,
     ) -> RusotoFuture<UnshareDirectoryResult, UnshareDirectoryError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.UnshareDirectory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6537,9 +6762,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: UpdateConditionalForwarderRequest,
     ) -> RusotoFuture<UpdateConditionalForwarderResult, UpdateConditionalForwarderError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.UpdateConditionalForwarder",
@@ -6567,9 +6797,14 @@ impl DirectoryService for DirectoryServiceClient {
         input: UpdateNumberOfDomainControllersRequest,
     ) -> RusotoFuture<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>
     {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DirectoryService_20150416.UpdateNumberOfDomainControllers",
@@ -6598,9 +6833,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: UpdateRadiusRequest,
     ) -> RusotoFuture<UpdateRadiusResult, UpdateRadiusError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.UpdateRadius");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6627,9 +6867,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: UpdateTrustRequest,
     ) -> RusotoFuture<UpdateTrustResult, UpdateTrustError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.UpdateTrust");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6656,9 +6901,14 @@ impl DirectoryService for DirectoryServiceClient {
         &self,
         input: VerifyTrustRequest,
     ) -> RusotoFuture<VerifyTrustResult, VerifyTrustError> {
-        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ds",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DirectoryService_20150416.VerifyTrust");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

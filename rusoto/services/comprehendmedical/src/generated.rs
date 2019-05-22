@@ -358,9 +358,14 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: DetectEntitiesRequest,
     ) -> RusotoFuture<DetectEntitiesResponse, DetectEntitiesError> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehendmedical",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ComprehendMedical_20181030.DetectEntities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -387,9 +392,14 @@ impl ComprehendMedical for ComprehendMedicalClient {
         &self,
         input: DetectPHIRequest,
     ) -> RusotoFuture<DetectPHIResponse, DetectPHIError> {
-        let mut request = SignedRequest::new("POST", "comprehendmedical", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "comprehendmedical",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ComprehendMedical_20181030.DetectPHI");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

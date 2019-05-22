@@ -5017,9 +5017,14 @@ impl Ecs for EcsClient {
         &self,
         input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.CreateCluster",
@@ -5049,9 +5054,14 @@ impl Ecs for EcsClient {
         &self,
         input: CreateServiceRequest,
     ) -> RusotoFuture<CreateServiceResponse, CreateServiceError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.CreateService",
@@ -5081,9 +5091,14 @@ impl Ecs for EcsClient {
         &self,
         input: DeleteAccountSettingRequest,
     ) -> RusotoFuture<DeleteAccountSettingResponse, DeleteAccountSettingError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DeleteAccountSetting",
@@ -5112,9 +5127,14 @@ impl Ecs for EcsClient {
         &self,
         input: DeleteAttributesRequest,
     ) -> RusotoFuture<DeleteAttributesResponse, DeleteAttributesError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DeleteAttributes",
@@ -5144,9 +5164,14 @@ impl Ecs for EcsClient {
         &self,
         input: DeleteClusterRequest,
     ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DeleteCluster",
@@ -5176,9 +5201,14 @@ impl Ecs for EcsClient {
         &self,
         input: DeleteServiceRequest,
     ) -> RusotoFuture<DeleteServiceResponse, DeleteServiceError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DeleteService",
@@ -5208,9 +5238,14 @@ impl Ecs for EcsClient {
         &self,
         input: DeregisterContainerInstanceRequest,
     ) -> RusotoFuture<DeregisterContainerInstanceResponse, DeregisterContainerInstanceError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DeregisterContainerInstance",
@@ -5237,9 +5272,14 @@ impl Ecs for EcsClient {
         &self,
         input: DeregisterTaskDefinitionRequest,
     ) -> RusotoFuture<DeregisterTaskDefinitionResponse, DeregisterTaskDefinitionError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DeregisterTaskDefinition",
@@ -5266,9 +5306,14 @@ impl Ecs for EcsClient {
         &self,
         input: DescribeClustersRequest,
     ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DescribeClusters",
@@ -5298,9 +5343,14 @@ impl Ecs for EcsClient {
         &self,
         input: DescribeContainerInstancesRequest,
     ) -> RusotoFuture<DescribeContainerInstancesResponse, DescribeContainerInstancesError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DescribeContainerInstances",
@@ -5327,9 +5377,14 @@ impl Ecs for EcsClient {
         &self,
         input: DescribeServicesRequest,
     ) -> RusotoFuture<DescribeServicesResponse, DescribeServicesError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DescribeServices",
@@ -5359,9 +5414,14 @@ impl Ecs for EcsClient {
         &self,
         input: DescribeTaskDefinitionRequest,
     ) -> RusotoFuture<DescribeTaskDefinitionResponse, DescribeTaskDefinitionError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DescribeTaskDefinition",
@@ -5390,9 +5450,14 @@ impl Ecs for EcsClient {
         &self,
         input: DescribeTasksRequest,
     ) -> RusotoFuture<DescribeTasksResponse, DescribeTasksError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DescribeTasks",
@@ -5422,9 +5487,14 @@ impl Ecs for EcsClient {
         &self,
         input: DiscoverPollEndpointRequest,
     ) -> RusotoFuture<DiscoverPollEndpointResponse, DiscoverPollEndpointError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.DiscoverPollEndpoint",
@@ -5453,9 +5523,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListAccountSettingsRequest,
     ) -> RusotoFuture<ListAccountSettingsResponse, ListAccountSettingsError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListAccountSettings",
@@ -5484,9 +5559,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListAttributesRequest,
     ) -> RusotoFuture<ListAttributesResponse, ListAttributesError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListAttributes",
@@ -5516,9 +5596,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListClustersRequest,
     ) -> RusotoFuture<ListClustersResponse, ListClustersError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListClusters",
@@ -5548,9 +5633,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListContainerInstancesRequest,
     ) -> RusotoFuture<ListContainerInstancesResponse, ListContainerInstancesError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListContainerInstances",
@@ -5579,9 +5669,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListServicesRequest,
     ) -> RusotoFuture<ListServicesResponse, ListServicesError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListServices",
@@ -5611,9 +5706,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListTagsForResource",
@@ -5642,9 +5742,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListTaskDefinitionFamiliesRequest,
     ) -> RusotoFuture<ListTaskDefinitionFamiliesResponse, ListTaskDefinitionFamiliesError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListTaskDefinitionFamilies",
@@ -5671,9 +5776,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListTaskDefinitionsRequest,
     ) -> RusotoFuture<ListTaskDefinitionsResponse, ListTaskDefinitionsError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListTaskDefinitions",
@@ -5702,9 +5812,14 @@ impl Ecs for EcsClient {
         &self,
         input: ListTasksRequest,
     ) -> RusotoFuture<ListTasksResponse, ListTasksError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.ListTasks",
@@ -5734,9 +5849,14 @@ impl Ecs for EcsClient {
         &self,
         input: PutAccountSettingRequest,
     ) -> RusotoFuture<PutAccountSettingResponse, PutAccountSettingError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.PutAccountSetting",
@@ -5766,9 +5886,14 @@ impl Ecs for EcsClient {
         &self,
         input: PutAccountSettingDefaultRequest,
     ) -> RusotoFuture<PutAccountSettingDefaultResponse, PutAccountSettingDefaultError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.PutAccountSettingDefault",
@@ -5795,9 +5920,14 @@ impl Ecs for EcsClient {
         &self,
         input: PutAttributesRequest,
     ) -> RusotoFuture<PutAttributesResponse, PutAttributesError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.PutAttributes",
@@ -5827,9 +5957,14 @@ impl Ecs for EcsClient {
         &self,
         input: RegisterContainerInstanceRequest,
     ) -> RusotoFuture<RegisterContainerInstanceResponse, RegisterContainerInstanceError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.RegisterContainerInstance",
@@ -5856,9 +5991,14 @@ impl Ecs for EcsClient {
         &self,
         input: RegisterTaskDefinitionRequest,
     ) -> RusotoFuture<RegisterTaskDefinitionResponse, RegisterTaskDefinitionError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.RegisterTaskDefinition",
@@ -5884,9 +6024,14 @@ impl Ecs for EcsClient {
 
     /// <p><p>Starts a new task using the specified task definition.</p> <p>You can allow Amazon ECS to place tasks for you, or you can customize how Amazon ECS places tasks using placement constraints and placement strategies. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/scheduling_tasks.html">Scheduling Tasks</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>Alternatively, you can use <a>StartTask</a> to use your own scheduler or place tasks manually on specific container instances.</p> <p>The Amazon ECS API follows an eventual consistency model, due to the distributed nature of the system supporting the API. This means that the result of an API command you run that affects your Amazon ECS resources might not be immediately visible to all subsequent commands you run. Keep this in mind when you carry out an API command that immediately follows a previous API command.</p> <p>To manage eventual consistency, you can do the following:</p> <ul> <li> <p>Confirm the state of the resource before you run a command to modify it. Run the DescribeTasks command using an exponential backoff algorithm to ensure that you allow enough time for the previous command to propagate through the system. To do this, run the DescribeTasks command repeatedly, starting with a couple of seconds of wait time and increasing gradually up to five minutes of wait time.</p> </li> <li> <p>Add wait time between subsequent commands, even if the DescribeTasks command returns an accurate response. Apply an exponential backoff algorithm starting with a couple of seconds of wait time, and increase gradually up to about five minutes of wait time.</p> </li> </ul></p>
     fn run_task(&self, input: RunTaskRequest) -> RusotoFuture<RunTaskResponse, RunTaskError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonEC2ContainerServiceV20141113.RunTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5912,9 +6057,14 @@ impl Ecs for EcsClient {
         &self,
         input: StartTaskRequest,
     ) -> RusotoFuture<StartTaskResponse, StartTaskError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.StartTask",
@@ -5941,9 +6091,14 @@ impl Ecs for EcsClient {
 
     /// <p><p>Stops a running task. Any tags associated with the task will be deleted.</p> <p>When <a>StopTask</a> is called on a task, the equivalent of <code>docker stop</code> is issued to the containers running in the task. This results in a <code>SIGTERM</code> value and a default 30-second timeout, after which the <code>SIGKILL</code> value is sent and the containers are forcibly stopped. If the container handles the <code>SIGTERM</code> value gracefully and exits within 30 seconds from receiving it, no <code>SIGKILL</code> value is sent.</p> <note> <p>The default 30-second timeout can be configured on the Amazon ECS container agent with the <code>ECS<em>CONTAINER</em>STOP_TIMEOUT</code> variable. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html">Amazon ECS Container Agent Configuration</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </note></p>
     fn stop_task(&self, input: StopTaskRequest) -> RusotoFuture<StopTaskResponse, StopTaskError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.StopTask",
@@ -5973,9 +6128,14 @@ impl Ecs for EcsClient {
         &self,
         input: SubmitContainerStateChangeRequest,
     ) -> RusotoFuture<SubmitContainerStateChangeResponse, SubmitContainerStateChangeError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.SubmitContainerStateChange",
@@ -6002,9 +6162,14 @@ impl Ecs for EcsClient {
         &self,
         input: SubmitTaskStateChangeRequest,
     ) -> RusotoFuture<SubmitTaskStateChangeResponse, SubmitTaskStateChangeError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.SubmitTaskStateChange",
@@ -6033,9 +6198,14 @@ impl Ecs for EcsClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.TagResource",
@@ -6065,9 +6235,14 @@ impl Ecs for EcsClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.UntagResource",
@@ -6097,9 +6272,14 @@ impl Ecs for EcsClient {
         &self,
         input: UpdateContainerAgentRequest,
     ) -> RusotoFuture<UpdateContainerAgentResponse, UpdateContainerAgentError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.UpdateContainerAgent",
@@ -6129,9 +6309,14 @@ impl Ecs for EcsClient {
         input: UpdateContainerInstancesStateRequest,
     ) -> RusotoFuture<UpdateContainerInstancesStateResponse, UpdateContainerInstancesStateError>
     {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.UpdateContainerInstancesState",
@@ -6158,9 +6343,14 @@ impl Ecs for EcsClient {
         &self,
         input: UpdateServiceRequest,
     ) -> RusotoFuture<UpdateServiceResponse, UpdateServiceError> {
-        let mut request = SignedRequest::new("POST", "ecs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerServiceV20141113.UpdateService",

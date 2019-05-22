@@ -281,9 +281,14 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         &self,
         input: DeleteReportDefinitionRequest,
     ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError> {
-        let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cur",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.DeleteReportDefinition",
@@ -312,9 +317,14 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         &self,
         input: DescribeReportDefinitionsRequest,
     ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError> {
-        let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cur",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.DescribeReportDefinitions",
@@ -341,9 +351,14 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         &self,
         input: PutReportDefinitionRequest,
     ) -> RusotoFuture<PutReportDefinitionResponse, PutReportDefinitionError> {
-        let mut request = SignedRequest::new("POST", "cur", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cur",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSOrigamiServiceGatewayService.PutReportDefinition",

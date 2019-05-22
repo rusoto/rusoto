@@ -3401,9 +3401,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: AcceptQualificationRequestRequest,
     ) -> RusotoFuture<AcceptQualificationRequestResponse, AcceptQualificationRequestError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.AcceptQualificationRequest",
@@ -3430,9 +3435,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ApproveAssignmentRequest,
     ) -> RusotoFuture<ApproveAssignmentResponse, ApproveAssignmentError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ApproveAssignment",
@@ -3463,9 +3473,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: AssociateQualificationWithWorkerRequest,
     ) -> RusotoFuture<AssociateQualificationWithWorkerResponse, AssociateQualificationWithWorkerError>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.AssociateQualificationWithWorker",
@@ -3497,9 +3512,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         CreateAdditionalAssignmentsForHITResponse,
         CreateAdditionalAssignmentsForHITError,
     > {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateAdditionalAssignmentsForHIT",
@@ -3528,9 +3548,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateHITRequest,
     ) -> RusotoFuture<CreateHITResponse, CreateHITError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.CreateHIT");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3557,9 +3582,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateHITTypeRequest,
     ) -> RusotoFuture<CreateHITTypeResponse, CreateHITTypeError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateHITType",
@@ -3589,9 +3619,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateHITWithHITTypeRequest,
     ) -> RusotoFuture<CreateHITWithHITTypeResponse, CreateHITWithHITTypeError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateHITWithHITType",
@@ -3620,9 +3655,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateQualificationTypeRequest,
     ) -> RusotoFuture<CreateQualificationTypeResponse, CreateQualificationTypeError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateQualificationType",
@@ -3649,9 +3689,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: CreateWorkerBlockRequest,
     ) -> RusotoFuture<CreateWorkerBlockResponse, CreateWorkerBlockError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.CreateWorkerBlock",
@@ -3681,9 +3726,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: DeleteHITRequest,
     ) -> RusotoFuture<DeleteHITResponse, DeleteHITError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.DeleteHIT");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3710,9 +3760,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: DeleteQualificationTypeRequest,
     ) -> RusotoFuture<DeleteQualificationTypeResponse, DeleteQualificationTypeError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.DeleteQualificationType",
@@ -3739,9 +3794,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: DeleteWorkerBlockRequest,
     ) -> RusotoFuture<DeleteWorkerBlockResponse, DeleteWorkerBlockError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.DeleteWorkerBlock",
@@ -3774,9 +3834,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         DisassociateQualificationFromWorkerResponse,
         DisassociateQualificationFromWorkerError,
     > {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.DisassociateQualificationFromWorker",
@@ -3804,9 +3869,14 @@ impl MechanicalTurk for MechanicalTurkClient {
     fn get_account_balance(
         &self,
     ) -> RusotoFuture<GetAccountBalanceResponse, GetAccountBalanceError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetAccountBalance",
@@ -3835,9 +3905,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetAssignmentRequest,
     ) -> RusotoFuture<GetAssignmentResponse, GetAssignmentError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetAssignment",
@@ -3867,9 +3942,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetFileUploadURLRequest,
     ) -> RusotoFuture<GetFileUploadURLResponse, GetFileUploadURLError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetFileUploadURL",
@@ -3896,9 +3976,14 @@ impl MechanicalTurk for MechanicalTurkClient {
 
     /// <p> The <code>GetHIT</code> operation retrieves the details of the specified HIT. </p>
     fn get_hit(&self, input: GetHITRequest) -> RusotoFuture<GetHITResponse, GetHITError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.GetHIT");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3924,9 +4009,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetQualificationScoreRequest,
     ) -> RusotoFuture<GetQualificationScoreResponse, GetQualificationScoreError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetQualificationScore",
@@ -3955,9 +4045,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: GetQualificationTypeRequest,
     ) -> RusotoFuture<GetQualificationTypeResponse, GetQualificationTypeError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.GetQualificationType",
@@ -3986,9 +4081,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListAssignmentsForHITRequest,
     ) -> RusotoFuture<ListAssignmentsForHITResponse, ListAssignmentsForHITError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListAssignmentsForHIT",
@@ -4017,9 +4117,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListBonusPaymentsRequest,
     ) -> RusotoFuture<ListBonusPaymentsResponse, ListBonusPaymentsError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListBonusPayments",
@@ -4046,9 +4151,14 @@ impl MechanicalTurk for MechanicalTurkClient {
 
     /// <p> The <code>ListHITs</code> operation returns all of a Requester's HITs. The operation returns HITs of any status, except for HITs that have been deleted of with the DeleteHIT operation or that have been auto-deleted. </p>
     fn list_hi_ts(&self, input: ListHITsRequest) -> RusotoFuture<ListHITsResponse, ListHITsError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.ListHITs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4075,9 +4185,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListHITsForQualificationTypeRequest,
     ) -> RusotoFuture<ListHITsForQualificationTypeResponse, ListHITsForQualificationTypeError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListHITsForQualificationType",
@@ -4104,9 +4219,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListQualificationRequestsRequest,
     ) -> RusotoFuture<ListQualificationRequestsResponse, ListQualificationRequestsError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListQualificationRequests",
@@ -4133,9 +4253,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListQualificationTypesRequest,
     ) -> RusotoFuture<ListQualificationTypesResponse, ListQualificationTypesError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListQualificationTypes",
@@ -4165,9 +4290,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: ListReviewPolicyResultsForHITRequest,
     ) -> RusotoFuture<ListReviewPolicyResultsForHITResponse, ListReviewPolicyResultsForHITError>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListReviewPolicyResultsForHIT",
@@ -4194,9 +4324,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListReviewableHITsRequest,
     ) -> RusotoFuture<ListReviewableHITsResponse, ListReviewableHITsError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListReviewableHITs",
@@ -4226,9 +4361,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: ListWorkerBlocksRequest,
     ) -> RusotoFuture<ListWorkerBlocksResponse, ListWorkerBlocksError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListWorkerBlocks",
@@ -4259,9 +4399,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         input: ListWorkersWithQualificationTypeRequest,
     ) -> RusotoFuture<ListWorkersWithQualificationTypeResponse, ListWorkersWithQualificationTypeError>
     {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.ListWorkersWithQualificationType",
@@ -4290,9 +4435,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: NotifyWorkersRequest,
     ) -> RusotoFuture<NotifyWorkersResponse, NotifyWorkersError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.NotifyWorkers",
@@ -4322,9 +4472,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: RejectAssignmentRequest,
     ) -> RusotoFuture<RejectAssignmentResponse, RejectAssignmentError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.RejectAssignment",
@@ -4354,9 +4509,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: RejectQualificationRequestRequest,
     ) -> RusotoFuture<RejectQualificationRequestResponse, RejectQualificationRequestError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.RejectQualificationRequest",
@@ -4383,9 +4543,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: SendBonusRequest,
     ) -> RusotoFuture<SendBonusResponse, SendBonusError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MTurkRequesterServiceV20170117.SendBonus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4412,9 +4577,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: SendTestEventNotificationRequest,
     ) -> RusotoFuture<SendTestEventNotificationResponse, SendTestEventNotificationError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.SendTestEventNotification",
@@ -4441,9 +4611,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateExpirationForHITRequest,
     ) -> RusotoFuture<UpdateExpirationForHITResponse, UpdateExpirationForHITError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateExpirationForHIT",
@@ -4472,9 +4647,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateHITReviewStatusRequest,
     ) -> RusotoFuture<UpdateHITReviewStatusResponse, UpdateHITReviewStatusError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateHITReviewStatus",
@@ -4503,9 +4683,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateHITTypeOfHITRequest,
     ) -> RusotoFuture<UpdateHITTypeOfHITResponse, UpdateHITTypeOfHITError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateHITTypeOfHIT",
@@ -4535,9 +4720,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateNotificationSettingsRequest,
     ) -> RusotoFuture<UpdateNotificationSettingsResponse, UpdateNotificationSettingsError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateNotificationSettings",
@@ -4564,9 +4754,14 @@ impl MechanicalTurk for MechanicalTurkClient {
         &self,
         input: UpdateQualificationTypeRequest,
     ) -> RusotoFuture<UpdateQualificationTypeResponse, UpdateQualificationTypeError> {
-        let mut request = SignedRequest::new("POST", "mturk-requester", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mturk-requester",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "MTurkRequesterServiceV20170117.UpdateQualificationType",

@@ -3580,9 +3580,14 @@ impl Emr for EmrClient {
         &self,
         input: AddInstanceFleetInput,
     ) -> RusotoFuture<AddInstanceFleetOutput, AddInstanceFleetError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.AddInstanceFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3609,9 +3614,14 @@ impl Emr for EmrClient {
         &self,
         input: AddInstanceGroupsInput,
     ) -> RusotoFuture<AddInstanceGroupsOutput, AddInstanceGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.AddInstanceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3638,9 +3648,14 @@ impl Emr for EmrClient {
         &self,
         input: AddJobFlowStepsInput,
     ) -> RusotoFuture<AddJobFlowStepsOutput, AddJobFlowStepsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.AddJobFlowSteps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3664,9 +3679,14 @@ impl Emr for EmrClient {
 
     /// <p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html">Tag Clusters</a>. </p>
     fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.AddTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3692,9 +3712,14 @@ impl Emr for EmrClient {
         &self,
         input: CancelStepsInput,
     ) -> RusotoFuture<CancelStepsOutput, CancelStepsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.CancelSteps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3721,9 +3746,14 @@ impl Emr for EmrClient {
         &self,
         input: CreateSecurityConfigurationInput,
     ) -> RusotoFuture<CreateSecurityConfigurationOutput, CreateSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.CreateSecurityConfiguration",
@@ -3750,9 +3780,14 @@ impl Emr for EmrClient {
         &self,
         input: DeleteSecurityConfigurationInput,
     ) -> RusotoFuture<DeleteSecurityConfigurationOutput, DeleteSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.DeleteSecurityConfiguration",
@@ -3779,9 +3814,14 @@ impl Emr for EmrClient {
         &self,
         input: DescribeClusterInput,
     ) -> RusotoFuture<DescribeClusterOutput, DescribeClusterError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3808,9 +3848,14 @@ impl Emr for EmrClient {
         &self,
         input: DescribeJobFlowsInput,
     ) -> RusotoFuture<DescribeJobFlowsOutput, DescribeJobFlowsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeJobFlows");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3837,9 +3882,14 @@ impl Emr for EmrClient {
         &self,
         input: DescribeSecurityConfigurationInput,
     ) -> RusotoFuture<DescribeSecurityConfigurationOutput, DescribeSecurityConfigurationError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.DescribeSecurityConfiguration",
@@ -3866,9 +3916,14 @@ impl Emr for EmrClient {
         &self,
         input: DescribeStepInput,
     ) -> RusotoFuture<DescribeStepOutput, DescribeStepError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.DescribeStep");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3895,9 +3950,14 @@ impl Emr for EmrClient {
         &self,
         input: ListBootstrapActionsInput,
     ) -> RusotoFuture<ListBootstrapActionsOutput, ListBootstrapActionsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListBootstrapActions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3923,9 +3983,14 @@ impl Emr for EmrClient {
         &self,
         input: ListClustersInput,
     ) -> RusotoFuture<ListClustersOutput, ListClustersError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListClusters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3952,9 +4017,14 @@ impl Emr for EmrClient {
         &self,
         input: ListInstanceFleetsInput,
     ) -> RusotoFuture<ListInstanceFleetsOutput, ListInstanceFleetsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstanceFleets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3981,9 +4051,14 @@ impl Emr for EmrClient {
         &self,
         input: ListInstanceGroupsInput,
     ) -> RusotoFuture<ListInstanceGroupsOutput, ListInstanceGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstanceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4010,9 +4085,14 @@ impl Emr for EmrClient {
         &self,
         input: ListInstancesInput,
     ) -> RusotoFuture<ListInstancesOutput, ListInstancesError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4039,9 +4119,14 @@ impl Emr for EmrClient {
         &self,
         input: ListSecurityConfigurationsInput,
     ) -> RusotoFuture<ListSecurityConfigurationsOutput, ListSecurityConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ElasticMapReduce.ListSecurityConfigurations",
@@ -4065,9 +4150,14 @@ impl Emr for EmrClient {
 
     /// <p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>
     fn list_steps(&self, input: ListStepsInput) -> RusotoFuture<ListStepsOutput, ListStepsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ListSteps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4093,9 +4183,14 @@ impl Emr for EmrClient {
         &self,
         input: ModifyInstanceFleetInput,
     ) -> RusotoFuture<(), ModifyInstanceFleetError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ModifyInstanceFleet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4118,9 +4213,14 @@ impl Emr for EmrClient {
         &self,
         input: ModifyInstanceGroupsInput,
     ) -> RusotoFuture<(), ModifyInstanceGroupsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.ModifyInstanceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4143,9 +4243,14 @@ impl Emr for EmrClient {
         &self,
         input: PutAutoScalingPolicyInput,
     ) -> RusotoFuture<PutAutoScalingPolicyOutput, PutAutoScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.PutAutoScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4171,9 +4276,14 @@ impl Emr for EmrClient {
         &self,
         input: RemoveAutoScalingPolicyInput,
     ) -> RusotoFuture<RemoveAutoScalingPolicyOutput, RemoveAutoScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.RemoveAutoScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4197,9 +4307,14 @@ impl Emr for EmrClient {
         &self,
         input: RemoveTagsInput,
     ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.RemoveTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4226,9 +4341,14 @@ impl Emr for EmrClient {
         &self,
         input: RunJobFlowInput,
     ) -> RusotoFuture<RunJobFlowOutput, RunJobFlowError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.RunJobFlow");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4255,9 +4375,14 @@ impl Emr for EmrClient {
         &self,
         input: SetTerminationProtectionInput,
     ) -> RusotoFuture<(), SetTerminationProtectionError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.SetTerminationProtection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4278,9 +4403,14 @@ impl Emr for EmrClient {
         &self,
         input: SetVisibleToAllUsersInput,
     ) -> RusotoFuture<(), SetVisibleToAllUsersError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.SetVisibleToAllUsers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4303,9 +4433,14 @@ impl Emr for EmrClient {
         &self,
         input: TerminateJobFlowsInput,
     ) -> RusotoFuture<(), TerminateJobFlowsError> {
-        let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "elasticmapreduce",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ElasticMapReduce.TerminateJobFlows");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

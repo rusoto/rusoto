@@ -1886,9 +1886,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: CancelRotateSecretRequest,
     ) -> RusotoFuture<CancelRotateSecretResponse, CancelRotateSecretError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.CancelRotateSecret");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1915,9 +1920,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: CreateSecretRequest,
     ) -> RusotoFuture<CreateSecretResponse, CreateSecretError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.CreateSecret");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1944,9 +1954,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: DeleteResourcePolicyRequest,
     ) -> RusotoFuture<DeleteResourcePolicyResponse, DeleteResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.DeleteResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1972,9 +1987,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: DeleteSecretRequest,
     ) -> RusotoFuture<DeleteSecretResponse, DeleteSecretError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.DeleteSecret");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2001,9 +2021,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: DescribeSecretRequest,
     ) -> RusotoFuture<DescribeSecretResponse, DescribeSecretError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.DescribeSecret");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2030,9 +2055,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: GetRandomPasswordRequest,
     ) -> RusotoFuture<GetRandomPasswordResponse, GetRandomPasswordError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.GetRandomPassword");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2059,9 +2089,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: GetResourcePolicyRequest,
     ) -> RusotoFuture<GetResourcePolicyResponse, GetResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.GetResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2088,9 +2123,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: GetSecretValueRequest,
     ) -> RusotoFuture<GetSecretValueResponse, GetSecretValueError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.GetSecretValue");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2117,9 +2157,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: ListSecretVersionIdsRequest,
     ) -> RusotoFuture<ListSecretVersionIdsResponse, ListSecretVersionIdsError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.ListSecretVersionIds");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2145,9 +2190,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: ListSecretsRequest,
     ) -> RusotoFuture<ListSecretsResponse, ListSecretsError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.ListSecrets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2174,9 +2224,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: PutResourcePolicyRequest,
     ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.PutResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2203,9 +2258,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: PutSecretValueRequest,
     ) -> RusotoFuture<PutSecretValueResponse, PutSecretValueError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.PutSecretValue");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2232,9 +2292,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: RestoreSecretRequest,
     ) -> RusotoFuture<RestoreSecretResponse, RestoreSecretError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.RestoreSecret");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2261,9 +2326,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: RotateSecretRequest,
     ) -> RusotoFuture<RotateSecretResponse, RotateSecretError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.RotateSecret");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2287,9 +2357,14 @@ impl SecretsManager for SecretsManagerClient {
 
     /// <p><p>Attaches one or more tags, each consisting of a key name and a value, to the specified secret. Tags are part of the secret&#39;s overall metadata, and are not associated with any specific version of the secret. This operation only appends tags to the existing list of tags. To remove tags, you must use <a>UntagResource</a>.</p> <p>The following basic restrictions apply to tags:</p> <ul> <li> <p>Maximum number of tags per secret—50</p> </li> <li> <p>Maximum key length—127 Unicode characters in UTF-8</p> </li> <li> <p>Maximum value length—255 Unicode characters in UTF-8</p> </li> <li> <p>Tag keys and values are case sensitive.</p> </li> <li> <p>Do not use the <code>aws:</code> prefix in your tag names or values because it is reserved for AWS use. You can&#39;t edit or delete tag names or values with this prefix. Tags with this prefix do not count against your tags per secret limit.</p> </li> <li> <p>If your tagging schema will be used across multiple services and resources, remember that other services might have restrictions on allowed characters. Generally allowed characters are: letters, spaces, and numbers representable in UTF-8, plus the following special characters: + - = . _ : / @.</p> </li> </ul> <important> <p>If you use tags as part of your security strategy, then adding or removing a tag can change permissions. If successfully completing this operation would result in you losing your permissions for this secret, then the operation is blocked and returns an Access Denied error.</p> </important> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p>secretsmanager:TagResource</p> </li> </ul> <p> <b>Related operations</b> </p> <ul> <li> <p>To remove one or more tags from the collection attached to a secret, use <a>UntagResource</a>.</p> </li> <li> <p>To view the list of tags attached to a secret, use <a>DescribeSecret</a>.</p> </li> </ul></p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2310,9 +2385,14 @@ impl SecretsManager for SecretsManagerClient {
 
     /// <p><p>Removes one or more tags from the specified secret.</p> <p>This operation is idempotent. If a requested tag is not attached to the secret, no error is returned and the secret metadata is unchanged.</p> <important> <p>If you use tags as part of your security strategy, then removing a tag can change permissions. If successfully completing this operation would result in you losing your permissions for this secret, then the operation is blocked and returns an Access Denied error.</p> </important> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p>secretsmanager:UntagResource</p> </li> </ul> <p> <b>Related operations</b> </p> <ul> <li> <p>To add one or more tags to the collection attached to a secret, use <a>TagResource</a>.</p> </li> <li> <p>To view the list of tags attached to a secret, use <a>DescribeSecret</a>.</p> </li> </ul></p>
     fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2336,9 +2416,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: UpdateSecretRequest,
     ) -> RusotoFuture<UpdateSecretResponse, UpdateSecretError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.UpdateSecret");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2365,9 +2450,14 @@ impl SecretsManager for SecretsManagerClient {
         &self,
         input: UpdateSecretVersionStageRequest,
     ) -> RusotoFuture<UpdateSecretVersionStageResponse, UpdateSecretVersionStageError> {
-        let mut request = SignedRequest::new("POST", "secretsmanager", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "secretsmanager",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "secretsmanager.UpdateSecretVersionStage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

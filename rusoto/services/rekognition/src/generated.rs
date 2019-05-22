@@ -4806,9 +4806,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: CompareFacesRequest,
     ) -> RusotoFuture<CompareFacesResponse, CompareFacesError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.CompareFaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4835,9 +4840,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: CreateCollectionRequest,
     ) -> RusotoFuture<CreateCollectionResponse, CreateCollectionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.CreateCollection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4864,9 +4874,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: CreateStreamProcessorRequest,
     ) -> RusotoFuture<CreateStreamProcessorResponse, CreateStreamProcessorError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.CreateStreamProcessor");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4892,9 +4907,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DeleteCollectionRequest,
     ) -> RusotoFuture<DeleteCollectionResponse, DeleteCollectionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DeleteCollection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4921,9 +4941,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DeleteFacesRequest,
     ) -> RusotoFuture<DeleteFacesResponse, DeleteFacesError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DeleteFaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4950,9 +4975,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DeleteStreamProcessorRequest,
     ) -> RusotoFuture<DeleteStreamProcessorResponse, DeleteStreamProcessorError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DeleteStreamProcessor");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4978,9 +5008,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DescribeCollectionRequest,
     ) -> RusotoFuture<DescribeCollectionResponse, DescribeCollectionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DescribeCollection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5007,9 +5042,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DescribeStreamProcessorRequest,
     ) -> RusotoFuture<DescribeStreamProcessorResponse, DescribeStreamProcessorError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DescribeStreamProcessor");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5033,9 +5073,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DetectFacesRequest,
     ) -> RusotoFuture<DetectFacesResponse, DetectFacesError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DetectFaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5062,9 +5107,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DetectLabelsRequest,
     ) -> RusotoFuture<DetectLabelsResponse, DetectLabelsError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DetectLabels");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5091,9 +5141,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DetectModerationLabelsRequest,
     ) -> RusotoFuture<DetectModerationLabelsResponse, DetectModerationLabelsError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DetectModerationLabels");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5119,9 +5174,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: DetectTextRequest,
     ) -> RusotoFuture<DetectTextResponse, DetectTextError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.DetectText");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5148,9 +5208,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: GetCelebrityInfoRequest,
     ) -> RusotoFuture<GetCelebrityInfoResponse, GetCelebrityInfoError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.GetCelebrityInfo");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5177,9 +5242,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: GetCelebrityRecognitionRequest,
     ) -> RusotoFuture<GetCelebrityRecognitionResponse, GetCelebrityRecognitionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.GetCelebrityRecognition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5203,9 +5273,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: GetContentModerationRequest,
     ) -> RusotoFuture<GetContentModerationResponse, GetContentModerationError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.GetContentModeration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5231,9 +5306,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: GetFaceDetectionRequest,
     ) -> RusotoFuture<GetFaceDetectionResponse, GetFaceDetectionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.GetFaceDetection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5260,9 +5340,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: GetFaceSearchRequest,
     ) -> RusotoFuture<GetFaceSearchResponse, GetFaceSearchError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.GetFaceSearch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5289,9 +5374,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: GetLabelDetectionRequest,
     ) -> RusotoFuture<GetLabelDetectionResponse, GetLabelDetectionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.GetLabelDetection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5318,9 +5408,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: GetPersonTrackingRequest,
     ) -> RusotoFuture<GetPersonTrackingResponse, GetPersonTrackingError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.GetPersonTracking");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5347,9 +5442,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: IndexFacesRequest,
     ) -> RusotoFuture<IndexFacesResponse, IndexFacesError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.IndexFaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5376,9 +5476,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: ListCollectionsRequest,
     ) -> RusotoFuture<ListCollectionsResponse, ListCollectionsError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.ListCollections");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5405,9 +5510,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: ListFacesRequest,
     ) -> RusotoFuture<ListFacesResponse, ListFacesError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.ListFaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5434,9 +5544,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: ListStreamProcessorsRequest,
     ) -> RusotoFuture<ListStreamProcessorsResponse, ListStreamProcessorsError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.ListStreamProcessors");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5462,9 +5577,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: RecognizeCelebritiesRequest,
     ) -> RusotoFuture<RecognizeCelebritiesResponse, RecognizeCelebritiesError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.RecognizeCelebrities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5490,9 +5610,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: SearchFacesRequest,
     ) -> RusotoFuture<SearchFacesResponse, SearchFacesError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.SearchFaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5519,9 +5644,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: SearchFacesByImageRequest,
     ) -> RusotoFuture<SearchFacesByImageResponse, SearchFacesByImageError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.SearchFacesByImage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5548,9 +5678,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: StartCelebrityRecognitionRequest,
     ) -> RusotoFuture<StartCelebrityRecognitionResponse, StartCelebrityRecognitionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "RekognitionService.StartCelebrityRecognition",
@@ -5577,9 +5712,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: StartContentModerationRequest,
     ) -> RusotoFuture<StartContentModerationResponse, StartContentModerationError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.StartContentModeration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5605,9 +5745,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: StartFaceDetectionRequest,
     ) -> RusotoFuture<StartFaceDetectionResponse, StartFaceDetectionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.StartFaceDetection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5634,9 +5779,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: StartFaceSearchRequest,
     ) -> RusotoFuture<StartFaceSearchResponse, StartFaceSearchError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.StartFaceSearch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5663,9 +5813,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: StartLabelDetectionRequest,
     ) -> RusotoFuture<StartLabelDetectionResponse, StartLabelDetectionError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.StartLabelDetection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5691,9 +5846,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: StartPersonTrackingRequest,
     ) -> RusotoFuture<StartPersonTrackingResponse, StartPersonTrackingError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.StartPersonTracking");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5719,9 +5879,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: StartStreamProcessorRequest,
     ) -> RusotoFuture<StartStreamProcessorResponse, StartStreamProcessorError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.StartStreamProcessor");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5747,9 +5912,14 @@ impl Rekognition for RekognitionClient {
         &self,
         input: StopStreamProcessorRequest,
     ) -> RusotoFuture<StopStreamProcessorResponse, StopStreamProcessorError> {
-        let mut request = SignedRequest::new("POST", "rekognition", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "rekognition",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "RekognitionService.StopStreamProcessor");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

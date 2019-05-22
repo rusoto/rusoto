@@ -3493,9 +3493,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: AssociateKmsKeyRequest,
     ) -> RusotoFuture<(), AssociateKmsKeyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.AssociateKmsKey");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3519,9 +3524,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: CancelExportTaskRequest,
     ) -> RusotoFuture<(), CancelExportTaskError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.CancelExportTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3545,9 +3555,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: CreateExportTaskRequest,
     ) -> RusotoFuture<CreateExportTaskResponse, CreateExportTaskError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.CreateExportTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3574,9 +3589,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: CreateLogGroupRequest,
     ) -> RusotoFuture<(), CreateLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.CreateLogGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3600,9 +3620,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: CreateLogStreamRequest,
     ) -> RusotoFuture<(), CreateLogStreamError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.CreateLogStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3626,9 +3651,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DeleteDestinationRequest,
     ) -> RusotoFuture<(), DeleteDestinationError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteDestination");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3652,9 +3682,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DeleteLogGroupRequest,
     ) -> RusotoFuture<(), DeleteLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteLogGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3678,9 +3713,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DeleteLogStreamRequest,
     ) -> RusotoFuture<(), DeleteLogStreamError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteLogStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3704,9 +3744,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DeleteMetricFilterRequest,
     ) -> RusotoFuture<(), DeleteMetricFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteMetricFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3730,9 +3775,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DeleteResourcePolicyRequest,
     ) -> RusotoFuture<(), DeleteResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3755,9 +3805,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DeleteRetentionPolicyRequest,
     ) -> RusotoFuture<(), DeleteRetentionPolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteRetentionPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3780,9 +3835,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DeleteSubscriptionFilterRequest,
     ) -> RusotoFuture<(), DeleteSubscriptionFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DeleteSubscriptionFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3803,9 +3863,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DescribeDestinationsRequest,
     ) -> RusotoFuture<DescribeDestinationsResponse, DescribeDestinationsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeDestinations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3831,9 +3896,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DescribeExportTasksRequest,
     ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeExportTasks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3859,9 +3929,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DescribeLogGroupsRequest,
     ) -> RusotoFuture<DescribeLogGroupsResponse, DescribeLogGroupsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeLogGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3888,9 +3963,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DescribeLogStreamsRequest,
     ) -> RusotoFuture<DescribeLogStreamsResponse, DescribeLogStreamsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeLogStreams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3917,9 +3997,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DescribeMetricFiltersRequest,
     ) -> RusotoFuture<DescribeMetricFiltersResponse, DescribeMetricFiltersError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeMetricFilters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3945,9 +4030,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DescribeQueriesRequest,
     ) -> RusotoFuture<DescribeQueriesResponse, DescribeQueriesError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeQueries");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3974,9 +4064,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DescribeResourcePoliciesRequest,
     ) -> RusotoFuture<DescribeResourcePoliciesResponse, DescribeResourcePoliciesError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeResourcePolicies");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4000,9 +4095,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DescribeSubscriptionFiltersRequest,
     ) -> RusotoFuture<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DescribeSubscriptionFilters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4026,9 +4126,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: DisassociateKmsKeyRequest,
     ) -> RusotoFuture<(), DisassociateKmsKeyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.DisassociateKmsKey");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4052,9 +4157,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: FilterLogEventsRequest,
     ) -> RusotoFuture<FilterLogEventsResponse, FilterLogEventsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.FilterLogEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4081,9 +4191,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: GetLogEventsRequest,
     ) -> RusotoFuture<GetLogEventsResponse, GetLogEventsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.GetLogEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4110,9 +4225,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: GetLogGroupFieldsRequest,
     ) -> RusotoFuture<GetLogGroupFieldsResponse, GetLogGroupFieldsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.GetLogGroupFields");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4139,9 +4259,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: GetLogRecordRequest,
     ) -> RusotoFuture<GetLogRecordResponse, GetLogRecordError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.GetLogRecord");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4168,9 +4293,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: GetQueryResultsRequest,
     ) -> RusotoFuture<GetQueryResultsResponse, GetQueryResultsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.GetQueryResults");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4197,9 +4327,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: ListTagsLogGroupRequest,
     ) -> RusotoFuture<ListTagsLogGroupResponse, ListTagsLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.ListTagsLogGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4226,9 +4361,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: PutDestinationRequest,
     ) -> RusotoFuture<PutDestinationResponse, PutDestinationError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutDestination");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4255,9 +4395,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: PutDestinationPolicyRequest,
     ) -> RusotoFuture<(), PutDestinationPolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutDestinationPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4280,9 +4425,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: PutLogEventsRequest,
     ) -> RusotoFuture<PutLogEventsResponse, PutLogEventsError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutLogEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4309,9 +4459,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: PutMetricFilterRequest,
     ) -> RusotoFuture<(), PutMetricFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutMetricFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4335,9 +4490,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: PutResourcePolicyRequest,
     ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutResourcePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4364,9 +4524,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: PutRetentionPolicyRequest,
     ) -> RusotoFuture<(), PutRetentionPolicyError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutRetentionPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4390,9 +4555,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: PutSubscriptionFilterRequest,
     ) -> RusotoFuture<(), PutSubscriptionFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.PutSubscriptionFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4415,9 +4585,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: StartQueryRequest,
     ) -> RusotoFuture<StartQueryResponse, StartQueryError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.StartQuery");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4444,9 +4619,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: StopQueryRequest,
     ) -> RusotoFuture<StopQueryResponse, StopQueryError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.StopQuery");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4470,9 +4650,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
     /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
     fn tag_log_group(&self, input: TagLogGroupRequest) -> RusotoFuture<(), TagLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.TagLogGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4496,9 +4681,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         &self,
         input: TestMetricFilterRequest,
     ) -> RusotoFuture<TestMetricFilterResponse, TestMetricFilterError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.TestMetricFilter");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4522,9 +4712,14 @@ impl CloudWatchLogs for CloudWatchLogsClient {
 
     /// <p>Removes the specified tags from the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To add tags, use <a>UntagLogGroup</a>.</p>
     fn untag_log_group(&self, input: UntagLogGroupRequest) -> RusotoFuture<(), UntagLogGroupError> {
-        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "logs",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Logs_20140328.UntagLogGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

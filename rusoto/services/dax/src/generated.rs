@@ -2533,9 +2533,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2562,9 +2567,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: CreateParameterGroupRequest,
     ) -> RusotoFuture<CreateParameterGroupResponse, CreateParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateParameterGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2590,9 +2600,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: CreateSubnetGroupRequest,
     ) -> RusotoFuture<CreateSubnetGroupResponse, CreateSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.CreateSubnetGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2619,9 +2634,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DecreaseReplicationFactorRequest,
     ) -> RusotoFuture<DecreaseReplicationFactorResponse, DecreaseReplicationFactorError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DecreaseReplicationFactor");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2645,9 +2665,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DeleteClusterRequest,
     ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2674,9 +2699,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DeleteParameterGroupRequest,
     ) -> RusotoFuture<DeleteParameterGroupResponse, DeleteParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteParameterGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2702,9 +2732,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DeleteSubnetGroupRequest,
     ) -> RusotoFuture<DeleteSubnetGroupResponse, DeleteSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DeleteSubnetGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2731,9 +2766,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DescribeClustersRequest,
     ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeClusters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2760,9 +2800,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DescribeDefaultParametersRequest,
     ) -> RusotoFuture<DescribeDefaultParametersResponse, DescribeDefaultParametersError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeDefaultParameters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2786,9 +2831,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DescribeEventsRequest,
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2815,9 +2865,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DescribeParameterGroupsRequest,
     ) -> RusotoFuture<DescribeParameterGroupsResponse, DescribeParameterGroupsError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeParameterGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2841,9 +2896,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DescribeParametersRequest,
     ) -> RusotoFuture<DescribeParametersResponse, DescribeParametersError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeParameters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2870,9 +2930,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: DescribeSubnetGroupsRequest,
     ) -> RusotoFuture<DescribeSubnetGroupsResponse, DescribeSubnetGroupsError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.DescribeSubnetGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2898,9 +2963,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: IncreaseReplicationFactorRequest,
     ) -> RusotoFuture<IncreaseReplicationFactorResponse, IncreaseReplicationFactorError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.IncreaseReplicationFactor");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2921,9 +2991,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
 
     /// <p>List all of the tags for a DAX cluster. You can call <code>ListTags</code> up to 10 times per second, per account.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2950,9 +3025,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: RebootNodeRequest,
     ) -> RusotoFuture<RebootNodeResponse, RebootNodeError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.RebootNode");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2979,9 +3059,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3008,9 +3093,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3037,9 +3127,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: UpdateClusterRequest,
     ) -> RusotoFuture<UpdateClusterResponse, UpdateClusterError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3066,9 +3161,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: UpdateParameterGroupRequest,
     ) -> RusotoFuture<UpdateParameterGroupResponse, UpdateParameterGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateParameterGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3094,9 +3194,14 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         &self,
         input: UpdateSubnetGroupRequest,
     ) -> RusotoFuture<UpdateSubnetGroupResponse, UpdateSubnetGroupError> {
-        let mut request = SignedRequest::new("POST", "dax", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dax",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AmazonDAXV3.UpdateSubnetGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

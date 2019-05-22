@@ -1797,9 +1797,14 @@ impl Snowball for SnowballClient {
         &self,
         input: CancelClusterRequest,
     ) -> RusotoFuture<CancelClusterResult, CancelClusterError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CancelCluster",
@@ -1826,9 +1831,14 @@ impl Snowball for SnowballClient {
 
     /// <p>Cancels the specified job. You can only cancel a job before its <code>JobState</code> value changes to <code>PreparingAppliance</code>. Requesting the <code>ListJobs</code> or <code>DescribeJob</code> action returns a job's <code>JobState</code> as part of the response element data returned.</p>
     fn cancel_job(&self, input: CancelJobRequest) -> RusotoFuture<CancelJobResult, CancelJobError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CancelJob",
@@ -1857,9 +1867,14 @@ impl Snowball for SnowballClient {
         &self,
         input: CreateAddressRequest,
     ) -> RusotoFuture<CreateAddressResult, CreateAddressError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CreateAddress",
@@ -1889,9 +1904,14 @@ impl Snowball for SnowballClient {
         &self,
         input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResult, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CreateCluster",
@@ -1918,9 +1938,14 @@ impl Snowball for SnowballClient {
 
     /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for Snowball. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
     fn create_job(&self, input: CreateJobRequest) -> RusotoFuture<CreateJobResult, CreateJobError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.CreateJob",
@@ -1949,9 +1974,14 @@ impl Snowball for SnowballClient {
         &self,
         input: DescribeAddressRequest,
     ) -> RusotoFuture<DescribeAddressResult, DescribeAddressError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.DescribeAddress",
@@ -1981,9 +2011,14 @@ impl Snowball for SnowballClient {
         &self,
         input: DescribeAddressesRequest,
     ) -> RusotoFuture<DescribeAddressesResult, DescribeAddressesError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.DescribeAddresses",
@@ -2013,9 +2048,14 @@ impl Snowball for SnowballClient {
         &self,
         input: DescribeClusterRequest,
     ) -> RusotoFuture<DescribeClusterResult, DescribeClusterError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.DescribeCluster",
@@ -2045,9 +2085,14 @@ impl Snowball for SnowballClient {
         &self,
         input: DescribeJobRequest,
     ) -> RusotoFuture<DescribeJobResult, DescribeJobError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.DescribeJob",
@@ -2077,9 +2122,14 @@ impl Snowball for SnowballClient {
         &self,
         input: GetJobManifestRequest,
     ) -> RusotoFuture<GetJobManifestResult, GetJobManifestError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.GetJobManifest",
@@ -2109,9 +2159,14 @@ impl Snowball for SnowballClient {
         &self,
         input: GetJobUnlockCodeRequest,
     ) -> RusotoFuture<GetJobUnlockCodeResult, GetJobUnlockCodeError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.GetJobUnlockCode",
@@ -2138,9 +2193,14 @@ impl Snowball for SnowballClient {
 
     /// <p>Returns information about the Snowball service limit for your account, and also the number of Snowballs your account has in use.</p> <p>The default service limit for the number of Snowballs that you can have at one time is 1. If you want to increase your service limit, contact AWS Support.</p>
     fn get_snowball_usage(&self) -> RusotoFuture<GetSnowballUsageResult, GetSnowballUsageError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.GetSnowballUsage",
@@ -2169,9 +2229,14 @@ impl Snowball for SnowballClient {
         &self,
         input: ListClusterJobsRequest,
     ) -> RusotoFuture<ListClusterJobsResult, ListClusterJobsError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.ListClusterJobs",
@@ -2201,9 +2266,14 @@ impl Snowball for SnowballClient {
         &self,
         input: ListClustersRequest,
     ) -> RusotoFuture<ListClustersResult, ListClustersError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.ListClusters",
@@ -2233,9 +2303,14 @@ impl Snowball for SnowballClient {
         &self,
         input: ListCompatibleImagesRequest,
     ) -> RusotoFuture<ListCompatibleImagesResult, ListCompatibleImagesError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.ListCompatibleImages",
@@ -2261,9 +2336,14 @@ impl Snowball for SnowballClient {
 
     /// <p>Returns an array of <code>JobListEntry</code> objects of the specified length. Each <code>JobListEntry</code> object contains a job's state, a job's ID, and a value that indicates whether the job is a job part, in the case of export jobs. Calling this API action in one of the US regions will return jobs from the list of all jobs associated with this account in all US regions.</p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSIESnowballJobManagementService.ListJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2289,9 +2369,14 @@ impl Snowball for SnowballClient {
         &self,
         input: UpdateClusterRequest,
     ) -> RusotoFuture<UpdateClusterResult, UpdateClusterError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.UpdateCluster",
@@ -2318,9 +2403,14 @@ impl Snowball for SnowballClient {
 
     /// <p>While a job's <code>JobState</code> value is <code>New</code>, you can update some of the information associated with a job. Once the job changes to a different job state, usually within 60 minutes of the job being created, this action is no longer available.</p>
     fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<UpdateJobResult, UpdateJobError> {
-        let mut request = SignedRequest::new("POST", "snowball", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "snowball",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSIESnowballJobManagementService.UpdateJob",

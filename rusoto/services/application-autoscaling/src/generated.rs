@@ -1253,9 +1253,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: DeleteScalingPolicyRequest,
     ) -> RusotoFuture<DeleteScalingPolicyResponse, DeleteScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AnyScaleFrontendService.DeleteScalingPolicy",
@@ -1284,9 +1289,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: DeleteScheduledActionRequest,
     ) -> RusotoFuture<DeleteScheduledActionResponse, DeleteScheduledActionError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AnyScaleFrontendService.DeleteScheduledAction",
@@ -1315,9 +1325,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: DeregisterScalableTargetRequest,
     ) -> RusotoFuture<DeregisterScalableTargetResponse, DeregisterScalableTargetError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AnyScaleFrontendService.DeregisterScalableTarget",
@@ -1344,9 +1359,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: DescribeScalableTargetsRequest,
     ) -> RusotoFuture<DescribeScalableTargetsResponse, DescribeScalableTargetsError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AnyScaleFrontendService.DescribeScalableTargets",
@@ -1373,9 +1393,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: DescribeScalingActivitiesRequest,
     ) -> RusotoFuture<DescribeScalingActivitiesResponse, DescribeScalingActivitiesError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AnyScaleFrontendService.DescribeScalingActivities",
@@ -1402,9 +1427,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: DescribeScalingPoliciesRequest,
     ) -> RusotoFuture<DescribeScalingPoliciesResponse, DescribeScalingPoliciesError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AnyScaleFrontendService.DescribeScalingPolicies",
@@ -1431,9 +1461,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: DescribeScheduledActionsRequest,
     ) -> RusotoFuture<DescribeScheduledActionsResponse, DescribeScheduledActionsError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AnyScaleFrontendService.DescribeScheduledActions",
@@ -1460,9 +1495,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: PutScalingPolicyRequest,
     ) -> RusotoFuture<PutScalingPolicyResponse, PutScalingPolicyError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AnyScaleFrontendService.PutScalingPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1489,9 +1529,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: PutScheduledActionRequest,
     ) -> RusotoFuture<PutScheduledActionResponse, PutScheduledActionError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AnyScaleFrontendService.PutScheduledAction");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1518,9 +1563,14 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         &self,
         input: RegisterScalableTargetRequest,
     ) -> RusotoFuture<RegisterScalableTargetResponse, RegisterScalableTargetError> {
-        let mut request = SignedRequest::new("POST", "application-autoscaling", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "application-autoscaling",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("autoscaling".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AnyScaleFrontendService.RegisterScalableTarget",

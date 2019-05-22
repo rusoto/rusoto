@@ -7258,9 +7258,14 @@ impl SageMakerClient {
 impl SageMaker for SageMakerClient {
     /// <p><p>Adds or overwrites one or more tags for the specified Amazon SageMaker resource. You can add tags to notebook instances, training jobs, hyperparameter tuning jobs, models, endpoint configurations, and endpoints.</p> <p>Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p> <note> <p>Tags that you add to a hyperparameter tuning job by calling this API are also added to any training jobs that the hyperparameter tuning job launches after you call this API, but not to training jobs that the hyperparameter tuning job launched before you called this API. To make sure that the tags associated with a hyperparameter tuning job are also added to all training jobs that the hyperparameter tuning job launches, add the tags when you first create the tuning job by specifying them in the <code>Tags</code> parameter of <a>CreateHyperParameterTuningJob</a> </p> </note></p>
     fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.AddTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7286,9 +7291,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateAlgorithmInput,
     ) -> RusotoFuture<CreateAlgorithmOutput, CreateAlgorithmError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateAlgorithm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7315,9 +7325,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateCodeRepositoryInput,
     ) -> RusotoFuture<CreateCodeRepositoryOutput, CreateCodeRepositoryError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateCodeRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7343,9 +7358,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateCompilationJobRequest,
     ) -> RusotoFuture<CreateCompilationJobResponse, CreateCompilationJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateCompilationJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7371,9 +7391,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateEndpointInput,
     ) -> RusotoFuture<CreateEndpointOutput, CreateEndpointError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7400,9 +7425,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateEndpointConfigInput,
     ) -> RusotoFuture<CreateEndpointConfigOutput, CreateEndpointConfigError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateEndpointConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7429,9 +7459,14 @@ impl SageMaker for SageMakerClient {
         input: CreateHyperParameterTuningJobRequest,
     ) -> RusotoFuture<CreateHyperParameterTuningJobResponse, CreateHyperParameterTuningJobError>
     {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateHyperParameterTuningJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7455,9 +7490,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateLabelingJobRequest,
     ) -> RusotoFuture<CreateLabelingJobResponse, CreateLabelingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateLabelingJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7484,9 +7524,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateModelInput,
     ) -> RusotoFuture<CreateModelOutput, CreateModelError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7513,9 +7558,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateModelPackageInput,
     ) -> RusotoFuture<CreateModelPackageOutput, CreateModelPackageError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateModelPackage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7542,9 +7592,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateNotebookInstanceInput,
     ) -> RusotoFuture<CreateNotebookInstanceOutput, CreateNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateNotebookInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7573,9 +7628,14 @@ impl SageMaker for SageMakerClient {
         CreateNotebookInstanceLifecycleConfigOutput,
         CreateNotebookInstanceLifecycleConfigError,
     > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.CreateNotebookInstanceLifecycleConfig",
@@ -7607,9 +7667,14 @@ impl SageMaker for SageMakerClient {
         CreatePresignedNotebookInstanceUrlOutput,
         CreatePresignedNotebookInstanceUrlError,
     > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.CreatePresignedNotebookInstanceUrl",
@@ -7638,9 +7703,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateTrainingJobRequest,
     ) -> RusotoFuture<CreateTrainingJobResponse, CreateTrainingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateTrainingJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7667,9 +7737,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateTransformJobRequest,
     ) -> RusotoFuture<CreateTransformJobResponse, CreateTransformJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateTransformJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7696,9 +7771,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: CreateWorkteamRequest,
     ) -> RusotoFuture<CreateWorkteamResponse, CreateWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.CreateWorkteam");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7725,9 +7805,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DeleteAlgorithmInput,
     ) -> RusotoFuture<(), DeleteAlgorithmError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteAlgorithm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7751,9 +7836,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DeleteCodeRepositoryInput,
     ) -> RusotoFuture<(), DeleteCodeRepositoryError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteCodeRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7773,9 +7863,14 @@ impl SageMaker for SageMakerClient {
 
     /// <p>Deletes an endpoint. Amazon SageMaker frees up all of the resources that were deployed when the endpoint was created. </p> <p>Amazon SageMaker retires any custom KMS key grants associated with the endpoint, meaning you don't need to use the <a href="http://docs.aws.amazon.com/kms/latest/APIReference/API_RevokeGrant.html">RevokeGrant</a> API call.</p>
     fn delete_endpoint(&self, input: DeleteEndpointInput) -> RusotoFuture<(), DeleteEndpointError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7799,9 +7894,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DeleteEndpointConfigInput,
     ) -> RusotoFuture<(), DeleteEndpointConfigError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteEndpointConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7821,9 +7921,14 @@ impl SageMaker for SageMakerClient {
 
     /// <p>Deletes a model. The <code>DeleteModel</code> API deletes only the model entry that was created in Amazon SageMaker when you called the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateModel.html">CreateModel</a> API. It does not delete model artifacts, inference code, or the IAM role that you specified when creating the model. </p>
     fn delete_model(&self, input: DeleteModelInput) -> RusotoFuture<(), DeleteModelError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7847,9 +7952,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DeleteModelPackageInput,
     ) -> RusotoFuture<(), DeleteModelPackageError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteModelPackage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7873,9 +7983,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DeleteNotebookInstanceInput,
     ) -> RusotoFuture<(), DeleteNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteNotebookInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7898,9 +8013,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DeleteNotebookInstanceLifecycleConfigInput,
     ) -> RusotoFuture<(), DeleteNotebookInstanceLifecycleConfigError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.DeleteNotebookInstanceLifecycleConfig",
@@ -7926,9 +8046,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DeleteTagsInput,
     ) -> RusotoFuture<DeleteTagsOutput, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7955,9 +8080,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DeleteWorkteamRequest,
     ) -> RusotoFuture<DeleteWorkteamResponse, DeleteWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DeleteWorkteam");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7984,9 +8114,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeAlgorithmInput,
     ) -> RusotoFuture<DescribeAlgorithmOutput, DescribeAlgorithmError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeAlgorithm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8013,9 +8148,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeCodeRepositoryInput,
     ) -> RusotoFuture<DescribeCodeRepositoryOutput, DescribeCodeRepositoryError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeCodeRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8041,9 +8181,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeCompilationJobRequest,
     ) -> RusotoFuture<DescribeCompilationJobResponse, DescribeCompilationJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeCompilationJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8069,9 +8214,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeEndpointInput,
     ) -> RusotoFuture<DescribeEndpointOutput, DescribeEndpointError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8098,9 +8248,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeEndpointConfigInput,
     ) -> RusotoFuture<DescribeEndpointConfigOutput, DescribeEndpointConfigError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeEndpointConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8127,9 +8282,14 @@ impl SageMaker for SageMakerClient {
         input: DescribeHyperParameterTuningJobRequest,
     ) -> RusotoFuture<DescribeHyperParameterTuningJobResponse, DescribeHyperParameterTuningJobError>
     {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeHyperParameterTuningJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8155,9 +8315,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeLabelingJobRequest,
     ) -> RusotoFuture<DescribeLabelingJobResponse, DescribeLabelingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeLabelingJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8183,9 +8348,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeModelInput,
     ) -> RusotoFuture<DescribeModelOutput, DescribeModelError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeModel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8212,9 +8382,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeModelPackageInput,
     ) -> RusotoFuture<DescribeModelPackageOutput, DescribeModelPackageError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeModelPackage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8240,9 +8415,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeNotebookInstanceInput,
     ) -> RusotoFuture<DescribeNotebookInstanceOutput, DescribeNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeNotebookInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8269,9 +8449,14 @@ impl SageMaker for SageMakerClient {
         DescribeNotebookInstanceLifecycleConfigOutput,
         DescribeNotebookInstanceLifecycleConfigError,
     > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.DescribeNotebookInstanceLifecycleConfig",
@@ -8300,9 +8485,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeSubscribedWorkteamRequest,
     ) -> RusotoFuture<DescribeSubscribedWorkteamResponse, DescribeSubscribedWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeSubscribedWorkteam");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8326,9 +8516,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeTrainingJobRequest,
     ) -> RusotoFuture<DescribeTrainingJobResponse, DescribeTrainingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeTrainingJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8354,9 +8549,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeTransformJobRequest,
     ) -> RusotoFuture<DescribeTransformJobResponse, DescribeTransformJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeTransformJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8382,9 +8582,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: DescribeWorkteamRequest,
     ) -> RusotoFuture<DescribeWorkteamResponse, DescribeWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.DescribeWorkteam");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8411,9 +8616,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: GetSearchSuggestionsRequest,
     ) -> RusotoFuture<GetSearchSuggestionsResponse, GetSearchSuggestionsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.GetSearchSuggestions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8439,9 +8649,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListAlgorithmsInput,
     ) -> RusotoFuture<ListAlgorithmsOutput, ListAlgorithmsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListAlgorithms");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8468,9 +8683,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListCodeRepositoriesInput,
     ) -> RusotoFuture<ListCodeRepositoriesOutput, ListCodeRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListCodeRepositories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8496,9 +8716,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListCompilationJobsRequest,
     ) -> RusotoFuture<ListCompilationJobsResponse, ListCompilationJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListCompilationJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8524,9 +8749,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListEndpointConfigsInput,
     ) -> RusotoFuture<ListEndpointConfigsOutput, ListEndpointConfigsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListEndpointConfigs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8552,9 +8782,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListEndpointsInput,
     ) -> RusotoFuture<ListEndpointsOutput, ListEndpointsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListEndpoints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8581,9 +8816,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListHyperParameterTuningJobsRequest,
     ) -> RusotoFuture<ListHyperParameterTuningJobsResponse, ListHyperParameterTuningJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListHyperParameterTuningJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8607,9 +8847,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListLabelingJobsRequest,
     ) -> RusotoFuture<ListLabelingJobsResponse, ListLabelingJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListLabelingJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8636,9 +8881,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListLabelingJobsForWorkteamRequest,
     ) -> RusotoFuture<ListLabelingJobsForWorkteamResponse, ListLabelingJobsForWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListLabelingJobsForWorkteam");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8662,9 +8912,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListModelPackagesInput,
     ) -> RusotoFuture<ListModelPackagesOutput, ListModelPackagesError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListModelPackages");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8691,9 +8946,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListModelsInput,
     ) -> RusotoFuture<ListModelsOutput, ListModelsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListModels");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8723,9 +8983,14 @@ impl SageMaker for SageMakerClient {
         ListNotebookInstanceLifecycleConfigsOutput,
         ListNotebookInstanceLifecycleConfigsError,
     > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.ListNotebookInstanceLifecycleConfigs",
@@ -8754,9 +9019,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListNotebookInstancesInput,
     ) -> RusotoFuture<ListNotebookInstancesOutput, ListNotebookInstancesError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListNotebookInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8782,9 +9052,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListSubscribedWorkteamsRequest,
     ) -> RusotoFuture<ListSubscribedWorkteamsResponse, ListSubscribedWorkteamsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListSubscribedWorkteams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8805,9 +9080,14 @@ impl SageMaker for SageMakerClient {
 
     /// <p>Returns the tags for the specified Amazon SageMaker resource.</p>
     fn list_tags(&self, input: ListTagsInput) -> RusotoFuture<ListTagsOutput, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8833,9 +9113,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListTrainingJobsRequest,
     ) -> RusotoFuture<ListTrainingJobsResponse, ListTrainingJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListTrainingJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8865,9 +9150,14 @@ impl SageMaker for SageMakerClient {
         ListTrainingJobsForHyperParameterTuningJobResponse,
         ListTrainingJobsForHyperParameterTuningJobError,
     > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.ListTrainingJobsForHyperParameterTuningJob",
@@ -8894,9 +9184,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListTransformJobsRequest,
     ) -> RusotoFuture<ListTransformJobsResponse, ListTransformJobsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListTransformJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8923,9 +9218,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: ListWorkteamsRequest,
     ) -> RusotoFuture<ListWorkteamsResponse, ListWorkteamsError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.ListWorkteams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8952,9 +9252,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: RenderUiTemplateRequest,
     ) -> RusotoFuture<RenderUiTemplateResponse, RenderUiTemplateError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.RenderUiTemplate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8978,9 +9283,14 @@ impl SageMaker for SageMakerClient {
 
     /// <p>Finds Amazon SageMaker resources that match a search query. Matching resource objects are returned as a list of <code>SearchResult</code> objects in the response. You can sort the search results by any resource property in a ascending or descending order.</p> <p>You can query against the following value types: numerical, text, Booleans, and timestamps.</p>
     fn search(&self, input: SearchRequest) -> RusotoFuture<SearchResponse, SearchError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.Search");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9006,9 +9316,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: StartNotebookInstanceInput,
     ) -> RusotoFuture<(), StartNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StartNotebookInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9031,9 +9346,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: StopCompilationJobRequest,
     ) -> RusotoFuture<(), StopCompilationJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopCompilationJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9057,9 +9377,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: StopHyperParameterTuningJobRequest,
     ) -> RusotoFuture<(), StopHyperParameterTuningJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopHyperParameterTuningJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9080,9 +9405,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: StopLabelingJobRequest,
     ) -> RusotoFuture<(), StopLabelingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopLabelingJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9106,9 +9436,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: StopNotebookInstanceInput,
     ) -> RusotoFuture<(), StopNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopNotebookInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9131,9 +9466,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: StopTrainingJobRequest,
     ) -> RusotoFuture<(), StopTrainingJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopTrainingJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9157,9 +9497,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: StopTransformJobRequest,
     ) -> RusotoFuture<(), StopTransformJobError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.StopTransformJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9183,9 +9528,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: UpdateCodeRepositoryInput,
     ) -> RusotoFuture<UpdateCodeRepositoryOutput, UpdateCodeRepositoryError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.UpdateCodeRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9211,9 +9561,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: UpdateEndpointInput,
     ) -> RusotoFuture<UpdateEndpointOutput, UpdateEndpointError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.UpdateEndpoint");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9243,9 +9598,14 @@ impl SageMaker for SageMakerClient {
         UpdateEndpointWeightsAndCapacitiesOutput,
         UpdateEndpointWeightsAndCapacitiesError,
     > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.UpdateEndpointWeightsAndCapacities",
@@ -9274,9 +9634,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: UpdateNotebookInstanceInput,
     ) -> RusotoFuture<UpdateNotebookInstanceOutput, UpdateNotebookInstanceError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.UpdateNotebookInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9305,9 +9670,14 @@ impl SageMaker for SageMakerClient {
         UpdateNotebookInstanceLifecycleConfigOutput,
         UpdateNotebookInstanceLifecycleConfigError,
     > {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "SageMaker.UpdateNotebookInstanceLifecycleConfig",
@@ -9336,9 +9706,14 @@ impl SageMaker for SageMakerClient {
         &self,
         input: UpdateWorkteamRequest,
     ) -> RusotoFuture<UpdateWorkteamResponse, UpdateWorkteamError> {
-        let mut request = SignedRequest::new("POST", "sagemaker", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sagemaker",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.sagemaker".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "SageMaker.UpdateWorkteam");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

@@ -4077,9 +4077,14 @@ impl Kms for KmsClient {
         &self,
         input: CancelKeyDeletionRequest,
     ) -> RusotoFuture<CancelKeyDeletionResponse, CancelKeyDeletionError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CancelKeyDeletion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4106,9 +4111,14 @@ impl Kms for KmsClient {
         &self,
         input: ConnectCustomKeyStoreRequest,
     ) -> RusotoFuture<ConnectCustomKeyStoreResponse, ConnectCustomKeyStoreError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ConnectCustomKeyStore");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4131,9 +4141,14 @@ impl Kms for KmsClient {
 
     /// <p>Creates a display name for a customer master key (CMK). You can use an alias to identify a CMK in selected operations, such as <a>Encrypt</a> and <a>GenerateDataKey</a>. </p> <p>Each CMK can have multiple aliases, but each alias points to only one CMK. The alias name must be unique in the AWS account and region. To simplify code that runs in multiple regions, use the same alias name, but point it to a different CMK in each region. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation.</p> <p>An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p> <p>The alias and the CMK it is mapped to must be in the same AWS account and the same region. You cannot perform this operation on an alias in a different AWS account.</p> <p>To map an existing alias to a different CMK, call <a>UpdateAlias</a>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn create_alias(&self, input: CreateAliasRequest) -> RusotoFuture<(), CreateAliasError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4157,9 +4172,14 @@ impl Kms for KmsClient {
         &self,
         input: CreateCustomKeyStoreRequest,
     ) -> RusotoFuture<CreateCustomKeyStoreResponse, CreateCustomKeyStoreError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateCustomKeyStore");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4185,9 +4205,14 @@ impl Kms for KmsClient {
         &self,
         input: CreateGrantRequest,
     ) -> RusotoFuture<CreateGrantResponse, CreateGrantError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateGrant");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4214,9 +4239,14 @@ impl Kms for KmsClient {
         &self,
         input: CreateKeyRequest,
     ) -> RusotoFuture<CreateKeyResponse, CreateKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.CreateKey");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4240,9 +4270,14 @@ impl Kms for KmsClient {
 
     /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following operations:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn decrypt(&self, input: DecryptRequest) -> RusotoFuture<DecryptResponse, DecryptError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.Decrypt");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4265,9 +4300,14 @@ impl Kms for KmsClient {
 
     /// <p>Deletes the specified alias. You cannot perform this operation on an alias in a different AWS account. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation. </p> <p>Each CMK can have multiple aliases. To change the alias of a CMK, use <a>DeleteAlias</a> to delete the current alias and <a>CreateAlias</a> to create a new alias. To associate an existing alias with a different customer master key (CMK), call <a>UpdateAlias</a>.</p>
     fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DeleteAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4291,9 +4331,14 @@ impl Kms for KmsClient {
         &self,
         input: DeleteCustomKeyStoreRequest,
     ) -> RusotoFuture<DeleteCustomKeyStoreResponse, DeleteCustomKeyStoreError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DeleteCustomKeyStore");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4319,9 +4364,14 @@ impl Kms for KmsClient {
         &self,
         input: DeleteImportedKeyMaterialRequest,
     ) -> RusotoFuture<(), DeleteImportedKeyMaterialError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DeleteImportedKeyMaterial");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4342,9 +4392,14 @@ impl Kms for KmsClient {
         &self,
         input: DescribeCustomKeyStoresRequest,
     ) -> RusotoFuture<DescribeCustomKeyStoresResponse, DescribeCustomKeyStoresError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DescribeCustomKeyStores");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4368,9 +4423,14 @@ impl Kms for KmsClient {
         &self,
         input: DescribeKeyRequest,
     ) -> RusotoFuture<DescribeKeyResponse, DescribeKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DescribeKey");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4394,9 +4454,14 @@ impl Kms for KmsClient {
 
     /// <p>Sets the state of a customer master key (CMK) to disabled, thereby preventing its use for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn disable_key(&self, input: DisableKeyRequest) -> RusotoFuture<(), DisableKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DisableKey");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4420,9 +4485,14 @@ impl Kms for KmsClient {
         &self,
         input: DisableKeyRotationRequest,
     ) -> RusotoFuture<(), DisableKeyRotationError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DisableKeyRotation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4446,9 +4516,14 @@ impl Kms for KmsClient {
         &self,
         input: DisconnectCustomKeyStoreRequest,
     ) -> RusotoFuture<DisconnectCustomKeyStoreResponse, DisconnectCustomKeyStoreError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.DisconnectCustomKeyStore");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4469,9 +4544,14 @@ impl Kms for KmsClient {
 
     /// <p>Sets the key state of a customer master key (CMK) to enabled. This allows you to use the CMK for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn enable_key(&self, input: EnableKeyRequest) -> RusotoFuture<(), EnableKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.EnableKey");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4495,9 +4575,14 @@ impl Kms for KmsClient {
         &self,
         input: EnableKeyRotationRequest,
     ) -> RusotoFuture<(), EnableKeyRotationError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.EnableKeyRotation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4518,9 +4603,14 @@ impl Kms for KmsClient {
 
     /// <p>Encrypts plaintext into ciphertext by using a customer master key (CMK). The <code>Encrypt</code> operation has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 kilobytes (4096 bytes) of arbitrary data such as an RSA key, a database password, or other sensitive information.</p> </li> <li> <p>To move encrypted data from one AWS region to another, you can use this operation to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>Unless you are moving encrypted data from one region to another, you don't use this operation to encrypt a generated data key within a region. To get data keys that are already encrypted, call the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> operation. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>To encrypt data locally in your application, use the <a>GenerateDataKey</a> operation to return a plaintext data encryption key and a copy of the key encrypted under the CMK of your choosing.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn encrypt(&self, input: EncryptRequest) -> RusotoFuture<EncryptResponse, EncryptError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.Encrypt");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4546,9 +4636,14 @@ impl Kms for KmsClient {
         &self,
         input: GenerateDataKeyRequest,
     ) -> RusotoFuture<GenerateDataKeyResponse, GenerateDataKeyError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GenerateDataKey");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4576,9 +4671,14 @@ impl Kms for KmsClient {
         input: GenerateDataKeyWithoutPlaintextRequest,
     ) -> RusotoFuture<GenerateDataKeyWithoutPlaintextResponse, GenerateDataKeyWithoutPlaintextError>
     {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "TrentService.GenerateDataKeyWithoutPlaintext",
@@ -4607,9 +4707,14 @@ impl Kms for KmsClient {
         &self,
         input: GenerateRandomRequest,
     ) -> RusotoFuture<GenerateRandomResponse, GenerateRandomError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GenerateRandom");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4636,9 +4741,14 @@ impl Kms for KmsClient {
         &self,
         input: GetKeyPolicyRequest,
     ) -> RusotoFuture<GetKeyPolicyResponse, GetKeyPolicyError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetKeyPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4665,9 +4775,14 @@ impl Kms for KmsClient {
         &self,
         input: GetKeyRotationStatusRequest,
     ) -> RusotoFuture<GetKeyRotationStatusResponse, GetKeyRotationStatusError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetKeyRotationStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4693,9 +4808,14 @@ impl Kms for KmsClient {
         &self,
         input: GetParametersForImportRequest,
     ) -> RusotoFuture<GetParametersForImportResponse, GetParametersForImportError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.GetParametersForImport");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4721,9 +4841,14 @@ impl Kms for KmsClient {
         &self,
         input: ImportKeyMaterialRequest,
     ) -> RusotoFuture<ImportKeyMaterialResponse, ImportKeyMaterialError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ImportKeyMaterial");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4750,9 +4875,14 @@ impl Kms for KmsClient {
         &self,
         input: ListAliasesRequest,
     ) -> RusotoFuture<ListAliasesResponse, ListAliasesError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListAliases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4779,9 +4909,14 @@ impl Kms for KmsClient {
         &self,
         input: ListGrantsRequest,
     ) -> RusotoFuture<ListGrantsResponse, ListGrantsError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListGrants");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4808,9 +4943,14 @@ impl Kms for KmsClient {
         &self,
         input: ListKeyPoliciesRequest,
     ) -> RusotoFuture<ListKeyPoliciesResponse, ListKeyPoliciesError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListKeyPolicies");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4834,9 +4974,14 @@ impl Kms for KmsClient {
 
     /// <p>Gets a list of all customer master keys (CMKs) in the caller's AWS account and region.</p>
     fn list_keys(&self, input: ListKeysRequest) -> RusotoFuture<ListKeysResponse, ListKeysError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListKeys");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4863,9 +5008,14 @@ impl Kms for KmsClient {
         &self,
         input: ListResourceTagsRequest,
     ) -> RusotoFuture<ListResourceTagsResponse, ListResourceTagsError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListResourceTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4892,9 +5042,14 @@ impl Kms for KmsClient {
         &self,
         input: ListRetirableGrantsRequest,
     ) -> RusotoFuture<ListGrantsResponse, ListRetirableGrantsError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ListRetirableGrants");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4917,9 +5072,14 @@ impl Kms for KmsClient {
 
     /// <p>Attaches a key policy to the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about key policies, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn put_key_policy(&self, input: PutKeyPolicyRequest) -> RusotoFuture<(), PutKeyPolicyError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.PutKeyPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4943,9 +5103,14 @@ impl Kms for KmsClient {
         &self,
         input: ReEncryptRequest,
     ) -> RusotoFuture<ReEncryptResponse, ReEncryptError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ReEncrypt");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4969,9 +5134,14 @@ impl Kms for KmsClient {
 
     /// <p>Retires a grant. To clean up, you can retire a grant when you're done using it. You should revoke a grant when you intend to actively deny operations that depend on it. The following are permitted to call this API:</p> <ul> <li> <p>The AWS account (root user) under which the grant was created</p> </li> <li> <p>The <code>RetiringPrincipal</code>, if present in the grant</p> </li> <li> <p>The <code>GranteePrincipal</code>, if <code>RetireGrant</code> is an operation specified in the grant</p> </li> </ul> <p>You must identify the grant to retire by its grant token or by a combination of the grant ID and the Amazon Resource Name (ARN) of the customer master key (CMK). A grant token is a unique variable-length base64-encoded string. A grant ID is a 64 character unique identifier of a grant. The <a>CreateGrant</a> operation returns both.</p>
     fn retire_grant(&self, input: RetireGrantRequest) -> RusotoFuture<(), RetireGrantError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.RetireGrant");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4992,9 +5162,14 @@ impl Kms for KmsClient {
 
     /// <p>Revokes the specified grant for the specified customer master key (CMK). You can revoke a grant to actively deny operations that depend on it.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the <code>KeyId</code> parameter.</p>
     fn revoke_grant(&self, input: RevokeGrantRequest) -> RusotoFuture<(), RevokeGrantError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.RevokeGrant");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5018,9 +5193,14 @@ impl Kms for KmsClient {
         &self,
         input: ScheduleKeyDeletionRequest,
     ) -> RusotoFuture<ScheduleKeyDeletionResponse, ScheduleKeyDeletionError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.ScheduleKeyDeletion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5043,9 +5223,14 @@ impl Kms for KmsClient {
 
     /// <p>Adds or edits tags for a customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You can only use a tag key once for each CMK. If you use the tag key again, AWS KMS replaces the current tag value with the specified value.</p> <p>For information about the rules that apply to tag keys and tag values, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html">User-Defined Tag Restrictions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5066,9 +5251,14 @@ impl Kms for KmsClient {
 
     /// <p>Removes the specified tags from the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>To remove a tag, specify the tag key. To change the tag value of an existing tag key, use <a>TagResource</a>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5089,9 +5279,14 @@ impl Kms for KmsClient {
 
     /// <p>Associates an existing alias with a different customer master key (CMK). Each CMK can have multiple aliases, but the aliases must be unique within the account and region. You cannot perform this operation on an alias in a different AWS account.</p> <p>This operation works only on existing aliases. To change the alias of a CMK to a new value, use <a>CreateAlias</a> to create a new alias and <a>DeleteAlias</a> to delete the old alias.</p> <p>Because an alias is not a property of a CMK, you can create, update, and delete the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs in the account, use the <a>ListAliases</a> operation. </p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn update_alias(&self, input: UpdateAliasRequest) -> RusotoFuture<(), UpdateAliasError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UpdateAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5115,9 +5310,14 @@ impl Kms for KmsClient {
         &self,
         input: UpdateCustomKeyStoreRequest,
     ) -> RusotoFuture<UpdateCustomKeyStoreResponse, UpdateCustomKeyStoreError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UpdateCustomKeyStore");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5143,9 +5343,14 @@ impl Kms for KmsClient {
         &self,
         input: UpdateKeyDescriptionRequest,
     ) -> RusotoFuture<(), UpdateKeyDescriptionError> {
-        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "TrentService.UpdateKeyDescription");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

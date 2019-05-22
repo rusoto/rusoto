@@ -1733,9 +1733,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: CreateCertificateAuthorityRequest,
     ) -> RusotoFuture<CreateCertificateAuthorityResponse, CreateCertificateAuthorityError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.CreateCertificateAuthority");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1762,9 +1767,14 @@ impl AcmPca for AcmPcaClient {
         CreateCertificateAuthorityAuditReportResponse,
         CreateCertificateAuthorityAuditReportError,
     > {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ACMPrivateCA.CreateCertificateAuthorityAuditReport",
@@ -1793,9 +1803,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: DeleteCertificateAuthorityRequest,
     ) -> RusotoFuture<(), DeleteCertificateAuthorityError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.DeleteCertificateAuthority");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1816,9 +1831,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: DescribeCertificateAuthorityRequest,
     ) -> RusotoFuture<DescribeCertificateAuthorityResponse, DescribeCertificateAuthorityError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.DescribeCertificateAuthority");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1845,9 +1865,14 @@ impl AcmPca for AcmPcaClient {
         DescribeCertificateAuthorityAuditReportResponse,
         DescribeCertificateAuthorityAuditReportError,
     > {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ACMPrivateCA.DescribeCertificateAuthorityAuditReport",
@@ -1876,9 +1901,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: GetCertificateRequest,
     ) -> RusotoFuture<GetCertificateResponse, GetCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.GetCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1908,9 +1938,14 @@ impl AcmPca for AcmPcaClient {
         GetCertificateAuthorityCertificateResponse,
         GetCertificateAuthorityCertificateError,
     > {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ACMPrivateCA.GetCertificateAuthorityCertificate",
@@ -1939,9 +1974,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: GetCertificateAuthorityCsrRequest,
     ) -> RusotoFuture<GetCertificateAuthorityCsrResponse, GetCertificateAuthorityCsrError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.GetCertificateAuthorityCsr");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1965,9 +2005,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: ImportCertificateAuthorityCertificateRequest,
     ) -> RusotoFuture<(), ImportCertificateAuthorityCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ACMPrivateCA.ImportCertificateAuthorityCertificate",
@@ -1993,9 +2038,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: IssueCertificateRequest,
     ) -> RusotoFuture<IssueCertificateResponse, IssueCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.IssueCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2022,9 +2072,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: ListCertificateAuthoritiesRequest,
     ) -> RusotoFuture<ListCertificateAuthoritiesResponse, ListCertificateAuthoritiesError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.ListCertificateAuthorities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2045,9 +2100,14 @@ impl AcmPca for AcmPcaClient {
 
     /// <p>Lists the tags, if any, that are associated with your private CA. Tags are labels that you can use to identify and organize your CAs. Each tag consists of a key and an optional value. Call the <a>TagCertificateAuthority</a> operation to add one or more tags to your CA. Call the <a>UntagCertificateAuthority</a> operation to remove tags. </p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2074,9 +2134,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: RestoreCertificateAuthorityRequest,
     ) -> RusotoFuture<(), RestoreCertificateAuthorityError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.RestoreCertificateAuthority");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2097,9 +2162,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: RevokeCertificateRequest,
     ) -> RusotoFuture<(), RevokeCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.RevokeCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2123,9 +2193,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: TagCertificateAuthorityRequest,
     ) -> RusotoFuture<(), TagCertificateAuthorityError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.TagCertificateAuthority");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2146,9 +2221,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: UntagCertificateAuthorityRequest,
     ) -> RusotoFuture<(), UntagCertificateAuthorityError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.UntagCertificateAuthority");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2169,9 +2249,14 @@ impl AcmPca for AcmPcaClient {
         &self,
         input: UpdateCertificateAuthorityRequest,
     ) -> RusotoFuture<(), UpdateCertificateAuthorityError> {
-        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm-pca",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "ACMPrivateCA.UpdateCertificateAuthority");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

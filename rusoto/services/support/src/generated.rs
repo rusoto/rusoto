@@ -1459,9 +1459,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: AddAttachmentsToSetRequest,
     ) -> RusotoFuture<AddAttachmentsToSetResponse, AddAttachmentsToSetError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.AddAttachmentsToSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1487,9 +1492,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: AddCommunicationToCaseRequest,
     ) -> RusotoFuture<AddCommunicationToCaseResponse, AddCommunicationToCaseError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.AddCommunicationToCase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1515,9 +1525,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: CreateCaseRequest,
     ) -> RusotoFuture<CreateCaseResponse, CreateCaseError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.CreateCase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1544,9 +1559,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: DescribeAttachmentRequest,
     ) -> RusotoFuture<DescribeAttachmentResponse, DescribeAttachmentError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeAttachment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1573,9 +1593,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: DescribeCasesRequest,
     ) -> RusotoFuture<DescribeCasesResponse, DescribeCasesError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeCases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1602,9 +1627,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: DescribeCommunicationsRequest,
     ) -> RusotoFuture<DescribeCommunicationsResponse, DescribeCommunicationsError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeCommunications");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1630,9 +1660,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: DescribeServicesRequest,
     ) -> RusotoFuture<DescribeServicesResponse, DescribeServicesError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeServices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1659,9 +1694,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: DescribeSeverityLevelsRequest,
     ) -> RusotoFuture<DescribeSeverityLevelsResponse, DescribeSeverityLevelsError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.DescribeSeverityLevels");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1690,9 +1730,14 @@ impl AWSSupport for AWSSupportClient {
         DescribeTrustedAdvisorCheckRefreshStatusesResponse,
         DescribeTrustedAdvisorCheckRefreshStatusesError,
     > {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSupport_20130415.DescribeTrustedAdvisorCheckRefreshStatuses",
@@ -1722,9 +1767,14 @@ impl AWSSupport for AWSSupportClient {
         DescribeTrustedAdvisorCheckResultResponse,
         DescribeTrustedAdvisorCheckResultError,
     > {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSupport_20130415.DescribeTrustedAdvisorCheckResult",
@@ -1756,9 +1806,14 @@ impl AWSSupport for AWSSupportClient {
         DescribeTrustedAdvisorCheckSummariesResponse,
         DescribeTrustedAdvisorCheckSummariesError,
     > {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSupport_20130415.DescribeTrustedAdvisorCheckSummaries",
@@ -1787,9 +1842,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: DescribeTrustedAdvisorChecksRequest,
     ) -> RusotoFuture<DescribeTrustedAdvisorChecksResponse, DescribeTrustedAdvisorChecksError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSupport_20130415.DescribeTrustedAdvisorChecks",
@@ -1816,9 +1876,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: RefreshTrustedAdvisorCheckRequest,
     ) -> RusotoFuture<RefreshTrustedAdvisorCheckResponse, RefreshTrustedAdvisorCheckError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSupport_20130415.RefreshTrustedAdvisorCheck",
@@ -1845,9 +1910,14 @@ impl AWSSupport for AWSSupportClient {
         &self,
         input: ResolveCaseRequest,
     ) -> RusotoFuture<ResolveCaseResponse, ResolveCaseError> {
-        let mut request = SignedRequest::new("POST", "support", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "support",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSupport_20130415.ResolveCase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

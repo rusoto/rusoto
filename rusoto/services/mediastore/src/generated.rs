@@ -1021,9 +1021,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: CreateContainerInput,
     ) -> RusotoFuture<CreateContainerOutput, CreateContainerError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.CreateContainer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1050,9 +1055,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: DeleteContainerInput,
     ) -> RusotoFuture<DeleteContainerOutput, DeleteContainerError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.DeleteContainer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1079,9 +1089,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: DeleteContainerPolicyInput,
     ) -> RusotoFuture<DeleteContainerPolicyOutput, DeleteContainerPolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.DeleteContainerPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1107,9 +1122,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: DeleteCorsPolicyInput,
     ) -> RusotoFuture<DeleteCorsPolicyOutput, DeleteCorsPolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.DeleteCorsPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1136,9 +1156,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: DeleteLifecyclePolicyInput,
     ) -> RusotoFuture<DeleteLifecyclePolicyOutput, DeleteLifecyclePolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.DeleteLifecyclePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1164,9 +1189,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: DescribeContainerInput,
     ) -> RusotoFuture<DescribeContainerOutput, DescribeContainerError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.DescribeContainer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1193,9 +1223,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: GetContainerPolicyInput,
     ) -> RusotoFuture<GetContainerPolicyOutput, GetContainerPolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.GetContainerPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1222,9 +1257,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: GetCorsPolicyInput,
     ) -> RusotoFuture<GetCorsPolicyOutput, GetCorsPolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.GetCorsPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1251,9 +1291,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: GetLifecyclePolicyInput,
     ) -> RusotoFuture<GetLifecyclePolicyOutput, GetLifecyclePolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.GetLifecyclePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1280,9 +1325,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: ListContainersInput,
     ) -> RusotoFuture<ListContainersOutput, ListContainersError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.ListContainers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1309,9 +1359,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: PutContainerPolicyInput,
     ) -> RusotoFuture<PutContainerPolicyOutput, PutContainerPolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.PutContainerPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1338,9 +1393,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: PutCorsPolicyInput,
     ) -> RusotoFuture<PutCorsPolicyOutput, PutCorsPolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.PutCorsPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1367,9 +1427,14 @@ impl MediaStore for MediaStoreClient {
         &self,
         input: PutLifecyclePolicyInput,
     ) -> RusotoFuture<PutLifecyclePolicyOutput, PutLifecyclePolicyError> {
-        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mediastore",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MediaStore_20170901.PutLifecyclePolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

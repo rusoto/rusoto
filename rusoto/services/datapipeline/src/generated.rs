@@ -1827,9 +1827,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ActivatePipelineInput,
     ) -> RusotoFuture<ActivatePipelineOutput, ActivatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ActivatePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1853,9 +1858,14 @@ impl DataPipeline for DataPipelineClient {
 
     /// <p>Adds or modifies tags for the specified pipeline.</p>
     fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.AddTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1881,9 +1891,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: CreatePipelineInput,
     ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.CreatePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1910,9 +1925,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: DeactivatePipelineInput,
     ) -> RusotoFuture<DeactivatePipelineOutput, DeactivatePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DeactivatePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1936,9 +1956,14 @@ impl DataPipeline for DataPipelineClient {
 
     /// <p>Deletes a pipeline, its pipeline definition, and its run history. AWS Data Pipeline attempts to cancel instances associated with the pipeline that are currently being processed by task runners.</p> <p>Deleting a pipeline cannot be undone. You cannot query or restore a deleted pipeline. To temporarily pause a pipeline instead of deleting it, call <a>SetStatus</a> with the status set to <code>PAUSE</code> on individual components. Components that are paused by <a>SetStatus</a> can be resumed.</p>
     fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DeletePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1962,9 +1987,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: DescribeObjectsInput,
     ) -> RusotoFuture<DescribeObjectsOutput, DescribeObjectsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DescribeObjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1991,9 +2021,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: DescribePipelinesInput,
     ) -> RusotoFuture<DescribePipelinesOutput, DescribePipelinesError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.DescribePipelines");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2020,9 +2055,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: EvaluateExpressionInput,
     ) -> RusotoFuture<EvaluateExpressionOutput, EvaluateExpressionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.EvaluateExpression");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2049,9 +2089,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: GetPipelineDefinitionInput,
     ) -> RusotoFuture<GetPipelineDefinitionOutput, GetPipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.GetPipelineDefinition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2077,9 +2122,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ListPipelinesInput,
     ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ListPipelines");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2106,9 +2156,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: PollForTaskInput,
     ) -> RusotoFuture<PollForTaskOutput, PollForTaskError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.PollForTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2135,9 +2190,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: PutPipelineDefinitionInput,
     ) -> RusotoFuture<PutPipelineDefinitionOutput, PutPipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.PutPipelineDefinition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2163,9 +2223,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: QueryObjectsInput,
     ) -> RusotoFuture<QueryObjectsOutput, QueryObjectsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.QueryObjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2192,9 +2257,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: RemoveTagsInput,
     ) -> RusotoFuture<RemoveTagsOutput, RemoveTagsError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.RemoveTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2221,9 +2291,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ReportTaskProgressInput,
     ) -> RusotoFuture<ReportTaskProgressOutput, ReportTaskProgressError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ReportTaskProgress");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2250,9 +2325,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ReportTaskRunnerHeartbeatInput,
     ) -> RusotoFuture<ReportTaskRunnerHeartbeatOutput, ReportTaskRunnerHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ReportTaskRunnerHeartbeat");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2273,9 +2353,14 @@ impl DataPipeline for DataPipelineClient {
 
     /// <p>Requests that the status of the specified physical or logical pipeline objects be updated in the specified pipeline. This update might not occur immediately, but is eventually consistent. The status that can be set depends on the type of object (for example, DataNode or Activity). You cannot perform this operation on <code>FINISHED</code> pipelines and attempting to do so returns <code>InvalidRequestException</code>.</p>
     fn set_status(&self, input: SetStatusInput) -> RusotoFuture<(), SetStatusError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.SetStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2299,9 +2384,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: SetTaskStatusInput,
     ) -> RusotoFuture<SetTaskStatusOutput, SetTaskStatusError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.SetTaskStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2328,9 +2418,14 @@ impl DataPipeline for DataPipelineClient {
         &self,
         input: ValidatePipelineDefinitionInput,
     ) -> RusotoFuture<ValidatePipelineDefinitionOutput, ValidatePipelineDefinitionError> {
-        let mut request = SignedRequest::new("POST", "datapipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "datapipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DataPipeline.ValidatePipelineDefinition");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

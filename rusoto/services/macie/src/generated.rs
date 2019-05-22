@@ -649,9 +649,14 @@ impl Macie for MacieClient {
         &self,
         input: AssociateMemberAccountRequest,
     ) -> RusotoFuture<(), AssociateMemberAccountError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "macie",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.AssociateMemberAccount");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -674,9 +679,14 @@ impl Macie for MacieClient {
         &self,
         input: AssociateS3ResourcesRequest,
     ) -> RusotoFuture<AssociateS3ResourcesResult, AssociateS3ResourcesError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "macie",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.AssociateS3Resources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -702,9 +712,14 @@ impl Macie for MacieClient {
         &self,
         input: DisassociateMemberAccountRequest,
     ) -> RusotoFuture<(), DisassociateMemberAccountError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "macie",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.DisassociateMemberAccount");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -725,9 +740,14 @@ impl Macie for MacieClient {
         &self,
         input: DisassociateS3ResourcesRequest,
     ) -> RusotoFuture<DisassociateS3ResourcesResult, DisassociateS3ResourcesError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "macie",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.DisassociateS3Resources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -751,9 +771,14 @@ impl Macie for MacieClient {
         &self,
         input: ListMemberAccountsRequest,
     ) -> RusotoFuture<ListMemberAccountsResult, ListMemberAccountsError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "macie",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.ListMemberAccounts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -780,9 +805,14 @@ impl Macie for MacieClient {
         &self,
         input: ListS3ResourcesRequest,
     ) -> RusotoFuture<ListS3ResourcesResult, ListS3ResourcesError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "macie",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.ListS3Resources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -809,9 +839,14 @@ impl Macie for MacieClient {
         &self,
         input: UpdateS3ResourcesRequest,
     ) -> RusotoFuture<UpdateS3ResourcesResult, UpdateS3ResourcesError> {
-        let mut request = SignedRequest::new("POST", "macie", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "macie",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "MacieService.UpdateS3Resources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

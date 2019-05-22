@@ -1648,9 +1648,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: AddTagsToResourceRequest,
     ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.AddTagsToResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1677,9 +1682,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: CreateHapgRequest,
     ) -> RusotoFuture<CreateHapgResponse, CreateHapgError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.CreateHapg");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1706,9 +1716,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: CreateHsmRequest,
     ) -> RusotoFuture<CreateHsmResponse, CreateHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.CreateHsm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1735,9 +1750,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: CreateLunaClientRequest,
     ) -> RusotoFuture<CreateLunaClientResponse, CreateLunaClientError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.CreateLunaClient");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1764,9 +1784,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: DeleteHapgRequest,
     ) -> RusotoFuture<DeleteHapgResponse, DeleteHapgError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DeleteHapg");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1793,9 +1818,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: DeleteHsmRequest,
     ) -> RusotoFuture<DeleteHsmResponse, DeleteHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DeleteHsm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1822,9 +1852,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: DeleteLunaClientRequest,
     ) -> RusotoFuture<DeleteLunaClientResponse, DeleteLunaClientError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DeleteLunaClient");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1851,9 +1886,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: DescribeHapgRequest,
     ) -> RusotoFuture<DescribeHapgResponse, DescribeHapgError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DescribeHapg");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1880,9 +1920,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: DescribeHsmRequest,
     ) -> RusotoFuture<DescribeHsmResponse, DescribeHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DescribeHsm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1909,9 +1954,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: DescribeLunaClientRequest,
     ) -> RusotoFuture<DescribeLunaClientResponse, DescribeLunaClientError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.DescribeLunaClient");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1938,9 +1988,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: GetConfigRequest,
     ) -> RusotoFuture<GetConfigResponse, GetConfigError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.GetConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1966,9 +2021,14 @@ impl CloudHsm for CloudHsmClient {
     fn list_available_zones(
         &self,
     ) -> RusotoFuture<ListAvailableZonesResponse, ListAvailableZonesError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListAvailableZones");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1994,9 +2054,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: ListHapgsRequest,
     ) -> RusotoFuture<ListHapgsResponse, ListHapgsError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListHapgs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2020,9 +2085,14 @@ impl CloudHsm for CloudHsmClient {
 
     /// <p>This is documentation for <b>AWS CloudHSM Classic</b>. For more information, see <a href="http://aws.amazon.com/cloudhsm/faqs-classic/">AWS CloudHSM Classic FAQs</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/classic/userguide/">AWS CloudHSM Classic User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/classic/APIReference/">AWS CloudHSM Classic API Reference</a>.</p> <p> <b>For information about the current version of AWS CloudHSM</b>, see <a href="http://aws.amazon.com/cloudhsm/">AWS CloudHSM</a>, the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/">AWS CloudHSM User Guide</a>, and the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/">AWS CloudHSM API Reference</a>.</p> <p>Retrieves the identifiers of all of the HSMs provisioned for the current customer.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> member. If more results are available, the <code>NextToken</code> member of the response contains a token that you pass in the next call to <code>ListHsms</code> to retrieve the next set of items.</p>
     fn list_hsms(&self, input: ListHsmsRequest) -> RusotoFuture<ListHsmsResponse, ListHsmsError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListHsms");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2049,9 +2119,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: ListLunaClientsRequest,
     ) -> RusotoFuture<ListLunaClientsResponse, ListLunaClientsError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ListLunaClients");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2078,9 +2153,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CloudHsmFrontendService.ListTagsForResource",
@@ -2109,9 +2189,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: ModifyHapgRequest,
     ) -> RusotoFuture<ModifyHapgResponse, ModifyHapgError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ModifyHapg");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2138,9 +2223,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: ModifyHsmRequest,
     ) -> RusotoFuture<ModifyHsmResponse, ModifyHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ModifyHsm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2167,9 +2257,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: ModifyLunaClientRequest,
     ) -> RusotoFuture<ModifyLunaClientResponse, ModifyLunaClientError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CloudHsmFrontendService.ModifyLunaClient");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2196,9 +2291,14 @@ impl CloudHsm for CloudHsmClient {
         &self,
         input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CloudHsmFrontendService.RemoveTagsFromResource",

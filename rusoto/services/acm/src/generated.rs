@@ -1186,9 +1186,14 @@ impl Acm for AcmClient {
         &self,
         input: AddTagsToCertificateRequest,
     ) -> RusotoFuture<(), AddTagsToCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.AddTagsToCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1211,9 +1216,14 @@ impl Acm for AcmClient {
         &self,
         input: DeleteCertificateRequest,
     ) -> RusotoFuture<(), DeleteCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.DeleteCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1237,9 +1247,14 @@ impl Acm for AcmClient {
         &self,
         input: DescribeCertificateRequest,
     ) -> RusotoFuture<DescribeCertificateResponse, DescribeCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.DescribeCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1265,9 +1280,14 @@ impl Acm for AcmClient {
         &self,
         input: ExportCertificateRequest,
     ) -> RusotoFuture<ExportCertificateResponse, ExportCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.ExportCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1294,9 +1314,14 @@ impl Acm for AcmClient {
         &self,
         input: GetCertificateRequest,
     ) -> RusotoFuture<GetCertificateResponse, GetCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.GetCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1323,9 +1348,14 @@ impl Acm for AcmClient {
         &self,
         input: ImportCertificateRequest,
     ) -> RusotoFuture<ImportCertificateResponse, ImportCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.ImportCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1352,9 +1382,14 @@ impl Acm for AcmClient {
         &self,
         input: ListCertificatesRequest,
     ) -> RusotoFuture<ListCertificatesResponse, ListCertificatesError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.ListCertificates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1381,9 +1416,14 @@ impl Acm for AcmClient {
         &self,
         input: ListTagsForCertificateRequest,
     ) -> RusotoFuture<ListTagsForCertificateResponse, ListTagsForCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.ListTagsForCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1409,9 +1449,14 @@ impl Acm for AcmClient {
         &self,
         input: RemoveTagsFromCertificateRequest,
     ) -> RusotoFuture<(), RemoveTagsFromCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CertificateManager.RemoveTagsFromCertificate",
@@ -1435,9 +1480,14 @@ impl Acm for AcmClient {
         &self,
         input: RequestCertificateRequest,
     ) -> RusotoFuture<RequestCertificateResponse, RequestCertificateError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.RequestCertificate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1464,9 +1514,14 @@ impl Acm for AcmClient {
         &self,
         input: ResendValidationEmailRequest,
     ) -> RusotoFuture<(), ResendValidationEmailError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CertificateManager.ResendValidationEmail");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1489,9 +1544,14 @@ impl Acm for AcmClient {
         &self,
         input: UpdateCertificateOptionsRequest,
     ) -> RusotoFuture<(), UpdateCertificateOptionsError> {
-        let mut request = SignedRequest::new("POST", "acm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "acm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CertificateManager.UpdateCertificateOptions",

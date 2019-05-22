@@ -1407,9 +1407,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: CopyBackupToRegionRequest,
     ) -> RusotoFuture<CopyBackupToRegionResponse, CopyBackupToRegionError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.CopyBackupToRegion");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1436,9 +1441,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.CreateCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1465,9 +1475,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: CreateHsmRequest,
     ) -> RusotoFuture<CreateHsmResponse, CreateHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.CreateHsm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1494,9 +1509,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DeleteBackupRequest,
     ) -> RusotoFuture<DeleteBackupResponse, DeleteBackupError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DeleteBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1523,9 +1543,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DeleteClusterRequest,
     ) -> RusotoFuture<DeleteClusterResponse, DeleteClusterError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DeleteCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1552,9 +1577,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DeleteHsmRequest,
     ) -> RusotoFuture<DeleteHsmResponse, DeleteHsmError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DeleteHsm");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1581,9 +1611,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DescribeBackupsRequest,
     ) -> RusotoFuture<DescribeBackupsResponse, DescribeBackupsError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DescribeBackups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1610,9 +1645,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: DescribeClustersRequest,
     ) -> RusotoFuture<DescribeClustersResponse, DescribeClustersError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.DescribeClusters");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1639,9 +1679,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: InitializeClusterRequest,
     ) -> RusotoFuture<InitializeClusterResponse, InitializeClusterError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.InitializeCluster");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1665,9 +1710,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
 
     /// <p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.ListTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1694,9 +1744,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: RestoreBackupRequest,
     ) -> RusotoFuture<RestoreBackupResponse, RestoreBackupError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.RestoreBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1723,9 +1778,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1752,9 +1812,14 @@ impl CloudHsmv2 for CloudHsmv2Client {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloudhsm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("cloudhsmv2".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "BaldrApiService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

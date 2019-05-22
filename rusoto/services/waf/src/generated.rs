@@ -7107,9 +7107,14 @@ impl Waf for WafClient {
         &self,
         input: CreateByteMatchSetRequest,
     ) -> RusotoFuture<CreateByteMatchSetResponse, CreateByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateByteMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7136,9 +7141,14 @@ impl Waf for WafClient {
         &self,
         input: CreateGeoMatchSetRequest,
     ) -> RusotoFuture<CreateGeoMatchSetResponse, CreateGeoMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateGeoMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7165,9 +7175,14 @@ impl Waf for WafClient {
         &self,
         input: CreateIPSetRequest,
     ) -> RusotoFuture<CreateIPSetResponse, CreateIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateIPSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7194,9 +7209,14 @@ impl Waf for WafClient {
         &self,
         input: CreateRateBasedRuleRequest,
     ) -> RusotoFuture<CreateRateBasedRuleResponse, CreateRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateRateBasedRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7222,9 +7242,14 @@ impl Waf for WafClient {
         &self,
         input: CreateRegexMatchSetRequest,
     ) -> RusotoFuture<CreateRegexMatchSetResponse, CreateRegexMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateRegexMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7250,9 +7275,14 @@ impl Waf for WafClient {
         &self,
         input: CreateRegexPatternSetRequest,
     ) -> RusotoFuture<CreateRegexPatternSetResponse, CreateRegexPatternSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateRegexPatternSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7278,9 +7308,14 @@ impl Waf for WafClient {
         &self,
         input: CreateRuleRequest,
     ) -> RusotoFuture<CreateRuleResponse, CreateRuleError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7307,9 +7342,14 @@ impl Waf for WafClient {
         &self,
         input: CreateRuleGroupRequest,
     ) -> RusotoFuture<CreateRuleGroupResponse, CreateRuleGroupError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateRuleGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7336,9 +7376,14 @@ impl Waf for WafClient {
         &self,
         input: CreateSizeConstraintSetRequest,
     ) -> RusotoFuture<CreateSizeConstraintSetResponse, CreateSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateSizeConstraintSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7362,9 +7407,14 @@ impl Waf for WafClient {
         &self,
         input: CreateSqlInjectionMatchSetRequest,
     ) -> RusotoFuture<CreateSqlInjectionMatchSetResponse, CreateSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateSqlInjectionMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7388,9 +7438,14 @@ impl Waf for WafClient {
         &self,
         input: CreateWebACLRequest,
     ) -> RusotoFuture<CreateWebACLResponse, CreateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7417,9 +7472,14 @@ impl Waf for WafClient {
         &self,
         input: CreateXssMatchSetRequest,
     ) -> RusotoFuture<CreateXssMatchSetResponse, CreateXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.CreateXssMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7446,9 +7506,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteByteMatchSetRequest,
     ) -> RusotoFuture<DeleteByteMatchSetResponse, DeleteByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteByteMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7475,9 +7540,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteGeoMatchSetRequest,
     ) -> RusotoFuture<DeleteGeoMatchSetResponse, DeleteGeoMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteGeoMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7504,9 +7574,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteIPSetRequest,
     ) -> RusotoFuture<DeleteIPSetResponse, DeleteIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteIPSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7533,9 +7608,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteLoggingConfigurationRequest,
     ) -> RusotoFuture<DeleteLoggingConfigurationResponse, DeleteLoggingConfigurationError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteLoggingConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7559,9 +7639,14 @@ impl Waf for WafClient {
         &self,
         input: DeletePermissionPolicyRequest,
     ) -> RusotoFuture<DeletePermissionPolicyResponse, DeletePermissionPolicyError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeletePermissionPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7587,9 +7672,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteRateBasedRuleRequest,
     ) -> RusotoFuture<DeleteRateBasedRuleResponse, DeleteRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteRateBasedRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7615,9 +7705,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteRegexMatchSetRequest,
     ) -> RusotoFuture<DeleteRegexMatchSetResponse, DeleteRegexMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteRegexMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7643,9 +7738,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteRegexPatternSetRequest,
     ) -> RusotoFuture<DeleteRegexPatternSetResponse, DeleteRegexPatternSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteRegexPatternSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7671,9 +7771,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteRuleRequest,
     ) -> RusotoFuture<DeleteRuleResponse, DeleteRuleError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7700,9 +7805,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteRuleGroupRequest,
     ) -> RusotoFuture<DeleteRuleGroupResponse, DeleteRuleGroupError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteRuleGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7729,9 +7839,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteSizeConstraintSetRequest,
     ) -> RusotoFuture<DeleteSizeConstraintSetResponse, DeleteSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteSizeConstraintSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7755,9 +7870,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteSqlInjectionMatchSetRequest,
     ) -> RusotoFuture<DeleteSqlInjectionMatchSetResponse, DeleteSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteSqlInjectionMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7781,9 +7901,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteWebACLRequest,
     ) -> RusotoFuture<DeleteWebACLResponse, DeleteWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7810,9 +7935,14 @@ impl Waf for WafClient {
         &self,
         input: DeleteXssMatchSetRequest,
     ) -> RusotoFuture<DeleteXssMatchSetResponse, DeleteXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.DeleteXssMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7839,9 +7969,14 @@ impl Waf for WafClient {
         &self,
         input: GetByteMatchSetRequest,
     ) -> RusotoFuture<GetByteMatchSetResponse, GetByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetByteMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7865,9 +8000,14 @@ impl Waf for WafClient {
 
     /// <p>When you want to create, update, or delete AWS WAF objects, get a change token and include the change token in the create, update, or delete request. Change tokens ensure that your application doesn't submit conflicting requests to AWS WAF.</p> <p>Each create, update, or delete request must use a unique change token. If your application submits a <code>GetChangeToken</code> request and then submits a second <code>GetChangeToken</code> request before submitting a create, update, or delete request, the second <code>GetChangeToken</code> request returns the same value as the first <code>GetChangeToken</code> request.</p> <p>When you use a change token in a create, update, or delete request, the status of the change token changes to <code>PENDING</code>, which indicates that AWS WAF is propagating the change to all AWS WAF servers. Use <code>GetChangeTokenStatus</code> to determine the status of your change token.</p>
     fn get_change_token(&self) -> RusotoFuture<GetChangeTokenResponse, GetChangeTokenError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetChangeToken");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -7893,9 +8033,14 @@ impl Waf for WafClient {
         &self,
         input: GetChangeTokenStatusRequest,
     ) -> RusotoFuture<GetChangeTokenStatusResponse, GetChangeTokenStatusError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetChangeTokenStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7921,9 +8066,14 @@ impl Waf for WafClient {
         &self,
         input: GetGeoMatchSetRequest,
     ) -> RusotoFuture<GetGeoMatchSetResponse, GetGeoMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetGeoMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7947,9 +8097,14 @@ impl Waf for WafClient {
 
     /// <p>Returns the <a>IPSet</a> that is specified by <code>IPSetId</code>.</p>
     fn get_ip_set(&self, input: GetIPSetRequest) -> RusotoFuture<GetIPSetResponse, GetIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetIPSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7976,9 +8131,14 @@ impl Waf for WafClient {
         &self,
         input: GetLoggingConfigurationRequest,
     ) -> RusotoFuture<GetLoggingConfigurationResponse, GetLoggingConfigurationError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetLoggingConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8002,9 +8162,14 @@ impl Waf for WafClient {
         &self,
         input: GetPermissionPolicyRequest,
     ) -> RusotoFuture<GetPermissionPolicyResponse, GetPermissionPolicyError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetPermissionPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8030,9 +8195,14 @@ impl Waf for WafClient {
         &self,
         input: GetRateBasedRuleRequest,
     ) -> RusotoFuture<GetRateBasedRuleResponse, GetRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetRateBasedRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8059,9 +8229,14 @@ impl Waf for WafClient {
         &self,
         input: GetRateBasedRuleManagedKeysRequest,
     ) -> RusotoFuture<GetRateBasedRuleManagedKeysResponse, GetRateBasedRuleManagedKeysError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_20150824.GetRateBasedRuleManagedKeys",
@@ -8088,9 +8263,14 @@ impl Waf for WafClient {
         &self,
         input: GetRegexMatchSetRequest,
     ) -> RusotoFuture<GetRegexMatchSetResponse, GetRegexMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetRegexMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8117,9 +8297,14 @@ impl Waf for WafClient {
         &self,
         input: GetRegexPatternSetRequest,
     ) -> RusotoFuture<GetRegexPatternSetResponse, GetRegexPatternSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetRegexPatternSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8143,9 +8328,14 @@ impl Waf for WafClient {
 
     /// <p>Returns the <a>Rule</a> that is specified by the <code>RuleId</code> that you included in the <code>GetRule</code> request.</p>
     fn get_rule(&self, input: GetRuleRequest) -> RusotoFuture<GetRuleResponse, GetRuleError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8171,9 +8361,14 @@ impl Waf for WafClient {
         &self,
         input: GetRuleGroupRequest,
     ) -> RusotoFuture<GetRuleGroupResponse, GetRuleGroupError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetRuleGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8200,9 +8395,14 @@ impl Waf for WafClient {
         &self,
         input: GetSampledRequestsRequest,
     ) -> RusotoFuture<GetSampledRequestsResponse, GetSampledRequestsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetSampledRequests");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8229,9 +8429,14 @@ impl Waf for WafClient {
         &self,
         input: GetSizeConstraintSetRequest,
     ) -> RusotoFuture<GetSizeConstraintSetResponse, GetSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetSizeConstraintSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8257,9 +8462,14 @@ impl Waf for WafClient {
         &self,
         input: GetSqlInjectionMatchSetRequest,
     ) -> RusotoFuture<GetSqlInjectionMatchSetResponse, GetSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetSqlInjectionMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8283,9 +8493,14 @@ impl Waf for WafClient {
         &self,
         input: GetWebACLRequest,
     ) -> RusotoFuture<GetWebACLResponse, GetWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8312,9 +8527,14 @@ impl Waf for WafClient {
         &self,
         input: GetXssMatchSetRequest,
     ) -> RusotoFuture<GetXssMatchSetResponse, GetXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.GetXssMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8342,9 +8562,14 @@ impl Waf for WafClient {
         input: ListActivatedRulesInRuleGroupRequest,
     ) -> RusotoFuture<ListActivatedRulesInRuleGroupResponse, ListActivatedRulesInRuleGroupError>
     {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_20150824.ListActivatedRulesInRuleGroup",
@@ -8371,9 +8596,14 @@ impl Waf for WafClient {
         &self,
         input: ListByteMatchSetsRequest,
     ) -> RusotoFuture<ListByteMatchSetsResponse, ListByteMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListByteMatchSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8400,9 +8630,14 @@ impl Waf for WafClient {
         &self,
         input: ListGeoMatchSetsRequest,
     ) -> RusotoFuture<ListGeoMatchSetsResponse, ListGeoMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListGeoMatchSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8429,9 +8664,14 @@ impl Waf for WafClient {
         &self,
         input: ListIPSetsRequest,
     ) -> RusotoFuture<ListIPSetsResponse, ListIPSetsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListIPSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8458,9 +8698,14 @@ impl Waf for WafClient {
         &self,
         input: ListLoggingConfigurationsRequest,
     ) -> RusotoFuture<ListLoggingConfigurationsResponse, ListLoggingConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListLoggingConfigurations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8484,9 +8729,14 @@ impl Waf for WafClient {
         &self,
         input: ListRateBasedRulesRequest,
     ) -> RusotoFuture<ListRateBasedRulesResponse, ListRateBasedRulesError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListRateBasedRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8513,9 +8763,14 @@ impl Waf for WafClient {
         &self,
         input: ListRegexMatchSetsRequest,
     ) -> RusotoFuture<ListRegexMatchSetsResponse, ListRegexMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListRegexMatchSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8542,9 +8797,14 @@ impl Waf for WafClient {
         &self,
         input: ListRegexPatternSetsRequest,
     ) -> RusotoFuture<ListRegexPatternSetsResponse, ListRegexPatternSetsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListRegexPatternSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8570,9 +8830,14 @@ impl Waf for WafClient {
         &self,
         input: ListRuleGroupsRequest,
     ) -> RusotoFuture<ListRuleGroupsResponse, ListRuleGroupsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListRuleGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8599,9 +8864,14 @@ impl Waf for WafClient {
         &self,
         input: ListRulesRequest,
     ) -> RusotoFuture<ListRulesResponse, ListRulesError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8628,9 +8898,14 @@ impl Waf for WafClient {
         &self,
         input: ListSizeConstraintSetsRequest,
     ) -> RusotoFuture<ListSizeConstraintSetsResponse, ListSizeConstraintSetsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListSizeConstraintSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8656,9 +8931,14 @@ impl Waf for WafClient {
         &self,
         input: ListSqlInjectionMatchSetsRequest,
     ) -> RusotoFuture<ListSqlInjectionMatchSetsResponse, ListSqlInjectionMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListSqlInjectionMatchSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8682,9 +8962,14 @@ impl Waf for WafClient {
         &self,
         input: ListSubscribedRuleGroupsRequest,
     ) -> RusotoFuture<ListSubscribedRuleGroupsResponse, ListSubscribedRuleGroupsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListSubscribedRuleGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8708,9 +8993,14 @@ impl Waf for WafClient {
         &self,
         input: ListWebACLsRequest,
     ) -> RusotoFuture<ListWebACLsResponse, ListWebACLsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListWebACLs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8737,9 +9027,14 @@ impl Waf for WafClient {
         &self,
         input: ListXssMatchSetsRequest,
     ) -> RusotoFuture<ListXssMatchSetsResponse, ListXssMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.ListXssMatchSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8766,9 +9061,14 @@ impl Waf for WafClient {
         &self,
         input: PutLoggingConfigurationRequest,
     ) -> RusotoFuture<PutLoggingConfigurationResponse, PutLoggingConfigurationError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.PutLoggingConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8792,9 +9092,14 @@ impl Waf for WafClient {
         &self,
         input: PutPermissionPolicyRequest,
     ) -> RusotoFuture<PutPermissionPolicyResponse, PutPermissionPolicyError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.PutPermissionPolicy");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8820,9 +9125,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateByteMatchSetRequest,
     ) -> RusotoFuture<UpdateByteMatchSetResponse, UpdateByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateByteMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8849,9 +9159,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateGeoMatchSetRequest,
     ) -> RusotoFuture<UpdateGeoMatchSetResponse, UpdateGeoMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateGeoMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8878,9 +9193,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateIPSetRequest,
     ) -> RusotoFuture<UpdateIPSetResponse, UpdateIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateIPSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8907,9 +9227,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateRateBasedRuleRequest,
     ) -> RusotoFuture<UpdateRateBasedRuleResponse, UpdateRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateRateBasedRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8935,9 +9260,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateRegexMatchSetRequest,
     ) -> RusotoFuture<UpdateRegexMatchSetResponse, UpdateRegexMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateRegexMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8963,9 +9293,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateRegexPatternSetRequest,
     ) -> RusotoFuture<UpdateRegexPatternSetResponse, UpdateRegexPatternSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateRegexPatternSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8991,9 +9326,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateRuleRequest,
     ) -> RusotoFuture<UpdateRuleResponse, UpdateRuleError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9020,9 +9360,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateRuleGroupRequest,
     ) -> RusotoFuture<UpdateRuleGroupResponse, UpdateRuleGroupError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateRuleGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9049,9 +9394,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateSizeConstraintSetRequest,
     ) -> RusotoFuture<UpdateSizeConstraintSetResponse, UpdateSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateSizeConstraintSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9075,9 +9425,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateSqlInjectionMatchSetRequest,
     ) -> RusotoFuture<UpdateSqlInjectionMatchSetResponse, UpdateSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateSqlInjectionMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9101,9 +9456,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateWebACLRequest,
     ) -> RusotoFuture<UpdateWebACLResponse, UpdateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9130,9 +9490,14 @@ impl Waf for WafClient {
         &self,
         input: UpdateXssMatchSetRequest,
     ) -> RusotoFuture<UpdateXssMatchSetResponse, UpdateXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_20150824.UpdateXssMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

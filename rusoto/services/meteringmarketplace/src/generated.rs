@@ -511,9 +511,14 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
         &self,
         input: BatchMeterUsageRequest,
     ) -> RusotoFuture<BatchMeterUsageResult, BatchMeterUsageError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "aws-marketplace",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("metering.marketplace".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.BatchMeterUsage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -540,9 +545,14 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
         &self,
         input: MeterUsageRequest,
     ) -> RusotoFuture<MeterUsageResult, MeterUsageError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "aws-marketplace",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("metering.marketplace".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.MeterUsage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -569,9 +579,14 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
         &self,
         input: RegisterUsageRequest,
     ) -> RusotoFuture<RegisterUsageResult, RegisterUsageError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "aws-marketplace",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("metering.marketplace".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.RegisterUsage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -598,9 +613,14 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
         &self,
         input: ResolveCustomerRequest,
     ) -> RusotoFuture<ResolveCustomerResult, ResolveCustomerError> {
-        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "aws-marketplace",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("metering.marketplace".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMPMeteringService.ResolveCustomer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

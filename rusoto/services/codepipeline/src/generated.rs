@@ -3179,9 +3179,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: AcknowledgeJobInput,
     ) -> RusotoFuture<AcknowledgeJobOutput, AcknowledgeJobError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.AcknowledgeJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3208,9 +3213,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: AcknowledgeThirdPartyJobInput,
     ) -> RusotoFuture<AcknowledgeThirdPartyJobOutput, AcknowledgeThirdPartyJobError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.AcknowledgeThirdPartyJob",
@@ -3237,9 +3247,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: CreateCustomActionTypeInput,
     ) -> RusotoFuture<CreateCustomActionTypeOutput, CreateCustomActionTypeError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.CreateCustomActionType",
@@ -3268,9 +3283,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: CreatePipelineInput,
     ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.CreatePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3297,9 +3317,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: DeleteCustomActionTypeInput,
     ) -> RusotoFuture<(), DeleteCustomActionTypeError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.DeleteCustomActionType",
@@ -3322,9 +3347,14 @@ impl CodePipeline for CodePipelineClient {
 
     /// <p>Deletes the specified pipeline.</p>
     fn delete_pipeline(&self, input: DeletePipelineInput) -> RusotoFuture<(), DeletePipelineError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.DeletePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3348,9 +3378,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: DeleteWebhookInput,
     ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.DeleteWebhook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3378,9 +3413,14 @@ impl CodePipeline for CodePipelineClient {
         input: DeregisterWebhookWithThirdPartyInput,
     ) -> RusotoFuture<DeregisterWebhookWithThirdPartyOutput, DeregisterWebhookWithThirdPartyError>
     {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.DeregisterWebhookWithThirdParty",
@@ -3409,9 +3449,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: DisableStageTransitionInput,
     ) -> RusotoFuture<(), DisableStageTransitionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.DisableStageTransition",
@@ -3437,9 +3482,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: EnableStageTransitionInput,
     ) -> RusotoFuture<(), EnableStageTransitionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.EnableStageTransition",
@@ -3465,9 +3515,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: GetJobDetailsInput,
     ) -> RusotoFuture<GetJobDetailsOutput, GetJobDetailsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetJobDetails");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3494,9 +3549,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: GetPipelineInput,
     ) -> RusotoFuture<GetPipelineOutput, GetPipelineError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3523,9 +3583,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: GetPipelineExecutionInput,
     ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipelineExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3551,9 +3616,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: GetPipelineStateInput,
     ) -> RusotoFuture<GetPipelineStateOutput, GetPipelineStateError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.GetPipelineState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3580,9 +3650,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: GetThirdPartyJobDetailsInput,
     ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.GetThirdPartyJobDetails",
@@ -3609,9 +3684,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: ListActionTypesInput,
     ) -> RusotoFuture<ListActionTypesOutput, ListActionTypesError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListActionTypes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3638,9 +3718,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: ListPipelineExecutionsInput,
     ) -> RusotoFuture<ListPipelineExecutionsOutput, ListPipelineExecutionsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.ListPipelineExecutions",
@@ -3669,9 +3754,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: ListPipelinesInput,
     ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListPipelines");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3698,9 +3788,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: ListWebhooksInput,
     ) -> RusotoFuture<ListWebhooksOutput, ListWebhooksError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.ListWebhooks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3727,9 +3822,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PollForJobsInput,
     ) -> RusotoFuture<PollForJobsOutput, PollForJobsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PollForJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3756,9 +3856,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PollForThirdPartyJobsInput,
     ) -> RusotoFuture<PollForThirdPartyJobsOutput, PollForThirdPartyJobsError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.PollForThirdPartyJobs",
@@ -3787,9 +3892,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PutActionRevisionInput,
     ) -> RusotoFuture<PutActionRevisionOutput, PutActionRevisionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutActionRevision");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3816,9 +3926,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PutApprovalResultInput,
     ) -> RusotoFuture<PutApprovalResultOutput, PutApprovalResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutApprovalResult");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3845,9 +3960,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PutJobFailureResultInput,
     ) -> RusotoFuture<(), PutJobFailureResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutJobFailureResult");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3870,9 +3990,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PutJobSuccessResultInput,
     ) -> RusotoFuture<(), PutJobSuccessResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutJobSuccessResult");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3895,9 +4020,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PutThirdPartyJobFailureResultInput,
     ) -> RusotoFuture<(), PutThirdPartyJobFailureResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.PutThirdPartyJobFailureResult",
@@ -3921,9 +4051,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PutThirdPartyJobSuccessResultInput,
     ) -> RusotoFuture<(), PutThirdPartyJobSuccessResultError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.PutThirdPartyJobSuccessResult",
@@ -3947,9 +4082,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: PutWebhookInput,
     ) -> RusotoFuture<PutWebhookOutput, PutWebhookError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.PutWebhook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3976,9 +4116,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: RegisterWebhookWithThirdPartyInput,
     ) -> RusotoFuture<RegisterWebhookWithThirdPartyOutput, RegisterWebhookWithThirdPartyError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.RegisterWebhookWithThirdParty",
@@ -4005,9 +4150,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: RetryStageExecutionInput,
     ) -> RusotoFuture<RetryStageExecutionOutput, RetryStageExecutionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.RetryStageExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4033,9 +4183,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: StartPipelineExecutionInput,
     ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodePipeline_20150709.StartPipelineExecution",
@@ -4064,9 +4219,14 @@ impl CodePipeline for CodePipelineClient {
         &self,
         input: UpdatePipelineInput,
     ) -> RusotoFuture<UpdatePipelineOutput, UpdatePipelineError> {
-        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codepipeline",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodePipeline_20150709.UpdatePipeline");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

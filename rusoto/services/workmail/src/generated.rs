@@ -3281,9 +3281,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: AssociateDelegateToResourceRequest,
     ) -> RusotoFuture<AssociateDelegateToResourceResponse, AssociateDelegateToResourceError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "WorkMailService.AssociateDelegateToResource",
@@ -3310,9 +3315,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: AssociateMemberToGroupRequest,
     ) -> RusotoFuture<AssociateMemberToGroupResponse, AssociateMemberToGroupError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.AssociateMemberToGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3338,9 +3348,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: CreateAliasRequest,
     ) -> RusotoFuture<CreateAliasResponse, CreateAliasError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.CreateAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3367,9 +3382,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: CreateGroupRequest,
     ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.CreateGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3396,9 +3416,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: CreateResourceRequest,
     ) -> RusotoFuture<CreateResourceResponse, CreateResourceError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.CreateResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3425,9 +3450,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: CreateUserRequest,
     ) -> RusotoFuture<CreateUserResponse, CreateUserError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.CreateUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3454,9 +3484,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DeleteAliasRequest,
     ) -> RusotoFuture<DeleteAliasResponse, DeleteAliasError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DeleteAlias");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3483,9 +3518,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DeleteGroupRequest,
     ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DeleteGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3512,9 +3552,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DeleteMailboxPermissionsRequest,
     ) -> RusotoFuture<DeleteMailboxPermissionsResponse, DeleteMailboxPermissionsError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DeleteMailboxPermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3538,9 +3583,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DeleteResourceRequest,
     ) -> RusotoFuture<DeleteResourceResponse, DeleteResourceError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DeleteResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3567,9 +3617,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DeleteUserRequest,
     ) -> RusotoFuture<DeleteUserResponse, DeleteUserError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DeleteUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3596,9 +3651,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DeregisterFromWorkMailRequest,
     ) -> RusotoFuture<DeregisterFromWorkMailResponse, DeregisterFromWorkMailError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DeregisterFromWorkMail");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3624,9 +3684,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DescribeGroupRequest,
     ) -> RusotoFuture<DescribeGroupResponse, DescribeGroupError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DescribeGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3653,9 +3718,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DescribeOrganizationRequest,
     ) -> RusotoFuture<DescribeOrganizationResponse, DescribeOrganizationError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DescribeOrganization");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3681,9 +3751,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DescribeResourceRequest,
     ) -> RusotoFuture<DescribeResourceResponse, DescribeResourceError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DescribeResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3710,9 +3785,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DescribeUserRequest,
     ) -> RusotoFuture<DescribeUserResponse, DescribeUserError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.DescribeUser");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3740,9 +3820,14 @@ impl Workmail for WorkmailClient {
         input: DisassociateDelegateFromResourceRequest,
     ) -> RusotoFuture<DisassociateDelegateFromResourceResponse, DisassociateDelegateFromResourceError>
     {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "WorkMailService.DisassociateDelegateFromResource",
@@ -3771,9 +3856,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: DisassociateMemberFromGroupRequest,
     ) -> RusotoFuture<DisassociateMemberFromGroupResponse, DisassociateMemberFromGroupError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "WorkMailService.DisassociateMemberFromGroup",
@@ -3800,9 +3890,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ListAliasesRequest,
     ) -> RusotoFuture<ListAliasesResponse, ListAliasesError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ListAliases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3829,9 +3924,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ListGroupMembersRequest,
     ) -> RusotoFuture<ListGroupMembersResponse, ListGroupMembersError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ListGroupMembers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3858,9 +3958,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ListGroupsRequest,
     ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ListGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3887,9 +3992,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ListMailboxPermissionsRequest,
     ) -> RusotoFuture<ListMailboxPermissionsResponse, ListMailboxPermissionsError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ListMailboxPermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3915,9 +4025,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ListOrganizationsRequest,
     ) -> RusotoFuture<ListOrganizationsResponse, ListOrganizationsError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ListOrganizations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3944,9 +4059,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ListResourceDelegatesRequest,
     ) -> RusotoFuture<ListResourceDelegatesResponse, ListResourceDelegatesError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ListResourceDelegates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3972,9 +4092,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ListResourcesRequest,
     ) -> RusotoFuture<ListResourcesResponse, ListResourcesError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ListResources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4001,9 +4126,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ListUsersRequest,
     ) -> RusotoFuture<ListUsersResponse, ListUsersError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ListUsers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4030,9 +4160,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: PutMailboxPermissionsRequest,
     ) -> RusotoFuture<PutMailboxPermissionsResponse, PutMailboxPermissionsError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.PutMailboxPermissions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4058,9 +4193,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: RegisterToWorkMailRequest,
     ) -> RusotoFuture<RegisterToWorkMailResponse, RegisterToWorkMailError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.RegisterToWorkMail");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4087,9 +4227,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: ResetPasswordRequest,
     ) -> RusotoFuture<ResetPasswordResponse, ResetPasswordError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.ResetPassword");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4116,9 +4261,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: UpdatePrimaryEmailAddressRequest,
     ) -> RusotoFuture<UpdatePrimaryEmailAddressResponse, UpdatePrimaryEmailAddressError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.UpdatePrimaryEmailAddress");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4142,9 +4292,14 @@ impl Workmail for WorkmailClient {
         &self,
         input: UpdateResourceRequest,
     ) -> RusotoFuture<UpdateResourceResponse, UpdateResourceError> {
-        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workmail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkMailService.UpdateResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

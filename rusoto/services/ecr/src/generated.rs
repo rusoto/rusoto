@@ -2588,9 +2588,14 @@ impl Ecr for EcrClient {
         &self,
         input: BatchCheckLayerAvailabilityRequest,
     ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchCheckLayerAvailability",
@@ -2617,9 +2622,14 @@ impl Ecr for EcrClient {
         &self,
         input: BatchDeleteImageRequest,
     ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchDeleteImage",
@@ -2649,9 +2659,14 @@ impl Ecr for EcrClient {
         &self,
         input: BatchGetImageRequest,
     ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.BatchGetImage",
@@ -2681,9 +2696,14 @@ impl Ecr for EcrClient {
         &self,
         input: CompleteLayerUploadRequest,
     ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.CompleteLayerUpload",
@@ -2712,9 +2732,14 @@ impl Ecr for EcrClient {
         &self,
         input: CreateRepositoryRequest,
     ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.CreateRepository",
@@ -2744,9 +2769,14 @@ impl Ecr for EcrClient {
         &self,
         input: DeleteLifecyclePolicyRequest,
     ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteLifecyclePolicy",
@@ -2775,9 +2805,14 @@ impl Ecr for EcrClient {
         &self,
         input: DeleteRepositoryRequest,
     ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteRepository",
@@ -2807,9 +2842,14 @@ impl Ecr for EcrClient {
         &self,
         input: DeleteRepositoryPolicyRequest,
     ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DeleteRepositoryPolicy",
@@ -2838,9 +2878,14 @@ impl Ecr for EcrClient {
         &self,
         input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DescribeImages",
@@ -2870,9 +2915,14 @@ impl Ecr for EcrClient {
         &self,
         input: DescribeRepositoriesRequest,
     ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.DescribeRepositories",
@@ -2901,9 +2951,14 @@ impl Ecr for EcrClient {
         &self,
         input: GetAuthorizationTokenRequest,
     ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetAuthorizationToken",
@@ -2932,9 +2987,14 @@ impl Ecr for EcrClient {
         &self,
         input: GetDownloadUrlForLayerRequest,
     ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetDownloadUrlForLayer",
@@ -2963,9 +3023,14 @@ impl Ecr for EcrClient {
         &self,
         input: GetLifecyclePolicyRequest,
     ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetLifecyclePolicy",
@@ -2995,9 +3060,14 @@ impl Ecr for EcrClient {
         &self,
         input: GetLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetLifecyclePolicyPreview",
@@ -3024,9 +3094,14 @@ impl Ecr for EcrClient {
         &self,
         input: GetRepositoryPolicyRequest,
     ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.GetRepositoryPolicy",
@@ -3055,9 +3130,14 @@ impl Ecr for EcrClient {
         &self,
         input: InitiateLayerUploadRequest,
     ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.InitiateLayerUpload",
@@ -3086,9 +3166,14 @@ impl Ecr for EcrClient {
         &self,
         input: ListImagesRequest,
     ) -> RusotoFuture<ListImagesResponse, ListImagesError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.ListImages",
@@ -3118,9 +3203,14 @@ impl Ecr for EcrClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.ListTagsForResource",
@@ -3146,9 +3236,14 @@ impl Ecr for EcrClient {
 
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.PutImage",
@@ -3178,9 +3273,14 @@ impl Ecr for EcrClient {
         &self,
         input: PutLifecyclePolicyRequest,
     ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.PutLifecyclePolicy",
@@ -3210,9 +3310,14 @@ impl Ecr for EcrClient {
         &self,
         input: SetRepositoryPolicyRequest,
     ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.SetRepositoryPolicy",
@@ -3241,9 +3346,14 @@ impl Ecr for EcrClient {
         &self,
         input: StartLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.StartLifecyclePolicyPreview",
@@ -3270,9 +3380,14 @@ impl Ecr for EcrClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.TagResource",
@@ -3302,9 +3417,14 @@ impl Ecr for EcrClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.UntagResource",
@@ -3334,9 +3454,14 @@ impl Ecr for EcrClient {
         &self,
         input: UploadLayerPartRequest,
     ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError> {
-        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "ecr",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
         request.set_endpoint_prefix("api.ecr".to_string());
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AmazonEC2ContainerRegistry_V20150921.UploadLayerPart",

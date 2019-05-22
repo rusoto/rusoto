@@ -1185,9 +1185,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: CreateEnvironmentEC2Request,
     ) -> RusotoFuture<CreateEnvironmentEC2Result, CreateEnvironmentEC2Error> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.CreateEnvironmentEC2",
@@ -1216,9 +1221,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: CreateEnvironmentMembershipRequest,
     ) -> RusotoFuture<CreateEnvironmentMembershipResult, CreateEnvironmentMembershipError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.CreateEnvironmentMembership",
@@ -1245,9 +1255,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: DeleteEnvironmentRequest,
     ) -> RusotoFuture<DeleteEnvironmentResult, DeleteEnvironmentError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DeleteEnvironment",
@@ -1277,9 +1292,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: DeleteEnvironmentMembershipRequest,
     ) -> RusotoFuture<DeleteEnvironmentMembershipResult, DeleteEnvironmentMembershipError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DeleteEnvironmentMembership",
@@ -1307,9 +1327,14 @@ impl Cloud9 for Cloud9Client {
         input: DescribeEnvironmentMembershipsRequest,
     ) -> RusotoFuture<DescribeEnvironmentMembershipsResult, DescribeEnvironmentMembershipsError>
     {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DescribeEnvironmentMemberships",
@@ -1336,9 +1361,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: DescribeEnvironmentStatusRequest,
     ) -> RusotoFuture<DescribeEnvironmentStatusResult, DescribeEnvironmentStatusError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DescribeEnvironmentStatus",
@@ -1365,9 +1395,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: DescribeEnvironmentsRequest,
     ) -> RusotoFuture<DescribeEnvironmentsResult, DescribeEnvironmentsError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.DescribeEnvironments",
@@ -1396,9 +1431,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: ListEnvironmentsRequest,
     ) -> RusotoFuture<ListEnvironmentsResult, ListEnvironmentsError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.ListEnvironments",
@@ -1428,9 +1468,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: UpdateEnvironmentRequest,
     ) -> RusotoFuture<UpdateEnvironmentResult, UpdateEnvironmentError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.UpdateEnvironment",
@@ -1460,9 +1505,14 @@ impl Cloud9 for Cloud9Client {
         &self,
         input: UpdateEnvironmentMembershipRequest,
     ) -> RusotoFuture<UpdateEnvironmentMembershipResult, UpdateEnvironmentMembershipError> {
-        let mut request = SignedRequest::new("POST", "cloud9", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cloud9",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCloud9WorkspaceManagementService.UpdateEnvironmentMembership",

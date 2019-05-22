@@ -12063,9 +12063,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: AllocateStaticIpRequest,
     ) -> RusotoFuture<AllocateStaticIpResult, AllocateStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AllocateStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12092,9 +12097,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: AttachDiskRequest,
     ) -> RusotoFuture<AttachDiskResult, AttachDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AttachDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12121,9 +12131,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: AttachInstancesToLoadBalancerRequest,
     ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.AttachInstancesToLoadBalancer",
@@ -12151,9 +12166,14 @@ impl Lightsail for LightsailClient {
         input: AttachLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<AttachLoadBalancerTlsCertificateResult, AttachLoadBalancerTlsCertificateError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.AttachLoadBalancerTlsCertificate",
@@ -12182,9 +12202,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: AttachStaticIpRequest,
     ) -> RusotoFuture<AttachStaticIpResult, AttachStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.AttachStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12211,9 +12236,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CloseInstancePublicPortsRequest,
     ) -> RusotoFuture<CloseInstancePublicPortsResult, CloseInstancePublicPortsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CloseInstancePublicPorts",
@@ -12240,9 +12270,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CopySnapshotRequest,
     ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CopySnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12269,9 +12304,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateCloudFormationStackRequest,
     ) -> RusotoFuture<CreateCloudFormationStackResult, CreateCloudFormationStackError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateCloudFormationStack",
@@ -12298,9 +12338,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDiskRequest,
     ) -> RusotoFuture<CreateDiskResult, CreateDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12327,9 +12372,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDiskFromSnapshotRequest,
     ) -> RusotoFuture<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskFromSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12355,9 +12405,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDiskSnapshotRequest,
     ) -> RusotoFuture<CreateDiskSnapshotResult, CreateDiskSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12384,9 +12439,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDomainRequest,
     ) -> RusotoFuture<CreateDomainResult, CreateDomainError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12413,9 +12473,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateDomainEntryRequest,
     ) -> RusotoFuture<CreateDomainEntryResult, CreateDomainEntryError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateDomainEntry");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12442,9 +12507,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateInstanceSnapshotRequest,
     ) -> RusotoFuture<CreateInstanceSnapshotResult, CreateInstanceSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateInstanceSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12470,9 +12540,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateInstancesRequest,
     ) -> RusotoFuture<CreateInstancesResult, CreateInstancesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12499,9 +12574,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateInstancesFromSnapshotRequest,
     ) -> RusotoFuture<CreateInstancesFromSnapshotResult, CreateInstancesFromSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateInstancesFromSnapshot",
@@ -12528,9 +12608,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateKeyPairRequest,
     ) -> RusotoFuture<CreateKeyPairResult, CreateKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateKeyPair");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12557,9 +12642,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateLoadBalancerRequest,
     ) -> RusotoFuture<CreateLoadBalancerResult, CreateLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.CreateLoadBalancer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12587,9 +12677,14 @@ impl Lightsail for LightsailClient {
         input: CreateLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateLoadBalancerTlsCertificate",
@@ -12618,9 +12713,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: CreateRelationalDatabaseRequest,
     ) -> RusotoFuture<CreateRelationalDatabaseResult, CreateRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabase",
@@ -12650,9 +12750,14 @@ impl Lightsail for LightsailClient {
         CreateRelationalDatabaseFromSnapshotResult,
         CreateRelationalDatabaseFromSnapshotError,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabaseFromSnapshot",
@@ -12682,9 +12787,14 @@ impl Lightsail for LightsailClient {
         input: CreateRelationalDatabaseSnapshotRequest,
     ) -> RusotoFuture<CreateRelationalDatabaseSnapshotResult, CreateRelationalDatabaseSnapshotError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.CreateRelationalDatabaseSnapshot",
@@ -12713,9 +12823,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteDiskRequest,
     ) -> RusotoFuture<DeleteDiskResult, DeleteDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12742,9 +12857,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteDiskSnapshotRequest,
     ) -> RusotoFuture<DeleteDiskSnapshotResult, DeleteDiskSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDiskSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12771,9 +12891,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteDomainRequest,
     ) -> RusotoFuture<DeleteDomainResult, DeleteDomainError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12800,9 +12925,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteDomainEntryRequest,
     ) -> RusotoFuture<DeleteDomainEntryResult, DeleteDomainEntryError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteDomainEntry");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12829,9 +12959,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteInstanceRequest,
     ) -> RusotoFuture<DeleteInstanceResult, DeleteInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12858,9 +12993,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteInstanceSnapshotRequest,
     ) -> RusotoFuture<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteInstanceSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12886,9 +13026,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteKeyPairRequest,
     ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteKeyPair");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12915,9 +13060,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteLoadBalancerRequest,
     ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DeleteLoadBalancer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -12945,9 +13095,14 @@ impl Lightsail for LightsailClient {
         input: DeleteLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteLoadBalancerTlsCertificate",
@@ -12976,9 +13131,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DeleteRelationalDatabaseRequest,
     ) -> RusotoFuture<DeleteRelationalDatabaseResult, DeleteRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteRelationalDatabase",
@@ -13006,9 +13166,14 @@ impl Lightsail for LightsailClient {
         input: DeleteRelationalDatabaseSnapshotRequest,
     ) -> RusotoFuture<DeleteRelationalDatabaseSnapshotResult, DeleteRelationalDatabaseSnapshotError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DeleteRelationalDatabaseSnapshot",
@@ -13037,9 +13202,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DetachDiskRequest,
     ) -> RusotoFuture<DetachDiskResult, DetachDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DetachDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13067,9 +13237,14 @@ impl Lightsail for LightsailClient {
         input: DetachInstancesFromLoadBalancerRequest,
     ) -> RusotoFuture<DetachInstancesFromLoadBalancerResult, DetachInstancesFromLoadBalancerError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.DetachInstancesFromLoadBalancer",
@@ -13098,9 +13273,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: DetachStaticIpRequest,
     ) -> RusotoFuture<DetachStaticIpResult, DetachStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DetachStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13126,9 +13306,14 @@ impl Lightsail for LightsailClient {
     fn download_default_key_pair(
         &self,
     ) -> RusotoFuture<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.DownloadDefaultKeyPair");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -13153,9 +13338,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: ExportSnapshotRequest,
     ) -> RusotoFuture<ExportSnapshotResult, ExportSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.ExportSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13182,9 +13372,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetActiveNamesRequest,
     ) -> RusotoFuture<GetActiveNamesResult, GetActiveNamesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetActiveNames");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13211,9 +13406,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetBlueprintsRequest,
     ) -> RusotoFuture<GetBlueprintsResult, GetBlueprintsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetBlueprints");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13240,9 +13440,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetBundlesRequest,
     ) -> RusotoFuture<GetBundlesResult, GetBundlesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetBundles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13269,9 +13474,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetCloudFormationStackRecordsRequest,
     ) -> RusotoFuture<GetCloudFormationStackRecordsResult, GetCloudFormationStackRecordsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetCloudFormationStackRecords",
@@ -13295,9 +13505,14 @@ impl Lightsail for LightsailClient {
 
     /// <p>Returns information about a specific block storage disk.</p>
     fn get_disk(&self, input: GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDisk");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13323,9 +13538,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDiskSnapshotRequest,
     ) -> RusotoFuture<GetDiskSnapshotResult, GetDiskSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13352,9 +13572,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDiskSnapshotsRequest,
     ) -> RusotoFuture<GetDiskSnapshotsResult, GetDiskSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshots");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13378,9 +13603,14 @@ impl Lightsail for LightsailClient {
 
     /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
     fn get_disks(&self, input: GetDisksRequest) -> RusotoFuture<GetDisksResult, GetDisksError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDisks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13403,9 +13633,14 @@ impl Lightsail for LightsailClient {
 
     /// <p>Returns information about a specific domain recordset.</p>
     fn get_domain(&self, input: GetDomainRequest) -> RusotoFuture<GetDomainResult, GetDomainError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13431,9 +13666,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetDomainsRequest,
     ) -> RusotoFuture<GetDomainsResult, GetDomainsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetDomains");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13460,9 +13700,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetExportSnapshotRecordsRequest,
     ) -> RusotoFuture<GetExportSnapshotRecordsResult, GetExportSnapshotRecordsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetExportSnapshotRecords",
@@ -13489,9 +13734,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceRequest,
     ) -> RusotoFuture<GetInstanceResult, GetInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13518,9 +13768,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceAccessDetailsRequest,
     ) -> RusotoFuture<GetInstanceAccessDetailsResult, GetInstanceAccessDetailsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetInstanceAccessDetails",
@@ -13547,9 +13802,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceMetricDataRequest,
     ) -> RusotoFuture<GetInstanceMetricDataResult, GetInstanceMetricDataError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceMetricData");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13575,9 +13835,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstancePortStatesRequest,
     ) -> RusotoFuture<GetInstancePortStatesResult, GetInstancePortStatesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstancePortStates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13603,9 +13868,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceSnapshotRequest,
     ) -> RusotoFuture<GetInstanceSnapshotResult, GetInstanceSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13631,9 +13901,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceSnapshotsRequest,
     ) -> RusotoFuture<GetInstanceSnapshotsResult, GetInstanceSnapshotsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceSnapshots");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13659,9 +13934,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstanceStateRequest,
     ) -> RusotoFuture<GetInstanceStateResult, GetInstanceStateError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstanceState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13688,9 +13968,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetInstancesRequest,
     ) -> RusotoFuture<GetInstancesResult, GetInstancesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13717,9 +14002,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetKeyPairRequest,
     ) -> RusotoFuture<GetKeyPairResult, GetKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetKeyPair");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13746,9 +14036,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetKeyPairsRequest,
     ) -> RusotoFuture<GetKeyPairsResult, GetKeyPairsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetKeyPairs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13775,9 +14070,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetLoadBalancerRequest,
     ) -> RusotoFuture<GetLoadBalancerResult, GetLoadBalancerError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13804,9 +14104,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetLoadBalancerMetricDataRequest,
     ) -> RusotoFuture<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetLoadBalancerMetricData",
@@ -13834,9 +14139,14 @@ impl Lightsail for LightsailClient {
         input: GetLoadBalancerTlsCertificatesRequest,
     ) -> RusotoFuture<GetLoadBalancerTlsCertificatesResult, GetLoadBalancerTlsCertificatesError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetLoadBalancerTlsCertificates",
@@ -13863,9 +14173,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetLoadBalancersRequest,
     ) -> RusotoFuture<GetLoadBalancersResult, GetLoadBalancersError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13892,9 +14207,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetOperationRequest,
     ) -> RusotoFuture<GetOperationResult, GetOperationError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetOperation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13921,9 +14241,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetOperationsRequest,
     ) -> RusotoFuture<GetOperationsResult, GetOperationsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetOperations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -13950,9 +14275,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetOperationsForResourceRequest,
     ) -> RusotoFuture<GetOperationsForResourceResult, GetOperationsForResourceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetOperationsForResource",
@@ -13979,9 +14309,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRegionsRequest,
     ) -> RusotoFuture<GetRegionsResult, GetRegionsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetRegions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14008,9 +14343,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRelationalDatabaseRequest,
     ) -> RusotoFuture<GetRelationalDatabaseResult, GetRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetRelationalDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14037,9 +14377,14 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseBlueprintsRequest,
     ) -> RusotoFuture<GetRelationalDatabaseBlueprintsResult, GetRelationalDatabaseBlueprintsError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseBlueprints",
@@ -14068,9 +14413,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRelationalDatabaseBundlesRequest,
     ) -> RusotoFuture<GetRelationalDatabaseBundlesResult, GetRelationalDatabaseBundlesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseBundles",
@@ -14097,9 +14447,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRelationalDatabaseEventsRequest,
     ) -> RusotoFuture<GetRelationalDatabaseEventsResult, GetRelationalDatabaseEventsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseEvents",
@@ -14127,9 +14482,14 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseLogEventsRequest,
     ) -> RusotoFuture<GetRelationalDatabaseLogEventsResult, GetRelationalDatabaseLogEventsError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseLogEvents",
@@ -14157,9 +14517,14 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseLogStreamsRequest,
     ) -> RusotoFuture<GetRelationalDatabaseLogStreamsResult, GetRelationalDatabaseLogStreamsError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseLogStreams",
@@ -14191,9 +14556,14 @@ impl Lightsail for LightsailClient {
         GetRelationalDatabaseMasterUserPasswordResult,
         GetRelationalDatabaseMasterUserPasswordError,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseMasterUserPassword",
@@ -14223,9 +14593,14 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseMetricDataRequest,
     ) -> RusotoFuture<GetRelationalDatabaseMetricDataResult, GetRelationalDatabaseMetricDataError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseMetricData",
@@ -14255,9 +14630,14 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseParametersRequest,
     ) -> RusotoFuture<GetRelationalDatabaseParametersResult, GetRelationalDatabaseParametersError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseParameters",
@@ -14286,9 +14666,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRelationalDatabaseSnapshotRequest,
     ) -> RusotoFuture<GetRelationalDatabaseSnapshotResult, GetRelationalDatabaseSnapshotError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseSnapshot",
@@ -14316,9 +14701,14 @@ impl Lightsail for LightsailClient {
         input: GetRelationalDatabaseSnapshotsRequest,
     ) -> RusotoFuture<GetRelationalDatabaseSnapshotsResult, GetRelationalDatabaseSnapshotsError>
     {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.GetRelationalDatabaseSnapshots",
@@ -14345,9 +14735,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetRelationalDatabasesRequest,
     ) -> RusotoFuture<GetRelationalDatabasesResult, GetRelationalDatabasesError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetRelationalDatabases");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14373,9 +14768,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetStaticIpRequest,
     ) -> RusotoFuture<GetStaticIpResult, GetStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14402,9 +14802,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: GetStaticIpsRequest,
     ) -> RusotoFuture<GetStaticIpsResult, GetStaticIpsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.GetStaticIps");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14431,9 +14836,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: ImportKeyPairRequest,
     ) -> RusotoFuture<ImportKeyPairResult, ImportKeyPairError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.ImportKeyPair");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14457,9 +14867,14 @@ impl Lightsail for LightsailClient {
 
     /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
     fn is_vpc_peered(&self) -> RusotoFuture<IsVpcPeeredResult, IsVpcPeeredError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.IsVpcPeered");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -14485,9 +14900,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: OpenInstancePublicPortsRequest,
     ) -> RusotoFuture<OpenInstancePublicPortsResult, OpenInstancePublicPortsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.OpenInstancePublicPorts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14508,9 +14928,14 @@ impl Lightsail for LightsailClient {
 
     /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
     fn peer_vpc(&self) -> RusotoFuture<PeerVpcResult, PeerVpcError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.PeerVpc");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -14535,9 +14960,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: PutInstancePublicPortsRequest,
     ) -> RusotoFuture<PutInstancePublicPortsResult, PutInstancePublicPortsError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.PutInstancePublicPorts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14563,9 +14993,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: RebootInstanceRequest,
     ) -> RusotoFuture<RebootInstanceResult, RebootInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.RebootInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14592,9 +15027,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: RebootRelationalDatabaseRequest,
     ) -> RusotoFuture<RebootRelationalDatabaseResult, RebootRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.RebootRelationalDatabase",
@@ -14621,9 +15061,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: ReleaseStaticIpRequest,
     ) -> RusotoFuture<ReleaseStaticIpResult, ReleaseStaticIpError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.ReleaseStaticIp");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14650,9 +15095,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: StartInstanceRequest,
     ) -> RusotoFuture<StartInstanceResult, StartInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StartInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14679,9 +15129,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: StartRelationalDatabaseRequest,
     ) -> RusotoFuture<StartRelationalDatabaseResult, StartRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StartRelationalDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14705,9 +15160,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: StopInstanceRequest,
     ) -> RusotoFuture<StopInstanceResult, StopInstanceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StopInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14734,9 +15194,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: StopRelationalDatabaseRequest,
     ) -> RusotoFuture<StopRelationalDatabaseResult, StopRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.StopRelationalDatabase");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14762,9 +15227,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResult, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14788,9 +15258,14 @@ impl Lightsail for LightsailClient {
 
     /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
     fn unpeer_vpc(&self) -> RusotoFuture<UnpeerVpcResult, UnpeerVpcError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.UnpeerVpc");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -14815,9 +15290,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResult, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14844,9 +15324,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: UpdateDomainEntryRequest,
     ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Lightsail_20161128.UpdateDomainEntry");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -14873,9 +15358,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: UpdateLoadBalancerAttributeRequest,
     ) -> RusotoFuture<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateLoadBalancerAttribute",
@@ -14902,9 +15392,14 @@ impl Lightsail for LightsailClient {
         &self,
         input: UpdateRelationalDatabaseRequest,
     ) -> RusotoFuture<UpdateRelationalDatabaseResult, UpdateRelationalDatabaseError> {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateRelationalDatabase",
@@ -14934,9 +15429,14 @@ impl Lightsail for LightsailClient {
         UpdateRelationalDatabaseParametersResult,
         UpdateRelationalDatabaseParametersError,
     > {
-        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "lightsail",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Lightsail_20161128.UpdateRelationalDatabaseParameters",

@@ -4494,9 +4494,14 @@ impl Swf for SwfClient {
         &self,
         input: CountClosedWorkflowExecutionsInput,
     ) -> RusotoFuture<WorkflowExecutionCount, CountClosedWorkflowExecutionsError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.CountClosedWorkflowExecutions",
@@ -4523,9 +4528,14 @@ impl Swf for SwfClient {
         &self,
         input: CountOpenWorkflowExecutionsInput,
     ) -> RusotoFuture<WorkflowExecutionCount, CountOpenWorkflowExecutionsError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.CountOpenWorkflowExecutions",
@@ -4552,9 +4562,14 @@ impl Swf for SwfClient {
         &self,
         input: CountPendingActivityTasksInput,
     ) -> RusotoFuture<PendingTaskCount, CountPendingActivityTasksError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.CountPendingActivityTasks",
@@ -4581,9 +4596,14 @@ impl Swf for SwfClient {
         &self,
         input: CountPendingDecisionTasksInput,
     ) -> RusotoFuture<PendingTaskCount, CountPendingDecisionTasksError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.CountPendingDecisionTasks",
@@ -4610,9 +4630,14 @@ impl Swf for SwfClient {
         &self,
         input: DeprecateActivityTypeInput,
     ) -> RusotoFuture<(), DeprecateActivityTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.DeprecateActivityType",
@@ -4638,9 +4663,14 @@ impl Swf for SwfClient {
         &self,
         input: DeprecateDomainInput,
     ) -> RusotoFuture<(), DeprecateDomainError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.DeprecateDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4664,9 +4694,14 @@ impl Swf for SwfClient {
         &self,
         input: DeprecateWorkflowTypeInput,
     ) -> RusotoFuture<(), DeprecateWorkflowTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.DeprecateWorkflowType",
@@ -4692,9 +4727,14 @@ impl Swf for SwfClient {
         &self,
         input: DescribeActivityTypeInput,
     ) -> RusotoFuture<ActivityTypeDetail, DescribeActivityTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.DescribeActivityType");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4720,9 +4760,14 @@ impl Swf for SwfClient {
         &self,
         input: DescribeDomainInput,
     ) -> RusotoFuture<DomainDetail, DescribeDomainError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.DescribeDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4748,9 +4793,14 @@ impl Swf for SwfClient {
         &self,
         input: DescribeWorkflowExecutionInput,
     ) -> RusotoFuture<WorkflowExecutionDetail, DescribeWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.DescribeWorkflowExecution",
@@ -4777,9 +4827,14 @@ impl Swf for SwfClient {
         &self,
         input: DescribeWorkflowTypeInput,
     ) -> RusotoFuture<WorkflowTypeDetail, DescribeWorkflowTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.DescribeWorkflowType");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4805,9 +4860,14 @@ impl Swf for SwfClient {
         &self,
         input: GetWorkflowExecutionHistoryInput,
     ) -> RusotoFuture<History, GetWorkflowExecutionHistoryError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.GetWorkflowExecutionHistory",
@@ -4833,9 +4893,14 @@ impl Swf for SwfClient {
         &self,
         input: ListActivityTypesInput,
     ) -> RusotoFuture<ActivityTypeInfos, ListActivityTypesError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.ListActivityTypes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4862,9 +4927,14 @@ impl Swf for SwfClient {
         &self,
         input: ListClosedWorkflowExecutionsInput,
     ) -> RusotoFuture<WorkflowExecutionInfos, ListClosedWorkflowExecutionsError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.ListClosedWorkflowExecutions",
@@ -4888,9 +4958,14 @@ impl Swf for SwfClient {
 
     /// <p>Returns the list of domains registered in the account. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the nextPageToken returned by the initial call.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not exactly reflect recent updates and changes.</p> </note> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>Use a <code>Resource</code> element with the domain name to limit the action to only specified domains. The element must be set to <code>arn:aws:swf::AccountID:domain/*</code>, where <i>AccountID</i> is the account ID, with no dashes.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     fn list_domains(&self, input: ListDomainsInput) -> RusotoFuture<DomainInfos, ListDomainsError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.ListDomains");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4916,9 +4991,14 @@ impl Swf for SwfClient {
         &self,
         input: ListOpenWorkflowExecutionsInput,
     ) -> RusotoFuture<WorkflowExecutionInfos, ListOpenWorkflowExecutionsError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.ListOpenWorkflowExecutions",
@@ -4945,9 +5025,14 @@ impl Swf for SwfClient {
         &self,
         input: ListWorkflowTypesInput,
     ) -> RusotoFuture<WorkflowTypeInfos, ListWorkflowTypesError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.ListWorkflowTypes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4974,9 +5059,14 @@ impl Swf for SwfClient {
         &self,
         input: PollForActivityTaskInput,
     ) -> RusotoFuture<ActivityTask, PollForActivityTaskError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.PollForActivityTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5001,9 +5091,14 @@ impl Swf for SwfClient {
         &self,
         input: PollForDecisionTaskInput,
     ) -> RusotoFuture<DecisionTask, PollForDecisionTaskError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.PollForDecisionTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5028,9 +5123,14 @@ impl Swf for SwfClient {
         &self,
         input: RecordActivityTaskHeartbeatInput,
     ) -> RusotoFuture<ActivityTaskStatus, RecordActivityTaskHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.RecordActivityTaskHeartbeat",
@@ -5057,9 +5157,14 @@ impl Swf for SwfClient {
         &self,
         input: RegisterActivityTypeInput,
     ) -> RusotoFuture<(), RegisterActivityTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.RegisterActivityType");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5079,9 +5184,14 @@ impl Swf for SwfClient {
 
     /// <p>Registers a new domain.</p> <p> <b>Access Control</b> </p> <p>You can use IAM policies to control this action's access to Amazon SWF resources as follows:</p> <ul> <li> <p>You cannot use an IAM policy to control domain access for this action. The name of the domain being registered is available as the resource of this action.</p> </li> <li> <p>Use an <code>Action</code> element to allow or deny permission to call this action.</p> </li> <li> <p>You cannot use an IAM policy to constrain this action's parameters.</p> </li> </ul> <p>If the caller doesn't have sufficient permissions to invoke the action, or the parameter values fall outside the specified constraints, the action fails. The associated event attribute's <code>cause</code> parameter is set to <code>OPERATION_NOT_PERMITTED</code>. For details and example IAM policies, see <a href="http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html">Using IAM to Manage Access to Amazon SWF Workflows</a> in the <i>Amazon SWF Developer Guide</i>.</p>
     fn register_domain(&self, input: RegisterDomainInput) -> RusotoFuture<(), RegisterDomainError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.RegisterDomain");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5105,9 +5215,14 @@ impl Swf for SwfClient {
         &self,
         input: RegisterWorkflowTypeInput,
     ) -> RusotoFuture<(), RegisterWorkflowTypeError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "SimpleWorkflowService.RegisterWorkflowType");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5130,9 +5245,14 @@ impl Swf for SwfClient {
         &self,
         input: RequestCancelWorkflowExecutionInput,
     ) -> RusotoFuture<(), RequestCancelWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.RequestCancelWorkflowExecution",
@@ -5156,9 +5276,14 @@ impl Swf for SwfClient {
         &self,
         input: RespondActivityTaskCanceledInput,
     ) -> RusotoFuture<(), RespondActivityTaskCanceledError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.RespondActivityTaskCanceled",
@@ -5182,9 +5307,14 @@ impl Swf for SwfClient {
         &self,
         input: RespondActivityTaskCompletedInput,
     ) -> RusotoFuture<(), RespondActivityTaskCompletedError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.RespondActivityTaskCompleted",
@@ -5208,9 +5338,14 @@ impl Swf for SwfClient {
         &self,
         input: RespondActivityTaskFailedInput,
     ) -> RusotoFuture<(), RespondActivityTaskFailedError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.RespondActivityTaskFailed",
@@ -5234,9 +5369,14 @@ impl Swf for SwfClient {
         &self,
         input: RespondDecisionTaskCompletedInput,
     ) -> RusotoFuture<(), RespondDecisionTaskCompletedError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.RespondDecisionTaskCompleted",
@@ -5260,9 +5400,14 @@ impl Swf for SwfClient {
         &self,
         input: SignalWorkflowExecutionInput,
     ) -> RusotoFuture<(), SignalWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.SignalWorkflowExecution",
@@ -5286,9 +5431,14 @@ impl Swf for SwfClient {
         &self,
         input: StartWorkflowExecutionInput,
     ) -> RusotoFuture<Run, StartWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.StartWorkflowExecution",
@@ -5316,9 +5466,14 @@ impl Swf for SwfClient {
         &self,
         input: TerminateWorkflowExecutionInput,
     ) -> RusotoFuture<(), TerminateWorkflowExecutionError> {
-        let mut request = SignedRequest::new("POST", "swf", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "swf",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "SimpleWorkflowService.TerminateWorkflowExecution",

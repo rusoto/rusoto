@@ -7434,9 +7434,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: AssociateWebACLRequest,
     ) -> RusotoFuture<AssociateWebACLResponse, AssociateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.AssociateWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7463,9 +7468,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateByteMatchSetRequest,
     ) -> RusotoFuture<CreateByteMatchSetResponse, CreateByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.CreateByteMatchSet",
@@ -7495,9 +7505,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateGeoMatchSetRequest,
     ) -> RusotoFuture<CreateGeoMatchSetResponse, CreateGeoMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateGeoMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7524,9 +7539,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateIPSetRequest,
     ) -> RusotoFuture<CreateIPSetResponse, CreateIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateIPSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7553,9 +7573,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateRateBasedRuleRequest,
     ) -> RusotoFuture<CreateRateBasedRuleResponse, CreateRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.CreateRateBasedRule",
@@ -7584,9 +7609,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateRegexMatchSetRequest,
     ) -> RusotoFuture<CreateRegexMatchSetResponse, CreateRegexMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.CreateRegexMatchSet",
@@ -7615,9 +7645,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateRegexPatternSetRequest,
     ) -> RusotoFuture<CreateRegexPatternSetResponse, CreateRegexPatternSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.CreateRegexPatternSet",
@@ -7646,9 +7681,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateRuleRequest,
     ) -> RusotoFuture<CreateRuleResponse, CreateRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7675,9 +7715,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateRuleGroupRequest,
     ) -> RusotoFuture<CreateRuleGroupResponse, CreateRuleGroupError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateRuleGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7704,9 +7749,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateSizeConstraintSetRequest,
     ) -> RusotoFuture<CreateSizeConstraintSetResponse, CreateSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.CreateSizeConstraintSet",
@@ -7733,9 +7783,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateSqlInjectionMatchSetRequest,
     ) -> RusotoFuture<CreateSqlInjectionMatchSetResponse, CreateSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.CreateSqlInjectionMatchSet",
@@ -7762,9 +7817,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateWebACLRequest,
     ) -> RusotoFuture<CreateWebACLResponse, CreateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7791,9 +7851,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: CreateXssMatchSetRequest,
     ) -> RusotoFuture<CreateXssMatchSetResponse, CreateXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.CreateXssMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7820,9 +7885,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteByteMatchSetRequest,
     ) -> RusotoFuture<DeleteByteMatchSetResponse, DeleteByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DeleteByteMatchSet",
@@ -7852,9 +7922,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteGeoMatchSetRequest,
     ) -> RusotoFuture<DeleteGeoMatchSetResponse, DeleteGeoMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteGeoMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7881,9 +7956,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteIPSetRequest,
     ) -> RusotoFuture<DeleteIPSetResponse, DeleteIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteIPSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7910,9 +7990,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteLoggingConfigurationRequest,
     ) -> RusotoFuture<DeleteLoggingConfigurationResponse, DeleteLoggingConfigurationError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DeleteLoggingConfiguration",
@@ -7939,9 +8024,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeletePermissionPolicyRequest,
     ) -> RusotoFuture<DeletePermissionPolicyResponse, DeletePermissionPolicyError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DeletePermissionPolicy",
@@ -7970,9 +8060,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteRateBasedRuleRequest,
     ) -> RusotoFuture<DeleteRateBasedRuleResponse, DeleteRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DeleteRateBasedRule",
@@ -8001,9 +8096,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteRegexMatchSetRequest,
     ) -> RusotoFuture<DeleteRegexMatchSetResponse, DeleteRegexMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DeleteRegexMatchSet",
@@ -8032,9 +8132,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteRegexPatternSetRequest,
     ) -> RusotoFuture<DeleteRegexPatternSetResponse, DeleteRegexPatternSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DeleteRegexPatternSet",
@@ -8063,9 +8168,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteRuleRequest,
     ) -> RusotoFuture<DeleteRuleResponse, DeleteRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8092,9 +8202,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteRuleGroupRequest,
     ) -> RusotoFuture<DeleteRuleGroupResponse, DeleteRuleGroupError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteRuleGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8121,9 +8236,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteSizeConstraintSetRequest,
     ) -> RusotoFuture<DeleteSizeConstraintSetResponse, DeleteSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DeleteSizeConstraintSet",
@@ -8150,9 +8270,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteSqlInjectionMatchSetRequest,
     ) -> RusotoFuture<DeleteSqlInjectionMatchSetResponse, DeleteSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DeleteSqlInjectionMatchSet",
@@ -8179,9 +8304,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteWebACLRequest,
     ) -> RusotoFuture<DeleteWebACLResponse, DeleteWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8208,9 +8338,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DeleteXssMatchSetRequest,
     ) -> RusotoFuture<DeleteXssMatchSetResponse, DeleteXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.DeleteXssMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8237,9 +8372,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: DisassociateWebACLRequest,
     ) -> RusotoFuture<DisassociateWebACLResponse, DisassociateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.DisassociateWebACL",
@@ -8269,9 +8409,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetByteMatchSetRequest,
     ) -> RusotoFuture<GetByteMatchSetResponse, GetByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetByteMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8295,9 +8440,14 @@ impl WAFRegional for WAFRegionalClient {
 
     /// <p>When you want to create, update, or delete AWS WAF objects, get a change token and include the change token in the create, update, or delete request. Change tokens ensure that your application doesn't submit conflicting requests to AWS WAF.</p> <p>Each create, update, or delete request must use a unique change token. If your application submits a <code>GetChangeToken</code> request and then submits a second <code>GetChangeToken</code> request before submitting a create, update, or delete request, the second <code>GetChangeToken</code> request returns the same value as the first <code>GetChangeToken</code> request.</p> <p>When you use a change token in a create, update, or delete request, the status of the change token changes to <code>PENDING</code>, which indicates that AWS WAF is propagating the change to all AWS WAF servers. Use <code>GetChangeTokenStatus</code> to determine the status of your change token.</p>
     fn get_change_token(&self) -> RusotoFuture<GetChangeTokenResponse, GetChangeTokenError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetChangeToken");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -8323,9 +8473,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetChangeTokenStatusRequest,
     ) -> RusotoFuture<GetChangeTokenStatusResponse, GetChangeTokenStatusError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetChangeTokenStatus",
@@ -8354,9 +8509,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetGeoMatchSetRequest,
     ) -> RusotoFuture<GetGeoMatchSetResponse, GetGeoMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetGeoMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8380,9 +8540,14 @@ impl WAFRegional for WAFRegionalClient {
 
     /// <p>Returns the <a>IPSet</a> that is specified by <code>IPSetId</code>.</p>
     fn get_ip_set(&self, input: GetIPSetRequest) -> RusotoFuture<GetIPSetResponse, GetIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetIPSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8409,9 +8574,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetLoggingConfigurationRequest,
     ) -> RusotoFuture<GetLoggingConfigurationResponse, GetLoggingConfigurationError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetLoggingConfiguration",
@@ -8438,9 +8608,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetPermissionPolicyRequest,
     ) -> RusotoFuture<GetPermissionPolicyResponse, GetPermissionPolicyError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetPermissionPolicy",
@@ -8469,9 +8644,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetRateBasedRuleRequest,
     ) -> RusotoFuture<GetRateBasedRuleResponse, GetRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetRateBasedRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8498,9 +8678,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetRateBasedRuleManagedKeysRequest,
     ) -> RusotoFuture<GetRateBasedRuleManagedKeysResponse, GetRateBasedRuleManagedKeysError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetRateBasedRuleManagedKeys",
@@ -8527,9 +8712,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetRegexMatchSetRequest,
     ) -> RusotoFuture<GetRegexMatchSetResponse, GetRegexMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetRegexMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8556,9 +8746,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetRegexPatternSetRequest,
     ) -> RusotoFuture<GetRegexPatternSetResponse, GetRegexPatternSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetRegexPatternSet",
@@ -8585,9 +8780,14 @@ impl WAFRegional for WAFRegionalClient {
 
     /// <p>Returns the <a>Rule</a> that is specified by the <code>RuleId</code> that you included in the <code>GetRule</code> request.</p>
     fn get_rule(&self, input: GetRuleRequest) -> RusotoFuture<GetRuleResponse, GetRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8613,9 +8813,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetRuleGroupRequest,
     ) -> RusotoFuture<GetRuleGroupResponse, GetRuleGroupError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetRuleGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8642,9 +8847,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetSampledRequestsRequest,
     ) -> RusotoFuture<GetSampledRequestsResponse, GetSampledRequestsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetSampledRequests",
@@ -8674,9 +8884,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetSizeConstraintSetRequest,
     ) -> RusotoFuture<GetSizeConstraintSetResponse, GetSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetSizeConstraintSet",
@@ -8705,9 +8920,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetSqlInjectionMatchSetRequest,
     ) -> RusotoFuture<GetSqlInjectionMatchSetResponse, GetSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetSqlInjectionMatchSet",
@@ -8734,9 +8954,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetWebACLRequest,
     ) -> RusotoFuture<GetWebACLResponse, GetWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8763,9 +8988,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetWebACLForResourceRequest,
     ) -> RusotoFuture<GetWebACLForResourceResponse, GetWebACLForResourceError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.GetWebACLForResource",
@@ -8794,9 +9024,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: GetXssMatchSetRequest,
     ) -> RusotoFuture<GetXssMatchSetResponse, GetXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.GetXssMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8824,9 +9059,14 @@ impl WAFRegional for WAFRegionalClient {
         input: ListActivatedRulesInRuleGroupRequest,
     ) -> RusotoFuture<ListActivatedRulesInRuleGroupResponse, ListActivatedRulesInRuleGroupError>
     {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListActivatedRulesInRuleGroup",
@@ -8853,9 +9093,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListByteMatchSetsRequest,
     ) -> RusotoFuture<ListByteMatchSetsResponse, ListByteMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListByteMatchSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8882,9 +9127,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListGeoMatchSetsRequest,
     ) -> RusotoFuture<ListGeoMatchSetsResponse, ListGeoMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListGeoMatchSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8911,9 +9161,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListIPSetsRequest,
     ) -> RusotoFuture<ListIPSetsResponse, ListIPSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListIPSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8940,9 +9195,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListLoggingConfigurationsRequest,
     ) -> RusotoFuture<ListLoggingConfigurationsResponse, ListLoggingConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListLoggingConfigurations",
@@ -8969,9 +9229,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListRateBasedRulesRequest,
     ) -> RusotoFuture<ListRateBasedRulesResponse, ListRateBasedRulesError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListRateBasedRules",
@@ -9001,9 +9266,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListRegexMatchSetsRequest,
     ) -> RusotoFuture<ListRegexMatchSetsResponse, ListRegexMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListRegexMatchSets",
@@ -9033,9 +9303,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListRegexPatternSetsRequest,
     ) -> RusotoFuture<ListRegexPatternSetsResponse, ListRegexPatternSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListRegexPatternSets",
@@ -9064,9 +9339,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListResourcesForWebACLRequest,
     ) -> RusotoFuture<ListResourcesForWebACLResponse, ListResourcesForWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListResourcesForWebACL",
@@ -9095,9 +9375,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListRuleGroupsRequest,
     ) -> RusotoFuture<ListRuleGroupsResponse, ListRuleGroupsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListRuleGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9124,9 +9409,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListRulesRequest,
     ) -> RusotoFuture<ListRulesResponse, ListRulesError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9153,9 +9443,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListSizeConstraintSetsRequest,
     ) -> RusotoFuture<ListSizeConstraintSetsResponse, ListSizeConstraintSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListSizeConstraintSets",
@@ -9184,9 +9479,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListSqlInjectionMatchSetsRequest,
     ) -> RusotoFuture<ListSqlInjectionMatchSetsResponse, ListSqlInjectionMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListSqlInjectionMatchSets",
@@ -9213,9 +9513,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListSubscribedRuleGroupsRequest,
     ) -> RusotoFuture<ListSubscribedRuleGroupsResponse, ListSubscribedRuleGroupsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.ListSubscribedRuleGroups",
@@ -9242,9 +9547,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListWebACLsRequest,
     ) -> RusotoFuture<ListWebACLsResponse, ListWebACLsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListWebACLs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9271,9 +9581,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: ListXssMatchSetsRequest,
     ) -> RusotoFuture<ListXssMatchSetsResponse, ListXssMatchSetsError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.ListXssMatchSets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9300,9 +9615,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: PutLoggingConfigurationRequest,
     ) -> RusotoFuture<PutLoggingConfigurationResponse, PutLoggingConfigurationError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.PutLoggingConfiguration",
@@ -9329,9 +9649,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: PutPermissionPolicyRequest,
     ) -> RusotoFuture<PutPermissionPolicyResponse, PutPermissionPolicyError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.PutPermissionPolicy",
@@ -9360,9 +9685,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateByteMatchSetRequest,
     ) -> RusotoFuture<UpdateByteMatchSetResponse, UpdateByteMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.UpdateByteMatchSet",
@@ -9392,9 +9722,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateGeoMatchSetRequest,
     ) -> RusotoFuture<UpdateGeoMatchSetResponse, UpdateGeoMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateGeoMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9421,9 +9756,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateIPSetRequest,
     ) -> RusotoFuture<UpdateIPSetResponse, UpdateIPSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateIPSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9450,9 +9790,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateRateBasedRuleRequest,
     ) -> RusotoFuture<UpdateRateBasedRuleResponse, UpdateRateBasedRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.UpdateRateBasedRule",
@@ -9481,9 +9826,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateRegexMatchSetRequest,
     ) -> RusotoFuture<UpdateRegexMatchSetResponse, UpdateRegexMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.UpdateRegexMatchSet",
@@ -9512,9 +9862,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateRegexPatternSetRequest,
     ) -> RusotoFuture<UpdateRegexPatternSetResponse, UpdateRegexPatternSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.UpdateRegexPatternSet",
@@ -9543,9 +9898,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateRuleRequest,
     ) -> RusotoFuture<UpdateRuleResponse, UpdateRuleError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9572,9 +9932,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateRuleGroupRequest,
     ) -> RusotoFuture<UpdateRuleGroupResponse, UpdateRuleGroupError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateRuleGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9601,9 +9966,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateSizeConstraintSetRequest,
     ) -> RusotoFuture<UpdateSizeConstraintSetResponse, UpdateSizeConstraintSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.UpdateSizeConstraintSet",
@@ -9630,9 +10000,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateSqlInjectionMatchSetRequest,
     ) -> RusotoFuture<UpdateSqlInjectionMatchSetResponse, UpdateSqlInjectionMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSWAF_Regional_20161128.UpdateSqlInjectionMatchSet",
@@ -9659,9 +10034,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateWebACLRequest,
     ) -> RusotoFuture<UpdateWebACLResponse, UpdateWebACLError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateWebACL");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9688,9 +10068,14 @@ impl WAFRegional for WAFRegionalClient {
         &self,
         input: UpdateXssMatchSetRequest,
     ) -> RusotoFuture<UpdateXssMatchSetResponse, UpdateXssMatchSetError> {
-        let mut request = SignedRequest::new("POST", "waf-regional", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "waf-regional",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSWAF_Regional_20161128.UpdateXssMatchSet");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

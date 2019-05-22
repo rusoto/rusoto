@@ -2251,9 +2251,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: CreateActivityInput,
     ) -> RusotoFuture<CreateActivityOutput, CreateActivityError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.CreateActivity");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2280,9 +2285,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: CreateStateMachineInput,
     ) -> RusotoFuture<CreateStateMachineOutput, CreateStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.CreateStateMachine");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2309,9 +2319,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: DeleteActivityInput,
     ) -> RusotoFuture<DeleteActivityOutput, DeleteActivityError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DeleteActivity");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2338,9 +2353,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: DeleteStateMachineInput,
     ) -> RusotoFuture<DeleteStateMachineOutput, DeleteStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DeleteStateMachine");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2367,9 +2387,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: DescribeActivityInput,
     ) -> RusotoFuture<DescribeActivityOutput, DescribeActivityError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeActivity");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2396,9 +2421,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: DescribeExecutionInput,
     ) -> RusotoFuture<DescribeExecutionOutput, DescribeExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2425,9 +2455,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: DescribeStateMachineInput,
     ) -> RusotoFuture<DescribeStateMachineOutput, DescribeStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.DescribeStateMachine");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2454,9 +2489,14 @@ impl StepFunctions for StepFunctionsClient {
         input: DescribeStateMachineForExecutionInput,
     ) -> RusotoFuture<DescribeStateMachineForExecutionOutput, DescribeStateMachineForExecutionError>
     {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSStepFunctions.DescribeStateMachineForExecution",
@@ -2485,9 +2525,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: GetActivityTaskInput,
     ) -> RusotoFuture<GetActivityTaskOutput, GetActivityTaskError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.GetActivityTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2514,9 +2559,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: GetExecutionHistoryInput,
     ) -> RusotoFuture<GetExecutionHistoryOutput, GetExecutionHistoryError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.GetExecutionHistory");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2542,9 +2592,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: ListActivitiesInput,
     ) -> RusotoFuture<ListActivitiesOutput, ListActivitiesError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListActivities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2571,9 +2626,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: ListExecutionsInput,
     ) -> RusotoFuture<ListExecutionsOutput, ListExecutionsError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListExecutions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2600,9 +2660,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: ListStateMachinesInput,
     ) -> RusotoFuture<ListStateMachinesOutput, ListStateMachinesError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListStateMachines");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2629,9 +2694,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: ListTagsForResourceInput,
     ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2657,9 +2727,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: SendTaskFailureInput,
     ) -> RusotoFuture<SendTaskFailureOutput, SendTaskFailureError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskFailure");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2686,9 +2761,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: SendTaskHeartbeatInput,
     ) -> RusotoFuture<SendTaskHeartbeatOutput, SendTaskHeartbeatError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskHeartbeat");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2715,9 +2795,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: SendTaskSuccessInput,
     ) -> RusotoFuture<SendTaskSuccessOutput, SendTaskSuccessError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.SendTaskSuccess");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2744,9 +2829,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: StartExecutionInput,
     ) -> RusotoFuture<StartExecutionOutput, StartExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.StartExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2773,9 +2863,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: StopExecutionInput,
     ) -> RusotoFuture<StopExecutionOutput, StopExecutionError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.StopExecution");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2802,9 +2897,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: TagResourceInput,
     ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2831,9 +2931,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: UntagResourceInput,
     ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2860,9 +2965,14 @@ impl StepFunctions for StepFunctionsClient {
         &self,
         input: UpdateStateMachineInput,
     ) -> RusotoFuture<UpdateStateMachineOutput, UpdateStateMachineError> {
-        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "states",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
 
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "AWSStepFunctions.UpdateStateMachine");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

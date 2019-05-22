@@ -2411,9 +2411,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         AddApplicationCloudWatchLoggingOptionResponse,
         AddApplicationCloudWatchLoggingOptionError,
     > {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.AddApplicationCloudWatchLoggingOption",
@@ -2442,9 +2447,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: AddApplicationInputRequest,
     ) -> RusotoFuture<AddApplicationInputResponse, AddApplicationInputError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.AddApplicationInput",
@@ -2476,9 +2486,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         AddApplicationInputProcessingConfigurationResponse,
         AddApplicationInputProcessingConfigurationError,
     > {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.AddApplicationInputProcessingConfiguration",
@@ -2505,9 +2520,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: AddApplicationOutputRequest,
     ) -> RusotoFuture<AddApplicationOutputResponse, AddApplicationOutputError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.AddApplicationOutput",
@@ -2539,9 +2559,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         AddApplicationReferenceDataSourceResponse,
         AddApplicationReferenceDataSourceError,
     > {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.AddApplicationReferenceDataSource",
@@ -2570,9 +2595,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: CreateApplicationRequest,
     ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.CreateApplication",
@@ -2602,9 +2632,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: DeleteApplicationRequest,
     ) -> RusotoFuture<DeleteApplicationResponse, DeleteApplicationError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.DeleteApplication",
@@ -2637,9 +2672,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         DeleteApplicationCloudWatchLoggingOptionResponse,
         DeleteApplicationCloudWatchLoggingOptionError,
     > {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.DeleteApplicationCloudWatchLoggingOption",
@@ -2669,9 +2709,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         DeleteApplicationInputProcessingConfigurationResponse,
         DeleteApplicationInputProcessingConfigurationError,
     > {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.DeleteApplicationInputProcessingConfiguration",
@@ -2697,9 +2742,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: DeleteApplicationOutputRequest,
     ) -> RusotoFuture<DeleteApplicationOutputResponse, DeleteApplicationOutputError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.DeleteApplicationOutput",
@@ -2729,9 +2779,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         DeleteApplicationReferenceDataSourceResponse,
         DeleteApplicationReferenceDataSourceError,
     > {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.DeleteApplicationReferenceDataSource",
@@ -2760,9 +2815,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: DescribeApplicationRequest,
     ) -> RusotoFuture<DescribeApplicationResponse, DescribeApplicationError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.DescribeApplication",
@@ -2791,9 +2851,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: DiscoverInputSchemaRequest,
     ) -> RusotoFuture<DiscoverInputSchemaResponse, DiscoverInputSchemaError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.DiscoverInputSchema",
@@ -2822,9 +2887,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: ListApplicationsRequest,
     ) -> RusotoFuture<ListApplicationsResponse, ListApplicationsError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "KinesisAnalytics_20150814.ListApplications");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2851,9 +2921,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: StartApplicationRequest,
     ) -> RusotoFuture<StartApplicationResponse, StartApplicationError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "KinesisAnalytics_20150814.StartApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2880,9 +2955,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: StopApplicationRequest,
     ) -> RusotoFuture<StopApplicationResponse, StopApplicationError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "KinesisAnalytics_20150814.StopApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2909,9 +2989,14 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         &self,
         input: UpdateApplicationRequest,
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
-        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesisanalytics",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "KinesisAnalytics_20150814.UpdateApplication",

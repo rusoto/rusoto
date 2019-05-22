@@ -3847,9 +3847,14 @@ impl Inspector for InspectorClient {
         &self,
         input: AddAttributesToFindingsRequest,
     ) -> RusotoFuture<AddAttributesToFindingsResponse, AddAttributesToFindingsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.AddAttributesToFindings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3873,9 +3878,14 @@ impl Inspector for InspectorClient {
         &self,
         input: CreateAssessmentTargetRequest,
     ) -> RusotoFuture<CreateAssessmentTargetResponse, CreateAssessmentTargetError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.CreateAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3901,9 +3911,14 @@ impl Inspector for InspectorClient {
         &self,
         input: CreateAssessmentTemplateRequest,
     ) -> RusotoFuture<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.CreateAssessmentTemplate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3927,9 +3942,14 @@ impl Inspector for InspectorClient {
         &self,
         input: CreateExclusionsPreviewRequest,
     ) -> RusotoFuture<CreateExclusionsPreviewResponse, CreateExclusionsPreviewError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.CreateExclusionsPreview");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3953,9 +3973,14 @@ impl Inspector for InspectorClient {
         &self,
         input: CreateResourceGroupRequest,
     ) -> RusotoFuture<CreateResourceGroupResponse, CreateResourceGroupError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.CreateResourceGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3981,9 +4006,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DeleteAssessmentRunRequest,
     ) -> RusotoFuture<(), DeleteAssessmentRunError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4006,9 +4036,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DeleteAssessmentTargetRequest,
     ) -> RusotoFuture<(), DeleteAssessmentTargetError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4031,9 +4066,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DeleteAssessmentTemplateRequest,
     ) -> RusotoFuture<(), DeleteAssessmentTemplateError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DeleteAssessmentTemplate");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4054,9 +4094,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeAssessmentRunsRequest,
     ) -> RusotoFuture<DescribeAssessmentRunsResponse, DescribeAssessmentRunsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeAssessmentRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4082,9 +4127,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeAssessmentTargetsRequest,
     ) -> RusotoFuture<DescribeAssessmentTargetsResponse, DescribeAssessmentTargetsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeAssessmentTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4108,9 +4158,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeAssessmentTemplatesRequest,
     ) -> RusotoFuture<DescribeAssessmentTemplatesResponse, DescribeAssessmentTemplatesError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "InspectorService.DescribeAssessmentTemplates",
@@ -4137,9 +4192,14 @@ impl Inspector for InspectorClient {
         &self,
     ) -> RusotoFuture<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError>
     {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "InspectorService.DescribeCrossAccountAccessRole",
@@ -4165,9 +4225,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeExclusionsRequest,
     ) -> RusotoFuture<DescribeExclusionsResponse, DescribeExclusionsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeExclusions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4194,9 +4259,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeFindingsRequest,
     ) -> RusotoFuture<DescribeFindingsResponse, DescribeFindingsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeFindings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4223,9 +4293,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeResourceGroupsRequest,
     ) -> RusotoFuture<DescribeResourceGroupsResponse, DescribeResourceGroupsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeResourceGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4251,9 +4326,14 @@ impl Inspector for InspectorClient {
         &self,
         input: DescribeRulesPackagesRequest,
     ) -> RusotoFuture<DescribeRulesPackagesResponse, DescribeRulesPackagesError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.DescribeRulesPackages");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4279,9 +4359,14 @@ impl Inspector for InspectorClient {
         &self,
         input: GetAssessmentReportRequest,
     ) -> RusotoFuture<GetAssessmentReportResponse, GetAssessmentReportError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.GetAssessmentReport");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4307,9 +4392,14 @@ impl Inspector for InspectorClient {
         &self,
         input: GetExclusionsPreviewRequest,
     ) -> RusotoFuture<GetExclusionsPreviewResponse, GetExclusionsPreviewError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.GetExclusionsPreview");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4335,9 +4425,14 @@ impl Inspector for InspectorClient {
         &self,
         input: GetTelemetryMetadataRequest,
     ) -> RusotoFuture<GetTelemetryMetadataResponse, GetTelemetryMetadataError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.GetTelemetryMetadata");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4363,9 +4458,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListAssessmentRunAgentsRequest,
     ) -> RusotoFuture<ListAssessmentRunAgentsResponse, ListAssessmentRunAgentsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListAssessmentRunAgents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4389,9 +4489,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListAssessmentRunsRequest,
     ) -> RusotoFuture<ListAssessmentRunsResponse, ListAssessmentRunsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListAssessmentRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4418,9 +4523,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListAssessmentTargetsRequest,
     ) -> RusotoFuture<ListAssessmentTargetsResponse, ListAssessmentTargetsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListAssessmentTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4446,9 +4556,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListAssessmentTemplatesRequest,
     ) -> RusotoFuture<ListAssessmentTemplatesResponse, ListAssessmentTemplatesError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListAssessmentTemplates");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4472,9 +4587,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListEventSubscriptionsRequest,
     ) -> RusotoFuture<ListEventSubscriptionsResponse, ListEventSubscriptionsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListEventSubscriptions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4500,9 +4620,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListExclusionsRequest,
     ) -> RusotoFuture<ListExclusionsResponse, ListExclusionsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListExclusions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4529,9 +4654,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListFindingsRequest,
     ) -> RusotoFuture<ListFindingsResponse, ListFindingsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListFindings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4558,9 +4688,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListRulesPackagesRequest,
     ) -> RusotoFuture<ListRulesPackagesResponse, ListRulesPackagesError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListRulesPackages");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4587,9 +4722,14 @@ impl Inspector for InspectorClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.ListTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4615,9 +4755,14 @@ impl Inspector for InspectorClient {
         &self,
         input: PreviewAgentsRequest,
     ) -> RusotoFuture<PreviewAgentsResponse, PreviewAgentsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.PreviewAgents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4644,9 +4789,14 @@ impl Inspector for InspectorClient {
         &self,
         input: RegisterCrossAccountAccessRoleRequest,
     ) -> RusotoFuture<(), RegisterCrossAccountAccessRoleError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "InspectorService.RegisterCrossAccountAccessRole",
@@ -4670,9 +4820,14 @@ impl Inspector for InspectorClient {
         &self,
         input: RemoveAttributesFromFindingsRequest,
     ) -> RusotoFuture<RemoveAttributesFromFindingsResponse, RemoveAttributesFromFindingsError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "InspectorService.RemoveAttributesFromFindings",
@@ -4699,9 +4854,14 @@ impl Inspector for InspectorClient {
         &self,
         input: SetTagsForResourceRequest,
     ) -> RusotoFuture<(), SetTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.SetTagsForResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4725,9 +4885,14 @@ impl Inspector for InspectorClient {
         &self,
         input: StartAssessmentRunRequest,
     ) -> RusotoFuture<StartAssessmentRunResponse, StartAssessmentRunError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.StartAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4754,9 +4919,14 @@ impl Inspector for InspectorClient {
         &self,
         input: StopAssessmentRunRequest,
     ) -> RusotoFuture<(), StopAssessmentRunError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.StopAssessmentRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4780,9 +4950,14 @@ impl Inspector for InspectorClient {
         &self,
         input: SubscribeToEventRequest,
     ) -> RusotoFuture<(), SubscribeToEventError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.SubscribeToEvent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4806,9 +4981,14 @@ impl Inspector for InspectorClient {
         &self,
         input: UnsubscribeFromEventRequest,
     ) -> RusotoFuture<(), UnsubscribeFromEventError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.UnsubscribeFromEvent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4831,9 +5011,14 @@ impl Inspector for InspectorClient {
         &self,
         input: UpdateAssessmentTargetRequest,
     ) -> RusotoFuture<(), UpdateAssessmentTargetError> {
-        let mut request = SignedRequest::new("POST", "inspector", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "inspector",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "InspectorService.UpdateAssessmentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

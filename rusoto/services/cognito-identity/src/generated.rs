@@ -1967,9 +1967,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: CreateIdentityPoolInput,
     ) -> RusotoFuture<IdentityPool, CreateIdentityPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.CreateIdentityPool",
@@ -1998,9 +2003,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: DeleteIdentitiesInput,
     ) -> RusotoFuture<DeleteIdentitiesResponse, DeleteIdentitiesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.DeleteIdentities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2027,9 +2037,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: DeleteIdentityPoolInput,
     ) -> RusotoFuture<(), DeleteIdentityPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.DeleteIdentityPool",
@@ -2056,9 +2071,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: DescribeIdentityInput,
     ) -> RusotoFuture<IdentityDescription, DescribeIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.DescribeIdentity");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2085,9 +2105,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: DescribeIdentityPoolInput,
     ) -> RusotoFuture<IdentityPool, DescribeIdentityPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.DescribeIdentityPool",
@@ -2115,9 +2140,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: GetCredentialsForIdentityInput,
     ) -> RusotoFuture<GetCredentialsForIdentityResponse, GetCredentialsForIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.GetCredentialsForIdentity",
@@ -2141,9 +2171,14 @@ impl CognitoIdentity for CognitoIdentityClient {
 
     /// <p>Generates (or retrieves) a Cognito ID. Supplying multiple logins will create an implicit linked account.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn get_id(&self, input: GetIdInput) -> RusotoFuture<GetIdResponse, GetIdError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.GetId");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2169,9 +2204,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: GetIdentityPoolRolesInput,
     ) -> RusotoFuture<GetIdentityPoolRolesResponse, GetIdentityPoolRolesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.GetIdentityPoolRoles",
@@ -2200,9 +2240,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: GetOpenIdTokenInput,
     ) -> RusotoFuture<GetOpenIdTokenResponse, GetOpenIdTokenError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.GetOpenIdToken");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2232,9 +2277,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         GetOpenIdTokenForDeveloperIdentityResponse,
         GetOpenIdTokenForDeveloperIdentityError,
     > {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.GetOpenIdTokenForDeveloperIdentity",
@@ -2263,9 +2313,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: ListIdentitiesInput,
     ) -> RusotoFuture<ListIdentitiesResponse, ListIdentitiesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.ListIdentities");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2292,9 +2347,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: ListIdentityPoolsInput,
     ) -> RusotoFuture<ListIdentityPoolsResponse, ListIdentityPoolsError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.ListIdentityPools",
@@ -2324,9 +2384,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: LookupDeveloperIdentityInput,
     ) -> RusotoFuture<LookupDeveloperIdentityResponse, LookupDeveloperIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.LookupDeveloperIdentity",
@@ -2353,9 +2418,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: MergeDeveloperIdentitiesInput,
     ) -> RusotoFuture<MergeDeveloperIdentitiesResponse, MergeDeveloperIdentitiesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.MergeDeveloperIdentities",
@@ -2382,9 +2452,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: SetIdentityPoolRolesInput,
     ) -> RusotoFuture<(), SetIdentityPoolRolesError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.SetIdentityPoolRoles",
@@ -2410,9 +2485,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: UnlinkDeveloperIdentityInput,
     ) -> RusotoFuture<(), UnlinkDeveloperIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.UnlinkDeveloperIdentity",
@@ -2433,9 +2513,14 @@ impl CognitoIdentity for CognitoIdentityClient {
 
     /// <p>Unlinks a federated identity from an existing account. Unlinked logins will be considered new identities next time they are seen. Removing the last linked login will make this identity inaccessible.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     fn unlink_identity(&self, input: UnlinkIdentityInput) -> RusotoFuture<(), UnlinkIdentityError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSCognitoIdentityService.UnlinkIdentity");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2459,9 +2544,14 @@ impl CognitoIdentity for CognitoIdentityClient {
         &self,
         input: IdentityPool,
     ) -> RusotoFuture<IdentityPool, UpdateIdentityPoolError> {
-        let mut request = SignedRequest::new("POST", "cognito-identity", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "cognito-identity",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSCognitoIdentityService.UpdateIdentityPool",

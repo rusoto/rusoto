@@ -7333,9 +7333,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: AcceptPortfolioShareInput,
     ) -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AcceptPortfolioShare",
@@ -7365,9 +7370,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: AssociatePrincipalWithPortfolioInput,
     ) -> RusotoFuture<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociatePrincipalWithPortfolio",
@@ -7396,9 +7406,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: AssociateProductWithPortfolioInput,
     ) -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateProductWithPortfolio",
@@ -7428,9 +7443,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         AssociateServiceActionWithProvisioningArtifactOutput,
         AssociateServiceActionWithProvisioningArtifactError,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateServiceActionWithProvisioningArtifact",
@@ -7457,9 +7477,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: AssociateTagOptionWithResourceInput,
     ) -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.AssociateTagOptionWithResource",
@@ -7489,9 +7514,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         BatchAssociateServiceActionWithProvisioningArtifactOutput,
         BatchAssociateServiceActionWithProvisioningArtifactError,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.BatchAssociateServiceActionWithProvisioningArtifact",
@@ -7520,9 +7550,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         BatchDisassociateServiceActionFromProvisioningArtifactOutput,
         BatchDisassociateServiceActionFromProvisioningArtifactError,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.BatchDisassociateServiceActionFromProvisioningArtifact",
@@ -7548,9 +7583,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CopyProductInput,
     ) -> RusotoFuture<CopyProductOutput, CopyProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.CopyProduct");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7577,9 +7617,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateConstraintInput,
     ) -> RusotoFuture<CreateConstraintOutput, CreateConstraintError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateConstraint",
@@ -7609,9 +7654,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreatePortfolioInput,
     ) -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreatePortfolio",
@@ -7641,9 +7691,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreatePortfolioShareInput,
     ) -> RusotoFuture<CreatePortfolioShareOutput, CreatePortfolioShareError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreatePortfolioShare",
@@ -7672,9 +7727,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateProductInput,
     ) -> RusotoFuture<CreateProductOutput, CreateProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.CreateProduct");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7701,9 +7761,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateProvisionedProductPlanInput,
     ) -> RusotoFuture<CreateProvisionedProductPlanOutput, CreateProvisionedProductPlanError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateProvisionedProductPlan",
@@ -7730,9 +7795,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateProvisioningArtifactInput,
     ) -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateProvisioningArtifact",
@@ -7759,9 +7829,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateServiceActionInput,
     ) -> RusotoFuture<CreateServiceActionOutput, CreateServiceActionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateServiceAction",
@@ -7790,9 +7865,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: CreateTagOptionInput,
     ) -> RusotoFuture<CreateTagOptionOutput, CreateTagOptionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.CreateTagOption",
@@ -7822,9 +7902,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteConstraintInput,
     ) -> RusotoFuture<DeleteConstraintOutput, DeleteConstraintError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteConstraint",
@@ -7854,9 +7939,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeletePortfolioInput,
     ) -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeletePortfolio",
@@ -7886,9 +7976,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeletePortfolioShareInput,
     ) -> RusotoFuture<DeletePortfolioShareOutput, DeletePortfolioShareError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeletePortfolioShare",
@@ -7917,9 +8012,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteProductInput,
     ) -> RusotoFuture<DeleteProductOutput, DeleteProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.DeleteProduct");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7946,9 +8046,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteProvisionedProductPlanInput,
     ) -> RusotoFuture<DeleteProvisionedProductPlanOutput, DeleteProvisionedProductPlanError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteProvisionedProductPlan",
@@ -7975,9 +8080,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteProvisioningArtifactInput,
     ) -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteProvisioningArtifact",
@@ -8004,9 +8114,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteServiceActionInput,
     ) -> RusotoFuture<DeleteServiceActionOutput, DeleteServiceActionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteServiceAction",
@@ -8035,9 +8150,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DeleteTagOptionInput,
     ) -> RusotoFuture<DeleteTagOptionOutput, DeleteTagOptionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DeleteTagOption",
@@ -8067,9 +8187,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeConstraintInput,
     ) -> RusotoFuture<DescribeConstraintOutput, DescribeConstraintError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeConstraint",
@@ -8099,9 +8224,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeCopyProductStatusInput,
     ) -> RusotoFuture<DescribeCopyProductStatusOutput, DescribeCopyProductStatusError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeCopyProductStatus",
@@ -8128,9 +8258,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribePortfolioInput,
     ) -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribePortfolio",
@@ -8160,9 +8295,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribePortfolioShareStatusInput,
     ) -> RusotoFuture<DescribePortfolioShareStatusOutput, DescribePortfolioShareStatusError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribePortfolioShareStatus",
@@ -8189,9 +8329,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeProductInput,
     ) -> RusotoFuture<DescribeProductOutput, DescribeProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProduct",
@@ -8221,9 +8366,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeProductAsAdminInput,
     ) -> RusotoFuture<DescribeProductAsAdminOutput, DescribeProductAsAdminError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProductAsAdmin",
@@ -8252,9 +8402,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeProductViewInput,
     ) -> RusotoFuture<DescribeProductViewOutput, DescribeProductViewError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProductView",
@@ -8283,9 +8438,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeProvisionedProductInput,
     ) -> RusotoFuture<DescribeProvisionedProductOutput, DescribeProvisionedProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisionedProduct",
@@ -8313,9 +8473,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DescribeProvisionedProductPlanInput,
     ) -> RusotoFuture<DescribeProvisionedProductPlanOutput, DescribeProvisionedProductPlanError>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisionedProductPlan",
@@ -8342,9 +8507,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeProvisioningArtifactInput,
     ) -> RusotoFuture<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisioningArtifact",
@@ -8372,9 +8542,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DescribeProvisioningParametersInput,
     ) -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeProvisioningParameters",
@@ -8401,9 +8576,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeRecordInput,
     ) -> RusotoFuture<DescribeRecordOutput, DescribeRecordError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.DescribeRecord");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8430,9 +8610,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeServiceActionInput,
     ) -> RusotoFuture<DescribeServiceActionOutput, DescribeServiceActionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeServiceAction",
@@ -8461,9 +8646,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: DescribeTagOptionInput,
     ) -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DescribeTagOption",
@@ -8492,9 +8682,14 @@ impl ServiceCatalog for ServiceCatalogClient {
     fn disable_aws_organizations_access(
         &self,
     ) -> RusotoFuture<DisableAWSOrganizationsAccessOutput, DisableAWSOrganizationsAccessError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisableAWSOrganizationsAccess",
@@ -8523,9 +8718,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         DisassociatePrincipalFromPortfolioOutput,
         DisassociatePrincipalFromPortfolioError,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociatePrincipalFromPortfolio",
@@ -8555,9 +8755,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DisassociateProductFromPortfolioInput,
     ) -> RusotoFuture<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateProductFromPortfolio",
@@ -8589,9 +8794,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         DisassociateServiceActionFromProvisioningArtifactOutput,
         DisassociateServiceActionFromProvisioningArtifactError,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateServiceActionFromProvisioningArtifact",
@@ -8618,9 +8828,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: DisassociateTagOptionFromResourceInput,
     ) -> RusotoFuture<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.DisassociateTagOptionFromResource",
@@ -8648,9 +8863,14 @@ impl ServiceCatalog for ServiceCatalogClient {
     fn enable_aws_organizations_access(
         &self,
     ) -> RusotoFuture<EnableAWSOrganizationsAccessOutput, EnableAWSOrganizationsAccessError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.EnableAWSOrganizationsAccess",
@@ -8676,9 +8896,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ExecuteProvisionedProductPlanInput,
     ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ExecuteProvisionedProductPlan",
@@ -8708,9 +8933,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         ExecuteProvisionedProductServiceActionOutput,
         ExecuteProvisionedProductServiceActionError,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ExecuteProvisionedProductServiceAction",
@@ -8739,9 +8969,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
     ) -> RusotoFuture<GetAWSOrganizationsAccessStatusOutput, GetAWSOrganizationsAccessStatusError>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.GetAWSOrganizationsAccessStatus",
@@ -8769,9 +9004,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListAcceptedPortfolioSharesInput,
     ) -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListAcceptedPortfolioShares",
@@ -8798,9 +9038,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListConstraintsForPortfolioInput,
     ) -> RusotoFuture<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListConstraintsForPortfolio",
@@ -8827,9 +9072,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListLaunchPathsInput,
     ) -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListLaunchPaths",
@@ -8860,9 +9110,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         input: ListOrganizationPortfolioAccessInput,
     ) -> RusotoFuture<ListOrganizationPortfolioAccessOutput, ListOrganizationPortfolioAccessError>
     {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListOrganizationPortfolioAccess",
@@ -8891,9 +9146,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListPortfolioAccessInput,
     ) -> RusotoFuture<ListPortfolioAccessOutput, ListPortfolioAccessError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPortfolioAccess",
@@ -8922,9 +9182,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListPortfoliosInput,
     ) -> RusotoFuture<ListPortfoliosOutput, ListPortfoliosError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.ListPortfolios");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8951,9 +9216,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListPortfoliosForProductInput,
     ) -> RusotoFuture<ListPortfoliosForProductOutput, ListPortfoliosForProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPortfoliosForProduct",
@@ -8980,9 +9250,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListPrincipalsForPortfolioInput,
     ) -> RusotoFuture<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListPrincipalsForPortfolio",
@@ -9009,9 +9284,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListProvisionedProductPlansInput,
     ) -> RusotoFuture<ListProvisionedProductPlansOutput, ListProvisionedProductPlansError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListProvisionedProductPlans",
@@ -9038,9 +9318,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListProvisioningArtifactsInput,
     ) -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListProvisioningArtifacts",
@@ -9070,9 +9355,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         ListProvisioningArtifactsForServiceActionOutput,
         ListProvisioningArtifactsForServiceActionError,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListProvisioningArtifactsForServiceAction",
@@ -9099,9 +9389,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListRecordHistoryInput,
     ) -> RusotoFuture<ListRecordHistoryOutput, ListRecordHistoryError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListRecordHistory",
@@ -9131,9 +9426,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListResourcesForTagOptionInput,
     ) -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListResourcesForTagOption",
@@ -9160,9 +9460,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListServiceActionsInput,
     ) -> RusotoFuture<ListServiceActionsOutput, ListServiceActionsError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListServiceActions",
@@ -9195,9 +9500,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         ListServiceActionsForProvisioningArtifactOutput,
         ListServiceActionsForProvisioningArtifactError,
     > {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ListServiceActionsForProvisioningArtifact",
@@ -9224,9 +9534,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ListTagOptionsInput,
     ) -> RusotoFuture<ListTagOptionsOutput, ListTagOptionsError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.ListTagOptions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9253,9 +9568,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ProvisionProductInput,
     ) -> RusotoFuture<ProvisionProductOutput, ProvisionProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ProvisionProduct",
@@ -9285,9 +9605,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: RejectPortfolioShareInput,
     ) -> RusotoFuture<RejectPortfolioShareOutput, RejectPortfolioShareError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.RejectPortfolioShare",
@@ -9316,9 +9641,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: ScanProvisionedProductsInput,
     ) -> RusotoFuture<ScanProvisionedProductsOutput, ScanProvisionedProductsError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.ScanProvisionedProducts",
@@ -9345,9 +9675,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: SearchProductsInput,
     ) -> RusotoFuture<SearchProductsOutput, SearchProductsError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.SearchProducts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9374,9 +9709,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: SearchProductsAsAdminInput,
     ) -> RusotoFuture<SearchProductsAsAdminOutput, SearchProductsAsAdminError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.SearchProductsAsAdmin",
@@ -9405,9 +9745,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: SearchProvisionedProductsInput,
     ) -> RusotoFuture<SearchProvisionedProductsOutput, SearchProvisionedProductsError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.SearchProvisionedProducts",
@@ -9434,9 +9779,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: TerminateProvisionedProductInput,
     ) -> RusotoFuture<TerminateProvisionedProductOutput, TerminateProvisionedProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.TerminateProvisionedProduct",
@@ -9463,9 +9813,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateConstraintInput,
     ) -> RusotoFuture<UpdateConstraintOutput, UpdateConstraintError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateConstraint",
@@ -9495,9 +9850,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdatePortfolioInput,
     ) -> RusotoFuture<UpdatePortfolioOutput, UpdatePortfolioError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdatePortfolio",
@@ -9527,9 +9887,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateProductInput,
     ) -> RusotoFuture<UpdateProductOutput, UpdateProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWS242ServiceCatalogService.UpdateProduct");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -9556,9 +9921,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateProvisionedProductInput,
     ) -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateProvisionedProduct",
@@ -9585,9 +9955,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateProvisioningArtifactInput,
     ) -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateProvisioningArtifact",
@@ -9614,9 +9989,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateServiceActionInput,
     ) -> RusotoFuture<UpdateServiceActionOutput, UpdateServiceActionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateServiceAction",
@@ -9645,9 +10025,14 @@ impl ServiceCatalog for ServiceCatalogClient {
         &self,
         input: UpdateTagOptionInput,
     ) -> RusotoFuture<UpdateTagOptionOutput, UpdateTagOptionError> {
-        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicecatalog",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWS242ServiceCatalogService.UpdateTagOption",

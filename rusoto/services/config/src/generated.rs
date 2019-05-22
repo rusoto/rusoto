@@ -4710,9 +4710,14 @@ impl ConfigService for ConfigServiceClient {
         input: BatchGetAggregateResourceConfigRequest,
     ) -> RusotoFuture<BatchGetAggregateResourceConfigResponse, BatchGetAggregateResourceConfigError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.BatchGetAggregateResourceConfig",
@@ -4741,9 +4746,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: BatchGetResourceConfigRequest,
     ) -> RusotoFuture<BatchGetResourceConfigResponse, BatchGetResourceConfigError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.BatchGetResourceConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4769,9 +4779,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteAggregationAuthorizationRequest,
     ) -> RusotoFuture<(), DeleteAggregationAuthorizationError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteAggregationAuthorization",
@@ -4795,9 +4810,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigRuleRequest,
     ) -> RusotoFuture<(), DeleteConfigRuleError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.DeleteConfigRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4821,9 +4841,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigurationAggregatorRequest,
     ) -> RusotoFuture<(), DeleteConfigurationAggregatorError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteConfigurationAggregator",
@@ -4847,9 +4872,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteConfigurationRecorderRequest,
     ) -> RusotoFuture<(), DeleteConfigurationRecorderError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteConfigurationRecorder",
@@ -4873,9 +4903,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteDeliveryChannelRequest,
     ) -> RusotoFuture<(), DeleteDeliveryChannelError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.DeleteDeliveryChannel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4898,9 +4933,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteEvaluationResultsRequest,
     ) -> RusotoFuture<DeleteEvaluationResultsResponse, DeleteEvaluationResultsError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteEvaluationResults",
@@ -4927,9 +4967,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeletePendingAggregationRequestRequest,
     ) -> RusotoFuture<(), DeletePendingAggregationRequestError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeletePendingAggregationRequest",
@@ -4955,9 +5000,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeleteRetentionConfigurationRequest,
     ) -> RusotoFuture<(), DeleteRetentionConfigurationError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DeleteRetentionConfiguration",
@@ -4981,9 +5031,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DeliverConfigSnapshotRequest,
     ) -> RusotoFuture<DeliverConfigSnapshotResponse, DeliverConfigSnapshotError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.DeliverConfigSnapshot");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5012,9 +5067,14 @@ impl ConfigService for ConfigServiceClient {
         DescribeAggregateComplianceByConfigRulesResponse,
         DescribeAggregateComplianceByConfigRulesError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeAggregateComplianceByConfigRules",
@@ -5044,9 +5104,14 @@ impl ConfigService for ConfigServiceClient {
         DescribeAggregationAuthorizationsResponse,
         DescribeAggregationAuthorizationsError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeAggregationAuthorizations",
@@ -5076,9 +5141,14 @@ impl ConfigService for ConfigServiceClient {
         input: DescribeComplianceByConfigRuleRequest,
     ) -> RusotoFuture<DescribeComplianceByConfigRuleResponse, DescribeComplianceByConfigRuleError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeComplianceByConfigRule",
@@ -5105,9 +5175,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeComplianceByResourceRequest,
     ) -> RusotoFuture<DescribeComplianceByResourceResponse, DescribeComplianceByResourceError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeComplianceByResource",
@@ -5137,9 +5212,14 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigRuleEvaluationStatusResponse,
         DescribeConfigRuleEvaluationStatusError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigRuleEvaluationStatus",
@@ -5168,9 +5248,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeConfigRulesRequest,
     ) -> RusotoFuture<DescribeConfigRulesResponse, DescribeConfigRulesError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.DescribeConfigRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5199,9 +5284,14 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationAggregatorSourcesStatusResponse,
         DescribeConfigurationAggregatorSourcesStatusError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationAggregatorSourcesStatus",
@@ -5228,9 +5318,14 @@ impl ConfigService for ConfigServiceClient {
         input: DescribeConfigurationAggregatorsRequest,
     ) -> RusotoFuture<DescribeConfigurationAggregatorsResponse, DescribeConfigurationAggregatorsError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationAggregators",
@@ -5262,9 +5357,14 @@ impl ConfigService for ConfigServiceClient {
         DescribeConfigurationRecorderStatusResponse,
         DescribeConfigurationRecorderStatusError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationRecorderStatus",
@@ -5294,9 +5394,14 @@ impl ConfigService for ConfigServiceClient {
         input: DescribeConfigurationRecordersRequest,
     ) -> RusotoFuture<DescribeConfigurationRecordersResponse, DescribeConfigurationRecordersError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeConfigurationRecorders",
@@ -5324,9 +5429,14 @@ impl ConfigService for ConfigServiceClient {
         input: DescribeDeliveryChannelStatusRequest,
     ) -> RusotoFuture<DescribeDeliveryChannelStatusResponse, DescribeDeliveryChannelStatusError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeDeliveryChannelStatus",
@@ -5353,9 +5463,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: DescribeDeliveryChannelsRequest,
     ) -> RusotoFuture<DescribeDeliveryChannelsResponse, DescribeDeliveryChannelsError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeDeliveryChannels",
@@ -5385,9 +5500,14 @@ impl ConfigService for ConfigServiceClient {
         DescribePendingAggregationRequestsResponse,
         DescribePendingAggregationRequestsError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribePendingAggregationRequests",
@@ -5417,9 +5537,14 @@ impl ConfigService for ConfigServiceClient {
         input: DescribeRetentionConfigurationsRequest,
     ) -> RusotoFuture<DescribeRetentionConfigurationsResponse, DescribeRetentionConfigurationsError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.DescribeRetentionConfigurations",
@@ -5451,9 +5576,14 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateComplianceDetailsByConfigRuleResponse,
         GetAggregateComplianceDetailsByConfigRuleError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateComplianceDetailsByConfigRule",
@@ -5483,9 +5613,14 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateConfigRuleComplianceSummaryResponse,
         GetAggregateConfigRuleComplianceSummaryError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateConfigRuleComplianceSummary",
@@ -5517,9 +5652,14 @@ impl ConfigService for ConfigServiceClient {
         GetAggregateDiscoveredResourceCountsResponse,
         GetAggregateDiscoveredResourceCountsError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateDiscoveredResourceCounts",
@@ -5548,9 +5688,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: GetAggregateResourceConfigRequest,
     ) -> RusotoFuture<GetAggregateResourceConfigResponse, GetAggregateResourceConfigError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetAggregateResourceConfig",
@@ -5578,9 +5723,14 @@ impl ConfigService for ConfigServiceClient {
         input: GetComplianceDetailsByConfigRuleRequest,
     ) -> RusotoFuture<GetComplianceDetailsByConfigRuleResponse, GetComplianceDetailsByConfigRuleError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceDetailsByConfigRule",
@@ -5610,9 +5760,14 @@ impl ConfigService for ConfigServiceClient {
         input: GetComplianceDetailsByResourceRequest,
     ) -> RusotoFuture<GetComplianceDetailsByResourceResponse, GetComplianceDetailsByResourceError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceDetailsByResource",
@@ -5639,9 +5794,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
     ) -> RusotoFuture<GetComplianceSummaryByConfigRuleResponse, GetComplianceSummaryByConfigRuleError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceSummaryByConfigRule",
@@ -5672,9 +5832,14 @@ impl ConfigService for ConfigServiceClient {
         GetComplianceSummaryByResourceTypeResponse,
         GetComplianceSummaryByResourceTypeError,
     > {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetComplianceSummaryByResourceType",
@@ -5703,9 +5868,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: GetDiscoveredResourceCountsRequest,
     ) -> RusotoFuture<GetDiscoveredResourceCountsResponse, GetDiscoveredResourceCountsError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetDiscoveredResourceCounts",
@@ -5732,9 +5902,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: GetResourceConfigHistoryRequest,
     ) -> RusotoFuture<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.GetResourceConfigHistory",
@@ -5762,9 +5937,14 @@ impl ConfigService for ConfigServiceClient {
         input: ListAggregateDiscoveredResourcesRequest,
     ) -> RusotoFuture<ListAggregateDiscoveredResourcesResponse, ListAggregateDiscoveredResourcesError>
     {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.ListAggregateDiscoveredResources",
@@ -5793,9 +5973,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: ListDiscoveredResourcesRequest,
     ) -> RusotoFuture<ListDiscoveredResourcesResponse, ListDiscoveredResourcesError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.ListDiscoveredResources",
@@ -5822,9 +6007,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutAggregationAuthorizationRequest,
     ) -> RusotoFuture<PutAggregationAuthorizationResponse, PutAggregationAuthorizationError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutAggregationAuthorization",
@@ -5848,9 +6038,14 @@ impl ConfigService for ConfigServiceClient {
 
     /// <p>Adds or updates an AWS Config rule for evaluating whether your AWS resources comply with your desired configurations.</p> <p>You can use this action for custom AWS Config rules and AWS managed Config rules. A custom AWS Config rule is a rule that you develop and maintain. An AWS managed Config rule is a customizable, predefined rule that AWS Config provides.</p> <p>If you are adding a new custom AWS Config rule, you must first create the AWS Lambda function that the rule invokes to evaluate your resources. When you use the <code>PutConfigRule</code> action to add the rule to AWS Config, you must specify the Amazon Resource Name (ARN) that AWS Lambda assigns to the function. Specify the ARN for the <code>SourceIdentifier</code> key. This key is part of the <code>Source</code> object, which is part of the <code>ConfigRule</code> object. </p> <p>If you are adding an AWS managed Config rule, specify the rule's identifier for the <code>SourceIdentifier</code> key. To reference AWS managed Config rule identifiers, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config_use-managed-rules.html">About AWS Managed Config Rules</a>.</p> <p>For any new rule that you add, specify the <code>ConfigRuleName</code> in the <code>ConfigRule</code> object. Do not specify the <code>ConfigRuleArn</code> or the <code>ConfigRuleId</code>. These values are generated by AWS Config for new rules.</p> <p>If you are updating a rule that you added previously, you can specify the rule by <code>ConfigRuleName</code>, <code>ConfigRuleId</code>, or <code>ConfigRuleArn</code> in the <code>ConfigRule</code> data type that you use in this request.</p> <p>The maximum number of rules that AWS Config supports is 50.</p> <p>For information about requesting a rule limit increase, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_config">AWS Config Limits</a> in the <i>AWS General Reference Guide</i>.</p> <p>For more information about developing and using AWS Config rules, see <a href="http://docs.aws.amazon.com/config/latest/developerguide/evaluate-config.html">Evaluating AWS Resource Configurations with AWS Config</a> in the <i>AWS Config Developer Guide</i>.</p>
     fn put_config_rule(&self, input: PutConfigRuleRequest) -> RusotoFuture<(), PutConfigRuleError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.PutConfigRule");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5874,9 +6069,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutConfigurationAggregatorRequest,
     ) -> RusotoFuture<PutConfigurationAggregatorResponse, PutConfigurationAggregatorError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutConfigurationAggregator",
@@ -5903,9 +6103,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutConfigurationRecorderRequest,
     ) -> RusotoFuture<(), PutConfigurationRecorderError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutConfigurationRecorder",
@@ -5929,9 +6134,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutDeliveryChannelRequest,
     ) -> RusotoFuture<(), PutDeliveryChannelError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.PutDeliveryChannel");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5955,9 +6165,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutEvaluationsRequest,
     ) -> RusotoFuture<PutEvaluationsResponse, PutEvaluationsError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "StarlingDoveService.PutEvaluations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -5984,9 +6199,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: PutRetentionConfigurationRequest,
     ) -> RusotoFuture<PutRetentionConfigurationResponse, PutRetentionConfigurationError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.PutRetentionConfiguration",
@@ -6013,9 +6233,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: StartConfigRulesEvaluationRequest,
     ) -> RusotoFuture<StartConfigRulesEvaluationResponse, StartConfigRulesEvaluationError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StartConfigRulesEvaluation",
@@ -6042,9 +6267,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: StartConfigurationRecorderRequest,
     ) -> RusotoFuture<(), StartConfigurationRecorderError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StartConfigurationRecorder",
@@ -6068,9 +6298,14 @@ impl ConfigService for ConfigServiceClient {
         &self,
         input: StopConfigurationRecorderRequest,
     ) -> RusotoFuture<(), StopConfigurationRecorderError> {
-        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "config",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "StarlingDoveService.StopConfigurationRecorder",

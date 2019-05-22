@@ -7091,9 +7091,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: BatchGetRepositoriesInput,
     ) -> RusotoFuture<BatchGetRepositoriesOutput, BatchGetRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.BatchGetRepositories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7116,9 +7121,14 @@ impl CodeCommit for CodeCommitClient {
 
     /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
     fn create_branch(&self, input: CreateBranchInput) -> RusotoFuture<(), CreateBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7142,9 +7152,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreateCommitInput,
     ) -> RusotoFuture<CreateCommitOutput, CreateCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateCommit");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7171,9 +7186,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreatePullRequestInput,
     ) -> RusotoFuture<CreatePullRequestOutput, CreatePullRequestError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreatePullRequest");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7200,9 +7220,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: CreateRepositoryInput,
     ) -> RusotoFuture<CreateRepositoryOutput, CreateRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.CreateRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7229,9 +7254,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteBranchInput,
     ) -> RusotoFuture<DeleteBranchOutput, DeleteBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7258,9 +7288,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteCommentContentInput,
     ) -> RusotoFuture<DeleteCommentContentOutput, DeleteCommentContentError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteCommentContent");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7286,9 +7321,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteFileInput,
     ) -> RusotoFuture<DeleteFileOutput, DeleteFileError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7315,9 +7355,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DeleteRepositoryInput,
     ) -> RusotoFuture<DeleteRepositoryOutput, DeleteRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.DeleteRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7344,9 +7389,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: DescribePullRequestEventsInput,
     ) -> RusotoFuture<DescribePullRequestEventsOutput, DescribePullRequestEventsError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.DescribePullRequestEvents",
@@ -7370,9 +7420,14 @@ impl CodeCommit for CodeCommitClient {
 
     /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
     fn get_blob(&self, input: GetBlobInput) -> RusotoFuture<GetBlobOutput, GetBlobError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBlob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7395,9 +7450,14 @@ impl CodeCommit for CodeCommitClient {
 
     /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
     fn get_branch(&self, input: GetBranchInput) -> RusotoFuture<GetBranchOutput, GetBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7423,9 +7483,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetCommentInput,
     ) -> RusotoFuture<GetCommentOutput, GetCommentError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetComment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7452,9 +7517,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetCommentsForComparedCommitInput,
     ) -> RusotoFuture<GetCommentsForComparedCommitOutput, GetCommentsForComparedCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForComparedCommit",
@@ -7481,9 +7551,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetCommentsForPullRequestInput,
     ) -> RusotoFuture<GetCommentsForPullRequestOutput, GetCommentsForPullRequestError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.GetCommentsForPullRequest",
@@ -7507,9 +7582,14 @@ impl CodeCommit for CodeCommitClient {
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
     fn get_commit(&self, input: GetCommitInput) -> RusotoFuture<GetCommitOutput, GetCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetCommit");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7535,9 +7615,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetDifferencesInput,
     ) -> RusotoFuture<GetDifferencesOutput, GetDifferencesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetDifferences");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7561,9 +7646,14 @@ impl CodeCommit for CodeCommitClient {
 
     /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
     fn get_file(&self, input: GetFileInput) -> RusotoFuture<GetFileOutput, GetFileError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7586,9 +7676,14 @@ impl CodeCommit for CodeCommitClient {
 
     /// <p>Returns the contents of a specified folder in a repository.</p>
     fn get_folder(&self, input: GetFolderInput) -> RusotoFuture<GetFolderOutput, GetFolderError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetFolder");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7614,9 +7709,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetMergeConflictsInput,
     ) -> RusotoFuture<GetMergeConflictsOutput, GetMergeConflictsError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeConflicts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7643,9 +7743,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetPullRequestInput,
     ) -> RusotoFuture<GetPullRequestOutput, GetPullRequestError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetPullRequest");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7672,9 +7777,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetRepositoryInput,
     ) -> RusotoFuture<GetRepositoryOutput, GetRepositoryError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepository");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7701,9 +7811,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: GetRepositoryTriggersInput,
     ) -> RusotoFuture<GetRepositoryTriggersOutput, GetRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.GetRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7729,9 +7844,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListBranchesInput,
     ) -> RusotoFuture<ListBranchesOutput, ListBranchesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListBranches");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7758,9 +7878,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListPullRequestsInput,
     ) -> RusotoFuture<ListPullRequestsOutput, ListPullRequestsError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListPullRequests");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7787,9 +7912,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: ListRepositoriesInput,
     ) -> RusotoFuture<ListRepositoriesOutput, ListRepositoriesError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.ListRepositories");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7816,9 +7946,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: MergePullRequestByFastForwardInput,
     ) -> RusotoFuture<MergePullRequestByFastForwardOutput, MergePullRequestByFastForwardError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.MergePullRequestByFastForward",
@@ -7845,9 +7980,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PostCommentForComparedCommitInput,
     ) -> RusotoFuture<PostCommentForComparedCommitOutput, PostCommentForComparedCommitError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForComparedCommit",
@@ -7874,9 +8014,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PostCommentForPullRequestInput,
     ) -> RusotoFuture<PostCommentForPullRequestOutput, PostCommentForPullRequestError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.PostCommentForPullRequest",
@@ -7903,9 +8048,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PostCommentReplyInput,
     ) -> RusotoFuture<PostCommentReplyOutput, PostCommentReplyError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PostCommentReply");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7929,9 +8079,14 @@ impl CodeCommit for CodeCommitClient {
 
     /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
     fn put_file(&self, input: PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PutFile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7957,9 +8112,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: PutRepositoryTriggersInput,
     ) -> RusotoFuture<PutRepositoryTriggersOutput, PutRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.PutRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7985,9 +8145,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: TestRepositoryTriggersInput,
     ) -> RusotoFuture<TestRepositoryTriggersOutput, TestRepositoryTriggersError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.TestRepositoryTriggers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8013,9 +8178,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateCommentInput,
     ) -> RusotoFuture<UpdateCommentOutput, UpdateCommentError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateComment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8042,9 +8212,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateDefaultBranchInput,
     ) -> RusotoFuture<(), UpdateDefaultBranchError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateDefaultBranch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8067,9 +8242,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestDescriptionInput,
     ) -> RusotoFuture<UpdatePullRequestDescriptionOutput, UpdatePullRequestDescriptionError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestDescription",
@@ -8096,9 +8276,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestStatusInput,
     ) -> RusotoFuture<UpdatePullRequestStatusOutput, UpdatePullRequestStatusError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdatePullRequestStatus",
@@ -8125,9 +8310,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdatePullRequestTitleInput,
     ) -> RusotoFuture<UpdatePullRequestTitleOutput, UpdatePullRequestTitleError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdatePullRequestTitle");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8153,9 +8343,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateRepositoryDescriptionInput,
     ) -> RusotoFuture<(), UpdateRepositoryDescriptionError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeCommit_20150413.UpdateRepositoryDescription",
@@ -8179,9 +8374,14 @@ impl CodeCommit for CodeCommitClient {
         &self,
         input: UpdateRepositoryNameInput,
     ) -> RusotoFuture<(), UpdateRepositoryNameError> {
-        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codecommit",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeCommit_20150413.UpdateRepositoryName");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

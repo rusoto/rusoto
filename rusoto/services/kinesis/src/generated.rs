@@ -2799,9 +2799,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: AddTagsToStreamInput,
     ) -> RusotoFuture<(), AddTagsToStreamError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.AddTagsToStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2822,9 +2827,14 @@ impl Kinesis for KinesisClient {
 
     /// <p>Creates a Kinesis data stream. A stream captures and transports data records that are continuously emitted from different data sources or <i>producers</i>. Scale-out within a stream is explicitly supported by means of shards, which are uniquely identified groups of data records in a stream.</p> <p>You specify and control the number of shards that a stream is composed of. Each shard can support reads up to five transactions per second, up to a maximum data read total of 2 MB per second. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second. If the amount of data input increases or decreases, you can add or remove shards.</p> <p>The stream name identifies the stream. The name is scoped to the AWS account used by the application. It is also scoped by AWS Region. That is, two streams in two different accounts can have the same name, and two streams in the same account, but in two different Regions, can have the same name.</p> <p> <code>CreateStream</code> is an asynchronous operation. Upon receiving a <code>CreateStream</code> request, Kinesis Data Streams immediately returns and sets the stream status to <code>CREATING</code>. After the stream is created, Kinesis Data Streams sets the stream status to <code>ACTIVE</code>. You should perform read and write operations only on an <code>ACTIVE</code> stream. </p> <p>You receive a <code>LimitExceededException</code> when making a <code>CreateStream</code> request when you try to do one of the following:</p> <ul> <li> <p>Have more than five streams in the <code>CREATING</code> state at any point in time.</p> </li> <li> <p>Create more shards than are authorized for your account.</p> </li> </ul> <p>For the default shard limit for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Amazon Kinesis Data Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To increase this limit, <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">contact AWS Support</a>.</p> <p>You can use <code>DescribeStream</code> to check the stream status, which is returned in <code>StreamStatus</code>.</p> <p> <a>CreateStream</a> has a limit of five transactions per second per account.</p>
     fn create_stream(&self, input: CreateStreamInput) -> RusotoFuture<(), CreateStreamError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.CreateStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2848,9 +2858,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: DecreaseStreamRetentionPeriodInput,
     ) -> RusotoFuture<(), DecreaseStreamRetentionPeriodError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Kinesis_20131202.DecreaseStreamRetentionPeriod",
@@ -2871,9 +2886,14 @@ impl Kinesis for KinesisClient {
 
     /// <p>Deletes a Kinesis data stream and all its shards and data. You must shut down any applications that are operating on the stream before you delete the stream. If an application attempts to operate on a deleted stream, it receives the exception <code>ResourceNotFoundException</code>.</p> <p>If the stream is in the <code>ACTIVE</code> state, you can delete it. After a <code>DeleteStream</code> request, the specified stream is in the <code>DELETING</code> state until Kinesis Data Streams completes the deletion.</p> <p> <b>Note:</b> Kinesis Data Streams might continue to accept data read and write operations, such as <a>PutRecord</a>, <a>PutRecords</a>, and <a>GetRecords</a>, on a stream in the <code>DELETING</code> state until the stream deletion is complete.</p> <p>When you delete a stream, any shards in that stream are also deleted, and any tags are dissociated from the stream.</p> <p>You can use the <a>DescribeStream</a> operation to check the state of the stream, which is returned in <code>StreamStatus</code>.</p> <p> <a>DeleteStream</a> has a limit of five transactions per second per account.</p>
     fn delete_stream(&self, input: DeleteStreamInput) -> RusotoFuture<(), DeleteStreamError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.DeleteStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2897,9 +2917,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: DeregisterStreamConsumerInput,
     ) -> RusotoFuture<(), DeregisterStreamConsumerError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.DeregisterStreamConsumer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2917,9 +2942,14 @@ impl Kinesis for KinesisClient {
 
     /// <p>Describes the shard limits and usage for the account.</p> <p>If you update your account limits, the old limits might be returned for a few minutes.</p> <p>This operation has a limit of one transaction per second per account.</p>
     fn describe_limits(&self) -> RusotoFuture<DescribeLimitsOutput, DescribeLimitsError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.DescribeLimits");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -2945,9 +2975,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: DescribeStreamInput,
     ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.DescribeStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2974,9 +3009,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: DescribeStreamConsumerInput,
     ) -> RusotoFuture<DescribeStreamConsumerOutput, DescribeStreamConsumerError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.DescribeStreamConsumer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3002,9 +3042,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: DescribeStreamSummaryInput,
     ) -> RusotoFuture<DescribeStreamSummaryOutput, DescribeStreamSummaryError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.DescribeStreamSummary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3030,9 +3075,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: DisableEnhancedMonitoringInput,
     ) -> RusotoFuture<EnhancedMonitoringOutput, DisableEnhancedMonitoringError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.DisableEnhancedMonitoring");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3056,9 +3106,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: EnableEnhancedMonitoringInput,
     ) -> RusotoFuture<EnhancedMonitoringOutput, EnableEnhancedMonitoringError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.EnableEnhancedMonitoring");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3082,9 +3137,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: GetRecordsInput,
     ) -> RusotoFuture<GetRecordsOutput, GetRecordsError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.GetRecords");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3111,9 +3171,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: GetShardIteratorInput,
     ) -> RusotoFuture<GetShardIteratorOutput, GetShardIteratorError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.GetShardIterator");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3140,9 +3205,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: IncreaseStreamRetentionPeriodInput,
     ) -> RusotoFuture<(), IncreaseStreamRetentionPeriodError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Kinesis_20131202.IncreaseStreamRetentionPeriod",
@@ -3166,9 +3236,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: ListShardsInput,
     ) -> RusotoFuture<ListShardsOutput, ListShardsError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.ListShards");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3195,9 +3270,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: ListStreamConsumersInput,
     ) -> RusotoFuture<ListStreamConsumersOutput, ListStreamConsumersError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.ListStreamConsumers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3223,9 +3303,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: ListStreamsInput,
     ) -> RusotoFuture<ListStreamsOutput, ListStreamsError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.ListStreams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3252,9 +3337,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: ListTagsForStreamInput,
     ) -> RusotoFuture<ListTagsForStreamOutput, ListTagsForStreamError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.ListTagsForStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3278,9 +3368,14 @@ impl Kinesis for KinesisClient {
 
     /// <p>Merges two adjacent shards in a Kinesis data stream and combines them into a single shard to reduce the stream's capacity to ingest and transport data. Two shards are considered adjacent if the union of the hash key ranges for the two shards form a contiguous set with no gaps. For example, if you have two shards, one with a hash key range of 276...381 and the other with a hash key range of 382...454, then you could merge these two shards into a single shard that would have a hash key range of 276...454. After the merge, the single child shard receives data for all hash key values covered by the two parent shards.</p> <p> <code>MergeShards</code> is called when there is a need to reduce the overall capacity of a stream because of excess capacity that is not being used. You must specify the shard to be merged and the adjacent shard for a stream. For more information about merging shards, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-resharding-merge.html">Merge Two Shards</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>If the stream is in the <code>ACTIVE</code> state, you can call <code>MergeShards</code>. If a stream is in the <code>CREATING</code>, <code>UPDATING</code>, or <code>DELETING</code> state, <code>MergeShards</code> returns a <code>ResourceInUseException</code>. If the specified stream does not exist, <code>MergeShards</code> returns a <code>ResourceNotFoundException</code>. </p> <p>You can use <a>DescribeStream</a> to check the state of the stream, which is returned in <code>StreamStatus</code>.</p> <p> <code>MergeShards</code> is an asynchronous operation. Upon receiving a <code>MergeShards</code> request, Amazon Kinesis Data Streams immediately returns a response and sets the <code>StreamStatus</code> to <code>UPDATING</code>. After the operation is completed, Kinesis Data Streams sets the <code>StreamStatus</code> to <code>ACTIVE</code>. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state. </p> <p>You use <a>DescribeStream</a> to determine the shard IDs that are specified in the <code>MergeShards</code> request. </p> <p>If you try to operate on too many streams in parallel using <a>CreateStream</a>, <a>DeleteStream</a>, <code>MergeShards</code>, or <a>SplitShard</a>, you receive a <code>LimitExceededException</code>. </p> <p> <code>MergeShards</code> has a limit of five transactions per second per account.</p>
     fn merge_shards(&self, input: MergeShardsInput) -> RusotoFuture<(), MergeShardsError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.MergeShards");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3301,9 +3396,14 @@ impl Kinesis for KinesisClient {
 
     /// <p>Writes a single data record into an Amazon Kinesis data stream. Call <code>PutRecord</code> to send data into the stream for real-time ingestion and subsequent processing, one record at a time. Each shard can support writes up to 1,000 records per second, up to a maximum data write total of 1 MB per second.</p> <p>You must specify the name of the stream that captures, stores, and transports the data; a partition key; and the data blob itself.</p> <p>The data blob can be any type of data; for example, a segment from a log file, geographic/location data, website clickstream data, and so on.</p> <p>The partition key is used by Kinesis Data Streams to distribute data across shards. Kinesis Data Streams segregates the data records that belong to a stream into multiple shards, using the partition key associated with each data record to determine the shard to which a given data record belongs.</p> <p>Partition keys are Unicode strings, with a maximum length limit of 256 characters for each key. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards using the hash key ranges of the shards. You can override hashing the partition key to determine the shard by explicitly specifying a hash value using the <code>ExplicitHashKey</code> parameter. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream">Adding Data to a Stream</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p> <code>PutRecord</code> returns the shard ID of where the data record was placed and the sequence number that was assigned to the data record.</p> <p>Sequence numbers increase over time and are specific to a shard within a stream, not across all shards within a stream. To guarantee strictly increasing ordering, write serially to a shard and use the <code>SequenceNumberForOrdering</code> parameter. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/developing-producers-with-sdk.html#kinesis-using-sdk-java-add-data-to-stream">Adding Data to a Stream</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>If a <code>PutRecord</code> request cannot be processed because of insufficient provisioned throughput on the shard involved in the request, <code>PutRecord</code> throws <code>ProvisionedThroughputExceededException</code>. </p> <p>By default, data records are accessible for 24 hours from the time that they are added to a stream. You can use <a>IncreaseStreamRetentionPeriod</a> or <a>DecreaseStreamRetentionPeriod</a> to modify this retention period.</p>
     fn put_record(&self, input: PutRecordInput) -> RusotoFuture<PutRecordOutput, PutRecordError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.PutRecord");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3329,9 +3429,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: PutRecordsInput,
     ) -> RusotoFuture<PutRecordsOutput, PutRecordsError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.PutRecords");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3358,9 +3463,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: RegisterStreamConsumerInput,
     ) -> RusotoFuture<RegisterStreamConsumerOutput, RegisterStreamConsumerError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.RegisterStreamConsumer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3386,9 +3496,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: RemoveTagsFromStreamInput,
     ) -> RusotoFuture<(), RemoveTagsFromStreamError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.RemoveTagsFromStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3408,9 +3523,14 @@ impl Kinesis for KinesisClient {
 
     /// <p>Splits a shard into two new shards in the Kinesis data stream, to increase the stream's capacity to ingest and transport data. <code>SplitShard</code> is called when there is a need to increase the overall capacity of a stream because of an expected increase in the volume of data records being ingested. </p> <p>You can also use <code>SplitShard</code> when a shard appears to be approaching its maximum utilization; for example, the producers sending data into the specific shard are suddenly sending more than previously anticipated. You can also call <code>SplitShard</code> to increase stream capacity, so that more Kinesis Data Streams applications can simultaneously read data from the stream for real-time processing. </p> <p>You must specify the shard to be split and the new hash key, which is the position in the shard where the shard gets split in two. In many cases, the new hash key might be the average of the beginning and ending hash key, but it can be any hash key value in the range being mapped into the shard. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-resharding-split.html">Split a Shard</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>You can use <a>DescribeStream</a> to determine the shard ID and hash key values for the <code>ShardToSplit</code> and <code>NewStartingHashKey</code> parameters that are specified in the <code>SplitShard</code> request.</p> <p> <code>SplitShard</code> is an asynchronous operation. Upon receiving a <code>SplitShard</code> request, Kinesis Data Streams immediately returns a response and sets the stream status to <code>UPDATING</code>. After the operation is completed, Kinesis Data Streams sets the stream status to <code>ACTIVE</code>. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state. </p> <p>You can use <code>DescribeStream</code> to check the status of the stream, which is returned in <code>StreamStatus</code>. If the stream is in the <code>ACTIVE</code> state, you can call <code>SplitShard</code>. If a stream is in <code>CREATING</code> or <code>UPDATING</code> or <code>DELETING</code> states, <code>DescribeStream</code> returns a <code>ResourceInUseException</code>.</p> <p>If the specified stream does not exist, <code>DescribeStream</code> returns a <code>ResourceNotFoundException</code>. If you try to create more shards than are authorized for your account, you receive a <code>LimitExceededException</code>. </p> <p>For the default shard limit for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Kinesis Data Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To increase this limit, <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">contact AWS Support</a>.</p> <p>If you try to operate on too many streams simultaneously using <a>CreateStream</a>, <a>DeleteStream</a>, <a>MergeShards</a>, and/or <a>SplitShard</a>, you receive a <code>LimitExceededException</code>. </p> <p> <code>SplitShard</code> has a limit of five transactions per second per account.</p>
     fn split_shard(&self, input: SplitShardInput) -> RusotoFuture<(), SplitShardError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.SplitShard");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3434,9 +3554,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: StartStreamEncryptionInput,
     ) -> RusotoFuture<(), StartStreamEncryptionError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.StartStreamEncryption");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3459,9 +3584,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: StopStreamEncryptionInput,
     ) -> RusotoFuture<(), StopStreamEncryptionError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.StopStreamEncryption");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3484,9 +3614,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: SubscribeToShardInput,
     ) -> RusotoFuture<SubscribeToShardOutput, SubscribeToShardError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.SubscribeToShard");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3513,9 +3648,14 @@ impl Kinesis for KinesisClient {
         &self,
         input: UpdateShardCountInput,
     ) -> RusotoFuture<UpdateShardCountOutput, UpdateShardCountError> {
-        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "kinesis",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Kinesis_20131202.UpdateShardCount");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

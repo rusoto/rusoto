@@ -1502,9 +1502,14 @@ impl Fsx for FsxClient {
         &self,
         input: CreateBackupRequest,
     ) -> RusotoFuture<CreateBackupResponse, CreateBackupError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSimbaAPIService_v20180301.CreateBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1531,9 +1536,14 @@ impl Fsx for FsxClient {
         &self,
         input: CreateFileSystemRequest,
     ) -> RusotoFuture<CreateFileSystemResponse, CreateFileSystemError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSimbaAPIService_v20180301.CreateFileSystem",
@@ -1563,9 +1573,14 @@ impl Fsx for FsxClient {
         &self,
         input: CreateFileSystemFromBackupRequest,
     ) -> RusotoFuture<CreateFileSystemFromBackupResponse, CreateFileSystemFromBackupError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSimbaAPIService_v20180301.CreateFileSystemFromBackup",
@@ -1592,9 +1607,14 @@ impl Fsx for FsxClient {
         &self,
         input: DeleteBackupRequest,
     ) -> RusotoFuture<DeleteBackupResponse, DeleteBackupError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSimbaAPIService_v20180301.DeleteBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1621,9 +1641,14 @@ impl Fsx for FsxClient {
         &self,
         input: DeleteFileSystemRequest,
     ) -> RusotoFuture<DeleteFileSystemResponse, DeleteFileSystemError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSimbaAPIService_v20180301.DeleteFileSystem",
@@ -1653,9 +1678,14 @@ impl Fsx for FsxClient {
         &self,
         input: DescribeBackupsRequest,
     ) -> RusotoFuture<DescribeBackupsResponse, DescribeBackupsError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSimbaAPIService_v20180301.DescribeBackups",
@@ -1685,9 +1715,14 @@ impl Fsx for FsxClient {
         &self,
         input: DescribeFileSystemsRequest,
     ) -> RusotoFuture<DescribeFileSystemsResponse, DescribeFileSystemsError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSimbaAPIService_v20180301.DescribeFileSystems",
@@ -1716,9 +1751,14 @@ impl Fsx for FsxClient {
         &self,
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSimbaAPIService_v20180301.ListTagsForResource",
@@ -1747,9 +1787,14 @@ impl Fsx for FsxClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSimbaAPIService_v20180301.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1776,9 +1821,14 @@ impl Fsx for FsxClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSSimbaAPIService_v20180301.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1805,9 +1855,14 @@ impl Fsx for FsxClient {
         &self,
         input: UpdateFileSystemRequest,
     ) -> RusotoFuture<UpdateFileSystemResponse, UpdateFileSystemError> {
-        let mut request = SignedRequest::new("POST", "fsx", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "fsx",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSSimbaAPIService_v20180301.UpdateFileSystem",

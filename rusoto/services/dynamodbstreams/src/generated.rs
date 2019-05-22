@@ -627,9 +627,14 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         &self,
         input: DescribeStreamInput,
     ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
         request.set_endpoint_prefix("streams.dynamodb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.DescribeStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -656,9 +661,14 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         &self,
         input: GetRecordsInput,
     ) -> RusotoFuture<GetRecordsOutput, GetRecordsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
         request.set_endpoint_prefix("streams.dynamodb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.GetRecords");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -685,9 +695,14 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         &self,
         input: GetShardIteratorInput,
     ) -> RusotoFuture<GetShardIteratorOutput, GetShardIteratorError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
         request.set_endpoint_prefix("streams.dynamodb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.GetShardIterator");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -714,9 +729,14 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         &self,
         input: ListStreamsInput,
     ) -> RusotoFuture<ListStreamsOutput, ListStreamsError> {
-        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "dynamodb",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.0",
+        );
         request.set_endpoint_prefix("streams.dynamodb".to_string());
-        request.set_content_type("application/x-amz-json-1.0".to_owned());
         request.add_header("x-amz-target", "DynamoDBStreams_20120810.ListStreams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

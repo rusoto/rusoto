@@ -2019,9 +2019,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: CreateHttpNamespaceRequest,
     ) -> RusotoFuture<CreateHttpNamespaceResponse, CreateHttpNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreateHttpNamespace",
@@ -2050,9 +2055,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: CreatePrivateDnsNamespaceRequest,
     ) -> RusotoFuture<CreatePrivateDnsNamespaceResponse, CreatePrivateDnsNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreatePrivateDnsNamespace",
@@ -2079,9 +2089,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: CreatePublicDnsNamespaceRequest,
     ) -> RusotoFuture<CreatePublicDnsNamespaceResponse, CreatePublicDnsNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.CreatePublicDnsNamespace",
@@ -2108,9 +2123,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: CreateServiceRequest,
     ) -> RusotoFuture<CreateServiceResponse, CreateServiceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.CreateService");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2137,9 +2157,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: DeleteNamespaceRequest,
     ) -> RusotoFuture<DeleteNamespaceResponse, DeleteNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DeleteNamespace",
@@ -2169,9 +2194,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: DeleteServiceRequest,
     ) -> RusotoFuture<DeleteServiceResponse, DeleteServiceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.DeleteService");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2198,9 +2228,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: DeregisterInstanceRequest,
     ) -> RusotoFuture<DeregisterInstanceResponse, DeregisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DeregisterInstance",
@@ -2230,9 +2265,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: DiscoverInstancesRequest,
     ) -> RusotoFuture<DiscoverInstancesResponse, DiscoverInstancesError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.DiscoverInstances",
@@ -2262,9 +2302,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetInstanceRequest,
     ) -> RusotoFuture<GetInstanceResponse, GetInstanceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2291,9 +2336,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetInstancesHealthStatusRequest,
     ) -> RusotoFuture<GetInstancesHealthStatusResponse, GetInstancesHealthStatusError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.GetInstancesHealthStatus",
@@ -2320,9 +2370,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetNamespaceRequest,
     ) -> RusotoFuture<GetNamespaceResponse, GetNamespaceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetNamespace");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2349,9 +2404,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetOperationRequest,
     ) -> RusotoFuture<GetOperationResponse, GetOperationError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetOperation");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2378,9 +2438,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: GetServiceRequest,
     ) -> RusotoFuture<GetServiceResponse, GetServiceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.GetService");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2407,9 +2472,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: ListInstancesRequest,
     ) -> RusotoFuture<ListInstancesResponse, ListInstancesError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2436,9 +2506,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: ListNamespacesRequest,
     ) -> RusotoFuture<ListNamespacesResponse, ListNamespacesError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListNamespaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2465,9 +2540,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: ListOperationsRequest,
     ) -> RusotoFuture<ListOperationsResponse, ListOperationsError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListOperations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2494,9 +2574,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: ListServicesRequest,
     ) -> RusotoFuture<ListServicesResponse, ListServicesError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.ListServices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2523,9 +2608,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: RegisterInstanceRequest,
     ) -> RusotoFuture<RegisterInstanceResponse, RegisterInstanceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.RegisterInstance",
@@ -2555,9 +2645,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: UpdateInstanceCustomHealthStatusRequest,
     ) -> RusotoFuture<(), UpdateInstanceCustomHealthStatusError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Route53AutoNaming_v20170314.UpdateInstanceCustomHealthStatus",
@@ -2583,9 +2678,14 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         &self,
         input: UpdateServiceRequest,
     ) -> RusotoFuture<UpdateServiceResponse, UpdateServiceError> {
-        let mut request = SignedRequest::new("POST", "servicediscovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "servicediscovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Route53AutoNaming_v20170314.UpdateService");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

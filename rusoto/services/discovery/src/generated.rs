@@ -2742,9 +2742,14 @@ impl Discovery for DiscoveryClient {
         AssociateConfigurationItemsToApplicationResponse,
         AssociateConfigurationItemsToApplicationError,
     > {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.AssociateConfigurationItemsToApplication",
@@ -2771,9 +2776,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: BatchDeleteImportDataRequest,
     ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.BatchDeleteImportData",
@@ -2802,9 +2812,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: CreateApplicationRequest,
     ) -> RusotoFuture<CreateApplicationResponse, CreateApplicationError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.CreateApplication",
@@ -2834,9 +2849,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: CreateTagsRequest,
     ) -> RusotoFuture<CreateTagsResponse, CreateTagsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPoseidonService_V2015_11_01.CreateTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2863,9 +2883,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DeleteApplicationsRequest,
     ) -> RusotoFuture<DeleteApplicationsResponse, DeleteApplicationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DeleteApplications",
@@ -2895,9 +2920,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSPoseidonService_V2015_11_01.DeleteTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2924,9 +2954,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DescribeAgentsRequest,
     ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeAgents",
@@ -2956,9 +2991,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DescribeConfigurationsRequest,
     ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeConfigurations",
@@ -2987,9 +3027,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DescribeContinuousExportsRequest,
     ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeContinuousExports",
@@ -3016,9 +3061,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DescribeExportConfigurationsRequest,
     ) -> RusotoFuture<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeExportConfigurations",
@@ -3045,9 +3095,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DescribeExportTasksRequest,
     ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeExportTasks",
@@ -3076,9 +3131,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DescribeImportTasksRequest,
     ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeImportTasks",
@@ -3107,9 +3167,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DescribeTags",
@@ -3142,9 +3207,14 @@ impl Discovery for DiscoveryClient {
         DisassociateConfigurationItemsFromApplicationResponse,
         DisassociateConfigurationItemsFromApplicationError,
     > {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.DisassociateConfigurationItemsFromApplication",
@@ -3169,9 +3239,14 @@ impl Discovery for DiscoveryClient {
     fn export_configurations(
         &self,
     ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.ExportConfigurations",
@@ -3198,9 +3273,14 @@ impl Discovery for DiscoveryClient {
     fn get_discovery_summary(
         &self,
     ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.GetDiscoverySummary",
@@ -3228,9 +3308,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: ListConfigurationsRequest,
     ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.ListConfigurations",
@@ -3260,9 +3345,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: ListServerNeighborsRequest,
     ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.ListServerNeighbors",
@@ -3290,9 +3380,14 @@ impl Discovery for DiscoveryClient {
     fn start_continuous_export(
         &self,
     ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartContinuousExport",
@@ -3321,9 +3416,14 @@ impl Discovery for DiscoveryClient {
         input: StartDataCollectionByAgentIdsRequest,
     ) -> RusotoFuture<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>
     {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartDataCollectionByAgentIds",
@@ -3350,9 +3450,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: StartExportTaskRequest,
     ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartExportTask",
@@ -3382,9 +3487,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: StartImportTaskRequest,
     ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StartImportTask",
@@ -3414,9 +3524,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: StopContinuousExportRequest,
     ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StopContinuousExport",
@@ -3445,9 +3560,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: StopDataCollectionByAgentIdsRequest,
     ) -> RusotoFuture<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.StopDataCollectionByAgentIds",
@@ -3474,9 +3594,14 @@ impl Discovery for DiscoveryClient {
         &self,
         input: UpdateApplicationRequest,
     ) -> RusotoFuture<UpdateApplicationResponse, UpdateApplicationError> {
-        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "discovery",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSPoseidonService_V2015_11_01.UpdateApplication",

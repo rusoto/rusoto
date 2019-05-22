@@ -1636,9 +1636,14 @@ impl Shield for ShieldClient {
         &self,
         input: AssociateDRTLogBucketRequest,
     ) -> RusotoFuture<AssociateDRTLogBucketResponse, AssociateDRTLogBucketError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.AssociateDRTLogBucket");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1664,9 +1669,14 @@ impl Shield for ShieldClient {
         &self,
         input: AssociateDRTRoleRequest,
     ) -> RusotoFuture<AssociateDRTRoleResponse, AssociateDRTRoleError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.AssociateDRTRole");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1693,9 +1703,14 @@ impl Shield for ShieldClient {
         &self,
         input: CreateProtectionRequest,
     ) -> RusotoFuture<CreateProtectionResponse, CreateProtectionError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.CreateProtection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1721,9 +1736,14 @@ impl Shield for ShieldClient {
     fn create_subscription(
         &self,
     ) -> RusotoFuture<CreateSubscriptionResponse, CreateSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.CreateSubscription");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1749,9 +1769,14 @@ impl Shield for ShieldClient {
         &self,
         input: DeleteProtectionRequest,
     ) -> RusotoFuture<DeleteProtectionResponse, DeleteProtectionError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DeleteProtection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1777,9 +1802,14 @@ impl Shield for ShieldClient {
     fn delete_subscription(
         &self,
     ) -> RusotoFuture<DeleteSubscriptionResponse, DeleteSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DeleteSubscription");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1805,9 +1835,14 @@ impl Shield for ShieldClient {
         &self,
         input: DescribeAttackRequest,
     ) -> RusotoFuture<DescribeAttackResponse, DescribeAttackError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeAttack");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1833,9 +1868,14 @@ impl Shield for ShieldClient {
     fn describe_drt_access(
         &self,
     ) -> RusotoFuture<DescribeDRTAccessResponse, DescribeDRTAccessError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeDRTAccess");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1861,9 +1901,14 @@ impl Shield for ShieldClient {
         &self,
     ) -> RusotoFuture<DescribeEmergencyContactSettingsResponse, DescribeEmergencyContactSettingsError>
     {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSShield_20160616.DescribeEmergencyContactSettings",
@@ -1891,9 +1936,14 @@ impl Shield for ShieldClient {
         &self,
         input: DescribeProtectionRequest,
     ) -> RusotoFuture<DescribeProtectionResponse, DescribeProtectionError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeProtection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1919,9 +1969,14 @@ impl Shield for ShieldClient {
     fn describe_subscription(
         &self,
     ) -> RusotoFuture<DescribeSubscriptionResponse, DescribeSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DescribeSubscription");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -1946,9 +2001,14 @@ impl Shield for ShieldClient {
         &self,
         input: DisassociateDRTLogBucketRequest,
     ) -> RusotoFuture<DisassociateDRTLogBucketResponse, DisassociateDRTLogBucketError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSShield_20160616.DisassociateDRTLogBucket",
@@ -1974,9 +2034,14 @@ impl Shield for ShieldClient {
     fn disassociate_drt_role(
         &self,
     ) -> RusotoFuture<DisassociateDRTRoleResponse, DisassociateDRTRoleError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.DisassociateDRTRole");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -2000,9 +2065,14 @@ impl Shield for ShieldClient {
     fn get_subscription_state(
         &self,
     ) -> RusotoFuture<GetSubscriptionStateResponse, GetSubscriptionStateError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.GetSubscriptionState");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -2027,9 +2097,14 @@ impl Shield for ShieldClient {
         &self,
         input: ListAttacksRequest,
     ) -> RusotoFuture<ListAttacksResponse, ListAttacksError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.ListAttacks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2056,9 +2131,14 @@ impl Shield for ShieldClient {
         &self,
         input: ListProtectionsRequest,
     ) -> RusotoFuture<ListProtectionsResponse, ListProtectionsError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.ListProtections");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2086,9 +2166,14 @@ impl Shield for ShieldClient {
         input: UpdateEmergencyContactSettingsRequest,
     ) -> RusotoFuture<UpdateEmergencyContactSettingsResponse, UpdateEmergencyContactSettingsError>
     {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSShield_20160616.UpdateEmergencyContactSettings",
@@ -2115,9 +2200,14 @@ impl Shield for ShieldClient {
         &self,
         input: UpdateSubscriptionRequest,
     ) -> RusotoFuture<UpdateSubscriptionResponse, UpdateSubscriptionError> {
-        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "shield",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSShield_20160616.UpdateSubscription");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

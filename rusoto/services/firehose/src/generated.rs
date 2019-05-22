@@ -2117,9 +2117,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: CreateDeliveryStreamInput,
     ) -> RusotoFuture<CreateDeliveryStreamOutput, CreateDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.CreateDeliveryStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2145,9 +2150,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: DeleteDeliveryStreamInput,
     ) -> RusotoFuture<DeleteDeliveryStreamOutput, DeleteDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.DeleteDeliveryStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2173,9 +2183,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: DescribeDeliveryStreamInput,
     ) -> RusotoFuture<DescribeDeliveryStreamOutput, DescribeDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.DescribeDeliveryStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2201,9 +2216,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: ListDeliveryStreamsInput,
     ) -> RusotoFuture<ListDeliveryStreamsOutput, ListDeliveryStreamsError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.ListDeliveryStreams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2229,9 +2249,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: ListTagsForDeliveryStreamInput,
     ) -> RusotoFuture<ListTagsForDeliveryStreamOutput, ListTagsForDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Firehose_20150804.ListTagsForDeliveryStream",
@@ -2255,9 +2280,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
 
     /// <p><p>Writes a single data record into an Amazon Kinesis Data Firehose delivery stream. To write multiple data records into a delivery stream, use <a>PutRecordBatch</a>. Applications using these operations are referred to as producers.</p> <p>By default, each delivery stream can take in up to 2,000 transactions per second, 5,000 records per second, or 5 MB per second. If you use <a>PutRecord</a> and <a>PutRecordBatch</a>, the limits are an aggregate across these two operations for each delivery stream. For more information about limits and how to request an increase, see <a href="http://docs.aws.amazon.com/firehose/latest/dev/limits.html">Amazon Kinesis Data Firehose Limits</a>. </p> <p>You must specify the name of the delivery stream and the data record when using <a>PutRecord</a>. The data record consists of a data blob that can be up to 1,000 KB in size, and any kind of data. For example, it can be a segment from a log file, geographic location data, website clickstream data, and so on.</p> <p>Kinesis Data Firehose buffers records before delivering them to the destination. To disambiguate the data blobs at the destination, a common solution is to use delimiters in the data, such as a newline (<code>\n</code>) or some other character unique within the data. This allows the consumer application to parse individual data items when reading the data from the destination.</p> <p>The <code>PutRecord</code> operation returns a <code>RecordId</code>, which is a unique string assigned to each record. Producer applications can use this ID for purposes such as auditability and investigation.</p> <p>If the <code>PutRecord</code> operation throws a <code>ServiceUnavailableException</code>, back off and retry. If the exception persists, it is possible that the throughput limits have been exceeded for the delivery stream. </p> <p>Data records sent to Kinesis Data Firehose are stored for 24 hours from the time they are added to a delivery stream as it tries to send the records to the destination. If the destination is unreachable for more than 24 hours, the data is no longer available.</p> <important> <p>Don&#39;t concatenate two or more base64 strings to form the data fields of your records. Instead, concatenate the raw data, then perform base64 encoding.</p> </important></p>
     fn put_record(&self, input: PutRecordInput) -> RusotoFuture<PutRecordOutput, PutRecordError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.PutRecord");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2283,9 +2313,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: PutRecordBatchInput,
     ) -> RusotoFuture<PutRecordBatchOutput, PutRecordBatchError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.PutRecordBatch");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2312,9 +2347,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: StartDeliveryStreamEncryptionInput,
     ) -> RusotoFuture<StartDeliveryStreamEncryptionOutput, StartDeliveryStreamEncryptionError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Firehose_20150804.StartDeliveryStreamEncryption",
@@ -2341,9 +2381,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: StopDeliveryStreamEncryptionInput,
     ) -> RusotoFuture<StopDeliveryStreamEncryptionOutput, StopDeliveryStreamEncryptionError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "Firehose_20150804.StopDeliveryStreamEncryption",
@@ -2370,9 +2415,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: TagDeliveryStreamInput,
     ) -> RusotoFuture<TagDeliveryStreamOutput, TagDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.TagDeliveryStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2399,9 +2449,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: UntagDeliveryStreamInput,
     ) -> RusotoFuture<UntagDeliveryStreamOutput, UntagDeliveryStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.UntagDeliveryStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2427,9 +2482,14 @@ impl KinesisFirehose for KinesisFirehoseClient {
         &self,
         input: UpdateDestinationInput,
     ) -> RusotoFuture<UpdateDestinationOutput, UpdateDestinationError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "firehose",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Firehose_20150804.UpdateDestination");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

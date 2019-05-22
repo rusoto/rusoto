@@ -2178,9 +2178,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: BatchDeleteBuildsInput,
     ) -> RusotoFuture<BatchDeleteBuildsOutput, BatchDeleteBuildsError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.BatchDeleteBuilds");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2207,9 +2212,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: BatchGetBuildsInput,
     ) -> RusotoFuture<BatchGetBuildsOutput, BatchGetBuildsError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.BatchGetBuilds");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2236,9 +2246,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: BatchGetProjectsInput,
     ) -> RusotoFuture<BatchGetProjectsOutput, BatchGetProjectsError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.BatchGetProjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2265,9 +2280,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: CreateProjectInput,
     ) -> RusotoFuture<CreateProjectOutput, CreateProjectError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.CreateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2294,9 +2314,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: CreateWebhookInput,
     ) -> RusotoFuture<CreateWebhookOutput, CreateWebhookError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.CreateWebhook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2323,9 +2348,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: DeleteProjectInput,
     ) -> RusotoFuture<DeleteProjectOutput, DeleteProjectError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.DeleteProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2352,9 +2382,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: DeleteSourceCredentialsInput,
     ) -> RusotoFuture<DeleteSourceCredentialsOutput, DeleteSourceCredentialsError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.DeleteSourceCredentials");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2378,9 +2413,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: DeleteWebhookInput,
     ) -> RusotoFuture<DeleteWebhookOutput, DeleteWebhookError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.DeleteWebhook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2407,9 +2447,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: ImportSourceCredentialsInput,
     ) -> RusotoFuture<ImportSourceCredentialsOutput, ImportSourceCredentialsError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ImportSourceCredentials");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2433,9 +2478,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: InvalidateProjectCacheInput,
     ) -> RusotoFuture<InvalidateProjectCacheOutput, InvalidateProjectCacheError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.InvalidateProjectCache");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2461,9 +2511,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: ListBuildsInput,
     ) -> RusotoFuture<ListBuildsOutput, ListBuildsError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ListBuilds");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2490,9 +2545,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: ListBuildsForProjectInput,
     ) -> RusotoFuture<ListBuildsForProjectOutput, ListBuildsForProjectError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ListBuildsForProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2517,9 +2577,14 @@ impl CodeBuild for CodeBuildClient {
     fn list_curated_environment_images(
         &self,
     ) -> RusotoFuture<ListCuratedEnvironmentImagesOutput, ListCuratedEnvironmentImagesError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeBuild_20161006.ListCuratedEnvironmentImages",
@@ -2545,9 +2610,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: ListProjectsInput,
     ) -> RusotoFuture<ListProjectsOutput, ListProjectsError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ListProjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2573,9 +2643,14 @@ impl CodeBuild for CodeBuildClient {
     fn list_source_credentials(
         &self,
     ) -> RusotoFuture<ListSourceCredentialsOutput, ListSourceCredentialsError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.ListSourceCredentials");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -2600,9 +2675,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: StartBuildInput,
     ) -> RusotoFuture<StartBuildOutput, StartBuildError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.StartBuild");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2626,9 +2706,14 @@ impl CodeBuild for CodeBuildClient {
 
     /// <p>Attempts to stop running a build.</p>
     fn stop_build(&self, input: StopBuildInput) -> RusotoFuture<StopBuildOutput, StopBuildError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.StopBuild");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2654,9 +2739,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: UpdateProjectInput,
     ) -> RusotoFuture<UpdateProjectOutput, UpdateProjectError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.UpdateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2683,9 +2773,14 @@ impl CodeBuild for CodeBuildClient {
         &self,
         input: UpdateWebhookInput,
     ) -> RusotoFuture<UpdateWebhookOutput, UpdateWebhookError> {
-        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codebuild",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeBuild_20161006.UpdateWebhook");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

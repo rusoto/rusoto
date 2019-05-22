@@ -3104,9 +3104,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: CreateAppRequest,
     ) -> RusotoFuture<CreateAppResponse, CreateAppError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.CreateApp",
@@ -3136,9 +3141,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: CreateReplicationJobRequest,
     ) -> RusotoFuture<CreateReplicationJobResponse, CreateReplicationJobError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.CreateReplicationJob",
@@ -3167,9 +3177,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: DeleteAppRequest,
     ) -> RusotoFuture<DeleteAppResponse, DeleteAppError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteApp",
@@ -3199,9 +3214,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: DeleteAppLaunchConfigurationRequest,
     ) -> RusotoFuture<DeleteAppLaunchConfigurationResponse, DeleteAppLaunchConfigurationError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteAppLaunchConfiguration",
@@ -3231,9 +3251,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         DeleteAppReplicationConfigurationResponse,
         DeleteAppReplicationConfigurationError,
     > {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteAppReplicationConfiguration",
@@ -3262,9 +3287,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: DeleteReplicationJobRequest,
     ) -> RusotoFuture<DeleteReplicationJobResponse, DeleteReplicationJobError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteReplicationJob",
@@ -3292,9 +3322,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
     fn delete_server_catalog(
         &self,
     ) -> RusotoFuture<DeleteServerCatalogResponse, DeleteServerCatalogError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DeleteServerCatalog",
@@ -3322,9 +3357,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: DisassociateConnectorRequest,
     ) -> RusotoFuture<DisassociateConnectorResponse, DisassociateConnectorError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.DisassociateConnector",
@@ -3353,9 +3393,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GenerateChangeSetRequest,
     ) -> RusotoFuture<GenerateChangeSetResponse, GenerateChangeSetError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GenerateChangeSet",
@@ -3385,9 +3430,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GenerateTemplateRequest,
     ) -> RusotoFuture<GenerateTemplateResponse, GenerateTemplateError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GenerateTemplate",
@@ -3414,9 +3464,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
     /// <p>Retrieve information about an application.</p>
     fn get_app(&self, input: GetAppRequest) -> RusotoFuture<GetAppResponse, GetAppError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetApp",
@@ -3445,9 +3500,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetAppLaunchConfigurationRequest,
     ) -> RusotoFuture<GetAppLaunchConfigurationResponse, GetAppLaunchConfigurationError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetAppLaunchConfiguration",
@@ -3475,9 +3535,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         input: GetAppReplicationConfigurationRequest,
     ) -> RusotoFuture<GetAppReplicationConfigurationResponse, GetAppReplicationConfigurationError>
     {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetAppReplicationConfiguration",
@@ -3504,9 +3569,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetConnectorsRequest,
     ) -> RusotoFuture<GetConnectorsResponse, GetConnectorsError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetConnectors",
@@ -3536,9 +3606,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetReplicationJobsRequest,
     ) -> RusotoFuture<GetReplicationJobsResponse, GetReplicationJobsError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetReplicationJobs",
@@ -3568,9 +3643,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetReplicationRunsRequest,
     ) -> RusotoFuture<GetReplicationRunsResponse, GetReplicationRunsError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetReplicationRuns",
@@ -3600,9 +3680,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: GetServersRequest,
     ) -> RusotoFuture<GetServersResponse, GetServersError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.GetServers",
@@ -3631,9 +3716,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
     fn import_server_catalog(
         &self,
     ) -> RusotoFuture<ImportServerCatalogResponse, ImportServerCatalogError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.ImportServerCatalog",
@@ -3661,9 +3751,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: LaunchAppRequest,
     ) -> RusotoFuture<LaunchAppResponse, LaunchAppError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.LaunchApp",
@@ -3690,9 +3785,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
 
     /// <p>Returns a list of summaries for all applications.</p>
     fn list_apps(&self, input: ListAppsRequest) -> RusotoFuture<ListAppsResponse, ListAppsError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.ListApps",
@@ -3722,9 +3822,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: PutAppLaunchConfigurationRequest,
     ) -> RusotoFuture<PutAppLaunchConfigurationResponse, PutAppLaunchConfigurationError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.PutAppLaunchConfiguration",
@@ -3752,9 +3857,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         input: PutAppReplicationConfigurationRequest,
     ) -> RusotoFuture<PutAppReplicationConfigurationResponse, PutAppReplicationConfigurationError>
     {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.PutAppReplicationConfiguration",
@@ -3781,9 +3891,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: StartAppReplicationRequest,
     ) -> RusotoFuture<StartAppReplicationResponse, StartAppReplicationError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.StartAppReplication",
@@ -3812,9 +3927,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: StartOnDemandReplicationRunRequest,
     ) -> RusotoFuture<StartOnDemandReplicationRunResponse, StartOnDemandReplicationRunError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.StartOnDemandReplicationRun",
@@ -3841,9 +3961,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: StopAppReplicationRequest,
     ) -> RusotoFuture<StopAppReplicationResponse, StopAppReplicationError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.StopAppReplication",
@@ -3873,9 +3998,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: TerminateAppRequest,
     ) -> RusotoFuture<TerminateAppResponse, TerminateAppError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.TerminateApp",
@@ -3905,9 +4035,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: UpdateAppRequest,
     ) -> RusotoFuture<UpdateAppResponse, UpdateAppError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.UpdateApp",
@@ -3937,9 +4072,14 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         &self,
         input: UpdateReplicationJobRequest,
     ) -> RusotoFuture<UpdateReplicationJobResponse, UpdateReplicationJobError> {
-        let mut request = SignedRequest::new("POST", "sms", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "sms",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSServerMigrationService_V2016_10_24.UpdateReplicationJob",

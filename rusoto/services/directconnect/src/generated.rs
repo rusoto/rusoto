@@ -3681,9 +3681,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: AllocateConnectionOnInterconnectRequest,
     ) -> RusotoFuture<Connection, AllocateConnectionOnInterconnectError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.AllocateConnectionOnInterconnect",
@@ -3711,9 +3716,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: AllocateHostedConnectionRequest,
     ) -> RusotoFuture<Connection, AllocateHostedConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.AllocateHostedConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3736,9 +3746,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: AllocatePrivateVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, AllocatePrivateVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.AllocatePrivateVirtualInterface",
@@ -3767,9 +3782,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: AllocatePublicVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, AllocatePublicVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.AllocatePublicVirtualInterface",
@@ -3796,9 +3816,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: AssociateConnectionWithLagRequest,
     ) -> RusotoFuture<Connection, AssociateConnectionWithLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.AssociateConnectionWithLag");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3821,9 +3846,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: AssociateHostedConnectionRequest,
     ) -> RusotoFuture<Connection, AssociateHostedConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.AssociateHostedConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3846,9 +3876,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: AssociateVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, AssociateVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.AssociateVirtualInterface");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3872,9 +3907,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: ConfirmConnectionRequest,
     ) -> RusotoFuture<ConfirmConnectionResponse, ConfirmConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.ConfirmConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3902,9 +3942,14 @@ impl DirectConnect for DirectConnectClient {
         input: ConfirmPrivateVirtualInterfaceRequest,
     ) -> RusotoFuture<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError>
     {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.ConfirmPrivateVirtualInterface",
@@ -3932,9 +3977,14 @@ impl DirectConnect for DirectConnectClient {
         input: ConfirmPublicVirtualInterfaceRequest,
     ) -> RusotoFuture<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError>
     {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.ConfirmPublicVirtualInterface",
@@ -3961,9 +4011,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: CreateBGPPeerRequest,
     ) -> RusotoFuture<CreateBGPPeerResponse, CreateBGPPeerError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateBGPPeer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3990,9 +4045,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: CreateConnectionRequest,
     ) -> RusotoFuture<Connection, CreateConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4018,9 +4078,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: CreateDirectConnectGatewayRequest,
     ) -> RusotoFuture<CreateDirectConnectGatewayResult, CreateDirectConnectGatewayError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateDirectConnectGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4047,9 +4112,14 @@ impl DirectConnect for DirectConnectClient {
         CreateDirectConnectGatewayAssociationResult,
         CreateDirectConnectGatewayAssociationError,
     > {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.CreateDirectConnectGatewayAssociation",
@@ -4078,9 +4148,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: CreateInterconnectRequest,
     ) -> RusotoFuture<Interconnect, CreateInterconnectError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateInterconnect");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4103,9 +4178,14 @@ impl DirectConnect for DirectConnectClient {
 
     /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
     fn create_lag(&self, input: CreateLagRequest) -> RusotoFuture<Lag, CreateLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.CreateLag");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4131,9 +4211,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: CreatePrivateVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, CreatePrivateVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.CreatePrivateVirtualInterface",
@@ -4160,9 +4245,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: CreatePublicVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, CreatePublicVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.CreatePublicVirtualInterface",
@@ -4189,9 +4279,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DeleteBGPPeerRequest,
     ) -> RusotoFuture<DeleteBGPPeerResponse, DeleteBGPPeerError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteBGPPeer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4218,9 +4313,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DeleteConnectionRequest,
     ) -> RusotoFuture<Connection, DeleteConnectionError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteConnection");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4246,9 +4346,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DeleteDirectConnectGatewayRequest,
     ) -> RusotoFuture<DeleteDirectConnectGatewayResult, DeleteDirectConnectGatewayError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteDirectConnectGateway");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4275,9 +4380,14 @@ impl DirectConnect for DirectConnectClient {
         DeleteDirectConnectGatewayAssociationResult,
         DeleteDirectConnectGatewayAssociationError,
     > {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.DeleteDirectConnectGatewayAssociation",
@@ -4306,9 +4416,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DeleteInterconnectRequest,
     ) -> RusotoFuture<DeleteInterconnectResponse, DeleteInterconnectError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteInterconnect");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4332,9 +4447,14 @@ impl DirectConnect for DirectConnectClient {
 
     /// <p>Deletes the specified link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
     fn delete_lag(&self, input: DeleteLagRequest) -> RusotoFuture<Lag, DeleteLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteLag");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4360,9 +4480,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DeleteVirtualInterfaceRequest,
     ) -> RusotoFuture<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DeleteVirtualInterface");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4388,9 +4513,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeConnectionLoaRequest,
     ) -> RusotoFuture<DescribeConnectionLoaResponse, DescribeConnectionLoaError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeConnectionLoa");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4416,9 +4546,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeConnectionsRequest,
     ) -> RusotoFuture<Connections, DescribeConnectionsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeConnections");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4443,9 +4578,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeConnectionsOnInterconnectRequest,
     ) -> RusotoFuture<Connections, DescribeConnectionsOnInterconnectError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.DescribeConnectionsOnInterconnect",
@@ -4476,9 +4616,14 @@ impl DirectConnect for DirectConnectClient {
         DescribeDirectConnectGatewayAssociationsResult,
         DescribeDirectConnectGatewayAssociationsError,
     > {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.DescribeDirectConnectGatewayAssociations",
@@ -4508,9 +4653,14 @@ impl DirectConnect for DirectConnectClient {
         DescribeDirectConnectGatewayAttachmentsResult,
         DescribeDirectConnectGatewayAttachmentsError,
     > {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.DescribeDirectConnectGatewayAttachments",
@@ -4539,9 +4689,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeDirectConnectGatewaysRequest,
     ) -> RusotoFuture<DescribeDirectConnectGatewaysResult, DescribeDirectConnectGatewaysError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.DescribeDirectConnectGateways",
@@ -4568,9 +4723,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeHostedConnectionsRequest,
     ) -> RusotoFuture<Connections, DescribeHostedConnectionsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeHostedConnections");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4593,9 +4753,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeInterconnectLoaRequest,
     ) -> RusotoFuture<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeInterconnectLoa");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4619,9 +4784,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeInterconnectsRequest,
     ) -> RusotoFuture<Interconnects, DescribeInterconnectsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeInterconnects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4643,9 +4813,14 @@ impl DirectConnect for DirectConnectClient {
 
     /// <p>Describes all your link aggregation groups (LAG) or the specified LAG.</p>
     fn describe_lags(&self, input: DescribeLagsRequest) -> RusotoFuture<Lags, DescribeLagsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeLags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4668,9 +4843,14 @@ impl DirectConnect for DirectConnectClient {
 
     /// <p>Gets the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     fn describe_loa(&self, input: DescribeLoaRequest) -> RusotoFuture<Loa, DescribeLoaError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeLoa");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4693,9 +4873,14 @@ impl DirectConnect for DirectConnectClient {
 
     /// <p>Lists the AWS Direct Connect locations in the current AWS Region. These are the locations that can be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
     fn describe_locations(&self) -> RusotoFuture<Locations, DescribeLocationsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeLocations");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -4720,9 +4905,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4748,9 +4938,14 @@ impl DirectConnect for DirectConnectClient {
     fn describe_virtual_gateways(
         &self,
     ) -> RusotoFuture<VirtualGateways, DescribeVirtualGatewaysError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeVirtualGateways");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -4772,9 +4967,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DescribeVirtualInterfacesRequest,
     ) -> RusotoFuture<VirtualInterfaces, DescribeVirtualInterfacesError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.DescribeVirtualInterfaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4798,9 +4998,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: DisassociateConnectionFromLagRequest,
     ) -> RusotoFuture<Connection, DisassociateConnectionFromLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.DisassociateConnectionFromLag",
@@ -4826,9 +5031,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.TagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4855,9 +5065,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.UntagResource");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4881,9 +5096,14 @@ impl DirectConnect for DirectConnectClient {
 
     /// <p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value and the number of operational connections falls below the specified value, the LAG automatically goes down to avoid over-utilization of the remaining connections. Adjust this value with care, as it could force the LAG down if it is set higher than the current number of operational connections.</p>
     fn update_lag(&self, input: UpdateLagRequest) -> RusotoFuture<Lag, UpdateLagError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OvertureService.UpdateLag");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -4909,9 +5129,14 @@ impl DirectConnect for DirectConnectClient {
         &self,
         input: UpdateVirtualInterfaceAttributesRequest,
     ) -> RusotoFuture<VirtualInterface, UpdateVirtualInterfaceAttributesError> {
-        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "directconnect",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OvertureService.UpdateVirtualInterfaceAttributes",

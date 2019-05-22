@@ -6648,9 +6648,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateDevicePoolRequest,
     ) -> RusotoFuture<CreateDevicePoolResult, CreateDevicePoolError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateDevicePool");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6677,9 +6682,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateInstanceProfileRequest,
     ) -> RusotoFuture<CreateInstanceProfileResult, CreateInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateInstanceProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6705,9 +6715,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateNetworkProfileRequest,
     ) -> RusotoFuture<CreateNetworkProfileResult, CreateNetworkProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6733,9 +6748,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateProjectRequest,
     ) -> RusotoFuture<CreateProjectResult, CreateProjectError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6762,9 +6782,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateRemoteAccessSessionRequest,
     ) -> RusotoFuture<CreateRemoteAccessSessionResult, CreateRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.CreateRemoteAccessSession",
@@ -6791,9 +6816,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateUploadRequest,
     ) -> RusotoFuture<CreateUploadResult, CreateUploadError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.CreateUpload");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6820,9 +6850,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: CreateVPCEConfigurationRequest,
     ) -> RusotoFuture<CreateVPCEConfigurationResult, CreateVPCEConfigurationError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.CreateVPCEConfiguration",
@@ -6849,9 +6884,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteDevicePoolRequest,
     ) -> RusotoFuture<DeleteDevicePoolResult, DeleteDevicePoolError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteDevicePool");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6878,9 +6918,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteInstanceProfileRequest,
     ) -> RusotoFuture<DeleteInstanceProfileResult, DeleteInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteInstanceProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6906,9 +6951,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteNetworkProfileRequest,
     ) -> RusotoFuture<DeleteNetworkProfileResult, DeleteNetworkProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6934,9 +6984,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteProjectRequest,
     ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6963,9 +7018,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteRemoteAccessSessionRequest,
     ) -> RusotoFuture<DeleteRemoteAccessSessionResult, DeleteRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.DeleteRemoteAccessSession",
@@ -6989,9 +7049,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Deletes the run, given the run ARN.</p> <p> <b>Note</b> Deleting this resource does not stop an in-progress run.</p>
     fn delete_run(&self, input: DeleteRunRequest) -> RusotoFuture<DeleteRunResult, DeleteRunError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7017,9 +7082,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteUploadRequest,
     ) -> RusotoFuture<DeleteUploadResult, DeleteUploadError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.DeleteUpload");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7046,9 +7116,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: DeleteVPCEConfigurationRequest,
     ) -> RusotoFuture<DeleteVPCEConfigurationResult, DeleteVPCEConfigurationError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.DeleteVPCEConfiguration",
@@ -7074,9 +7149,14 @@ impl DeviceFarm for DeviceFarmClient {
     fn get_account_settings(
         &self,
     ) -> RusotoFuture<GetAccountSettingsResult, GetAccountSettingsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetAccountSettings");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -7099,9 +7179,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about a unique device type.</p>
     fn get_device(&self, input: GetDeviceRequest) -> RusotoFuture<GetDeviceResult, GetDeviceError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetDevice");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7127,9 +7212,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetDeviceInstanceRequest,
     ) -> RusotoFuture<GetDeviceInstanceResult, GetDeviceInstanceError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetDeviceInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7156,9 +7246,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetDevicePoolRequest,
     ) -> RusotoFuture<GetDevicePoolResult, GetDevicePoolError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetDevicePool");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7185,9 +7280,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetDevicePoolCompatibilityRequest,
     ) -> RusotoFuture<GetDevicePoolCompatibilityResult, GetDevicePoolCompatibilityError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.GetDevicePoolCompatibility",
@@ -7214,9 +7314,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetInstanceProfileRequest,
     ) -> RusotoFuture<GetInstanceProfileResult, GetInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetInstanceProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7240,9 +7345,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about a job.</p>
     fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResult, GetJobError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7268,9 +7378,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetNetworkProfileRequest,
     ) -> RusotoFuture<GetNetworkProfileResult, GetNetworkProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7297,9 +7412,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetOfferingStatusRequest,
     ) -> RusotoFuture<GetOfferingStatusResult, GetOfferingStatusError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetOfferingStatus");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7326,9 +7446,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetProjectRequest,
     ) -> RusotoFuture<GetProjectResult, GetProjectError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7355,9 +7480,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetRemoteAccessSessionRequest,
     ) -> RusotoFuture<GetRemoteAccessSessionResult, GetRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetRemoteAccessSession");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7380,9 +7510,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about a run.</p>
     fn get_run(&self, input: GetRunRequest) -> RusotoFuture<GetRunResult, GetRunError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7405,9 +7540,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about a suite.</p>
     fn get_suite(&self, input: GetSuiteRequest) -> RusotoFuture<GetSuiteResult, GetSuiteError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetSuite");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7430,9 +7570,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about a test.</p>
     fn get_test(&self, input: GetTestRequest) -> RusotoFuture<GetTestResult, GetTestError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetTest");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7455,9 +7600,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about an upload.</p>
     fn get_upload(&self, input: GetUploadRequest) -> RusotoFuture<GetUploadResult, GetUploadError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetUpload");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7483,9 +7633,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: GetVPCEConfigurationRequest,
     ) -> RusotoFuture<GetVPCEConfigurationResult, GetVPCEConfigurationError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.GetVPCEConfiguration");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7511,9 +7666,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: InstallToRemoteAccessSessionRequest,
     ) -> RusotoFuture<InstallToRemoteAccessSessionResult, InstallToRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.InstallToRemoteAccessSession",
@@ -7540,9 +7700,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListArtifactsRequest,
     ) -> RusotoFuture<ListArtifactsResult, ListArtifactsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListArtifacts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7569,9 +7734,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListDeviceInstancesRequest,
     ) -> RusotoFuture<ListDeviceInstancesResult, ListDeviceInstancesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListDeviceInstances");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7597,9 +7767,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListDevicePoolsRequest,
     ) -> RusotoFuture<ListDevicePoolsResult, ListDevicePoolsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListDevicePools");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7626,9 +7801,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListDevicesRequest,
     ) -> RusotoFuture<ListDevicesResult, ListDevicesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListDevices");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7655,9 +7835,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListInstanceProfilesRequest,
     ) -> RusotoFuture<ListInstanceProfilesResult, ListInstanceProfilesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListInstanceProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7680,9 +7865,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about jobs for a given test run.</p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResult, ListJobsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7708,9 +7898,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListNetworkProfilesRequest,
     ) -> RusotoFuture<ListNetworkProfilesResult, ListNetworkProfilesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListNetworkProfiles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7736,9 +7931,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListOfferingPromotionsRequest,
     ) -> RusotoFuture<ListOfferingPromotionsResult, ListOfferingPromotionsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListOfferingPromotions");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7764,9 +7964,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListOfferingTransactionsRequest,
     ) -> RusotoFuture<ListOfferingTransactionsResult, ListOfferingTransactionsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.ListOfferingTransactions",
@@ -7793,9 +7998,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListOfferingsRequest,
     ) -> RusotoFuture<ListOfferingsResult, ListOfferingsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListOfferings");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7822,9 +8032,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListProjectsRequest,
     ) -> RusotoFuture<ListProjectsResult, ListProjectsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListProjects");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7851,9 +8066,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListRemoteAccessSessionsRequest,
     ) -> RusotoFuture<ListRemoteAccessSessionsResult, ListRemoteAccessSessionsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.ListRemoteAccessSessions",
@@ -7877,9 +8097,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about runs, given an AWS Device Farm project ARN.</p>
     fn list_runs(&self, input: ListRunsRequest) -> RusotoFuture<ListRunsResult, ListRunsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListRuns");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7905,9 +8130,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListSamplesRequest,
     ) -> RusotoFuture<ListSamplesResult, ListSamplesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListSamples");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7934,9 +8164,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListSuitesRequest,
     ) -> RusotoFuture<ListSuitesResult, ListSuitesError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListSuites");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7960,9 +8195,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Gets information about tests in a given test suite.</p>
     fn list_tests(&self, input: ListTestsRequest) -> RusotoFuture<ListTestsResult, ListTestsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListTests");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7988,9 +8228,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListUniqueProblemsRequest,
     ) -> RusotoFuture<ListUniqueProblemsResult, ListUniqueProblemsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListUniqueProblems");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8017,9 +8262,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListUploadsRequest,
     ) -> RusotoFuture<ListUploadsResult, ListUploadsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListUploads");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8046,9 +8296,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ListVPCEConfigurationsRequest,
     ) -> RusotoFuture<ListVPCEConfigurationsResult, ListVPCEConfigurationsError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ListVPCEConfigurations");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8074,9 +8329,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: PurchaseOfferingRequest,
     ) -> RusotoFuture<PurchaseOfferingResult, PurchaseOfferingError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.PurchaseOffering");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8103,9 +8363,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: RenewOfferingRequest,
     ) -> RusotoFuture<RenewOfferingResult, RenewOfferingError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.RenewOffering");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8132,9 +8397,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: ScheduleRunRequest,
     ) -> RusotoFuture<ScheduleRunResult, ScheduleRunError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.ScheduleRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8158,9 +8428,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Initiates a stop request for the current job. AWS Device Farm will immediately stop the job on the device where tests have not started executing, and you will not be billed for this device. On the device where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on the device. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>
     fn stop_job(&self, input: StopJobRequest) -> RusotoFuture<StopJobResult, StopJobError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.StopJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8186,9 +8461,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: StopRemoteAccessSessionRequest,
     ) -> RusotoFuture<StopRemoteAccessSessionResult, StopRemoteAccessSessionError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.StopRemoteAccessSession",
@@ -8212,9 +8492,14 @@ impl DeviceFarm for DeviceFarmClient {
 
     /// <p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>
     fn stop_run(&self, input: StopRunRequest) -> RusotoFuture<StopRunResult, StopRunError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.StopRun");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8240,9 +8525,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateDeviceInstanceRequest,
     ) -> RusotoFuture<UpdateDeviceInstanceResult, UpdateDeviceInstanceError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateDeviceInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8268,9 +8558,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateDevicePoolRequest,
     ) -> RusotoFuture<UpdateDevicePoolResult, UpdateDevicePoolError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateDevicePool");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8297,9 +8592,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateInstanceProfileRequest,
     ) -> RusotoFuture<UpdateInstanceProfileResult, UpdateInstanceProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateInstanceProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8325,9 +8625,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateNetworkProfileRequest,
     ) -> RusotoFuture<UpdateNetworkProfileResult, UpdateNetworkProfileError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateNetworkProfile");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8353,9 +8658,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateProjectRequest,
     ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateProject");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8382,9 +8692,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateUploadRequest,
     ) -> RusotoFuture<UpdateUploadResult, UpdateUploadError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "DeviceFarm_20150623.UpdateUpload");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -8411,9 +8726,14 @@ impl DeviceFarm for DeviceFarmClient {
         &self,
         input: UpdateVPCEConfigurationRequest,
     ) -> RusotoFuture<UpdateVPCEConfigurationResult, UpdateVPCEConfigurationError> {
-        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "devicefarm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "DeviceFarm_20150623.UpdateVPCEConfiguration",

@@ -1451,9 +1451,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: AssociateNodeRequest,
     ) -> RusotoFuture<AssociateNodeResponse, AssociateNodeError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.AssociateNode");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1480,9 +1485,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: CreateBackupRequest,
     ) -> RusotoFuture<CreateBackupResponse, CreateBackupError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.CreateBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1509,9 +1519,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: CreateServerRequest,
     ) -> RusotoFuture<CreateServerResponse, CreateServerError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.CreateServer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1538,9 +1553,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: DeleteBackupRequest,
     ) -> RusotoFuture<DeleteBackupResponse, DeleteBackupError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DeleteBackup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1567,9 +1587,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: DeleteServerRequest,
     ) -> RusotoFuture<DeleteServerResponse, DeleteServerError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DeleteServer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1595,9 +1620,14 @@ impl OpsWorksCM for OpsWorksCMClient {
     fn describe_account_attributes(
         &self,
     ) -> RusotoFuture<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorksCM_V2016_11_01.DescribeAccountAttributes",
@@ -1623,9 +1653,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: DescribeBackupsRequest,
     ) -> RusotoFuture<DescribeBackupsResponse, DescribeBackupsError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeBackups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1652,9 +1687,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: DescribeEventsRequest,
     ) -> RusotoFuture<DescribeEventsResponse, DescribeEventsError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeEvents");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1682,9 +1722,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         input: DescribeNodeAssociationStatusRequest,
     ) -> RusotoFuture<DescribeNodeAssociationStatusResponse, DescribeNodeAssociationStatusError>
     {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorksCM_V2016_11_01.DescribeNodeAssociationStatus",
@@ -1711,9 +1756,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: DescribeServersRequest,
     ) -> RusotoFuture<DescribeServersResponse, DescribeServersError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DescribeServers");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1740,9 +1790,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: DisassociateNodeRequest,
     ) -> RusotoFuture<DisassociateNodeResponse, DisassociateNodeError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.DisassociateNode");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1769,9 +1824,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: ExportServerEngineAttributeRequest,
     ) -> RusotoFuture<ExportServerEngineAttributeResponse, ExportServerEngineAttributeError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorksCM_V2016_11_01.ExportServerEngineAttribute",
@@ -1798,9 +1858,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: RestoreServerRequest,
     ) -> RusotoFuture<RestoreServerResponse, RestoreServerError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.RestoreServer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1827,9 +1892,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: StartMaintenanceRequest,
     ) -> RusotoFuture<StartMaintenanceResponse, StartMaintenanceError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.StartMaintenance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1856,9 +1926,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: UpdateServerRequest,
     ) -> RusotoFuture<UpdateServerResponse, UpdateServerError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "OpsWorksCM_V2016_11_01.UpdateServer");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1885,9 +1960,14 @@ impl OpsWorksCM for OpsWorksCMClient {
         &self,
         input: UpdateServerEngineAttributesRequest,
     ) -> RusotoFuture<UpdateServerEngineAttributesResponse, UpdateServerEngineAttributesError> {
-        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "opsworks-cm",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "OpsWorksCM_V2016_11_01.UpdateServerEngineAttributes",

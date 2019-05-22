@@ -6021,9 +6021,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: AddTagsToOnPremisesInstancesInput,
     ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.AddTagsToOnPremisesInstances",
@@ -6047,9 +6052,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetApplicationRevisionsInput,
     ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetApplicationRevisions",
@@ -6076,9 +6086,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetApplicationsInput,
     ) -> RusotoFuture<BatchGetApplicationsOutput, BatchGetApplicationsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.BatchGetApplications");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6104,9 +6119,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetDeploymentGroupsInput,
     ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentGroups",
@@ -6133,9 +6153,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetDeploymentInstancesInput,
     ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentInstances",
@@ -6162,9 +6187,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetDeploymentTargetsInput,
     ) -> RusotoFuture<BatchGetDeploymentTargetsOutput, BatchGetDeploymentTargetsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetDeploymentTargets",
@@ -6191,9 +6221,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetDeploymentsInput,
     ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.BatchGetDeployments");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6219,9 +6254,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: BatchGetOnPremisesInstancesInput,
     ) -> RusotoFuture<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.BatchGetOnPremisesInstances",
@@ -6248,9 +6288,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ContinueDeploymentInput,
     ) -> RusotoFuture<(), ContinueDeploymentError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ContinueDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6274,9 +6319,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: CreateApplicationInput,
     ) -> RusotoFuture<CreateApplicationOutput, CreateApplicationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6303,9 +6353,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: CreateDeploymentInput,
     ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6332,9 +6387,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: CreateDeploymentConfigInput,
     ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeploymentConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6360,9 +6420,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: CreateDeploymentGroupInput,
     ) -> RusotoFuture<CreateDeploymentGroupOutput, CreateDeploymentGroupError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.CreateDeploymentGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6388,9 +6453,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeleteApplicationInput,
     ) -> RusotoFuture<(), DeleteApplicationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6414,9 +6484,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeleteDeploymentConfigInput,
     ) -> RusotoFuture<(), DeleteDeploymentConfigError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteDeploymentConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6439,9 +6514,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeleteDeploymentGroupInput,
     ) -> RusotoFuture<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.DeleteDeploymentGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6467,9 +6547,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeleteGitHubAccountTokenInput,
     ) -> RusotoFuture<DeleteGitHubAccountTokenOutput, DeleteGitHubAccountTokenError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.DeleteGitHubAccountToken",
@@ -6496,9 +6581,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: DeregisterOnPremisesInstanceInput,
     ) -> RusotoFuture<(), DeregisterOnPremisesInstanceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.DeregisterOnPremisesInstance",
@@ -6522,9 +6612,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetApplicationInput,
     ) -> RusotoFuture<GetApplicationOutput, GetApplicationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6551,9 +6646,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetApplicationRevisionInput,
     ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetApplicationRevision");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6579,9 +6679,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentInput,
     ) -> RusotoFuture<GetDeploymentOutput, GetDeploymentError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6608,9 +6713,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentConfigInput,
     ) -> RusotoFuture<GetDeploymentConfigOutput, GetDeploymentConfigError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentConfig");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6636,9 +6746,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentGroupInput,
     ) -> RusotoFuture<GetDeploymentGroupOutput, GetDeploymentGroupError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6665,9 +6780,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentInstanceInput,
     ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6693,9 +6813,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetDeploymentTargetInput,
     ) -> RusotoFuture<GetDeploymentTargetOutput, GetDeploymentTargetError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentTarget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6721,9 +6846,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: GetOnPremisesInstanceInput,
     ) -> RusotoFuture<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.GetOnPremisesInstance");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6749,9 +6879,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListApplicationRevisionsInput,
     ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListApplicationRevisions",
@@ -6778,9 +6913,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListApplicationsInput,
     ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListApplications");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6807,9 +6947,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentConfigsInput,
     ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentConfigs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6835,9 +6980,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentGroupsInput,
     ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6863,9 +7013,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentInstancesInput,
     ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListDeploymentInstances",
@@ -6892,9 +7047,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentTargetsInput,
     ) -> RusotoFuture<ListDeploymentTargetsOutput, ListDeploymentTargetsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentTargets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6920,9 +7080,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListDeploymentsInput,
     ) -> RusotoFuture<ListDeploymentsOutput, ListDeploymentsError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeployments");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -6949,9 +7114,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListGitHubAccountTokenNamesInput,
     ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListGitHubAccountTokenNames",
@@ -6978,9 +7148,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: ListOnPremisesInstancesInput,
     ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.ListOnPremisesInstances",
@@ -7010,9 +7185,14 @@ impl CodeDeploy for CodeDeployClient {
         PutLifecycleEventHookExecutionStatusOutput,
         PutLifecycleEventHookExecutionStatusError,
     > {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.PutLifecycleEventHookExecutionStatus",
@@ -7041,9 +7221,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: RegisterApplicationRevisionInput,
     ) -> RusotoFuture<(), RegisterApplicationRevisionError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RegisterApplicationRevision",
@@ -7067,9 +7252,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: RegisterOnPremisesInstanceInput,
     ) -> RusotoFuture<(), RegisterOnPremisesInstanceError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RegisterOnPremisesInstance",
@@ -7093,9 +7283,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: RemoveTagsFromOnPremisesInstancesInput,
     ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.RemoveTagsFromOnPremisesInstances",
@@ -7121,9 +7316,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: SkipWaitTimeForInstanceTerminationInput,
     ) -> RusotoFuture<(), SkipWaitTimeForInstanceTerminationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "CodeDeploy_20141006.SkipWaitTimeForInstanceTermination",
@@ -7149,9 +7349,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: StopDeploymentInput,
     ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.StopDeployment");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7178,9 +7383,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: UpdateApplicationInput,
     ) -> RusotoFuture<(), UpdateApplicationError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.UpdateApplication");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -7204,9 +7414,14 @@ impl CodeDeploy for CodeDeployClient {
         &self,
         input: UpdateDeploymentGroupInput,
     ) -> RusotoFuture<UpdateDeploymentGroupOutput, UpdateDeploymentGroupError> {
-        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "codedeploy",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "CodeDeploy_20141006.UpdateDeploymentGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

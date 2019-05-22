@@ -397,9 +397,14 @@ impl PerformanceInsights for PerformanceInsightsClient {
         &self,
         input: DescribeDimensionKeysRequest,
     ) -> RusotoFuture<DescribeDimensionKeysResponse, DescribeDimensionKeysError> {
-        let mut request = SignedRequest::new("POST", "pi", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "pi",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PerformanceInsightsv20180227.DescribeDimensionKeys",
@@ -428,9 +433,14 @@ impl PerformanceInsights for PerformanceInsightsClient {
         &self,
         input: GetResourceMetricsRequest,
     ) -> RusotoFuture<GetResourceMetricsResponse, GetResourceMetricsError> {
-        let mut request = SignedRequest::new("POST", "pi", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "pi",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "PerformanceInsightsv20180227.GetResourceMetrics",

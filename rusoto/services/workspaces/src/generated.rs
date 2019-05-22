@@ -2855,9 +2855,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: AssociateIpGroupsRequest,
     ) -> RusotoFuture<AssociateIpGroupsResult, AssociateIpGroupsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.AssociateIpGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2884,9 +2889,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: AuthorizeIpRulesRequest,
     ) -> RusotoFuture<AuthorizeIpRulesResult, AuthorizeIpRulesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.AuthorizeIpRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2913,9 +2923,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: CreateIpGroupRequest,
     ) -> RusotoFuture<CreateIpGroupResult, CreateIpGroupError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.CreateIpGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2942,9 +2957,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: CreateTagsRequest,
     ) -> RusotoFuture<CreateTagsResult, CreateTagsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.CreateTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2971,9 +2991,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: CreateWorkspacesRequest,
     ) -> RusotoFuture<CreateWorkspacesResult, CreateWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.CreateWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3000,9 +3025,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DeleteIpGroupRequest,
     ) -> RusotoFuture<DeleteIpGroupResult, DeleteIpGroupError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DeleteIpGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3029,9 +3059,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DeleteTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3058,9 +3093,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DeleteWorkspaceImageRequest,
     ) -> RusotoFuture<DeleteWorkspaceImageResult, DeleteWorkspaceImageError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DeleteWorkspaceImage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3083,9 +3123,14 @@ impl Workspaces for WorkspacesClient {
 
     /// <p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>
     fn describe_account(&self) -> RusotoFuture<DescribeAccountResult, DescribeAccountError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeAccount");
         request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
 
@@ -3111,9 +3156,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeAccountModificationsRequest,
     ) -> RusotoFuture<DescribeAccountModificationsResult, DescribeAccountModificationsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "WorkspacesService.DescribeAccountModifications",
@@ -3140,9 +3190,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeClientPropertiesRequest,
     ) -> RusotoFuture<DescribeClientPropertiesResult, DescribeClientPropertiesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeClientProperties");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3166,9 +3221,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeIpGroupsRequest,
     ) -> RusotoFuture<DescribeIpGroupsResult, DescribeIpGroupsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeIpGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3195,9 +3255,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResult, DescribeTagsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeTags");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3224,9 +3289,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeWorkspaceBundlesRequest,
     ) -> RusotoFuture<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaceBundles");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3250,9 +3320,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeWorkspaceDirectoriesRequest,
     ) -> RusotoFuture<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "WorkspacesService.DescribeWorkspaceDirectories",
@@ -3279,9 +3354,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeWorkspaceImagesRequest,
     ) -> RusotoFuture<DescribeWorkspaceImagesResult, DescribeWorkspaceImagesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaceImages");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3305,9 +3385,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DescribeWorkspacesRequest,
     ) -> RusotoFuture<DescribeWorkspacesResult, DescribeWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3337,9 +3422,14 @@ impl Workspaces for WorkspacesClient {
         DescribeWorkspacesConnectionStatusResult,
         DescribeWorkspacesConnectionStatusError,
     > {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "WorkspacesService.DescribeWorkspacesConnectionStatus",
@@ -3368,9 +3458,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: DisassociateIpGroupsRequest,
     ) -> RusotoFuture<DisassociateIpGroupsResult, DisassociateIpGroupsError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.DisassociateIpGroups");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3396,9 +3491,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ImportWorkspaceImageRequest,
     ) -> RusotoFuture<ImportWorkspaceImageResult, ImportWorkspaceImageError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.ImportWorkspaceImage");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3425,9 +3525,14 @@ impl Workspaces for WorkspacesClient {
         input: ListAvailableManagementCidrRangesRequest,
     ) -> RusotoFuture<ListAvailableManagementCidrRangesResult, ListAvailableManagementCidrRangesError>
     {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "WorkspacesService.ListAvailableManagementCidrRanges",
@@ -3456,9 +3561,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ModifyAccountRequest,
     ) -> RusotoFuture<ModifyAccountResult, ModifyAccountError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.ModifyAccount");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3485,9 +3595,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ModifyClientPropertiesRequest,
     ) -> RusotoFuture<ModifyClientPropertiesResult, ModifyClientPropertiesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.ModifyClientProperties");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3513,9 +3628,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ModifyWorkspacePropertiesRequest,
     ) -> RusotoFuture<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "WorkspacesService.ModifyWorkspaceProperties",
@@ -3542,9 +3662,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: ModifyWorkspaceStateRequest,
     ) -> RusotoFuture<ModifyWorkspaceStateResult, ModifyWorkspaceStateError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.ModifyWorkspaceState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3570,9 +3695,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: RebootWorkspacesRequest,
     ) -> RusotoFuture<RebootWorkspacesResult, RebootWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.RebootWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3599,9 +3729,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: RebuildWorkspacesRequest,
     ) -> RusotoFuture<RebuildWorkspacesResult, RebuildWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.RebuildWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3628,9 +3763,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: RevokeIpRulesRequest,
     ) -> RusotoFuture<RevokeIpRulesResult, RevokeIpRulesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.RevokeIpRules");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3657,9 +3797,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: StartWorkspacesRequest,
     ) -> RusotoFuture<StartWorkspacesResult, StartWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.StartWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3686,9 +3831,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: StopWorkspacesRequest,
     ) -> RusotoFuture<StopWorkspacesResult, StopWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.StopWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3715,9 +3865,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: TerminateWorkspacesRequest,
     ) -> RusotoFuture<TerminateWorkspacesResult, TerminateWorkspacesError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.TerminateWorkspaces");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -3743,9 +3898,14 @@ impl Workspaces for WorkspacesClient {
         &self,
         input: UpdateRulesOfIpGroupRequest,
     ) -> RusotoFuture<UpdateRulesOfIpGroupResult, UpdateRulesOfIpGroupError> {
-        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "workspaces",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "WorkspacesService.UpdateRulesOfIpGroup");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

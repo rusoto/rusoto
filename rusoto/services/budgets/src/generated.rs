@@ -1461,9 +1461,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: CreateBudgetRequest,
     ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateBudget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1490,9 +1495,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: CreateNotificationRequest,
     ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateNotification");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1519,9 +1529,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: CreateSubscriberRequest,
     ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.CreateSubscriber");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1548,9 +1563,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: DeleteBudgetRequest,
     ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteBudget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1577,9 +1597,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: DeleteNotificationRequest,
     ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteNotification");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1606,9 +1631,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: DeleteSubscriberRequest,
     ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DeleteSubscriber");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1635,9 +1665,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: DescribeBudgetRequest,
     ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DescribeBudget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1665,9 +1700,14 @@ impl Budgets for BudgetsClient {
         input: DescribeBudgetPerformanceHistoryRequest,
     ) -> RusotoFuture<DescribeBudgetPerformanceHistoryResponse, DescribeBudgetPerformanceHistoryError>
     {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSBudgetServiceGateway.DescribeBudgetPerformanceHistory",
@@ -1696,9 +1736,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: DescribeBudgetsRequest,
     ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.DescribeBudgets");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1726,9 +1771,14 @@ impl Budgets for BudgetsClient {
         input: DescribeNotificationsForBudgetRequest,
     ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>
     {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSBudgetServiceGateway.DescribeNotificationsForBudget",
@@ -1758,9 +1808,14 @@ impl Budgets for BudgetsClient {
         DescribeSubscribersForNotificationResponse,
         DescribeSubscribersForNotificationError,
     > {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSBudgetServiceGateway.DescribeSubscribersForNotification",
@@ -1789,9 +1844,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: UpdateBudgetRequest,
     ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateBudget");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1818,9 +1878,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: UpdateNotificationRequest,
     ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateNotification");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1847,9 +1912,14 @@ impl Budgets for BudgetsClient {
         &self,
         input: UpdateSubscriberRequest,
     ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError> {
-        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "budgets",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSBudgetServiceGateway.UpdateSubscriber");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

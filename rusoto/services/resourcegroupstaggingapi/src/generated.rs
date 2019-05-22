@@ -518,9 +518,14 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         &self,
         input: GetResourcesInput,
     ) -> RusotoFuture<GetResourcesOutput, GetResourcesError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "tagging",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.GetResources",
@@ -550,9 +555,14 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         &self,
         input: GetTagKeysInput,
     ) -> RusotoFuture<GetTagKeysOutput, GetTagKeysError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "tagging",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.GetTagKeys",
@@ -582,9 +592,14 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         &self,
         input: GetTagValuesInput,
     ) -> RusotoFuture<GetTagValuesOutput, GetTagValuesError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "tagging",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.GetTagValues",
@@ -614,9 +629,14 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         &self,
         input: TagResourcesInput,
     ) -> RusotoFuture<TagResourcesOutput, TagResourcesError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "tagging",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.TagResources",
@@ -646,9 +666,14 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         &self,
         input: UntagResourcesInput,
     ) -> RusotoFuture<UntagResourcesOutput, UntagResourcesError> {
-        let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "tagging",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "ResourceGroupsTaggingAPI_20170126.UntagResources",

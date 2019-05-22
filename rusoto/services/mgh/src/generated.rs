@@ -1860,9 +1860,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: AssociateCreatedArtifactRequest,
     ) -> RusotoFuture<AssociateCreatedArtifactResult, AssociateCreatedArtifactError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.AssociateCreatedArtifact");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1886,9 +1891,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: AssociateDiscoveredResourceRequest,
     ) -> RusotoFuture<AssociateDiscoveredResourceResult, AssociateDiscoveredResourceError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSMigrationHub.AssociateDiscoveredResource",
@@ -1915,9 +1925,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: CreateProgressUpdateStreamRequest,
     ) -> RusotoFuture<CreateProgressUpdateStreamResult, CreateProgressUpdateStreamError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.CreateProgressUpdateStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1941,9 +1956,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: DeleteProgressUpdateStreamRequest,
     ) -> RusotoFuture<DeleteProgressUpdateStreamResult, DeleteProgressUpdateStreamError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.DeleteProgressUpdateStream");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1967,9 +1987,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: DescribeApplicationStateRequest,
     ) -> RusotoFuture<DescribeApplicationStateResult, DescribeApplicationStateError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.DescribeApplicationState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1993,9 +2018,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: DescribeMigrationTaskRequest,
     ) -> RusotoFuture<DescribeMigrationTaskResult, DescribeMigrationTaskError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.DescribeMigrationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2021,9 +2051,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: DisassociateCreatedArtifactRequest,
     ) -> RusotoFuture<DisassociateCreatedArtifactResult, DisassociateCreatedArtifactError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSMigrationHub.DisassociateCreatedArtifact",
@@ -2051,9 +2086,14 @@ impl MigrationHub for MigrationHubClient {
         input: DisassociateDiscoveredResourceRequest,
     ) -> RusotoFuture<DisassociateDiscoveredResourceResult, DisassociateDiscoveredResourceError>
     {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
             "AWSMigrationHub.DisassociateDiscoveredResource",
@@ -2080,9 +2120,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ImportMigrationTaskRequest,
     ) -> RusotoFuture<ImportMigrationTaskResult, ImportMigrationTaskError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.ImportMigrationTask");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2108,9 +2153,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListCreatedArtifactsRequest,
     ) -> RusotoFuture<ListCreatedArtifactsResult, ListCreatedArtifactsError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.ListCreatedArtifacts");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2136,9 +2186,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListDiscoveredResourcesRequest,
     ) -> RusotoFuture<ListDiscoveredResourcesResult, ListDiscoveredResourcesError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.ListDiscoveredResources");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2162,9 +2217,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListMigrationTasksRequest,
     ) -> RusotoFuture<ListMigrationTasksResult, ListMigrationTasksError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.ListMigrationTasks");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2191,9 +2251,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: ListProgressUpdateStreamsRequest,
     ) -> RusotoFuture<ListProgressUpdateStreamsResult, ListProgressUpdateStreamsError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.ListProgressUpdateStreams");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2217,9 +2282,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: NotifyApplicationStateRequest,
     ) -> RusotoFuture<NotifyApplicationStateResult, NotifyApplicationStateError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.NotifyApplicationState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2245,9 +2315,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: NotifyMigrationTaskStateRequest,
     ) -> RusotoFuture<NotifyMigrationTaskStateResult, NotifyMigrationTaskStateError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.NotifyMigrationTaskState");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -2271,9 +2346,14 @@ impl MigrationHub for MigrationHubClient {
         &self,
         input: PutResourceAttributesRequest,
     ) -> RusotoFuture<PutResourceAttributesResult, PutResourceAttributesError> {
-        let mut request = SignedRequest::new("POST", "mgh", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "mgh",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "AWSMigrationHub.PutResourceAttributes");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));

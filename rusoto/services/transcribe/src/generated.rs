@@ -972,9 +972,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: CreateVocabularyRequest,
     ) -> RusotoFuture<CreateVocabularyResponse, CreateVocabularyError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.CreateVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1001,9 +1006,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: DeleteTranscriptionJobRequest,
     ) -> RusotoFuture<(), DeleteTranscriptionJobError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.DeleteTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1026,9 +1036,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: DeleteVocabularyRequest,
     ) -> RusotoFuture<(), DeleteVocabularyError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.DeleteVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1052,9 +1067,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: GetTranscriptionJobRequest,
     ) -> RusotoFuture<GetTranscriptionJobResponse, GetTranscriptionJobError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.GetTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1080,9 +1100,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: GetVocabularyRequest,
     ) -> RusotoFuture<GetVocabularyResponse, GetVocabularyError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.GetVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1109,9 +1134,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: ListTranscriptionJobsRequest,
     ) -> RusotoFuture<ListTranscriptionJobsResponse, ListTranscriptionJobsError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.ListTranscriptionJobs");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1137,9 +1167,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: ListVocabulariesRequest,
     ) -> RusotoFuture<ListVocabulariesResponse, ListVocabulariesError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.ListVocabularies");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1166,9 +1201,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: StartTranscriptionJobRequest,
     ) -> RusotoFuture<StartTranscriptionJobResponse, StartTranscriptionJobError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.StartTranscriptionJob");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
@@ -1194,9 +1234,14 @@ impl Transcribe for TranscribeClient {
         &self,
         input: UpdateVocabularyRequest,
     ) -> RusotoFuture<UpdateVocabularyResponse, UpdateVocabularyError> {
-        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+        let mut request = SignedRequest::new_with_content_type(
+            "POST",
+            "transcribe",
+            &self.region,
+            "/",
+            "application/x-amz-json-1.1",
+        );
 
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header("x-amz-target", "Transcribe.UpdateVocabulary");
         let encoded = serde_json::to_string(&input).unwrap();
         request.set_payload(Some(encoded));
