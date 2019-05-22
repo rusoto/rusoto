@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use serde_json;
-
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 /// <p><p>A JSON object containing one or more of the following fields:</p> <ul> <li> <p> <a>ActivateGatewayInput$ActivationKey</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayName</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayRegion</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayTimezone</a> </p> </li> <li> <p> <a>ActivateGatewayInput$GatewayType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$TapeDriveType</a> </p> </li> <li> <p> <a>ActivateGatewayInput$MediumChangerType</a> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ActivateGatewayInput {

@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use serde_json;
-
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 /// <p>This section describes operations that you can perform on an AWS Elemental MediaStore container.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]

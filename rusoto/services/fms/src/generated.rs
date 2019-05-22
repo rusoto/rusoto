@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use serde_json;
-
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateAdminAccountRequest {
     /// <p>The AWS account ID to associate with AWS Firewall Manager as the AWS Firewall Manager administrator account. This can be an AWS Organizations master account or a member account. For more information about AWS Organizations and master accounts, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts.html">Managing the AWS Accounts in Your Organization</a>.</p>

@@ -21,10 +21,9 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError, RusotoFuture};
 
-use serde_json;
-
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
+use serde_json;
 /// <p>Represents an attribute for describing the key schema for the table and indexes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AttributeDefinition {
