@@ -70,13 +70,17 @@ impl GenerateProtocol for JsonGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
-        writeln!(
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+        let res = writeln!(
             writer,
-            "use serde_json;
-        use rusoto_core::signature::SignedRequest;
-        use rusoto_core::proto;"
-        )
+            "
+        use rusoto_core::proto;
+        use rusoto_core::signature::SignedRequest;"
+        );
+        if service.needs_serde_json_crate() {
+            return writeln!(writer, "use serde_json;");
+        }
+        res
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {

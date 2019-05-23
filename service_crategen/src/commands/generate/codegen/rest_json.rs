@@ -104,18 +104,20 @@ impl GenerateProtocol for RestJsonGenerator {
     }
 
     fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
-        writeln!(writer, "use serde_json;")?;
-
         // avoid unused imports when building services that don't use params
         if service_has_query_parameters(service) {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
         }
 
-        writeln!(
+        let res = writeln!(
             writer,
             "use rusoto_core::signature::SignedRequest;
                   use rusoto_core::proto;"
-        )
+        );
+        if service.needs_serde_json_crate() {
+            return writeln!(writer, "use serde_json;");
+        }
+        res
     }
 
     fn serialize_trait(&self) -> Option<&'static str> {

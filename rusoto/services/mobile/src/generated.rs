@@ -24,7 +24,6 @@ use rusoto_core::{Client, RusotoError, RusotoFuture};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
-use serde_json;
 /// <p> The details of the bundle. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]

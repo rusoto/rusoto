@@ -22,7 +22,6 @@ extern crate rusoto_core;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
-extern crate serde_json;
 
 mod generated;
 mod custom;

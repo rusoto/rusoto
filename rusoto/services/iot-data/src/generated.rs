@@ -24,7 +24,6 @@ use rusoto_core::{Client, RusotoError, RusotoFuture};
 use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
-use serde_json;
 /// <p>The input for the DeleteThingShadow operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteThingShadowRequest {
