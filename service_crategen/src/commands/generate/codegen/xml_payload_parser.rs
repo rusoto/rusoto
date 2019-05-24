@@ -243,7 +243,12 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> S
         ShapeType::List => generate_list_deserializer(shape, service),
         ShapeType::Map => generate_map_deserializer(shape),
         ShapeType::Structure => generate_struct_deserializer(name, service, shape),
-        _ => generate_primitive_deserializer(shape),
+
+        // All policies returned by the IAM APIs are URI-encoded, and
+        // they all use this shape name so we're able to match on this safely. botocore does the same
+        // thing to ensure a consistent user experience. Other services that handle IAM policies don't
+        // need the same treatment.
+        _ => generate_primitive_deserializer(shape, name == "PolicyDocumentType"),
     }
 }
 
@@ -351,8 +356,9 @@ fn generate_map_deserializer(shape: &Shape) -> String {
     }
 }
 
-fn generate_primitive_deserializer(shape: &Shape) -> String {
+fn generate_primitive_deserializer(shape: &Shape, percent_decode: bool) -> String {
     let statement = match shape.shape_type {
+        ShapeType::String if percent_decode => "rusoto_core::signature::decode_uri(&characters(stack)?)",
         ShapeType::String | ShapeType::Timestamp => "characters(stack)?",
         ShapeType::Integer | ShapeType::Long => {
             "i64::from_str(characters(stack)?.as_ref()).unwrap()"
