@@ -3,9 +3,10 @@ use toml;
 use std::collections::BTreeMap;
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize)]
-pub struct Manifest {
-    pub package: Metadata,
-    pub badges: Option<BTreeMap<String, Badge>>,
+pub struct Manifest<'a> {
+    pub package: Metadata<'a>,
+    #[serde(borrow)]
+    pub badges: Option<BTreeMap<String, Badge<'a>>>,
     #[serde(rename = "build-dependencies")]
     #[serde(serialize_with = "toml::ser::tables_last")]
     pub build_dependencies: BTreeMap<String, Dependency>,
@@ -18,8 +19,9 @@ pub struct Manifest {
 }
 
 #[derive(Debug, Default, Clone, Deserialize, Serialize)]
-pub struct Metadata {
-    pub authors: Option<Vec<String>>,
+pub struct Metadata<'a> {
+    #[serde(borrow)]
+    pub authors: Option<Vec<&'a str>>,
     pub description: Option<String>,
     pub documentation: Option<String>,
     pub keywords: Option<Vec<String>>,
@@ -33,9 +35,9 @@ pub struct Metadata {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct Badge {
-    pub repository: String,
-    pub branch: String,
+pub struct Badge<'a> {
+    pub repository: &'a str,
+    pub branch: &'a str,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
