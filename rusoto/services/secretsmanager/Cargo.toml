@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Secrets Manager @ 2017-10-17"
-documentation = "https://rusoto.github.io/rusoto/rusoto_secretsmanager/index.html"
+documentation = "https://docs.rs/rusoto_secretsmanager"
 keywords = ["AWS", "Amazon", "secretsmanager"]
 license = "MIT"
 name = "rusoto_secretsmanager"

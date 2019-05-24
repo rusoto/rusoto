@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon Mechanical Turk @ 2017-01-17"
-documentation = "https://rusoto.github.io/rusoto/rusoto_mturk/index.html"
+documentation = "https://docs.rs/rusoto_mturk"
 keywords = ["AWS", "Amazon", "mturk"]
 license = "MIT"
 name = "rusoto_mturk"

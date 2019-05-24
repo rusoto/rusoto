@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon CloudHSM @ 2014-05-30"
-documentation = "https://rusoto.github.io/rusoto/rusoto_cloudhsm/index.html"
+documentation = "https://docs.rs/rusoto_cloudhsm"
 keywords = ["AWS", "Amazon", "cloudhsm"]
 license = "MIT"
 name = "rusoto_cloudhsm"

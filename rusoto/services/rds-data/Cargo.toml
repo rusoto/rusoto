@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS RDS DataService @ 2018-08-01"
-documentation = "https://rusoto.github.io/rusoto/rusoto_rds_data/index.html"
+documentation = "https://docs.rs/rusoto_rds_data"
 keywords = ["AWS", "Amazon", "rds-data"]
 license = "MIT"
 name = "rusoto_rds_data"

@@ -6,10 +6,6 @@
         <td><a href="https://dev.azure.com/matthewkmayer/Rusoto/_build?definitionId=1" title="Pipelines Build Status"><img src="https://dev.azure.com/matthewkmayer/Rusoto/_apis/build/status/rusoto.rusoto?branchName=master" alt="pipelines-badge"></img></a></td>
     </tr>
     <tr>
-        <td><strong>API docs</strong></td>
-        <td><a href="https://travis-ci.org/rusoto/rusoto" title="Travis Build Status"><img src="https://travis-ci.org/rusoto/rusoto.svg?branch=master" alt="travis-badge"></img></a></td>
-    </tr>
-    <tr>
         <td><strong>Windows</strong></td>
         <td><a href="https://ci.appveyor.com/project/matthewkmayer/rusoto/branch/master" title="Appveyor Build Status"><img src="https://ci.appveyor.com/api/projects/status/o83ruaeu7xft0ru5/branch/master?svg=true" alt="appveyor-badge"></img></a></td>
     </tr>
@@ -19,7 +15,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            <a href="https://rusoto.github.io/rusoto/" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+            <a href="https://docs.rs/rusoto_core" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
             <a href="https://crates.io/crates/rusoto_core" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
             <a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
             <img src="https://tokei.rs/b1/github/rusoto/rusoto"></img>
@@ -61,7 +57,7 @@ Breaking changes and migration details are documented at [https://rusoto.org/mig
 Rusoto has a crate for each AWS service, containing Rust types for that service's API.
 A full list of these services can be found [here][supported-aws-services].
 All other public types are reexported to the crate root.
-Consult the rustdoc documentation for full details by running `cargo doc` or visiting the online [documentation](https://rusoto.github.io/rusoto/rusoto/index.html) for the latest crates.io release.
+Consult the rustdoc documentation for full details by running `cargo doc` or visiting the online [documentation](https://docs.rs/rusoto_core) for the latest crates.io release.
 
 A simple example of using Rusoto's DynamoDB API to list the names of all tables in a database:
 
@@ -126,7 +122,7 @@ Rusoto is distributed under the terms of the MIT license.
 
 See [LICENSE][license] for details.
 
-[api-documentation]: https://rusoto.github.io/rusoto/rusoto/ "API documentation"
+[api-documentation]: https://docs.rs/rusoto_core "API documentation"
 [license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
 [rusoto-help]: https://www.rusoto.org/help.html "Getting help with Rusoto"
 [rusoto-overview]: https://www.rusoto.org/ "Rusoto overview"

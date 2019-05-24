@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Identity and Access Management @ 2010-05-08"
-documentation = "https://rusoto.github.io/rusoto/rusoto_iam/index.html"
+documentation = "https://docs.rs/rusoto_iam"
 keywords = ["AWS", "Amazon", "iam"]
 license = "MIT"
 name = "rusoto_iam"

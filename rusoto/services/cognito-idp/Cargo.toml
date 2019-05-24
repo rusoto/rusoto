@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon Cognito Identity Provider @ 2016-04-18"
-documentation = "https://rusoto.github.io/rusoto/rusoto_cognito_idp/index.html"
+documentation = "https://docs.rs/rusoto_cognito_idp"
 keywords = ["AWS", "Amazon", "cognito-idp"]
 license = "MIT"
 name = "rusoto_cognito_idp"

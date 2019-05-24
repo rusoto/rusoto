@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon API Gateway @ 2015-07-09"
-documentation = "https://rusoto.github.io/rusoto/rusoto_apigateway/index.html"
+documentation = "https://docs.rs/rusoto_apigateway"
 keywords = ["AWS", "Amazon", "apigateway"]
 license = "MIT"
 name = "rusoto_apigateway"

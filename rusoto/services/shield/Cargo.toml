@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Shield @ 2016-06-02"
-documentation = "https://rusoto.github.io/rusoto/rusoto_shield/index.html"
+documentation = "https://docs.rs/rusoto_shield"
 keywords = ["AWS", "Amazon", "shield"]
 license = "MIT"
 name = "rusoto_shield"

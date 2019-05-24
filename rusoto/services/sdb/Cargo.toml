@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon SimpleDB @ 2009-04-15"
-documentation = "https://rusoto.github.io/rusoto/rusoto_sdb/index.html"
+documentation = "https://docs.rs/rusoto_sdb"
 keywords = ["AWS", "Amazon", "sdb"]
 license = "MIT"
 name = "rusoto_sdb"

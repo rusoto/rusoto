@@ -7,7 +7,7 @@ authors = [
 ]
 build = "build.rs"
 description = "AWS SDK for Rust - Core"
-documentation = "http://rusoto.github.io/rusoto/rusoto/index.html"
+documentation = "https://docs.rs/rusoto_core"
 keywords = ["AWS", "Amazon"]
 license = "MIT"
 name = "rusoto_core"
