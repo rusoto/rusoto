@@ -112,9 +112,9 @@ See [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Supported OSs and Rust versions
 
-Linux, OSX and Windows are supported and tested via TravisCI and Appveyor.
+Linux, OSX and Windows are supported and tested via Azure Pipelines and Appveyor.
 
-Rust stable is supported.  Older versions of Rust are supported and tested via TravisCI.  The minimum Rust version is incremented when it becomes inconvenient to support older versions.  The current minimum version of Rust supported can be found in [.travis.yml](.travis.yml).  If a version number is not specified in the `rust` section, only the named versions listed are supported.  This should be stable, beta and nightly.
+Rust stable, beta and nightly are supported.
 
 ## License
 

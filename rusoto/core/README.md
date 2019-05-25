@@ -3,7 +3,7 @@
 <table>
     <tr>
         <td><strong>Linux / OS X</strong></td>
-        <td><a href="https://travis-ci.org/rusoto/rusoto" title="Travis Build Status"><img src="https://travis-ci.org/rusoto/rusoto.svg?branch=master" alt="travis-badge"></img></a></td>
+        <td><a href="https://dev.azure.com/matthewkmayer/Rusoto/_build?definitionId=1" title="Pipelines Build Status"><img src="https://dev.azure.com/matthewkmayer/Rusoto/_apis/build/status/rusoto.rusoto?branchName=master" alt="pipelines-badge"></img></a></td>
     </tr>
     <tr>
         <td><strong>Windows</strong></td>
@@ -118,12 +118,9 @@ See [CONTRIBUTING][contribution].
 
 ## Supported OSs and Rust versions
 
-Linux, OSX and Windows are supported and tested via TravisCI and Appveyor.
+Linux, OSX and Windows are supported and tested via Azure Pipelines and Appveyor.
 
-Rust stable is supported.  Older versions of Rust are supported and tested via TravisCI.  The minimum Rust version is
-incremented when it becomes inconvenient to support older versions.  The current minimum version of Rust supported can
-be found in [.travis.yml][travis].  If a version number is not specified in the `rust` section, only the named versions
-listed are supported.  This should be stable, beta and nightly.
+Rust stable, beta and nightly are supported.
 
 ## License
 
@@ -139,4 +136,3 @@ See [LICENSE][license] for details.
 [aws-credentials]: https://github.com/rusoto/rusoto/blob/master/AWS-CREDENTIALS.md "AWS Credentials"
 [releasing]: https://github.com/rusoto/rusoto/blob/master/RELEASING.md "Releasing Rusoto"
 [contribution]: https://github.com/rusoto/rusoto/blob/master/CONTRIBUTING.md "Contributing to Rusoto"
-[travis]: https://github.com/rusoto/rusoto/blob/master/.travis.yml "Building Rusoto"
