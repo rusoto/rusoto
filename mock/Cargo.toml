@@ -18,6 +18,10 @@ categories = [
 ]
 edition = "2018"
 
+[badges]
+appveyor = { repository = "rusoto/rusoto", branch = "master" }
+azure-devops = { project = "Rusoto", pipeline = "rusoto.rusoto", build="1" }
+
 [dependencies]
 chrono = "0.4.0"
 futures = "0.1.16"
