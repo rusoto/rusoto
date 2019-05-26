@@ -112,7 +112,7 @@ pub struct Build {
     #[serde(rename = "currentPhase")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_phase: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <p>This is expressed either as the Amazon Resource Name (ARN) of the CMK or, if specified, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<String>,
@@ -301,7 +301,7 @@ pub struct CreateProjectInput {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<String>,
@@ -477,6 +477,14 @@ pub struct EnvironmentVariable {
     /// <p><p>The value of the environment variable.</p> <important> <p>We strongly discourage the use of environment variables to store sensitive values, especially AWS secret key IDs and secret access keys. Environment variables can be displayed in plain text using the AWS CodeBuild console and the AWS Command Line Interface (AWS CLI).</p> </important></p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+/// <p> Information about the Git submodules configuration for an AWS CodeBuild build project. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GitSubmodulesConfig {
+    /// <p> Set to true to fetch Git submodules for your AWS CodeBuild build project. </p>
+    #[serde(rename = "fetchSubmodules")]
+    pub fetch_submodules: bool,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -721,7 +729,7 @@ pub struct Project {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <p>This is expressed either as the Amazon Resource Name (ARN) of the CMK or, if specified, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<String>,
@@ -840,7 +848,7 @@ pub struct ProjectCache {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p><p> If you use a <code>LOCAL</code> cache, the local cache mode. You can use one or more local cache modes at the same time. </p> <ul> <li> <p> <code>LOCAL<em>SOURCE</em>CACHE</code> mode caches Git metadata for primary and secondary sources. After the cache is created, subsequent builds pull only the change between commits. This mode is a good choice for projects with a clean working directory and a source that is a large Git repository. If your project does not use a Git repository (GitHub, GitHub Enterprise, or Bitbucket) and you choose this option, then it is ignored. </p> </li> <li> <p> <code>LOCAL<em>DOCKER</em>LAYER<em>CACHE</code> mode caches existing Docker layers. This mode is a good choice for projects that build or pull large Docker images. It can prevent the performance hit that would be caused by pulling large Docker images down from the network. </p> <note> <ul> <li> <p> You can only use a Docker layer cache in the Linux enviornment. </p> </li> <li> <p> The <code>privileged</code> flag must be set so that your project has the necessary Docker privileges. </p> </li> <li> <p> You should consider the security implications before using a Docker layer cache. </p> </li> </ul> </note> </li> </ul> <ul> <li> <p> <code>LOCAL</em>CUSTOM_CACHE</code> mode caches directories you specify in the buildspec file. This mode is a good choice if your build scenario does not match one that works well with one of the other three local cache modes. If you use a custom cache: </p> <ul> <li> <p> Only directories can be specified for caching. You cannot specify individual files. </p> </li> <li> <p> Symlinks are used to reference cached directories. </p> </li> <li> <p> Cached directories are linked to your build before it downloads its project sources. Cached items are overriden if a source item has the same name. Directories are specified using cache paths in the buildspec file. </p> </li> </ul> </li> </ul></p>
+    /// <p><p> If you use a <code>LOCAL</code> cache, the local cache mode. You can use one or more local cache modes at the same time. </p> <ul> <li> <p> <code>LOCAL<em>SOURCE</em>CACHE</code> mode caches Git metadata for primary and secondary sources. After the cache is created, subsequent builds pull only the change between commits. This mode is a good choice for projects with a clean working directory and a source that is a large Git repository. If you choose this option and your project does not use a Git repository (GitHub, GitHub Enterprise, or Bitbucket), the option is ignored. </p> </li> <li> <p> <code>LOCAL<em>DOCKER</em>LAYER<em>CACHE</code> mode caches existing Docker layers. This mode is a good choice for projects that build or pull large Docker images. It can prevent the performance issues caused by pulling large Docker images down from the network. </p> <note> <ul> <li> <p> You can use a Docker layer cache in the Linux enviornment only. </p> </li> <li> <p> The <code>privileged</code> flag must be set so that your project has the required Docker permissions. </p> </li> <li> <p> You should consider the security implications before you use a Docker layer cache. </p> </li> </ul> </note> </li> </ul> <ul> <li> <p> <code>LOCAL</em>CUSTOM_CACHE</code> mode caches directories you specify in the buildspec file. This mode is a good choice if your build scenario is not suited to one of the other three local cache modes. If you use a custom cache: </p> <ul> <li> <p> Only directories can be specified for caching. You cannot specify individual files. </p> </li> <li> <p> Symlinks are used to reference cached directories. </p> </li> <li> <p> Cached directories are linked to your build before it downloads its project sources. Cached items are overriden if a source item has the same name. Directories are specified using cache paths in the buildspec file. </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "modes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modes: Option<Vec<String>>,
@@ -894,10 +902,14 @@ pub struct ProjectSource {
     #[serde(rename = "buildspec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buildspec: Option<String>,
-    /// <p>Information about the git clone depth for the build project.</p>
+    /// <p>Information about the Git clone depth for the build project.</p>
     #[serde(rename = "gitCloneDepth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_clone_depth: Option<i64>,
+    /// <p> Information about the Git submodules configuration for the build project. </p>
+    #[serde(rename = "gitSubmodulesConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_submodules_config: Option<GitSubmodulesConfig>,
     /// <p>Enable this flag to ignore SSL warnings while connecting to the project source code.</p>
     #[serde(rename = "insecureSsl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -944,6 +956,10 @@ pub struct RegistryCredential {
 /// <p> Information about S3 logs for a build project. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3LogsConfig {
+    /// <p> Set to true if you do not want your S3 build log output encrypted. By default S3 build logs are encrypted. </p>
+    #[serde(rename = "encryptionDisabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_disabled: Option<bool>,
     /// <p> The ARN of an S3 bucket and the path prefix for S3 logs. If your Amazon S3 bucket name is <code>my-bucket</code>, and your path prefix is <code>build-log</code>, then acceptable formats are <code>my-bucket/build-log</code> or <code>arn:aws:s3:::my-bucket/build-log</code>. </p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1017,6 +1033,10 @@ pub struct StartBuildInput {
     #[serde(rename = "gitCloneDepthOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_clone_depth_override: Option<i64>,
+    /// <p> Information about the Git submodules configuration for this build of an AWS CodeBuild build project. </p>
+    #[serde(rename = "gitSubmodulesConfigOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_submodules_config_override: Option<GitSubmodulesConfig>,
     /// <p>A unique, case sensitive identifier you provide to ensure the idempotency of the StartBuild request. The token is included in the StartBuild request and is valid for 12 hours. If you repeat the StartBuild request with the same token, but change a parameter, AWS CodeBuild returns a parameter mismatch error. </p>
     #[serde(rename = "idempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1150,7 +1170,7 @@ pub struct UpdateProjectInput {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The replacement AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <p>You can specify either the Amazon Resource Name (ARN)of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
+    /// <p>The AWS Key Management Service (AWS KMS) customer master key (CMK) to be used for encrypting the build output artifacts.</p> <note> <p> You can use a cross-account KMS key to encrypt the build output artifacts if your service role has permission to that key. </p> </note> <p>You can specify either the Amazon Resource Name (ARN) of the CMK or, if available, the CMK's alias (using the format <code>alias/<i>alias-name</i> </code>).</p>
     #[serde(rename = "encryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_key: Option<String>,

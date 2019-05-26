@@ -25,6 +25,50 @@ use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateDomainRequest {
+    /// <p>The ARN of an issued ACM certificate that is valid for the domain being associated.</p>
+    #[serde(rename = "AcmCertificateArn")]
+    pub acm_certificate_arn: String,
+    /// <p>The name to display.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The fully qualified domain name (FQDN).</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The Amazon Resource Name (ARN) of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateDomainResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateWebsiteAuthorizationProviderRequest {
+    /// <p>The authorization provider type.</p>
+    #[serde(rename = "AuthorizationProviderType")]
+    pub authorization_provider_type: String,
+    /// <p>The domain name of the authorization provider. This applies only to SAML-based authorization providers.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateWebsiteAuthorizationProviderResponse {
+    /// <p>A unique identifier for the authorization provider.</p>
+    #[serde(rename = "AuthorizationProviderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_provider_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateWebsiteCertificateAuthorityRequest {
     /// <p>The root certificate of the CA.</p>
     #[serde(rename = "Certificate")]
@@ -190,6 +234,41 @@ pub struct DescribeDeviceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeDomainRequest {
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeDomainResponse {
+    /// <p>The ARN of an issued ACM certificate that is valid for the domain being associated.</p>
+    #[serde(rename = "AcmCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acm_certificate_arn: Option<String>,
+    /// <p>The time that the domain was added.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The name to display.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The current state for the domain.</p>
+    #[serde(rename = "DomainStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeFleetMetadataRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -295,6 +374,34 @@ pub struct DeviceSummary {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateDomainRequest {
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateDomainResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateWebsiteAuthorizationProviderRequest {
+    /// <p>A unique identifier for the authorization provider.</p>
+    #[serde(rename = "AuthorizationProviderId")]
+    pub authorization_provider_id: String,
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateWebsiteAuthorizationProviderResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateWebsiteCertificateAuthorityRequest {
     /// <p>The ARN of the fleet.</p>
     #[serde(rename = "FleetArn")]
@@ -307,6 +414,25 @@ pub struct DisassociateWebsiteCertificateAuthorityRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateWebsiteCertificateAuthorityResponse {}
+
+/// <p>The summary of the domain.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DomainSummary {
+    /// <p>The time that the domain was created.</p>
+    #[serde(rename = "CreatedTime")]
+    pub created_time: f64,
+    /// <p>The name to display.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The status of the domain.</p>
+    #[serde(rename = "DomainStatus")]
+    pub domain_status: String,
+}
 
 /// <p>The summary of the fleet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -371,6 +497,34 @@ pub struct ListDevicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListDomainsRequest {
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+    /// <p>The maximum number of results to be included in the next page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The pagination token used to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListDomainsResponse {
+    /// <p>Information about the domains.</p>
+    #[serde(rename = "Domains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domains: Option<Vec<DomainSummary>>,
+    /// <p>The pagination token used to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListFleetsRequest {
     /// <p>The maximum number of results to be included in the next page.</p>
     #[serde(rename = "MaxResults")]
@@ -393,6 +547,34 @@ pub struct ListFleetsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListWebsiteAuthorizationProvidersRequest {
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+    /// <p>The maximum number of results to be included in the next page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListWebsiteAuthorizationProvidersResponse {
+    /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The website authorization providers.</p>
+    #[serde(rename = "WebsiteAuthorizationProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub website_authorization_providers: Option<Vec<WebsiteAuthorizationProviderSummary>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -422,6 +604,34 @@ pub struct ListWebsiteCertificateAuthoritiesResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub website_certificate_authorities: Option<Vec<WebsiteCaSummary>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RestoreDomainAccessRequest {
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RestoreDomainAccessResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RevokeDomainAccessRequest {
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RevokeDomainAccessResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SignOutUserRequest {
@@ -488,6 +698,24 @@ pub struct UpdateDevicePolicyConfigurationRequest {
 pub struct UpdateDevicePolicyConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateDomainMetadataRequest {
+    /// <p>The name to display.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the domain.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>The ARN of the fleet.</p>
+    #[serde(rename = "FleetArn")]
+    pub fleet_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDomainMetadataResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateFleetMetadataRequest {
     /// <p>The fleet name to display. The existing DisplayName is unset if null is passed.</p>
     #[serde(rename = "DisplayName")]
@@ -524,6 +752,27 @@ pub struct UpdateIdentityProviderConfigurationRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateIdentityProviderConfigurationResponse {}
 
+/// <p>The summary of the website authorization provider.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct WebsiteAuthorizationProviderSummary {
+    /// <p>A unique identifier for the authorization provider.</p>
+    #[serde(rename = "AuthorizationProviderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_provider_id: Option<String>,
+    /// <p>The authorization provider type.</p>
+    #[serde(rename = "AuthorizationProviderType")]
+    pub authorization_provider_type: String,
+    /// <p>The time of creation.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The domain name of the authorization provider. This applies only to SAML-based authorization providers.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+}
+
 /// <p>The summary of the certificate authority (CA).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -542,6 +791,148 @@ pub struct WebsiteCaSummary {
     pub website_ca_id: Option<String>,
 }
 
+/// Errors returned by AssociateDomain
+#[derive(Debug, PartialEq)]
+pub enum AssociateDomainError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl AssociateDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateDomainError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(AssociateDomainError::InternalServerError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(AssociateDomainError::InvalidRequest(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(AssociateDomainError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AssociateDomainError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(AssociateDomainError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(AssociateDomainError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AssociateDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateDomainError::InternalServerError(ref cause) => cause,
+            AssociateDomainError::InvalidRequest(ref cause) => cause,
+            AssociateDomainError::ResourceAlreadyExists(ref cause) => cause,
+            AssociateDomainError::ResourceNotFound(ref cause) => cause,
+            AssociateDomainError::TooManyRequests(ref cause) => cause,
+            AssociateDomainError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssociateWebsiteAuthorizationProvider
+#[derive(Debug, PartialEq)]
+pub enum AssociateWebsiteAuthorizationProviderError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl AssociateWebsiteAuthorizationProviderError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateWebsiteAuthorizationProviderError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        AssociateWebsiteAuthorizationProviderError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        AssociateWebsiteAuthorizationProviderError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        AssociateWebsiteAuthorizationProviderError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateWebsiteAuthorizationProviderError::ResourceNotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        AssociateWebsiteAuthorizationProviderError::TooManyRequests(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(
+                        AssociateWebsiteAuthorizationProviderError::Unauthorized(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AssociateWebsiteAuthorizationProviderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateWebsiteAuthorizationProviderError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateWebsiteAuthorizationProviderError::InternalServerError(ref cause) => cause,
+            AssociateWebsiteAuthorizationProviderError::InvalidRequest(ref cause) => cause,
+            AssociateWebsiteAuthorizationProviderError::ResourceAlreadyExists(ref cause) => cause,
+            AssociateWebsiteAuthorizationProviderError::ResourceNotFound(ref cause) => cause,
+            AssociateWebsiteAuthorizationProviderError::TooManyRequests(ref cause) => cause,
+            AssociateWebsiteAuthorizationProviderError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by AssociateWebsiteCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum AssociateWebsiteCertificateAuthorityError {
@@ -1003,6 +1394,63 @@ impl Error for DescribeDevicePolicyConfigurationError {
         }
     }
 }
+/// Errors returned by DescribeDomain
+#[derive(Debug, PartialEq)]
+pub enum DescribeDomainError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl DescribeDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeDomainError::InternalServerError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeDomainError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeDomainError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DescribeDomainError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DescribeDomainError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDomainError::InternalServerError(ref cause) => cause,
+            DescribeDomainError::InvalidRequest(ref cause) => cause,
+            DescribeDomainError::ResourceNotFound(ref cause) => cause,
+            DescribeDomainError::TooManyRequests(ref cause) => cause,
+            DescribeDomainError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeFleetMetadata
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetMetadataError {
@@ -1206,6 +1654,146 @@ impl Error for DescribeWebsiteCertificateAuthorityError {
         }
     }
 }
+/// Errors returned by DisassociateDomain
+#[derive(Debug, PartialEq)]
+pub enum DisassociateDomainError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl DisassociateDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateDomainError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DisassociateDomainError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DisassociateDomainError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DisassociateDomainError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DisassociateDomainError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DisassociateDomainError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisassociateDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateDomainError::InternalServerError(ref cause) => cause,
+            DisassociateDomainError::InvalidRequest(ref cause) => cause,
+            DisassociateDomainError::ResourceNotFound(ref cause) => cause,
+            DisassociateDomainError::TooManyRequests(ref cause) => cause,
+            DisassociateDomainError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DisassociateWebsiteAuthorizationProvider
+#[derive(Debug, PartialEq)]
+pub enum DisassociateWebsiteAuthorizationProviderError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl DisassociateWebsiteAuthorizationProviderError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateWebsiteAuthorizationProviderError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DisassociateWebsiteAuthorizationProviderError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DisassociateWebsiteAuthorizationProviderError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        DisassociateWebsiteAuthorizationProviderError::ResourceAlreadyExists(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateWebsiteAuthorizationProviderError::ResourceNotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        DisassociateWebsiteAuthorizationProviderError::TooManyRequests(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(
+                        DisassociateWebsiteAuthorizationProviderError::Unauthorized(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisassociateWebsiteAuthorizationProviderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateWebsiteAuthorizationProviderError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateWebsiteAuthorizationProviderError::InternalServerError(ref cause) => cause,
+            DisassociateWebsiteAuthorizationProviderError::InvalidRequest(ref cause) => cause,
+            DisassociateWebsiteAuthorizationProviderError::ResourceAlreadyExists(ref cause) => {
+                cause
+            }
+            DisassociateWebsiteAuthorizationProviderError::ResourceNotFound(ref cause) => cause,
+            DisassociateWebsiteAuthorizationProviderError::TooManyRequests(ref cause) => cause,
+            DisassociateWebsiteAuthorizationProviderError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DisassociateWebsiteCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum DisassociateWebsiteCertificateAuthorityError {
@@ -1332,6 +1920,57 @@ impl Error for ListDevicesError {
         }
     }
 }
+/// Errors returned by ListDomains
+#[derive(Debug, PartialEq)]
+pub enum ListDomainsError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl ListDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDomainsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListDomainsError::InternalServerError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListDomainsError::InvalidRequest(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListDomainsError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListDomainsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListDomainsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDomainsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDomainsError::InternalServerError(ref cause) => cause,
+            ListDomainsError::InvalidRequest(ref cause) => cause,
+            ListDomainsError::TooManyRequests(ref cause) => cause,
+            ListDomainsError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListFleets
 #[derive(Debug, PartialEq)]
 pub enum ListFleetsError {
@@ -1380,6 +2019,75 @@ impl Error for ListFleetsError {
             ListFleetsError::InvalidRequest(ref cause) => cause,
             ListFleetsError::TooManyRequests(ref cause) => cause,
             ListFleetsError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListWebsiteAuthorizationProviders
+#[derive(Debug, PartialEq)]
+pub enum ListWebsiteAuthorizationProvidersError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl ListWebsiteAuthorizationProvidersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListWebsiteAuthorizationProvidersError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        ListWebsiteAuthorizationProvidersError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        ListWebsiteAuthorizationProvidersError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListWebsiteAuthorizationProvidersError::ResourceNotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        ListWebsiteAuthorizationProvidersError::TooManyRequests(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(
+                        ListWebsiteAuthorizationProvidersError::Unauthorized(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListWebsiteAuthorizationProvidersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListWebsiteAuthorizationProvidersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListWebsiteAuthorizationProvidersError::InternalServerError(ref cause) => cause,
+            ListWebsiteAuthorizationProvidersError::InvalidRequest(ref cause) => cause,
+            ListWebsiteAuthorizationProvidersError::ResourceNotFound(ref cause) => cause,
+            ListWebsiteAuthorizationProvidersError::TooManyRequests(ref cause) => cause,
+            ListWebsiteAuthorizationProvidersError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -1441,6 +2149,126 @@ impl Error for ListWebsiteCertificateAuthoritiesError {
             ListWebsiteCertificateAuthoritiesError::InvalidRequest(ref cause) => cause,
             ListWebsiteCertificateAuthoritiesError::TooManyRequests(ref cause) => cause,
             ListWebsiteCertificateAuthoritiesError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RestoreDomainAccess
+#[derive(Debug, PartialEq)]
+pub enum RestoreDomainAccessError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl RestoreDomainAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RestoreDomainAccessError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(RestoreDomainAccessError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(RestoreDomainAccessError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RestoreDomainAccessError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(RestoreDomainAccessError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(RestoreDomainAccessError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for RestoreDomainAccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RestoreDomainAccessError {
+    fn description(&self) -> &str {
+        match *self {
+            RestoreDomainAccessError::InternalServerError(ref cause) => cause,
+            RestoreDomainAccessError::InvalidRequest(ref cause) => cause,
+            RestoreDomainAccessError::ResourceNotFound(ref cause) => cause,
+            RestoreDomainAccessError::TooManyRequests(ref cause) => cause,
+            RestoreDomainAccessError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RevokeDomainAccess
+#[derive(Debug, PartialEq)]
+pub enum RevokeDomainAccessError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl RevokeDomainAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeDomainAccessError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(RevokeDomainAccessError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(RevokeDomainAccessError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RevokeDomainAccessError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(RevokeDomainAccessError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(RevokeDomainAccessError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for RevokeDomainAccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RevokeDomainAccessError {
+    fn description(&self) -> &str {
+        match *self {
+            RevokeDomainAccessError::InternalServerError(ref cause) => cause,
+            RevokeDomainAccessError::InvalidRequest(ref cause) => cause,
+            RevokeDomainAccessError::ResourceNotFound(ref cause) => cause,
+            RevokeDomainAccessError::TooManyRequests(ref cause) => cause,
+            RevokeDomainAccessError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -1708,6 +2536,69 @@ impl Error for UpdateDevicePolicyConfigurationError {
         }
     }
 }
+/// Errors returned by UpdateDomainMetadata
+#[derive(Debug, PartialEq)]
+pub enum UpdateDomainMetadataError {
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The requested resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit.</p>
+    TooManyRequests(String),
+    /// <p>You are not authorized to perform this action.</p>
+    Unauthorized(String),
+}
+
+impl UpdateDomainMetadataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateDomainMetadataError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateDomainMetadataError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateDomainMetadataError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateDomainMetadataError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateDomainMetadataError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateDomainMetadataError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateDomainMetadataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateDomainMetadataError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateDomainMetadataError::InternalServerError(ref cause) => cause,
+            UpdateDomainMetadataError::InvalidRequest(ref cause) => cause,
+            UpdateDomainMetadataError::ResourceNotFound(ref cause) => cause,
+            UpdateDomainMetadataError::TooManyRequests(ref cause) => cause,
+            UpdateDomainMetadataError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateFleetMetadata
 #[derive(Debug, PartialEq)]
 pub enum UpdateFleetMetadataError {
@@ -1840,6 +2731,21 @@ impl Error for UpdateIdentityProviderConfigurationError {
 }
 /// Trait representing the capabilities of the WorkLink API. WorkLink clients implement this trait.
 pub trait Worklink {
+    /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
+    fn associate_domain(
+        &self,
+        input: AssociateDomainRequest,
+    ) -> RusotoFuture<AssociateDomainResponse, AssociateDomainError>;
+
+    /// <p>Associates a website authorization provider with a specified fleet. This is used to authorize users against associated websites in the company network.</p>
+    fn associate_website_authorization_provider(
+        &self,
+        input: AssociateWebsiteAuthorizationProviderRequest,
+    ) -> RusotoFuture<
+        AssociateWebsiteAuthorizationProviderResponse,
+        AssociateWebsiteAuthorizationProviderError,
+    >;
+
     /// <p>Imports the root certificate of a certificate authority (CA) used to obtain TLS certificates used by associated websites within the company network.</p>
     fn associate_website_certificate_authority(
         &self,
@@ -1891,6 +2797,12 @@ pub trait Worklink {
         DescribeDevicePolicyConfigurationError,
     >;
 
+    /// <p>Provides information about the domain.</p>
+    fn describe_domain(
+        &self,
+        input: DescribeDomainRequest,
+    ) -> RusotoFuture<DescribeDomainResponse, DescribeDomainError>;
+
     /// <p>Provides basic information for the specified fleet, excluding identity provider, networking, and device configuration details.</p>
     fn describe_fleet_metadata(
         &self,
@@ -1915,6 +2827,21 @@ pub trait Worklink {
         DescribeWebsiteCertificateAuthorityError,
     >;
 
+    /// <p>Disassociates a domain from Amazon WorkLink. End users lose the ability to access the domain with Amazon WorkLink. </p>
+    fn disassociate_domain(
+        &self,
+        input: DisassociateDomainRequest,
+    ) -> RusotoFuture<DisassociateDomainResponse, DisassociateDomainError>;
+
+    /// <p>Disassociates a website authorization provider from a specified fleet. After the disassociation, users can't load any associated websites that require this authorization provider.</p>
+    fn disassociate_website_authorization_provider(
+        &self,
+        input: DisassociateWebsiteAuthorizationProviderRequest,
+    ) -> RusotoFuture<
+        DisassociateWebsiteAuthorizationProviderResponse,
+        DisassociateWebsiteAuthorizationProviderError,
+    >;
+
     /// <p>Removes a certificate authority (CA).</p>
     fn disassociate_website_certificate_authority(
         &self,
@@ -1930,11 +2857,26 @@ pub trait Worklink {
         input: ListDevicesRequest,
     ) -> RusotoFuture<ListDevicesResponse, ListDevicesError>;
 
+    /// <p>Retrieves a list of domains associated to a specified fleet.</p>
+    fn list_domains(
+        &self,
+        input: ListDomainsRequest,
+    ) -> RusotoFuture<ListDomainsResponse, ListDomainsError>;
+
     /// <p>Retrieves a list of fleets for the current account and Region.</p>
     fn list_fleets(
         &self,
         input: ListFleetsRequest,
     ) -> RusotoFuture<ListFleetsResponse, ListFleetsError>;
+
+    /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
+    fn list_website_authorization_providers(
+        &self,
+        input: ListWebsiteAuthorizationProvidersRequest,
+    ) -> RusotoFuture<
+        ListWebsiteAuthorizationProvidersResponse,
+        ListWebsiteAuthorizationProvidersError,
+    >;
 
     /// <p>Retrieves a list of certificate authorities added for the current account and Region.</p>
     fn list_website_certificate_authorities(
@@ -1944,6 +2886,18 @@ pub trait Worklink {
         ListWebsiteCertificateAuthoritiesResponse,
         ListWebsiteCertificateAuthoritiesError,
     >;
+
+    /// <p>Moves a domain to ACTIVE status if it was in the INACTIVE status.</p>
+    fn restore_domain_access(
+        &self,
+        input: RestoreDomainAccessRequest,
+    ) -> RusotoFuture<RestoreDomainAccessResponse, RestoreDomainAccessError>;
+
+    /// <p>Moves a domain to INACTIVE status if it was in the ACTIVE status.</p>
+    fn revoke_domain_access(
+        &self,
+        input: RevokeDomainAccessRequest,
+    ) -> RusotoFuture<RevokeDomainAccessResponse, RevokeDomainAccessError>;
 
     /// <p>Signs the user out from all of their devices. The user can sign in again if they have valid credentials.</p>
     fn sign_out_user(
@@ -1971,6 +2925,12 @@ pub trait Worklink {
         &self,
         input: UpdateDevicePolicyConfigurationRequest,
     ) -> RusotoFuture<UpdateDevicePolicyConfigurationResponse, UpdateDevicePolicyConfigurationError>;
+
+    /// <p>Updates domain metadata, such as DisplayName.</p>
+    fn update_domain_metadata(
+        &self,
+        input: UpdateDomainMetadataRequest,
+    ) -> RusotoFuture<UpdateDomainMetadataResponse, UpdateDomainMetadataError>;
 
     /// <p>Updates fleet metadata, such as DisplayName.</p>
     fn update_fleet_metadata(
@@ -2024,6 +2984,73 @@ impl WorklinkClient {
 }
 
 impl Worklink for WorklinkClient {
+    /// <p>Specifies a domain to be associated to Amazon WorkLink.</p>
+    fn associate_domain(
+        &self,
+        input: AssociateDomainRequest,
+    ) -> RusotoFuture<AssociateDomainResponse, AssociateDomainError> {
+        let request_uri = "/associateDomain";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateDomainResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AssociateDomainError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Associates a website authorization provider with a specified fleet. This is used to authorize users against associated websites in the company network.</p>
+    fn associate_website_authorization_provider(
+        &self,
+        input: AssociateWebsiteAuthorizationProviderRequest,
+    ) -> RusotoFuture<
+        AssociateWebsiteAuthorizationProviderResponse,
+        AssociateWebsiteAuthorizationProviderError,
+    > {
+        let request_uri = "/associateWebsiteAuthorizationProvider";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateWebsiteAuthorizationProviderResponse, _>(
+                    )?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateWebsiteAuthorizationProviderError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Imports the root certificate of a certificate authority (CA) used to obtain TLS certificates used by associated websites within the company network.</p>
     fn associate_website_certificate_authority(
         &self,
@@ -2255,6 +3282,38 @@ impl Worklink for WorklinkClient {
         })
     }
 
+    /// <p>Provides information about the domain.</p>
+    fn describe_domain(
+        &self,
+        input: DescribeDomainRequest,
+    ) -> RusotoFuture<DescribeDomainResponse, DescribeDomainError> {
+        let request_uri = "/describeDomain";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeDomainResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeDomainError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Provides basic information for the specified fleet, excluding identity provider, networking, and device configuration details.</p>
     fn describe_fleet_metadata(
         &self,
@@ -2355,6 +3414,71 @@ impl Worklink for WorklinkClient {
         })
     }
 
+    /// <p>Disassociates a domain from Amazon WorkLink. End users lose the ability to access the domain with Amazon WorkLink. </p>
+    fn disassociate_domain(
+        &self,
+        input: DisassociateDomainRequest,
+    ) -> RusotoFuture<DisassociateDomainResponse, DisassociateDomainError> {
+        let request_uri = "/disassociateDomain";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateDomainResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DisassociateDomainError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Disassociates a website authorization provider from a specified fleet. After the disassociation, users can't load any associated websites that require this authorization provider.</p>
+    fn disassociate_website_authorization_provider(
+        &self,
+        input: DisassociateWebsiteAuthorizationProviderRequest,
+    ) -> RusotoFuture<
+        DisassociateWebsiteAuthorizationProviderResponse,
+        DisassociateWebsiteAuthorizationProviderError,
+    > {
+        let request_uri = "/disassociateWebsiteAuthorizationProvider";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateWebsiteAuthorizationProviderResponse, _>(
+                    )?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateWebsiteAuthorizationProviderError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Removes a certificate authority (CA).</p>
     fn disassociate_website_certificate_authority(
         &self,
@@ -2422,6 +3546,38 @@ impl Worklink for WorklinkClient {
         })
     }
 
+    /// <p>Retrieves a list of domains associated to a specified fleet.</p>
+    fn list_domains(
+        &self,
+        input: ListDomainsRequest,
+    ) -> RusotoFuture<ListDomainsResponse, ListDomainsError> {
+        let request_uri = "/listDomains";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListDomainsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDomainsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Retrieves a list of fleets for the current account and Region.</p>
     fn list_fleets(
         &self,
@@ -2450,6 +3606,40 @@ impl Worklink for WorklinkClient {
                         .from_err()
                         .and_then(|response| Err(ListFleetsError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Retrieves a list of website authorization providers associated with a specified fleet.</p>
+    fn list_website_authorization_providers(
+        &self,
+        input: ListWebsiteAuthorizationProvidersRequest,
+    ) -> RusotoFuture<
+        ListWebsiteAuthorizationProvidersResponse,
+        ListWebsiteAuthorizationProvidersError,
+    > {
+        let request_uri = "/listWebsiteAuthorizationProviders";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListWebsiteAuthorizationProvidersResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListWebsiteAuthorizationProvidersError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }
@@ -2484,6 +3674,69 @@ impl Worklink for WorklinkClient {
                         response,
                     ))
                 }))
+            }
+        })
+    }
+
+    /// <p>Moves a domain to ACTIVE status if it was in the INACTIVE status.</p>
+    fn restore_domain_access(
+        &self,
+        input: RestoreDomainAccessRequest,
+    ) -> RusotoFuture<RestoreDomainAccessResponse, RestoreDomainAccessError> {
+        let request_uri = "/restoreDomainAccess";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RestoreDomainAccessResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RestoreDomainAccessError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Moves a domain to INACTIVE status if it was in the ACTIVE status.</p>
+    fn revoke_domain_access(
+        &self,
+        input: RevokeDomainAccessRequest,
+    ) -> RusotoFuture<RevokeDomainAccessResponse, RevokeDomainAccessError> {
+        let request_uri = "/revokeDomainAccess";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<RevokeDomainAccessResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RevokeDomainAccessError::from_response(response))),
+                )
             }
         })
     }
@@ -2612,6 +3865,37 @@ impl Worklink for WorklinkClient {
                         response,
                     ))
                 }))
+            }
+        })
+    }
+
+    /// <p>Updates domain metadata, such as DisplayName.</p>
+    fn update_domain_metadata(
+        &self,
+        input: UpdateDomainMetadataRequest,
+    ) -> RusotoFuture<UpdateDomainMetadataResponse, UpdateDomainMetadataError> {
+        let request_uri = "/updateDomainMetadata";
+
+        let mut request = SignedRequest::new("POST", "worklink", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateDomainMetadataResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateDomainMetadataError::from_response(response))
+                    }),
+                )
             }
         })
     }

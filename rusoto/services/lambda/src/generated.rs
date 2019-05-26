@@ -640,6 +640,13 @@ pub struct GetFunctionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetLayerVersionByArnRequest {
+    /// <p>The ARN of the layer version.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLayerVersionPolicyRequest {
     /// <p>The name or Amazon Resource Name (ARN) of the layer.</p>
     #[serde(rename = "LayerName")]
@@ -1456,7 +1463,7 @@ pub struct VpcConfigResponse {
 pub enum AddLayerVersionPermissionError {
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
-    /// <p>Lambda function access policy is limited to 20 KB.</p>
+    /// <p>The permissions policy for the resource is too large. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     PolicyLengthExceeded(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
@@ -1537,7 +1544,7 @@ impl Error for AddLayerVersionPermissionError {
 pub enum AddPermissionError {
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
-    /// <p>Lambda function access policy is limited to 20 KB.</p>
+    /// <p>The permissions policy for the resource is too large. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     PolicyLengthExceeded(String),
     /// <p>The RevisionId provided does not match the latest RevisionId for the Lambda function or alias. Call the <code>GetFunction</code> or the <code>GetAlias</code> API to retrieve the latest RevisionId for your resource.</p>
     PreconditionFailed(String),
@@ -1726,7 +1733,7 @@ impl Error for CreateEventSourceMappingError {
 /// Errors returned by CreateFunction
 #[derive(Debug, PartialEq)]
 pub enum CreateFunctionError {
-    /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
+    /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
@@ -2356,6 +2363,63 @@ impl Error for GetLayerVersionError {
             GetLayerVersionError::ResourceNotFound(ref cause) => cause,
             GetLayerVersionError::Service(ref cause) => cause,
             GetLayerVersionError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetLayerVersionByArn
+#[derive(Debug, PartialEq)]
+pub enum GetLayerVersionByArnError {
+    /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource (for example, a Lambda function or access policy statement) specified in the request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The AWS Lambda service encountered an internal error.</p>
+    Service(String),
+    /// <p>Request throughput limit exceeded.</p>
+    TooManyRequests(String),
+}
+
+impl GetLayerVersionByArnError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetLayerVersionByArnError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(GetLayerVersionByArnError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetLayerVersionByArnError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(GetLayerVersionByArnError::Service(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetLayerVersionByArnError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetLayerVersionByArnError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLayerVersionByArnError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLayerVersionByArnError::InvalidParameterValue(ref cause) => cause,
+            GetLayerVersionByArnError::ResourceNotFound(ref cause) => cause,
+            GetLayerVersionByArnError::Service(ref cause) => cause,
+            GetLayerVersionByArnError::TooManyRequests(ref cause) => cause,
         }
     }
 }
@@ -3023,7 +3087,7 @@ impl Error for ListVersionsByFunctionError {
 /// Errors returned by PublishLayerVersion
 #[derive(Debug, PartialEq)]
 pub enum PublishLayerVersionError {
-    /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
+    /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
@@ -3086,7 +3150,7 @@ impl Error for PublishLayerVersionError {
 /// Errors returned by PublishVersion
 #[derive(Debug, PartialEq)]
 pub enum PublishVersionError {
-    /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
+    /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
@@ -3568,7 +3632,7 @@ impl Error for UpdateEventSourceMappingError {
 /// Errors returned by UpdateFunctionCode
 #[derive(Debug, PartialEq)]
 pub enum UpdateFunctionCodeError {
-    /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Limits</a> </p>
+    /// <p>You have exceeded your maximum total code size per account. <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">Learn more</a> </p>
     CodeStorageExceeded(String),
     /// <p>One of the parameters in the request is invalid. For example, if you provided an IAM role for AWS Lambda to assume in the <code>CreateFunction</code> or the <code>UpdateFunctionConfiguration</code> API, that AWS Lambda is unable to assume you will get this exception.</p>
     InvalidParameterValue(String),
@@ -3800,6 +3864,12 @@ pub trait Lambda {
         input: GetLayerVersionRequest,
     ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionError>;
 
+    /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
+    fn get_layer_version_by_arn(
+        &self,
+        input: GetLayerVersionByArnRequest,
+    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionByArnError>;
+
     /// <p>Returns the permission policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
     fn get_layer_version_policy(
         &self,
@@ -3812,7 +3882,7 @@ pub trait Lambda {
         input: GetPolicyRequest,
     ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
 
-    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
+    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
     fn invoke(&self, input: InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError>;
 
     /// <p><important> <p>For asynchronous function invocation, use <a>Invoke</a>.</p> </important> <p>Invokes a function asynchronously.</p></p>
@@ -3914,7 +3984,7 @@ pub trait Lambda {
         input: UpdateFunctionCodeRequest,
     ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionCodeError>;
 
-    /// <p>Modify the version-specifc settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
+    /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
     fn update_function_configuration(
         &self,
         input: UpdateFunctionConfigurationRequest,
@@ -4483,6 +4553,39 @@ impl Lambda for LambdaClient {
         })
     }
 
+    /// <p>Returns information about a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>, with a link to download the layer archive that's valid for 10 minutes.</p>
+    fn get_layer_version_by_arn(
+        &self,
+        input: GetLayerVersionByArnRequest,
+    ) -> RusotoFuture<GetLayerVersionResponse, GetLayerVersionByArnError> {
+        let request_uri = "/2018-10-31/layers";
+
+        let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("Arn", &input.arn);
+        params.put("find", "LayerVersion");
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetLayerVersionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetLayerVersionByArnError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Returns the permission policy for a version of an <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html">AWS Lambda layer</a>. For more information, see <a>AddLayerVersionPermission</a>.</p>
     fn get_layer_version_policy(
         &self,
@@ -4553,7 +4656,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
+    /// <p>Invokes a Lambda function. You can invoke a function synchronously (and wait for the response), or asynchronously. To invoke a function asynchronously, set <code>InvocationType</code> to <code>Event</code>.</p> <p>For synchronous invocation, details about the function response, including errors, are included in the response body and headers. For either invocation type, you can find more information in the <a href="https://docs.aws.amazon.com/lambda/latest/dg/monitoring-functions.html">execution log</a> and <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">trace</a>. To record function errors for asynchronous invocations, configure your function with a <a href="https://docs.aws.amazon.com/lambda/latest/dg/dlq.html">dead letter queue</a>.</p> <p>When an error occurs, your function may be invoked multiple times. Retry behavior varies by error type, client, event source, and invocation type. For example, if you invoke a function asynchronously and it returns an error, Lambda executes the function up to two more times. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/retries-on-errors.html">Retry Behavior</a>.</p> <p>The status code in the API response doesn't reflect function errors. Error codes are reserved for errors that prevent your function from executing, such as permissions errors, <a href="https://docs.aws.amazon.com/lambda/latest/dg/limits.html">limit errors</a>, or issues with your function's code and configuration. For example, Lambda returns <code>TooManyRequestsException</code> if executing the function would cause you to exceed a concurrency limit at either the account level (<code>ConcurrentInvocationLimitExceeded</code>) or function level (<code>ReservedFunctionConcurrentInvocationLimitExceeded</code>).</p> <p>For functions with a long timeout, your client might be disconnected during synchronous invocation while it waits for a response. Configure your HTTP client, SDK, firewall, proxy, or operating system to allow for long connections with timeout or keep-alive settings.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
     fn invoke(&self, input: InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/invocations",
@@ -5277,7 +5380,7 @@ impl Lambda for LambdaClient {
         })
     }
 
-    /// <p>Modify the version-specifc settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
+    /// <p>Modify the version-specific settings of a Lambda function.</p> <p>These settings can vary between versions of a function and are locked when you publish a version. You can't modify the configuration of a published version, only the unpublished version.</p> <p>To configure function concurrency, use <a>PutFunctionConcurrency</a>. To grant invoke permissions to an account or AWS service, use <a>AddPermission</a>.</p>
     fn update_function_configuration(
         &self,
         input: UpdateFunctionConfigurationRequest,

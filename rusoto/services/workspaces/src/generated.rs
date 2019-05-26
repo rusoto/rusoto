@@ -124,6 +124,10 @@ pub struct CreateIpGroupRequest {
     /// <p>The name of the group.</p>
     #[serde(rename = "GroupName")]
     pub group_name: String,
+    /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The rules to add to the group.</p>
     #[serde(rename = "UserRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -141,10 +145,10 @@ pub struct CreateIpGroupResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTagsRequest {
-    /// <p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
+    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>The tags. Each WorkSpace can have a maximum of 50 tags.</p>
+    /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -212,7 +216,7 @@ pub struct DeleteIpGroupResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTagsRequest {
-    /// <p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
+    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>The tag keys.</p>
@@ -274,7 +278,7 @@ pub struct DescribeAccountResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeClientPropertiesRequest {
-    /// <p>The resource identifiers, in the form of directory IDs.</p>
+    /// <p>The resource identifier, in the form of directory IDs.</p>
     #[serde(rename = "ResourceIds")]
     pub resource_ids: Vec<String>,
 }
@@ -319,7 +323,7 @@ pub struct DescribeIpGroupsResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTagsRequest {
-    /// <p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
+    /// <p>The identifier of the WorkSpaces resource. The supported resource types are WorkSpaces, registered directories, images, custom bundles, and IP access control groups.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
@@ -546,6 +550,10 @@ pub struct ImportWorkspaceImageRequest {
     /// <p>The ingestion process to be used when importing the image.</p>
     #[serde(rename = "IngestionProcess")]
     pub ingestion_process: String,
+    /// <p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -714,6 +722,10 @@ pub struct RebuildRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebuildWorkspacesRequest {
+    /// <p>Reserved.</p>
+    #[serde(rename = "AdditionalInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_info: Option<String>,
     /// <p>The WorkSpace to rebuild. You can specify a single WorkSpace.</p>
     #[serde(rename = "RebuildWorkspaceRequests")]
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
@@ -1091,7 +1103,7 @@ pub struct WorkspaceProperties {
     #[serde(rename = "RootVolumeSizeGib")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_volume_size_gib: Option<i64>,
-    /// <p>The running mode. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/running-mode.html">Manage the WorkSpace Running Mode</a>.</p>
+    /// <p>The running mode. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/running-mode.html">Manage the WorkSpace Running Mode</a>.</p>
     #[serde(rename = "RunningMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_mode: Option<String>,
@@ -2029,6 +2041,8 @@ impl Error for DisassociateIpGroupsError {
 pub enum ImportWorkspaceImageError {
     /// <p>The user is not authorized to access a resource.</p>
     AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
     /// <p>This operation is not supported.</p>
     OperationNotSupported(String),
     /// <p>The specified resource already exists.</p>
@@ -2045,6 +2059,11 @@ impl ImportWorkspaceImageError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(ImportWorkspaceImageError::InvalidParameterValues(
+                        err.msg,
+                    ))
                 }
                 "OperationNotSupportedException" => {
                     return RusotoError::Service(ImportWorkspaceImageError::OperationNotSupported(
@@ -2082,6 +2101,7 @@ impl Error for ImportWorkspaceImageError {
     fn description(&self) -> &str {
         match *self {
             ImportWorkspaceImageError::AccessDenied(ref cause) => cause,
+            ImportWorkspaceImageError::InvalidParameterValues(ref cause) => cause,
             ImportWorkspaceImageError::OperationNotSupported(ref cause) => cause,
             ImportWorkspaceImageError::ResourceAlreadyExists(ref cause) => cause,
             ImportWorkspaceImageError::ResourceLimitExceeded(ref cause) => cause,
@@ -2257,7 +2277,7 @@ pub enum ModifyWorkspacePropertiesError {
     ResourceNotFound(String),
     /// <p>The specified resource is not available.</p>
     ResourceUnavailable(String),
-    /// <p>The configuration of this WorkSpace is not supported for this operation. For more information, see the <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/">Amazon WorkSpaces Administration Guide</a>. </p>
+    /// <p>The configuration of this WorkSpace is not supported for this operation. For more information, see the <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/">Amazon WorkSpaces Administration Guide</a>. </p>
     UnsupportedWorkspaceConfiguration(String),
 }
 
@@ -2639,7 +2659,7 @@ pub trait Workspaces {
         input: CreateIpGroupRequest,
     ) -> RusotoFuture<CreateIpGroupResult, CreateIpGroupError>;
 
-    /// <p>Creates the specified tags for the specified WorkSpace.</p>
+    /// <p>Creates the specified tags for the specified WorkSpaces resource.</p>
     fn create_tags(
         &self,
         input: CreateTagsRequest,
@@ -2657,7 +2677,7 @@ pub trait Workspaces {
         input: DeleteIpGroupRequest,
     ) -> RusotoFuture<DeleteIpGroupResult, DeleteIpGroupError>;
 
-    /// <p>Deletes the specified tags from the specified WorkSpace.</p>
+    /// <p>Deletes the specified tags from the specified WorkSpaces resource.</p>
     fn delete_tags(
         &self,
         input: DeleteTagsRequest,
@@ -2690,7 +2710,7 @@ pub trait Workspaces {
         input: DescribeIpGroupsRequest,
     ) -> RusotoFuture<DescribeIpGroupsResult, DescribeIpGroupsError>;
 
-    /// <p>Describes the specified tags for the specified WorkSpace.</p>
+    /// <p>Describes the specified tags for the specified WorkSpaces resource.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -2753,7 +2773,7 @@ pub trait Workspaces {
         input: ModifyAccountRequest,
     ) -> RusotoFuture<ModifyAccountResult, ModifyAccountError>;
 
-    /// <p>Modifies the properties of the specified Amazon WorkSpaces client.</p>
+    /// <p>Modifies the properties of the specified Amazon WorkSpaces clients.</p>
     fn modify_client_properties(
         &self,
         input: ModifyClientPropertiesRequest,
@@ -2777,7 +2797,7 @@ pub trait Workspaces {
         input: RebootWorkspacesRequest,
     ) -> RusotoFuture<RebootWorkspacesResult, RebootWorkspacesError>;
 
-    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
+    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     fn rebuild_workspaces(
         &self,
         input: RebuildWorkspacesRequest,
@@ -2937,7 +2957,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Creates the specified tags for the specified WorkSpace.</p>
+    /// <p>Creates the specified tags for the specified WorkSpaces resource.</p>
     fn create_tags(
         &self,
         input: CreateTagsRequest,
@@ -3024,7 +3044,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Deletes the specified tags from the specified WorkSpace.</p>
+    /// <p>Deletes the specified tags from the specified WorkSpaces resource.</p>
     fn delete_tags(
         &self,
         input: DeleteTagsRequest,
@@ -3190,7 +3210,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Describes the specified tags for the specified WorkSpace.</p>
+    /// <p>Describes the specified tags for the specified WorkSpaces resource.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -3480,7 +3500,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Modifies the properties of the specified Amazon WorkSpaces client.</p>
+    /// <p>Modifies the properties of the specified Amazon WorkSpaces clients.</p>
     fn modify_client_properties(
         &self,
         input: ModifyClientPropertiesRequest,
@@ -3594,7 +3614,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
+    /// <p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     fn rebuild_workspaces(
         &self,
         input: RebuildWorkspacesRequest,

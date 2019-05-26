@@ -59,6 +59,30 @@ pub struct AddTagsToResourceMessage {
 pub struct AddTagsToResourceResponse {}
 
 /// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ApplyPendingMaintenanceActionMessage {
+    /// <p>The pending maintenance action to apply to this resource.</p>
+    #[serde(rename = "ApplyAction")]
+    pub apply_action: String,
+    /// <p><p>A value that specifies the type of opt-in request, or undoes an opt-in request. An opt-in request of type <code>immediate</code> cannot be undone.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul></p>
+    #[serde(rename = "OptInType")]
+    pub opt_in_type: String,
+    /// <p>The Amazon Resource Name (ARN) of the AWS DMS resource that the pending maintenance action applies to.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    pub replication_instance_arn: String,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ApplyPendingMaintenanceActionResponse {
+    /// <p>The AWS DMS resource that the pending maintenance action will be applied to.</p>
+    #[serde(rename = "ResourcePendingMaintenanceActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_pending_maintenance_actions: Option<ResourcePendingMaintenanceActions>,
+}
+
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AvailabilityZone {
@@ -164,11 +188,11 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
-    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
-    /// <p>Settings in JSON format for the target Elasticsearch endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration">Extra Connection Attributes When Using Elasticsearch as a Target for AWS DMS</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Elasticsearch endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration">Extra Connection Attributes When Using Elasticsearch as a Target for AWS DMS</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "ElasticsearchSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elasticsearch_settings: Option<ElasticsearchSettings>,
@@ -189,7 +213,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
@@ -197,7 +221,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "MongoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
@@ -209,7 +233,10 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring">Extra Connection Attributes When Using Amazon S3 as a Target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    #[serde(rename = "RedshiftSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redshift_settings: Option<RedshiftSettings>,
+    /// <p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring">Extra Connection Attributes When Using Amazon S3 as a Target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "S3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_settings: Option<S3Settings>,
@@ -252,7 +279,7 @@ pub struct CreateEventSubscriptionMessage {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <code>DescribeEventCategories</code> action or in the topic <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <code>DescribeEventCategories</code> action or in the topic <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "EventCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
@@ -407,7 +434,7 @@ pub struct CreateReplicationTaskMessage {
     /// <p><p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     pub replication_task_identifier: String,
-    /// <p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings for AWS Database Migration Service Tasks</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings for AWS Database Migration Service Tasks</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
@@ -815,6 +842,41 @@ pub struct DescribeOrderableReplicationInstancesResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribePendingMaintenanceActionsMessage {
+    /// <p><p/></p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_records: Option<i64>,
+    /// <p>The ARN of the replication instance.</p>
+    #[serde(rename = "ReplicationInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_instance_arn: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribePendingMaintenanceActionsResponse {
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The pending maintenance action.</p>
+    #[serde(rename = "PendingMaintenanceActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRefreshSchemasStatusMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
@@ -975,6 +1037,10 @@ pub struct DescribeReplicationTasksMessage {
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
+    /// <p>Set this flag to avoid returning setting information. Use this to reduce overhead when settings are too large. Choose TRUE to use this flag, otherwise choose FALSE (default).</p>
+    #[serde(rename = "WithoutSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub without_settings: Option<bool>,
 }
 
 /// <p><p/></p>
@@ -1111,7 +1177,7 @@ pub struct Endpoint {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value. </p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value.</p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
@@ -1171,6 +1237,10 @@ pub struct Endpoint {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
+    /// <p>Settings for the Amazon Redshift endpoint</p>
+    #[serde(rename = "RedshiftSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redshift_settings: Option<RedshiftSettings>,
     /// <p>The settings for the S3 target endpoint. For more information, see the <code>S3Settings</code> structure.</p>
     #[serde(rename = "S3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1373,11 +1443,11 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
-    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
-    /// <p>Settings in JSON format for the target Elasticsearch endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration">Extra Connection Attributes When Using Elasticsearch as a Target for AWS DMS</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Elasticsearch endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration">Extra Connection Attributes When Using Elasticsearch as a Target for AWS DMS</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "ElasticsearchSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elasticsearch_settings: Option<ElasticsearchSettings>,
@@ -1404,11 +1474,11 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "KinesisSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_settings: Option<KinesisSettings>,
-    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "MongoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
@@ -1420,7 +1490,10 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring">Extra Connection Attributes When Using Amazon S3 as a Target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    #[serde(rename = "RedshiftSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redshift_settings: Option<RedshiftSettings>,
+    /// <p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring">Extra Connection Attributes When Using Amazon S3 as a Target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "S3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_settings: Option<S3Settings>,
@@ -1672,6 +1745,10 @@ pub struct MongoDbSettings {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct OrderableReplicationInstance {
+    /// <p>List of availability zones for this replication instance.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
     /// <p>The default amount of storage (in gigabytes) that is allocated for the replication instance.</p>
     #[serde(rename = "DefaultAllocatedStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1702,6 +1779,36 @@ pub struct OrderableReplicationInstance {
     pub storage_type: Option<String>,
 }
 
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PendingMaintenanceAction {
+    /// <p>The type of pending maintenance action that is available for the resource.</p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The date of the maintenance window when the action will be applied. The maintenance action will be applied to the resource during its first maintenance window after this date. If this date is specified, any <code>next-maintenance</code> opt-in requests are ignored.</p>
+    #[serde(rename = "AutoAppliedAfterDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_applied_after_date: Option<f64>,
+    /// <p>The effective date when the pending maintenance action will be applied to the resource. This date takes into account opt-in requests received from the <code>ApplyPendingMaintenanceAction</code> API, the <code>AutoAppliedAfterDate</code>, and the <code>ForcedApplyDate</code>. This value is blank if an opt-in request has not been received and nothing has been specified as <code>AutoAppliedAfterDate</code> or <code>ForcedApplyDate</code>.</p>
+    #[serde(rename = "CurrentApplyDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_apply_date: Option<f64>,
+    /// <p>A description providing more detail about the maintenance action.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The date when the maintenance action will be automatically applied. The maintenance action will be applied to the resource on this date regardless of the maintenance window for the resource. If this date is specified, any <code>immediate</code> opt-in requests are ignored.</p>
+    #[serde(rename = "ForcedApplyDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub forced_apply_date: Option<f64>,
+    /// <p>Indicates the type of opt-in request that has been received for the resource.</p>
+    #[serde(rename = "OptInStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub opt_in_status: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebootReplicationInstanceMessage {
     /// <p>If this parameter is <code>true</code>, the reboot is conducted through a Multi-AZ failover. (If the instance isn't configured for Multi-AZ, then you can't specify <code>true</code>.)</p>
@@ -1720,6 +1827,111 @@ pub struct RebootReplicationInstanceResponse {
     #[serde(rename = "ReplicationInstance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_instance: Option<ReplicationInstance>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RedshiftSettings {
+    /// <p>Allows any date format, including invalid formats such as 00/00/00 00:00:00, to be loaded without generating an error. You can choose TRUE or FALSE (default).</p> <p>This parameter applies only to TIMESTAMP and DATE columns. Always use ACCEPTANYDATE with the DATEFORMAT parameter. If the date format for the data does not match the DATEFORMAT specification, Amazon Redshift inserts a NULL value into that field. </p>
+    #[serde(rename = "AcceptAnyDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_any_date: Option<bool>,
+    /// <p>Code to run after connecting. This should be the code, not a filename.</p>
+    #[serde(rename = "AfterConnectScript")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_connect_script: Option<String>,
+    /// <p>The location where the CSV files are stored before being uploaded to the S3 bucket. </p>
+    #[serde(rename = "BucketFolder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_folder: Option<String>,
+    /// <p>The name of the S3 bucket you want to use</p>
+    #[serde(rename = "BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_name: Option<String>,
+    /// <p>Sets the amount of time to wait (in milliseconds) before timing out, beginning from when you initially establish a connection.</p>
+    #[serde(rename = "ConnectionTimeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_timeout: Option<i64>,
+    /// <p>The name of the Amazon Redshift data warehouse (service) you are working with.</p>
+    #[serde(rename = "DatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_name: Option<String>,
+    /// <p>The date format you are using. Valid values are <code>auto</code> (case-sensitive), your date format string enclosed in quotes, or NULL. If this is left unset (NULL), it defaults to a format of 'YYYY-MM-DD'. Using <code>auto</code> recognizes most strings, even some that are not supported when you use a date format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>
+    #[serde(rename = "DateFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_format: Option<String>,
+    /// <p>Specifies whether AWS DMS should migrate empty CHAR and VARCHAR fields as NULL. A value of TRUE sets empty CHAR and VARCHAR fields to null. The default is FALSE.</p>
+    #[serde(rename = "EmptyAsNull")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub empty_as_null: Option<bool>,
+    /// <p>The type of server side encryption you want to use for your data. This is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either SSE_S3 (default) or SSE_KMS. To use SSE_S3, create an IAM role with a policy that allows <code>"arn:aws:s3:::*"</code> to use the following actions: <code>"s3:PutObject", "s3:ListBucket"</code>.</p>
+    #[serde(rename = "EncryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_mode: Option<String>,
+    /// <p>Specifies the number of threads used to upload a single file. This accepts a value between 1 and 64. It defaults to 10.</p>
+    #[serde(rename = "FileTransferUploadStreams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_transfer_upload_streams: Option<i64>,
+    /// <p>Sets the amount of time to wait (in milliseconds) before timing out, beginning from when you begin loading.</p>
+    #[serde(rename = "LoadTimeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_timeout: Option<i64>,
+    /// <p>Specifies the maximum size (in KB) of any CSV file used to transfer data to Amazon Redshift. This accepts a value between 1 and 1048576. It defaults to 32768 KB (32 MB).</p>
+    #[serde(rename = "MaxFileSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_file_size: Option<i64>,
+    /// <p>The password for the user named in the username property.</p>
+    #[serde(rename = "Password")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub password: Option<String>,
+    /// <p>The port number for Amazon Redshift. The default value is 5439.</p>
+    #[serde(rename = "Port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+    /// <p>Removes surrounding quotation marks from strings in the incoming data. All characters within the quotation marks, including delimiters, are retained. Choose TRUE to remove quotation marks. The default is FALSE.</p>
+    #[serde(rename = "RemoveQuotes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove_quotes: Option<bool>,
+    /// <p>Replaces invalid characters specified in <code>ReplaceInvalidChars</code>, substituting the specified value instead. The default is "?".</p>
+    #[serde(rename = "ReplaceChars")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replace_chars: Option<String>,
+    /// <p>A list of chars you want to replace. Use with <code>ReplaceChars</code>.</p>
+    #[serde(rename = "ReplaceInvalidChars")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replace_invalid_chars: Option<String>,
+    /// <p>The name of the Amazon Redshift cluster you are using.</p>
+    #[serde(rename = "ServerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_name: Option<String>,
+    /// <p>If you are using SSE_KMS for the <code>EncryptionMode</code>, provide the KMS Key ID. The key you use needs an attached policy that enables IAM user permissions and allows use of the key.</p>
+    #[serde(rename = "ServerSideEncryptionKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_side_encryption_kms_key_id: Option<String>,
+    /// <p>The ARN of the role that has access to the Redshift service.</p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_access_role_arn: Option<String>,
+    /// <p>The time format you want to use. Valid values are <code>auto</code> (case-sensitive), 'timeformat_string', 'epochsecs', or 'epochmillisecs'. It defaults to 10. Using <code>auto</code> recognizes most strings, even some that are not supported when you use a time format string. </p> <p>If your date and time values use formats different from each other, set this to <code>auto</code>. </p>
+    #[serde(rename = "TimeFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_format: Option<String>,
+    /// <p>Removes the trailing white space characters from a VARCHAR string. This parameter applies only to columns with a VARCHAR data type. Choose TRUE to remove unneeded white space. The default is FALSE.</p>
+    #[serde(rename = "TrimBlanks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trim_blanks: Option<bool>,
+    /// <p>Truncates data in columns to the appropriate number of characters, so that it fits in the column. Applies only to columns with a VARCHAR or CHAR data type, and rows with a size of 4 MB or less. Choose TRUE to truncate data. The default is FALSE.</p>
+    #[serde(rename = "TruncateColumns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truncate_columns: Option<bool>,
+    /// <p>An Amazon Redshift user name for a registered user.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+    /// <p>The size of the write buffer to use in rows. Valid values range from 1 to 2048. Defaults to 1024. Use this setting to tune performance. </p>
+    #[serde(rename = "WriteBufferSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub write_buffer_size: Option<i64>,
 }
 
 /// <p><p/></p>
@@ -2103,9 +2315,23 @@ pub struct ReplicationTaskStats {
 }
 
 /// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResourcePendingMaintenanceActions {
+    /// <p>Detailed information about the pending maintenance action.</p>
+    #[serde(rename = "PendingMaintenanceActionDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_maintenance_action_details: Option<Vec<PendingMaintenanceAction>>,
+    /// <p>The Amazon Resource Name (ARN) of the DMS resource that the pending maintenance action applies to. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/dms/latest/UserGuide/USER_Tagging.html#USER_Tagging.ARN"> Constructing an Amazon Resource Name (ARN)</a> in the DMS documentation.</p>
+    #[serde(rename = "ResourceIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifier: Option<String>,
+}
+
+/// <p>Settings for exporting data to Amazon S3. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Settings {
-    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path &lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/. If this parameter is not specified, then the path used is &lt;schema_name&gt;/&lt;table_name&gt;/. </p>
+    /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path <code>&lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/</code>. If this parameter is not specified, then the path used is <code>&lt;schema_name&gt;/&lt;table_name&gt;/</code>. </p>
     #[serde(rename = "BucketFolder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_folder: Option<String>,
@@ -2113,7 +2339,11 @@ pub struct S3Settings {
     #[serde(rename = "BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket_name: Option<String>,
-    /// <p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. </p>
+    /// <p>Option to write only <code>INSERT</code> operations to the comma-separated value (CSV) output files. By default, the first field in a CSV record contains the letter <code>I</code> (insert), <code>U</code> (update) or <code>D</code> (delete) to indicate whether the row was inserted, updated, or deleted at the source database. If <code>cdcInsertsOnly</code> is set to true, then only <code>INSERT</code>s are recorded in the CSV file, without the <code>I</code> annotation on each line. Valid values are <code>TRUE</code> and <code>FALSE</code>.</p>
+    #[serde(rename = "CdcInsertsOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cdc_inserts_only: Option<bool>,
+    /// <p> An optional parameter to use GZIP to compress the target files. Set to GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed. Applies to both CSV and PARQUET data formats. </p>
     #[serde(rename = "CompressionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compression_type: Option<String>,
@@ -2121,14 +2351,50 @@ pub struct S3Settings {
     #[serde(rename = "CsvDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub csv_delimiter: Option<String>,
-    /// <p> The delimiter used to separate rows in the source files. The default is a carriage return (\n). </p>
+    /// <p> The delimiter used to separate rows in the source files. The default is a carriage return (<code>\n</code>). </p>
     #[serde(rename = "CsvRowDelimiter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub csv_row_delimiter: Option<String>,
+    /// <p><p>The format of the data which you want to use for output. You can choose one of the following: </p> <ul> <li> <p> <code>CSV</code> : This is a row-based format with comma-separated values. </p> </li> <li> <p> <code>PARQUET</code> : Apache Parquet is a columnar storage format that features efficient compression and provides faster query response. </p> </li> </ul></p>
+    #[serde(rename = "DataFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_format: Option<String>,
+    /// <p>The size of one data page in bytes. Defaults to 1024 * 1024 bytes (1MiB). For <code>PARQUET</code> format only. </p>
+    #[serde(rename = "DataPageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_page_size: Option<i64>,
+    /// <p>The maximum size of an encoded dictionary page of a column. If the dictionary page exceeds this, this column is stored using an encoding type of <code>PLAIN</code>. Defaults to 1024 * 1024 bytes (1MiB), the maximum size of a dictionary page before it reverts to <code>PLAIN</code> encoding. For <code>PARQUET</code> format only. </p>
+    #[serde(rename = "DictPageSizeLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dict_page_size_limit: Option<i64>,
+    /// <p>Enables statistics for Parquet pages and rowGroups. Choose <code>TRUE</code> to enable statistics, choose <code>FALSE</code> to disable. Statistics include <code>NULL</code>, <code>DISTINCT</code>, <code>MAX</code>, and <code>MIN</code> values. Defaults to <code>TRUE</code>. For <code>PARQUET</code> format only.</p>
+    #[serde(rename = "EnableStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_statistics: Option<bool>,
+    /// <p><p>The type of encoding you are using: <code>RLE<em>DICTIONARY</code> (default), <code>PLAIN</code>, or <code>PLAIN</em>DICTIONARY</code>.</p> <ul> <li> <p> <code>RLE<em>DICTIONARY</code> uses a combination of bit-packing and run-length encoding to store repeated values more efficiently.</p> </li> <li> <p> <code>PLAIN</code> does not use encoding at all. Values are stored as they are.</p> </li> <li> <p> <code>PLAIN</em>DICTIONARY</code> builds a dictionary of the values encountered in a given column. The dictionary is stored in a dictionary page for each column chunk.</p> </li> </ul></p>
+    #[serde(rename = "EncodingType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encoding_type: Option<String>,
+    /// <p><p>The type of server side encryption you want to use for your data. This is part of the endpoint settings or the extra connections attributes for Amazon S3. You can choose either <code>SSE<em>S3</code> (default) or <code>SSE</em>KMS</code>. To use <code>SSE_S3</code>, you need an IAM role with permission to allow <code>&quot;arn:aws:s3:::dms-*&quot;</code> to use the following actions:</p> <ul> <li> <p>s3:CreateBucket</p> </li> <li> <p>s3:ListBucket</p> </li> <li> <p>s3:DeleteBucket</p> </li> <li> <p>s3:GetBucketLocation</p> </li> <li> <p>s3:GetObject</p> </li> <li> <p>s3:PutObject</p> </li> <li> <p>s3:DeleteObject</p> </li> <li> <p>s3:GetObjectVersion</p> </li> <li> <p>s3:GetBucketPolicy</p> </li> <li> <p>s3:PutBucketPolicy</p> </li> <li> <p>s3:DeleteBucketPolicy</p> </li> </ul></p>
+    #[serde(rename = "EncryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_mode: Option<String>,
     /// <p> The external table definition. </p>
     #[serde(rename = "ExternalTableDefinition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_table_definition: Option<String>,
+    /// <p>The version of Apache Parquet format you want to use: <code>PARQUET_1_0</code> (default) or <code>PARQUET_2_0</code>.</p>
+    #[serde(rename = "ParquetVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parquet_version: Option<String>,
+    /// <p>The number of rows in a row group. A smaller row group size provides faster reads. But as the number of row groups grows, the slower writes become. Defaults to 10,000 (ten thousand) rows. For <code>PARQUET</code> format only. </p> <p>If you choose a value larger than the maximum, <code>RowGroupLength</code> is set to the max row group length in bytes (64 * 1024 * 1024). </p>
+    #[serde(rename = "RowGroupLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub row_group_length: Option<i64>,
+    /// <p>If you are using SSE_KMS for the <code>EncryptionMode</code>, provide the KMS Key ID. The key you use needs an attached policy that enables IAM user permissions and allows use of the key.</p> <p>Here is a CLI example: <code>aws dms create-endpoint --endpoint-identifier &lt;value&gt; --endpoint-type target --engine-name s3 --s3-settings ServiceAccessRoleArn=&lt;value&gt;,BucketFolder=&lt;value&gt;,BucketName=&lt;value&gt;,EncryptionMode=SSE_KMS,ServerSideEncryptionKmsKeyId=&lt;value&gt; </code> </p>
+    #[serde(rename = "ServerSideEncryptionKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_side_encryption_kms_key_id: Option<String>,
     /// <p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2410,10 +2676,47 @@ impl Error for AddTagsToResourceError {
         }
     }
 }
+/// Errors returned by ApplyPendingMaintenanceAction
+#[derive(Debug, PartialEq)]
+pub enum ApplyPendingMaintenanceActionError {
+    /// <p>The resource could not be found.</p>
+    ResourceNotFoundFault(String),
+}
+
+impl ApplyPendingMaintenanceActionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ApplyPendingMaintenanceActionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundFault" => {
+                    return RusotoError::Service(
+                        ApplyPendingMaintenanceActionError::ResourceNotFoundFault(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ApplyPendingMaintenanceActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ApplyPendingMaintenanceActionError {
+    fn description(&self) -> &str {
+        match *self {
+            ApplyPendingMaintenanceActionError::ResourceNotFoundFault(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointError {
-    /// <p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
@@ -2486,6 +2789,16 @@ impl Error for CreateEndpointError {
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
+    /// <p>The ciphertext references a key that doesn't exist or DMS account doesn't have an access to</p>
+    KMSAccessDeniedFault(String),
+    /// <p>The specified master key (CMK) isn't enabled.</p>
+    KMSDisabledFault(String),
+    /// <p>The state of the specified KMS resource isn't valid for this request.</p>
+    KMSInvalidStateFault(String),
+    /// <p>The specified KMS entity or resource can't be found.</p>
+    KMSNotFoundFault(String),
+    /// <p>This request triggered KMS request throttling.</p>
+    KMSThrottlingFault(String),
     /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
     /// <p>The resource could not be found.</p>
@@ -2502,6 +2815,31 @@ impl CreateEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "KMSAccessDeniedFault" => {
+                    return RusotoError::Service(
+                        CreateEventSubscriptionError::KMSAccessDeniedFault(err.msg),
+                    )
+                }
+                "KMSDisabledFault" => {
+                    return RusotoError::Service(CreateEventSubscriptionError::KMSDisabledFault(
+                        err.msg,
+                    ))
+                }
+                "KMSInvalidStateFault" => {
+                    return RusotoError::Service(
+                        CreateEventSubscriptionError::KMSInvalidStateFault(err.msg),
+                    )
+                }
+                "KMSNotFoundFault" => {
+                    return RusotoError::Service(CreateEventSubscriptionError::KMSNotFoundFault(
+                        err.msg,
+                    ))
+                }
+                "KMSThrottlingFault" => {
+                    return RusotoError::Service(CreateEventSubscriptionError::KMSThrottlingFault(
+                        err.msg,
+                    ))
+                }
                 "ResourceAlreadyExistsFault" => {
                     return RusotoError::Service(
                         CreateEventSubscriptionError::ResourceAlreadyExistsFault(err.msg),
@@ -2542,6 +2880,11 @@ impl fmt::Display for CreateEventSubscriptionError {
 impl Error for CreateEventSubscriptionError {
     fn description(&self) -> &str {
         match *self {
+            CreateEventSubscriptionError::KMSAccessDeniedFault(ref cause) => cause,
+            CreateEventSubscriptionError::KMSDisabledFault(ref cause) => cause,
+            CreateEventSubscriptionError::KMSInvalidStateFault(ref cause) => cause,
+            CreateEventSubscriptionError::KMSNotFoundFault(ref cause) => cause,
+            CreateEventSubscriptionError::KMSThrottlingFault(ref cause) => cause,
             CreateEventSubscriptionError::ResourceAlreadyExistsFault(ref cause) => cause,
             CreateEventSubscriptionError::ResourceNotFoundFault(ref cause) => cause,
             CreateEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => cause,
@@ -2553,7 +2896,7 @@ impl Error for CreateEventSubscriptionError {
 /// Errors returned by CreateReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationInstanceError {
-    /// <p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
     AccessDeniedFault(String),
     /// <p>There are not enough resources allocated to the database migration.</p>
     InsufficientResourceCapacityFault(String),
@@ -2664,7 +3007,7 @@ impl Error for CreateReplicationInstanceError {
 /// Errors returned by CreateReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationSubnetGroupError {
-    /// <p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
     AccessDeniedFault(String),
     /// <p>The subnet provided is invalid.</p>
     InvalidSubnet(String),
@@ -2743,7 +3086,7 @@ impl Error for CreateReplicationSubnetGroupError {
 /// Errors returned by CreateReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationTaskError {
-    /// <p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
@@ -3344,6 +3687,43 @@ impl Error for DescribeOrderableReplicationInstancesError {
         match *self {}
     }
 }
+/// Errors returned by DescribePendingMaintenanceActions
+#[derive(Debug, PartialEq)]
+pub enum DescribePendingMaintenanceActionsError {
+    /// <p>The resource could not be found.</p>
+    ResourceNotFoundFault(String),
+}
+
+impl DescribePendingMaintenanceActionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribePendingMaintenanceActionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundFault" => {
+                    return RusotoError::Service(
+                        DescribePendingMaintenanceActionsError::ResourceNotFoundFault(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribePendingMaintenanceActionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribePendingMaintenanceActionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribePendingMaintenanceActionsError::ResourceNotFoundFault(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeRefreshSchemasStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeRefreshSchemasStatusError {
@@ -3761,7 +4141,7 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ModifyEndpoint
 #[derive(Debug, PartialEq)]
 pub enum ModifyEndpointError {
-    /// <p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
@@ -3826,6 +4206,16 @@ impl Error for ModifyEndpointError {
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
+    /// <p>The ciphertext references a key that doesn't exist or DMS account doesn't have an access to</p>
+    KMSAccessDeniedFault(String),
+    /// <p>The specified master key (CMK) isn't enabled.</p>
+    KMSDisabledFault(String),
+    /// <p>The state of the specified KMS resource isn't valid for this request.</p>
+    KMSInvalidStateFault(String),
+    /// <p>The specified KMS entity or resource can't be found.</p>
+    KMSNotFoundFault(String),
+    /// <p>This request triggered KMS request throttling.</p>
+    KMSThrottlingFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// <p>The quota for this resource quota has been exceeded.</p>
@@ -3840,6 +4230,31 @@ impl ModifyEventSubscriptionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEventSubscriptionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "KMSAccessDeniedFault" => {
+                    return RusotoError::Service(
+                        ModifyEventSubscriptionError::KMSAccessDeniedFault(err.msg),
+                    )
+                }
+                "KMSDisabledFault" => {
+                    return RusotoError::Service(ModifyEventSubscriptionError::KMSDisabledFault(
+                        err.msg,
+                    ))
+                }
+                "KMSInvalidStateFault" => {
+                    return RusotoError::Service(
+                        ModifyEventSubscriptionError::KMSInvalidStateFault(err.msg),
+                    )
+                }
+                "KMSNotFoundFault" => {
+                    return RusotoError::Service(ModifyEventSubscriptionError::KMSNotFoundFault(
+                        err.msg,
+                    ))
+                }
+                "KMSThrottlingFault" => {
+                    return RusotoError::Service(ModifyEventSubscriptionError::KMSThrottlingFault(
+                        err.msg,
+                    ))
+                }
                 "ResourceNotFoundFault" => {
                     return RusotoError::Service(
                         ModifyEventSubscriptionError::ResourceNotFoundFault(err.msg),
@@ -3875,6 +4290,11 @@ impl fmt::Display for ModifyEventSubscriptionError {
 impl Error for ModifyEventSubscriptionError {
     fn description(&self) -> &str {
         match *self {
+            ModifyEventSubscriptionError::KMSAccessDeniedFault(ref cause) => cause,
+            ModifyEventSubscriptionError::KMSDisabledFault(ref cause) => cause,
+            ModifyEventSubscriptionError::KMSInvalidStateFault(ref cause) => cause,
+            ModifyEventSubscriptionError::KMSNotFoundFault(ref cause) => cause,
+            ModifyEventSubscriptionError::KMSThrottlingFault(ref cause) => cause,
             ModifyEventSubscriptionError::ResourceNotFoundFault(ref cause) => cause,
             ModifyEventSubscriptionError::ResourceQuotaExceededFault(ref cause) => cause,
             ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => cause,
@@ -3885,6 +4305,8 @@ impl Error for ModifyEventSubscriptionError {
 /// Errors returned by ModifyReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationInstanceError {
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
+    AccessDeniedFault(String),
     /// <p>There are not enough resources allocated to the database migration.</p>
     InsufficientResourceCapacityFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
@@ -3903,6 +4325,11 @@ impl ModifyReplicationInstanceError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyReplicationInstanceError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedFault" => {
+                    return RusotoError::Service(ModifyReplicationInstanceError::AccessDeniedFault(
+                        err.msg,
+                    ))
+                }
                 "InsufficientResourceCapacityFault" => {
                     return RusotoError::Service(
                         ModifyReplicationInstanceError::InsufficientResourceCapacityFault(err.msg),
@@ -3948,6 +4375,7 @@ impl fmt::Display for ModifyReplicationInstanceError {
 impl Error for ModifyReplicationInstanceError {
     fn description(&self) -> &str {
         match *self {
+            ModifyReplicationInstanceError::AccessDeniedFault(ref cause) => cause,
             ModifyReplicationInstanceError::InsufficientResourceCapacityFault(ref cause) => cause,
             ModifyReplicationInstanceError::InvalidResourceStateFault(ref cause) => cause,
             ModifyReplicationInstanceError::ResourceAlreadyExistsFault(ref cause) => cause,
@@ -3960,7 +4388,7 @@ impl Error for ModifyReplicationInstanceError {
 /// Errors returned by ModifyReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationSubnetGroupError {
-    /// <p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
     AccessDeniedFault(String),
     /// <p>The subnet provided is invalid.</p>
     InvalidSubnet(String),
@@ -4276,7 +4704,7 @@ impl Error for RemoveTagsFromResourceError {
 /// Errors returned by StartReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StartReplicationTaskError {
-    /// <p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
@@ -4479,13 +4907,19 @@ pub trait DatabaseMigrationService {
         input: AddTagsToResourceMessage,
     ) -> RusotoFuture<AddTagsToResourceResponse, AddTagsToResourceError>;
 
+    /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
+    fn apply_pending_maintenance_action(
+        &self,
+        input: ApplyPendingMaintenanceActionMessage,
+    ) -> RusotoFuture<ApplyPendingMaintenanceActionResponse, ApplyPendingMaintenanceActionError>;
+
     /// <p>Creates an endpoint using the provided settings.</p>
     fn create_endpoint(
         &self,
         input: CreateEndpointMessage,
     ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError>;
 
-    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
@@ -4574,7 +5008,7 @@ pub trait DatabaseMigrationService {
         input: DescribeEndpointsMessage,
     ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
 
-    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
@@ -4586,7 +5020,7 @@ pub trait DatabaseMigrationService {
         input: DescribeEventSubscriptionsMessage,
     ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
 
-    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
     fn describe_events(
         &self,
         input: DescribeEventsMessage,
@@ -4599,6 +5033,15 @@ pub trait DatabaseMigrationService {
     ) -> RusotoFuture<
         DescribeOrderableReplicationInstancesResponse,
         DescribeOrderableReplicationInstancesError,
+    >;
+
+    /// <p>For internal use only</p>
+    fn describe_pending_maintenance_actions(
+        &self,
+        input: DescribePendingMaintenanceActionsMessage,
+    ) -> RusotoFuture<
+        DescribePendingMaintenanceActionsResponse,
+        DescribePendingMaintenanceActionsError,
     >;
 
     /// <p>Returns the status of the RefreshSchemas operation.</p>
@@ -4691,7 +5134,7 @@ pub trait DatabaseMigrationService {
         input: ModifyReplicationSubnetGroupMessage,
     ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
 
-    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
+    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
     fn modify_replication_task(
         &self,
         input: ModifyReplicationTaskMessage,
@@ -4721,7 +5164,7 @@ pub trait DatabaseMigrationService {
         input: RemoveTagsFromResourceMessage,
     ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
 
-    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn start_replication_task(
         &self,
         input: StartReplicationTaskMessage,
@@ -4811,6 +5254,36 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
+    /// <p>Applies a pending maintenance action to a resource (for example, to a replication instance).</p>
+    fn apply_pending_maintenance_action(
+        &self,
+        input: ApplyPendingMaintenanceActionMessage,
+    ) -> RusotoFuture<ApplyPendingMaintenanceActionResponse, ApplyPendingMaintenanceActionError>
+    {
+        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.ApplyPendingMaintenanceAction",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ApplyPendingMaintenanceActionResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ApplyPendingMaintenanceActionError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates an endpoint using the provided settings.</p>
     fn create_endpoint(
         &self,
@@ -4840,7 +5313,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
@@ -5262,7 +5735,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
@@ -5317,7 +5790,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
     fn describe_events(
         &self,
         input: DescribeEventsMessage,
@@ -5373,6 +5846,40 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeOrderableReplicationInstancesError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>For internal use only</p>
+    fn describe_pending_maintenance_actions(
+        &self,
+        input: DescribePendingMaintenanceActionsMessage,
+    ) -> RusotoFuture<
+        DescribePendingMaintenanceActionsResponse,
+        DescribePendingMaintenanceActionsError,
+    > {
+        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribePendingMaintenanceActions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribePendingMaintenanceActionsResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribePendingMaintenanceActionsError::from_response(
                         response,
                     ))
                 }))
@@ -5790,7 +6297,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
+    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
     fn modify_replication_task(
         &self,
         input: ModifyReplicationTaskMessage,
@@ -5933,7 +6440,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
+    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn start_replication_task(
         &self,
         input: StartReplicationTaskMessage,

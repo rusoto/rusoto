@@ -246,7 +246,7 @@ pub struct CreateDatasetRequest {
     /// <p>The name of the data set.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
-    /// <p>[Optional] How long, in days, message data is kept for the data set. If not given or set to null, the latest version of the dataset content plus the latest succeeded version (if they are different) are retained for at most 90 days.</p>
+    /// <p>[Optional] How long, in days, versions of data set contents are kept for the data set. If not specified or set to null, versions of data set contents are retained for at most 90 days. The number of versions of data set contents retained is determined by the <code>versioningConfiguration</code> parameter. (For more information, see https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions)</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -258,6 +258,10 @@ pub struct CreateDatasetRequest {
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<DatasetTrigger>>,
+    /// <p>[Optional] How many versions of data set contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the "retentionPeriod" parameter. (For more information, see https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions)</p>
+    #[serde(rename = "versioningConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub versioning_configuration: Option<VersioningConfiguration>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -271,7 +275,7 @@ pub struct CreateDatasetResponse {
     #[serde(rename = "datasetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_name: Option<String>,
-    /// <p>How long, in days, message data is kept for the data set.</p>
+    /// <p>How long, in days, data set contents are kept for the data set.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -311,7 +315,7 @@ pub struct CreateDatastoreResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePipelineRequest {
-    /// <p>A list of pipeline activities.</p> <p>The list can be 1-25 <b>PipelineActivity</b> objects. Activities perform transformations on your messages, such as removing, renaming, or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p>
+    /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
     #[serde(rename = "pipelineActivities")]
     pub pipeline_activities: Vec<PipelineActivity>,
     /// <p>The name of the pipeline.</p>
@@ -376,6 +380,10 @@ pub struct Dataset {
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<DatasetTrigger>>,
+    /// <p>[Optional] How many versions of data set contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the "retentionPeriod" parameter. (For more information, see https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions)</p>
+    #[serde(rename = "versioningConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub versioning_configuration: Option<VersioningConfiguration>,
 }
 
 /// <p>A "DatasetAction" object that specifies how data set contents are automatically created.</p>
@@ -395,7 +403,7 @@ pub struct DatasetAction {
     pub query_action: Option<SqlQueryDatasetAction>,
 }
 
-/// <p><p/></p>
+/// <p>Information about the action which automatically creates the data set's contents.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DatasetActionSummary {
@@ -416,6 +424,10 @@ pub struct DatasetContentDeliveryDestination {
     #[serde(rename = "iotEventsDestinationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iot_events_destination_configuration: Option<IotEventsDestinationConfiguration>,
+    /// <p>Configuration information for delivery of data set contents to Amazon S3.</p>
+    #[serde(rename = "s3DestinationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_destination_configuration: Option<S3DestinationConfiguration>,
 }
 
 /// <p>When data set contents are created they are delivered to destination specified here.</p>
@@ -843,6 +855,17 @@ pub struct GetDatasetContentResponse {
     #[serde(rename = "timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<f64>,
+}
+
+/// <p>Configuration information for coordination with the AWS Glue ETL (extract, transform and load) service.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct GlueConfiguration {
+    /// <p>The name of the database in your AWS Glue Data Catalog in which the table is located. (An AWS Glue Data Catalog database contains Glue Data tables.)</p>
+    #[serde(rename = "databaseName")]
+    pub database_name: String,
+    /// <p>The name of the table in your AWS Glue Data Catalog which is used to perform the ETL (extract, transform and load) operations. (An AWS Glue Data Catalog table contains partitioned data and descriptions of data sources and targets.)</p>
+    #[serde(rename = "tableName")]
+    pub table_name: String,
 }
 
 /// <p>Configuration information for delivery of data set contents to AWS IoT Events.</p>
@@ -1285,6 +1308,24 @@ pub struct RunPipelineActivityResponse {
     pub payloads: Option<Vec<bytes::Bytes>>,
 }
 
+/// <p>Configuration information for delivery of data set contents to Amazon S3.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct S3DestinationConfiguration {
+    /// <p>The name of the Amazon S3 bucket to which data set contents are delivered.</p>
+    #[serde(rename = "bucket")]
+    pub bucket: String,
+    /// <p>Configuration information for coordination with the AWS Glue ETL (extract, transform and load) service.</p>
+    #[serde(rename = "glueConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub glue_configuration: Option<GlueConfiguration>,
+    /// <p>The key of the data set contents object. Each object in an Amazon S3 bucket has a key that is its unique identifier within the bucket (each object in a bucket has exactly one key).</p>
+    #[serde(rename = "key")]
+    pub key: String,
+    /// <p>The ARN of the role which grants AWS IoT Analytics permission to interact with your Amazon S3 and AWS Glue resources.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SampleChannelDataRequest {
     /// <p>The name of the channel whose message samples are retrieved.</p>
@@ -1321,7 +1362,7 @@ pub struct SampleChannelDataResponse {
 /// <p>The schedule for when to trigger an update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Schedule {
-    /// <p>The expression that defines when to trigger an update. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html"> Schedule Expressions for Rules</a> in the Amazon CloudWatch documentation.</p>
+    /// <p>The expression that defines when to trigger an update. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html"> Schedule Expressions for Rules</a> in the Amazon CloudWatch Events User Guide.</p>
     #[serde(rename = "expression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
@@ -1448,7 +1489,7 @@ pub struct UpdateDatasetRequest {
     /// <p>The name of the data set to update.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
-    /// <p>How long, in days, message data is kept for the data set.</p>
+    /// <p>How long, in days, data set contents are kept for the data set.</p>
     #[serde(rename = "retentionPeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_period: Option<RetentionPeriod>,
@@ -1456,6 +1497,10 @@ pub struct UpdateDatasetRequest {
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<DatasetTrigger>>,
+    /// <p>[Optional] How many versions of data set contents are kept. If not specified or set to null, only the latest version plus the latest succeeded version (if they are different) are kept for the time period specified by the "retentionPeriod" parameter. (For more information, see https://docs.aws.amazon.com/iotanalytics/latest/userguide/getting-started.html#aws-iot-analytics-dataset-versions)</p>
+    #[serde(rename = "versioningConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub versioning_configuration: Option<VersioningConfiguration>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1471,7 +1516,7 @@ pub struct UpdateDatastoreRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePipelineRequest {
-    /// <p>A list of "PipelineActivity" objects.</p> <p>The list can be 1-25 <b>PipelineActivity</b> objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p>
+    /// <p>A list of "PipelineActivity" objects. Activities perform transformations on your messages, such as removing, renaming or adding message attributes; filtering messages based on attribute values; invoking your Lambda functions on messages for advanced processing; or performing mathematical transformations to normalize device data.</p> <p>The list can be 2-25 <b>PipelineActivity</b> objects and must contain both a <code>channel</code> and a <code>datastore</code> activity. Each entry in the list must contain only one activity, for example:</p> <p> <code>pipelineActivities = [ { "channel": { ... } }, { "lambda": { ... } }, ... ]</code> </p>
     #[serde(rename = "pipelineActivities")]
     pub pipeline_activities: Vec<PipelineActivity>,
     /// <p>The name of the pipeline to update.</p>
@@ -1501,6 +1546,19 @@ pub struct Variable {
     #[serde(rename = "stringValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub string_value: Option<String>,
+}
+
+/// <p>Information about the versioning of data set contents.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VersioningConfiguration {
+    /// <p>How many versions of data set contents will be kept. The "unlimited" parameter must be false.</p>
+    #[serde(rename = "maxVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_versions: Option<i64>,
+    /// <p>If true, unlimited versions of data set contents will be kept.</p>
+    #[serde(rename = "unlimited")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unlimited: Option<bool>,
 }
 
 /// Errors returned by BatchPutMessage
@@ -3563,7 +3621,7 @@ pub trait IotAnalytics {
         input: CreateDatastoreRequest,
     ) -> RusotoFuture<CreateDatastoreResponse, CreateDatastoreError>;
 
-    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store.</p>
+    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
     fn create_pipeline(
         &self,
         input: CreatePipelineRequest,
@@ -3712,7 +3770,7 @@ pub trait IotAnalytics {
         input: UpdateDatastoreRequest,
     ) -> RusotoFuture<(), UpdateDatastoreError>;
 
-    /// <p>Updates the settings of a pipeline.</p>
+    /// <p>Updates the settings of a pipeline. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
     fn update_pipeline(
         &self,
         input: UpdatePipelineRequest,
@@ -3944,7 +4002,7 @@ impl IotAnalytics for IotAnalyticsClient {
         })
     }
 
-    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store.</p>
+    /// <p>Creates a pipeline. A pipeline consumes messages from one or more channels and allows you to process the messages before storing them in a data store. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
     fn create_pipeline(
         &self,
         input: CreatePipelineRequest,
@@ -4871,7 +4929,7 @@ impl IotAnalytics for IotAnalyticsClient {
         })
     }
 
-    /// <p>Updates the settings of a pipeline.</p>
+    /// <p>Updates the settings of a pipeline. You must specify both a <code>channel</code> and a <code>datastore</code> activity and, optionally, as many as 23 additional activities in the <code>pipelineActivities</code> array.</p>
     fn update_pipeline(
         &self,
         input: UpdatePipelineRequest,

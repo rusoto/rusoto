@@ -36,8 +36,7 @@ pub struct Application {
     pub creation_time: Option<String>,
     /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     pub description: String,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     pub home_page_url: Option<String>,
     /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
@@ -97,7 +96,7 @@ pub struct ApplicationPolicyStatement {
     /// Permissions</a>.</p>
     #[serde(rename = "Actions")]
     pub actions: Vec<String>,
-    /// <p>An AWS account ID, or * to make the application public.</p>
+    /// <p>An array of AWS account IDs, or * to make the application public.</p>
     #[serde(rename = "Principals")]
     pub principals: Vec<String>,
     /// <p>A unique ID for the statement.</p>
@@ -123,8 +122,7 @@ pub struct ApplicationSummary {
     /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     #[serde(rename = "Description")]
     pub description: String,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
@@ -172,8 +170,7 @@ pub struct CreateApplicationInput {
     pub author: String,
     /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     pub description: String,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     pub home_page_url: Option<String>,
     /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
@@ -193,7 +190,9 @@ pub struct CreateApplicationInput {
     /// <a href="https://semver.org/">https://semver.org/</a>
     /// </p>
     pub semantic_version: Option<String>,
-    /// <p>A link to a public repository for the source code of your application.</p>
+    /// <p>A link to the S3 object that contains the ZIP archive of the source code for this version of your application.</p><p>Maximum size 50 MB</p>
+    pub source_code_archive_url: Option<String>,
+    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
     pub source_code_url: Option<String>,
     /// <p>A valid identifier from <a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a>.</p>
     pub spdx_license_id: Option<String>,
@@ -212,8 +211,7 @@ pub struct CreateApplicationRequest {
     /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     #[serde(rename = "Description")]
     pub description: String,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
@@ -248,7 +246,11 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
-    /// <p>A link to a public repository for the source code of your application.</p>
+    /// <p>A link to the S3 object that contains the ZIP archive of the source code for this version of your application.</p><p>Maximum size 50 MB</p>
+    #[serde(rename = "SourceCodeArchiveUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_code_archive_url: Option<String>,
+    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,
@@ -286,8 +288,7 @@ pub struct CreateApplicationResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
@@ -320,7 +321,9 @@ pub struct CreateApplicationResponse {
 /// <p>Create a version request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateApplicationVersionInput {
-    /// <p>A link to a public repository for the source code of your application.</p>
+    /// <p>A link to the S3 object that contains the ZIP archive of the source code for this version of your application.</p><p>Maximum size 50 MB</p>
+    pub source_code_archive_url: Option<String>,
+    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
     pub source_code_url: Option<String>,
     /// <p>The raw packaged AWS SAM template of your application.</p>
     pub template_body: Option<String>,
@@ -336,7 +339,11 @@ pub struct CreateApplicationVersionRequest {
     /// <p>The semantic version of the new version.</p>
     #[serde(rename = "SemanticVersion")]
     pub semantic_version: String,
-    /// <p>A link to a public repository for the source code of your application.</p>
+    /// <p>A link to the S3 object that contains the ZIP archive of the source code for this version of your application.</p><p>Maximum size 50 MB</p>
+    #[serde(rename = "SourceCodeArchiveUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_code_archive_url: Option<String>,
+    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,
@@ -370,7 +377,7 @@ pub struct CreateApplicationVersionResponse {
     /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
     /// For those applications, you must explicitly acknowledge their capabilities by
     /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
-    /// and CAPABILITY_RESOURCE_POLICY.</p><p>The following resources require you to specify CAPABILITY_IAM or
+    /// CAPABILITY_RESOURCE_POLICY, and CAPABILITY_AUTO_EXPAND.</p><p>The following resources require you to specify CAPABILITY_IAM or
     /// CAPABILITY_NAMED_IAM:
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
@@ -384,10 +391,10 @@ pub struct CreateApplicationVersionResponse {
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS::TopicPolicy</a>.</p><p>If your application template contains any of the above resources, we recommend that you review
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS::TopicPolicy</a>.</p><p>Applications that contain one or more nested applications require you to specify
+    /// CAPABILITY_AUTO_EXPAND.</p><p>If your application template contains any of the above resources, we recommend that you review
     /// all permissions associated with the application before deploying. If you don't specify
-    /// this parameter for an application that requires capabilities, the call will fail.</p><p>Valid values: CAPABILITY_IAM | CAPABILITY_NAMED_IAM | CAPABILITY_RESOURCE_POLICY
-    /// </p>
+    /// this parameter for an application that requires capabilities, the call will fail.</p>
     #[serde(rename = "RequiredCapabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub required_capabilities: Option<Vec<String>>,
@@ -402,7 +409,11 @@ pub struct CreateApplicationVersionResponse {
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
-    /// <p>A link to a public repository for the source code of your application.</p>
+    /// <p>A link to the S3 object that contains the ZIP archive of the source code for this version of your application.</p><p>Maximum size 50 MB</p>
+    #[serde(rename = "SourceCodeArchiveUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_code_archive_url: Option<String>,
+    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,
@@ -420,7 +431,7 @@ pub struct CreateCloudFormationChangeSetInput {
     /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
     /// For those applications, you must explicitly acknowledge their capabilities by
     /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
-    /// and CAPABILITY_RESOURCE_POLICY.</p><p>The following resources require you to specify CAPABILITY_IAM or
+    /// CAPABILITY_RESOURCE_POLICY, and CAPABILITY_AUTO_EXPAND.</p><p>The following resources require you to specify CAPABILITY_IAM or
     /// CAPABILITY_NAMED_IAM:
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
@@ -434,32 +445,40 @@ pub struct CreateCloudFormationChangeSetInput {
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS:TopicPolicy</a>.</p><p>If your application template contains any of the above resources, we recommend that you review
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS:TopicPolicy</a>.</p><p>Applications that contain one or more nested applications require you to specify
+    /// CAPABILITY_AUTO_EXPAND.</p><p>If your application template contains any of the above resources, we recommend that you review
     /// all permissions associated with the application before deploying. If you don't specify
-    /// this parameter for an application that requires capabilities, the call will fail.</p><p>Valid values: CAPABILITY_IAM | CAPABILITY_NAMED_IAM | CAPABILITY_RESOURCE_POLICY
-    /// </p>
+    /// this parameter for an application that requires capabilities, the call will fail.</p>
     pub capabilities: Option<Vec<String>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     pub change_set_name: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     pub client_token: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     pub description: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     pub notification_arns: Option<Vec<String>>,
     /// <p>A list of parameter values for the parameters of the application.</p>
     pub parameter_overrides: Option<Vec<ParameterValue>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     pub resource_types: Option<Vec<String>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     pub rollback_configuration: Option<RollbackConfiguration>,
     /// <p>The semantic version of the application:</p><p>
     /// <a href="https://semver.org/">https://semver.org/</a>
     /// </p>
     pub semantic_version: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     pub stack_name: String,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
     pub template_id: Option<String>,
@@ -475,7 +494,7 @@ pub struct CreateCloudFormationChangeSetRequest {
     /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
     /// For those applications, you must explicitly acknowledge their capabilities by
     /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
-    /// and CAPABILITY_RESOURCE_POLICY.</p><p>The following resources require you to specify CAPABILITY_IAM or
+    /// CAPABILITY_RESOURCE_POLICY, and CAPABILITY_AUTO_EXPAND.</p><p>The following resources require you to specify CAPABILITY_IAM or
     /// CAPABILITY_NAMED_IAM:
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
@@ -489,26 +508,30 @@ pub struct CreateCloudFormationChangeSetRequest {
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS:TopicPolicy</a>.</p><p>If your application template contains any of the above resources, we recommend that you review
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS:TopicPolicy</a>.</p><p>Applications that contain one or more nested applications require you to specify
+    /// CAPABILITY_AUTO_EXPAND.</p><p>If your application template contains any of the above resources, we recommend that you review
     /// all permissions associated with the application before deploying. If you don't specify
-    /// this parameter for an application that requires capabilities, the call will fail.</p><p>Valid values: CAPABILITY_IAM | CAPABILITY_NAMED_IAM | CAPABILITY_RESOURCE_POLICY
-    /// </p>
+    /// this parameter for an application that requires capabilities, the call will fail.</p>
     #[serde(rename = "Capabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capabilities: Option<Vec<String>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     #[serde(rename = "ChangeSetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_set_name: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     #[serde(rename = "NotificationArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_arns: Option<Vec<String>>,
@@ -516,11 +539,13 @@ pub struct CreateCloudFormationChangeSetRequest {
     #[serde(rename = "ParameterOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_overrides: Option<Vec<ParameterValue>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     #[serde(rename = "RollbackConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_configuration: Option<RollbackConfiguration>,
@@ -530,10 +555,12 @@ pub struct CreateCloudFormationChangeSetRequest {
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
+    /// </i> API.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -601,7 +628,8 @@ pub struct CreateCloudFormationTemplateResponse {
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
-    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED</p>
+    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED
+    /// </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -669,8 +697,7 @@ pub struct GetApplicationResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
@@ -732,7 +759,8 @@ pub struct GetCloudFormationTemplateResponse {
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
-    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED</p>
+    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED
+    /// </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -936,34 +964,42 @@ pub struct PutApplicationPolicyResponse {
     pub statements: Option<Vec<ApplicationPolicyStatement>>,
 }
 
-/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a></i> Data Type.</p>
+/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
+/// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RollbackConfiguration {
-    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a></i> Data Type.</p>
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
+    /// </i> Data Type.</p>
     #[serde(rename = "MonitoringTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub monitoring_time_in_minutes: Option<i64>,
-    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a></i> Data Type.</p>
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a>
+    /// </i> Data Type.</p>
     #[serde(rename = "RollbackTriggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_triggers: Option<Vec<RollbackTrigger>>,
 }
 
-/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a></i> Data Type.</p>
+/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
+/// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RollbackTrigger {
-    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a></i> Data Type.</p>
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
+    /// </i> Data Type.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a></i> Data Type.</p>
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a>
+    /// </i> Data Type.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
 
-/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a></i> Data Type.</p>
+/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
+/// </i> Data Type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Tag {
-    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a></i> Data Type.</p>
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a>
+    /// </i> Data Type.</p>
     #[serde(rename = "Key")]
     pub key: String,
     /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">
@@ -988,7 +1024,8 @@ pub struct TemplateDetails {
     /// <a href="https://semver.org/">https://semver.org/</a>
     /// </p>
     pub semantic_version: String,
-    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED</p>
+    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED
+    /// </p>
     pub status: String,
     /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
     pub template_id: String,
@@ -1004,8 +1041,7 @@ pub struct UpdateApplicationInput {
     pub author: Option<String>,
     /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
     pub description: Option<String>,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     pub home_page_url: Option<String>,
     /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
@@ -1028,8 +1064,7 @@ pub struct UpdateApplicationRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
@@ -1066,8 +1101,7 @@ pub struct UpdateApplicationResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A URL with more information about the application, for example
-    /// the location of your GitHub repository for the application.</p>
+    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
     #[serde(rename = "HomePageUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_page_url: Option<String>,
@@ -1115,7 +1149,7 @@ pub struct Version {
     /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
     /// For those applications, you must explicitly acknowledge their capabilities by
     /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
-    /// and CAPABILITY_RESOURCE_POLICY.</p><p>The following resources require you to specify CAPABILITY_IAM or
+    /// CAPABILITY_RESOURCE_POLICY, and CAPABILITY_AUTO_EXPAND.</p><p>The following resources require you to specify CAPABILITY_IAM or
     /// CAPABILITY_NAMED_IAM:
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
@@ -1129,10 +1163,10 @@ pub struct Version {
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
     /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS::TopicPolicy</a>.</p><p>If your application template contains any of the above resources, we recommend that you review
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS::TopicPolicy</a>.</p><p>Applications that contain one or more nested applications require you to specify
+    /// CAPABILITY_AUTO_EXPAND.</p><p>If your application template contains any of the above resources, we recommend that you review
     /// all permissions associated with the application before deploying. If you don't specify
-    /// this parameter for an application that requires capabilities, the call will fail.</p><p>Valid values: CAPABILITY_IAM | CAPABILITY_NAMED_IAM | CAPABILITY_RESOURCE_POLICY
-    /// </p>
+    /// this parameter for an application that requires capabilities, the call will fail.</p>
     #[serde(rename = "RequiredCapabilities")]
     pub required_capabilities: Vec<String>,
     /// <p>Whether all of the AWS resources contained in this application are supported in the region
@@ -1144,7 +1178,11 @@ pub struct Version {
     /// </p>
     #[serde(rename = "SemanticVersion")]
     pub semantic_version: String,
-    /// <p>A link to a public repository for the source code of your application.</p>
+    /// <p>A link to the S3 object that contains the ZIP archive of the source code for this version of your application.</p><p>Maximum size 50 MB</p>
+    #[serde(rename = "SourceCodeArchiveUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_code_archive_url: Option<String>,
+    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,
@@ -1168,7 +1206,7 @@ pub struct VersionSummary {
     /// </p>
     #[serde(rename = "SemanticVersion")]
     pub semantic_version: String,
-    /// <p>A link to a public repository for the source code of your application.</p>
+    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
     #[serde(rename = "SourceCodeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_code_url: Option<String>,

@@ -913,6 +913,22 @@ pub struct DeleteKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteKnownHostKeysRequest {
+    /// <p>The name of the instance for which you want to reset the host key or certificate.</p>
+    #[serde(rename = "instanceName")]
+    pub instance_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteKnownHostKeysResult {
+    /// <p>A list of objects describing the API operation.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLoadBalancerRequest {
     /// <p>The name of the load balancer you want to delete.</p>
     #[serde(rename = "loadBalancerName")]
@@ -1282,7 +1298,7 @@ pub struct DomainEntry {
     #[serde(rename = "target")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
-    /// <p>The type of domain entry (e.g., <code>SOA</code> or <code>NS</code>).</p>
+    /// <p><p>The type of domain entry, such as address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The following domain entry types can be used:</p> <ul> <li> <p> <code>A</code> </p> </li> <li> <p> <code>CNAME</code> </p> </li> <li> <p> <code>MX</code> </p> </li> <li> <p> <code>NS</code> </p> </li> <li> <p> <code>SOA</code> </p> </li> <li> <p> <code>SRV</code> </p> </li> <li> <p> <code>TXT</code> </p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -2320,6 +2336,40 @@ pub struct GetStaticIpsResult {
     pub static_ips: Option<Vec<StaticIp>>,
 }
 
+/// <p>Describes the public SSH host keys or the RDP certificate.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct HostKeyAttributes {
+    /// <p>The SSH host key algorithm or the RDP certificate format.</p> <p>For SSH host keys, the algorithm may be <code>ssh-rsa</code>, <code>ecdsa-sha2-nistp256</code>, <code>ssh-ed25519</code>, etc. For RDP certificates, the algorithm is always <code>x509-cert</code>.</p>
+    #[serde(rename = "algorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub algorithm: Option<String>,
+    /// <p><p>The SHA-1 fingerprint of the returned SSH host key or RDP certificate.</p> <ul> <li> <p>Example of an SHA-1 SSH fingerprint:</p> <p> <code>SHA1:1CHH6FaAaXjtFOsR/t83vf91SR0</code> </p> </li> <li> <p>Example of an SHA-1 RDP fingerprint:</p> <p> <code>af:34:51:fe:09:f0:e0:da:b8:4e:56:ca:60:c2:10:ff:38:06:db:45</code> </p> </li> </ul></p>
+    #[serde(rename = "fingerprintSHA1")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fingerprint_sha1: Option<String>,
+    /// <p><p>The SHA-256 fingerprint of the returned SSH host key or RDP certificate.</p> <ul> <li> <p>Example of an SHA-256 SSH fingerprint:</p> <p> <code>SHA256:KTsMnRBh1IhD17HpdfsbzeGA4jOijm5tyXsMjKVbB8o</code> </p> </li> <li> <p>Example of an SHA-256 RDP fingerprint:</p> <p> <code>03:9b:36:9f:4b:de:4e:61:70:fc:7c:c9:78:e7:d2:1a:1c:25:a8:0c:91:f6:7c:e4:d6:a0:85:c8:b4:53:99:68</code> </p> </li> </ul></p>
+    #[serde(rename = "fingerprintSHA256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fingerprint_sha256: Option<String>,
+    /// <p>The returned RDP certificate is not valid after this point in time.</p> <p>This value is listed only for RDP certificates.</p>
+    #[serde(rename = "notValidAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_valid_after: Option<f64>,
+    /// <p>The returned RDP certificate is valid after this point in time.</p> <p>This value is listed only for RDP certificates.</p>
+    #[serde(rename = "notValidBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_valid_before: Option<f64>,
+    /// <p>The public SSH host key or the RDP certificate.</p>
+    #[serde(rename = "publicKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_key: Option<String>,
+    /// <p>The time that the SSH host key or RDP certificate was recorded by Lightsail.</p>
+    #[serde(rename = "witnessedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub witnessed_at: Option<f64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ImportKeyPairRequest {
     /// <p>The name of the key pair for which you want to import the public key.</p>
@@ -2433,6 +2483,10 @@ pub struct InstanceAccessDetails {
     #[serde(rename = "expiresAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<f64>,
+    /// <p>Describes the public SSH host keys or the RDP certificate.</p>
+    #[serde(rename = "hostKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_keys: Option<Vec<HostKeyAttributes>>,
     /// <p>The name of this Amazon Lightsail instance.</p>
     #[serde(rename = "instanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6085,6 +6139,79 @@ impl Error for DeleteKeyPairError {
             DeleteKeyPairError::OperationFailure(ref cause) => cause,
             DeleteKeyPairError::Service(ref cause) => cause,
             DeleteKeyPairError::Unauthenticated(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteKnownHostKeys
+#[derive(Debug, PartialEq)]
+pub enum DeleteKnownHostKeysError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+}
+
+impl DeleteKnownHostKeysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteKnownHostKeysError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteKnownHostKeysError::AccessDenied(err.msg))
+                }
+                "AccountSetupInProgressException" => {
+                    return RusotoError::Service(DeleteKnownHostKeysError::AccountSetupInProgress(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteKnownHostKeysError::InvalidInput(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteKnownHostKeysError::NotFound(err.msg))
+                }
+                "OperationFailureException" => {
+                    return RusotoError::Service(DeleteKnownHostKeysError::OperationFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(DeleteKnownHostKeysError::Service(err.msg))
+                }
+                "UnauthenticatedException" => {
+                    return RusotoError::Service(DeleteKnownHostKeysError::Unauthenticated(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteKnownHostKeysError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteKnownHostKeysError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteKnownHostKeysError::AccessDenied(ref cause) => cause,
+            DeleteKnownHostKeysError::AccountSetupInProgress(ref cause) => cause,
+            DeleteKnownHostKeysError::InvalidInput(ref cause) => cause,
+            DeleteKnownHostKeysError::NotFound(ref cause) => cause,
+            DeleteKnownHostKeysError::OperationFailure(ref cause) => cause,
+            DeleteKnownHostKeysError::Service(ref cause) => cause,
+            DeleteKnownHostKeysError::Unauthenticated(ref cause) => cause,
         }
     }
 }
@@ -11503,7 +11630,7 @@ pub trait Lightsail {
         input: CreateDomainRequest,
     ) -> RusotoFuture<CreateDomainResult, CreateDomainError>;
 
-    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain_entry(
         &self,
         input: CreateDomainEntryRequest,
@@ -11607,6 +11734,12 @@ pub trait Lightsail {
         &self,
         input: DeleteKeyPairRequest,
     ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError>;
+
+    /// <p><p>Deletes the known host key or certificate used by the Amazon Lightsail browser-based SSH or RDP clients to authenticate an instance. This operation enables the Lightsail browser-based SSH or RDP clients to connect to the instance after a host key mismatch.</p> <important> <p>Perform this operation only if you were expecting the host key or certificate mismatch or if you are familiar with the new host key or certificate on the instance. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-troubleshooting-browser-based-ssh-rdp-client-connection">Troubleshooting connection issues when using the Amazon Lightsail browser-based SSH or RDP client</a>.</p> </important></p>
+    fn delete_known_host_keys(
+        &self,
+        input: DeleteKnownHostKeysRequest,
+    ) -> RusotoFuture<DeleteKnownHostKeysResult, DeleteKnownHostKeysError>;
 
     /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer(
@@ -12408,7 +12541,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    /// <p>Creates one of the following entry records associated with the domain: Address (A), canonical name (CNAME), mail exchanger (MX), name server (NS), start of authority (SOA), service locator (SRV), or text (TXT).</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain_entry(
         &self,
         input: CreateDomainEntryRequest,
@@ -12905,6 +13038,34 @@ impl Lightsail for LightsailClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteKeyPairError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Deletes the known host key or certificate used by the Amazon Lightsail browser-based SSH or RDP clients to authenticate an instance. This operation enables the Lightsail browser-based SSH or RDP clients to connect to the instance after a host key mismatch.</p> <important> <p>Perform this operation only if you were expecting the host key or certificate mismatch or if you are familiar with the new host key or certificate on the instance. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-troubleshooting-browser-based-ssh-rdp-client-connection">Troubleshooting connection issues when using the Amazon Lightsail browser-based SSH or RDP client</a>.</p> </important></p>
+    fn delete_known_host_keys(
+        &self,
+        input: DeleteKnownHostKeysRequest,
+    ) -> RusotoFuture<DeleteKnownHostKeysResult, DeleteKnownHostKeysError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteKnownHostKeys");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteKnownHostKeysResult, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteKnownHostKeysError::from_response(response))
+                    }),
                 )
             }
         })

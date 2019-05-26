@@ -659,7 +659,7 @@ pub struct ImportTask {
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>A link to a compressed archive folder (in the ZIP format) that contains an error log and a file of failed records. You can use these two files to quickly identify records that failed, why they failed, and correct those records. Afterward, you can upload the corrected file to your Amazon S3 bucket and create another import task request.</p> <p>This field also includes authorization information so you can confirm the authenticity of the compressed archive before you download it.</p> <p>If some records failed to be imported we recommend that you correct the records in the failed entries file and then imports that failed entries file. This prevents you frmo having to correct and update the larger original file and attempt importing it again.</p>
+    /// <p>A link to a compressed archive folder (in the ZIP format) that contains an error log and a file of failed records. You can use these two files to quickly identify records that failed, why they failed, and correct those records. Afterward, you can upload the corrected file to your Amazon S3 bucket and create another import task request.</p> <p>This field also includes authorization information so you can confirm the authenticity of the compressed archive before you download it.</p> <p>If some records failed to be imported we recommend that you correct the records in the failed entries file and then imports that failed entries file. This prevents you from having to correct and update the larger original file and attempt importing it again.</p>
     #[serde(rename = "errorsAndFailedEntriesZip")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors_and_failed_entries_zip: Option<String>,
@@ -2601,7 +2601,7 @@ pub trait Discovery {
         input: DescribeContinuousExportsRequest,
     ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError>;
 
-    /// <p> <code>DescribeExportConfigurations</code> is deprecated.</p> <p>Use instead <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html"> <code>DescribeExportTasks</code> </a>.</p>
+    /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
     fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
@@ -3011,7 +3011,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p> <code>DescribeExportConfigurations</code> is deprecated.</p> <p>Use instead <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html"> <code>DescribeExportTasks</code> </a>.</p>
+    /// <p> <code>DescribeExportConfigurations</code> is deprecated. Use <a href="https://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html">DescribeImportTasks</a>, instead.</p>
     fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,

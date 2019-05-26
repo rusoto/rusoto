@@ -139,7 +139,7 @@ pub struct CertificateAuthority {
     pub type_: Option<String>,
 }
 
-/// <p>Contains configuration information for your private certificate authority (CA). This includes information about the class of public key algorithm and the key pair that your private CA creates when it issues a certificate, the signature algorithm it uses used when issuing certificates, and its X.500 distinguished name. You must specify this information when you call the <a>CreateCertificateAuthority</a> operation. </p>
+/// <p>Contains configuration information for your private certificate authority (CA). This includes information about the class of public key algorithm and the key pair that your private CA creates when it issues a certificate. It also includes the signature algorithm that it uses when issuing certificates, and its X.500 distinguished name. You must specify this information when you call the <a>CreateCertificateAuthority</a> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CertificateAuthorityConfiguration {
     /// <p>Type of the public key algorithm and size, in bits, of the key pair that your key pair creates when it issues a certificate.</p>
@@ -155,13 +155,13 @@ pub struct CertificateAuthorityConfiguration {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCertificateAuthorityAuditReportRequest {
-    /// <p>Format in which to create the report. This can be either <b>JSON</b> or <b>CSV</b>.</p>
+    /// <p>The format in which to create the report. This can be either <b>JSON</b> or <b>CSV</b>.</p>
     #[serde(rename = "AuditReportResponseFormat")]
     pub audit_report_response_format: String,
-    /// <p>Amazon Resource Name (ARN) of the CA to be audited. This is of the form:</p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the CA to be audited. This is of the form:</p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code>.</p>
     #[serde(rename = "CertificateAuthorityArn")]
     pub certificate_authority_arn: String,
-    /// <p>Name of the S3 bucket that will contain the audit report.</p>
+    /// <p>The name of the S3 bucket that will contain the audit report.</p>
     #[serde(rename = "S3BucketName")]
     pub s3_bucket_name: String,
 }
@@ -210,6 +210,23 @@ pub struct CreateCertificateAuthorityResponse {
     pub certificate_authority_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreatePermissionRequest {
+    /// <p>The actions that the specified AWS service principal can use. These include <code>IssueCertificate</code>, <code>GetCertificate</code>, and <code>ListPermissions</code>.</p>
+    #[serde(rename = "Actions")]
+    pub actions: Vec<String>,
+    /// <p>The Amazon Resource Name (ARN) of the CA that grants the permissions. You can find the ARN by calling the <a>ListCertificateAuthorities</a> operation. This must have the following form: </p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code>. </p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    pub certificate_authority_arn: String,
+    /// <p>The AWS service or identity that receives the permission. At this time, the only valid principal is <code>acm.amazonaws.com</code>.</p>
+    #[serde(rename = "Principal")]
+    pub principal: String,
+    /// <p>The ID of the calling account.</p>
+    #[serde(rename = "SourceAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_account: Option<String>,
+}
+
 /// <p>Contains configuration information for a certificate revocation list (CRL). Your private certificate authority (CA) creates base CRLs. Delta CRLs are not supported. You can enable CRLs for your new or an existing private CA by setting the <b>Enabled</b> parameter to <code>true</code>. Your private CA writes CRLs to an S3 bucket that you specify in the <b>S3BucketName</b> parameter. You can hide the name of your bucket by specifying a value for the <b>CustomCname</b> parameter. Your private CA copies the CNAME or the S3 bucket name to the <b>CRL Distribution Points</b> extension of each certificate it issues. Your S3 bucket policy must give write permission to ACM PCA. </p> <p>Your private CA uses the value in the <b>ExpirationInDays</b> parameter to calculate the <b>nextUpdate</b> field in the CRL. The CRL is refreshed at 1/2 the age of next update or when a certificate is revoked. When a certificate is revoked, it is recorded in the next CRL that is generated and in the next audit report. Only time valid certificates are listed in the CRL. Expired certificates are not included. </p> <p>CRLs contain the following fields:</p> <ul> <li> <p> <b>Version</b>: The current version number defined in RFC 5280 is V2. The integer value is 0x1. </p> </li> <li> <p> <b>Signature Algorithm</b>: The name of the algorithm used to sign the CRL.</p> </li> <li> <p> <b>Issuer</b>: The X.500 distinguished name of your private CA that issued the CRL.</p> </li> <li> <p> <b>Last Update</b>: The issue date and time of this CRL.</p> </li> <li> <p> <b>Next Update</b>: The day and time by which the next CRL will be issued.</p> </li> <li> <p> <b>Revoked Certificates</b>: List of revoked certificates. Each list item contains the following information.</p> <ul> <li> <p> <b>Serial Number</b>: The serial number, in hexadecimal format, of the revoked certificate.</p> </li> <li> <p> <b>Revocation Date</b>: Date and time the certificate was revoked.</p> </li> <li> <p> <b>CRL Entry Extensions</b>: Optional extensions for the CRL entry.</p> <ul> <li> <p> <b>X509v3 CRL Reason Code</b>: Reason the certificate was revoked.</p> </li> </ul> </li> </ul> </li> <li> <p> <b>CRL Extensions</b>: Optional extensions for the CRL.</p> <ul> <li> <p> <b>X509v3 Authority Key Identifier</b>: Identifies the public key associated with the private key used to sign the certificate.</p> </li> <li> <p> <b>X509v3 CRL Number:</b>: Decimal sequence number for the CRL.</p> </li> </ul> </li> <li> <p> <b>Signature Algorithm</b>: Algorithm used by your private CA to sign the CRL.</p> </li> <li> <p> <b>Signature Value</b>: Signature computed over the CRL.</p> </li> </ul> <p>Certificate revocation lists created by ACM PCA are DER-encoded. You can use the following OpenSSL command to list a CRL.</p> <p> <code>openssl crl -inform DER -text -in <i>crl_path</i> -noout</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CrlConfiguration {
@@ -239,6 +256,20 @@ pub struct DeleteCertificateAuthorityRequest {
     #[serde(rename = "PermanentDeletionTimeInDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permanent_deletion_time_in_days: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeletePermissionRequest {
+    /// <p>The Amazon Resource Number (ARN) of the private CA that issued the permissions. You can find the CA's ARN by calling the <a>ListCertificateAuthorities</a> operation. This must have the following form: </p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code>. </p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    pub certificate_authority_arn: String,
+    /// <p>The AWS service or identity that will have its CA permissions revoked. At this time, the only valid service principal is <code>acm.amazonaws.com</code> </p>
+    #[serde(rename = "Principal")]
+    pub principal: String,
+    /// <p>The AWS account that calls this operation.</p>
+    #[serde(rename = "SourceAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_account: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -430,6 +461,34 @@ pub struct ListCertificateAuthoritiesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListPermissionsRequest {
+    /// <p>The Amazon Resource Number (ARN) of the private CA to inspect. You can find the ARN by calling the <a>ListCertificateAuthorities</a> operation. This must be of the form: <code>arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012</code> You can get a private CA's ARN by running the <a>ListCertificateAuthorities</a> operation.</p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    pub certificate_authority_arn: String,
+    /// <p>When paginating results, use this parameter to specify the maximum number of items to return in the response. If additional items exist beyond the number you specify, the <b>NextToken</b> element is sent in the response. Use this <b>NextToken</b> value in a subsequent request to retrieve additional items.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>When paginating results, use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <b>NextToken</b> from the response you just received.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListPermissionsResponse {
+    /// <p>When the list is truncated, this value is present and should be used for the <b>NextToken</b> parameter in a subsequent pagination request. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Summary information about each permission assigned by the specified private CA, including the action enabled, the policy provided, and the time of creation.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<Permission>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsRequest {
     /// <p>The Amazon Resource Name (ARN) that was returned when you called the <a>CreateCertificateAuthority</a> operation. This must be of the form: </p> <p> <code>arn:aws:acm-pca:<i>region</i>:<i>account</i>:certificate-authority/<i>12345678-1234-1234-1234-123456789012</i> </code> </p>
     #[serde(rename = "CertificateAuthorityArn")]
@@ -455,6 +514,36 @@ pub struct ListTagsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Permissions designate which private CA operations can be performed by an AWS service or entity. In order for ACM to automatically renew private certificates, you must give the ACM service principal all available permissions (<code>IssueCertificate</code>, <code>GetCertificate</code>, and <code>ListPermissions</code>). Permissions can be assigned with the <a>CreatePermission</a> operation, removed with the <a>DeletePermission</a> operation, and listed with the <a>ListPermissions</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Permission {
+    /// <p>The private CA operations that can be performed by the designated AWS service.</p>
+    #[serde(rename = "Actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions: Option<Vec<String>>,
+    /// <p>The Amazon Resource Number (ARN) of the private CA from which the permission was issued.</p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_authority_arn: Option<String>,
+    /// <p>The time at which the permission was created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The name of the policy that is associated with the permission.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    /// <p>The AWS service or entity that holds the permission. At this time, the only valid principal is <code>acm.amazonaws.com</code>.</p>
+    #[serde(rename = "Principal")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal: Option<String>,
+    /// <p>The ID of the account that assigned the permission.</p>
+    #[serde(rename = "SourceAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_account: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -682,6 +771,71 @@ impl Error for CreateCertificateAuthorityAuditReportError {
         }
     }
 }
+/// Errors returned by CreatePermission
+#[derive(Debug, PartialEq)]
+pub enum CreatePermissionError {
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    InvalidArn(String),
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
+    InvalidState(String),
+    /// <p>An ACM PCA limit has been exceeded. See the exception message returned to determine the limit that was exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The designated permission has already been given to the user.</p>
+    PermissionAlreadyExists(String),
+    /// <p>The request has failed for an unspecified reason.</p>
+    RequestFailed(String),
+    /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl CreatePermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePermissionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidArnException" => {
+                    return RusotoError::Service(CreatePermissionError::InvalidArn(err.msg))
+                }
+                "InvalidStateException" => {
+                    return RusotoError::Service(CreatePermissionError::InvalidState(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreatePermissionError::LimitExceeded(err.msg))
+                }
+                "PermissionAlreadyExistsException" => {
+                    return RusotoError::Service(CreatePermissionError::PermissionAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "RequestFailedException" => {
+                    return RusotoError::Service(CreatePermissionError::RequestFailed(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreatePermissionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreatePermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreatePermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreatePermissionError::InvalidArn(ref cause) => cause,
+            CreatePermissionError::InvalidState(ref cause) => cause,
+            CreatePermissionError::LimitExceeded(ref cause) => cause,
+            CreatePermissionError::PermissionAlreadyExists(ref cause) => cause,
+            CreatePermissionError::RequestFailed(ref cause) => cause,
+            CreatePermissionError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteCertificateAuthority
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateAuthorityError {
@@ -740,6 +894,57 @@ impl Error for DeleteCertificateAuthorityError {
             DeleteCertificateAuthorityError::InvalidArn(ref cause) => cause,
             DeleteCertificateAuthorityError::InvalidState(ref cause) => cause,
             DeleteCertificateAuthorityError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeletePermission
+#[derive(Debug, PartialEq)]
+pub enum DeletePermissionError {
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    InvalidArn(String),
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
+    InvalidState(String),
+    /// <p>The request has failed for an unspecified reason.</p>
+    RequestFailed(String),
+    /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeletePermissionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePermissionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidArnException" => {
+                    return RusotoError::Service(DeletePermissionError::InvalidArn(err.msg))
+                }
+                "InvalidStateException" => {
+                    return RusotoError::Service(DeletePermissionError::InvalidState(err.msg))
+                }
+                "RequestFailedException" => {
+                    return RusotoError::Service(DeletePermissionError::RequestFailed(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeletePermissionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeletePermissionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeletePermissionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeletePermissionError::InvalidArn(ref cause) => cause,
+            DeletePermissionError::InvalidState(ref cause) => cause,
+            DeletePermissionError::RequestFailed(ref cause) => cause,
+            DeletePermissionError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -1213,6 +1418,63 @@ impl Error for ListCertificateAuthoritiesError {
         }
     }
 }
+/// Errors returned by ListPermissions
+#[derive(Debug, PartialEq)]
+pub enum ListPermissionsError {
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    InvalidArn(String),
+    /// <p>The token specified in the <code>NextToken</code> argument is not valid. Use the token returned from your previous call to <a>ListCertificateAuthorities</a>.</p>
+    InvalidNextToken(String),
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
+    InvalidState(String),
+    /// <p>The request has failed for an unspecified reason.</p>
+    RequestFailed(String),
+    /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListPermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPermissionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidArnException" => {
+                    return RusotoError::Service(ListPermissionsError::InvalidArn(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListPermissionsError::InvalidNextToken(err.msg))
+                }
+                "InvalidStateException" => {
+                    return RusotoError::Service(ListPermissionsError::InvalidState(err.msg))
+                }
+                "RequestFailedException" => {
+                    return RusotoError::Service(ListPermissionsError::RequestFailed(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListPermissionsError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListPermissionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListPermissionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListPermissionsError::InvalidArn(ref cause) => cause,
+            ListPermissionsError::InvalidNextToken(ref cause) => cause,
+            ListPermissionsError::InvalidState(ref cause) => cause,
+            ListPermissionsError::RequestFailed(ref cause) => cause,
+            ListPermissionsError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
@@ -1589,7 +1851,7 @@ pub trait AcmPca {
         input: CreateCertificateAuthorityRequest,
     ) -> RusotoFuture<CreateCertificateAuthorityResponse, CreateCertificateAuthorityError>;
 
-    /// <p>Creates an audit report that lists every time that the your CA private key is used. The report is saved in the Amazon S3 bucket that you specify on input. The <a>IssueCertificate</a> and <a>RevokeCertificate</a> operations use the private key. You can generate a new report every 30 minutes.</p>
+    /// <p>Creates an audit report that lists every time that your CA private key is used. The report is saved in the Amazon S3 bucket that you specify on input. The <a>IssueCertificate</a> and <a>RevokeCertificate</a> operations use the private key. You can generate a new report every 30 minutes.</p>
     fn create_certificate_authority_audit_report(
         &self,
         input: CreateCertificateAuthorityAuditReportRequest,
@@ -1598,11 +1860,23 @@ pub trait AcmPca {
         CreateCertificateAuthorityAuditReportError,
     >;
 
-    /// <p>Deletes a private certificate authority (CA). You must provide the ARN (Amazon Resource Name) of the private CA that you want to delete. You can find the ARN by calling the <a>ListCertificateAuthorities</a> operation. Before you can delete a CA, you must disable it. Call the <a>UpdateCertificateAuthority</a> operation and set the <b>CertificateAuthorityStatus</b> parameter to <code>DISABLED</code>. </p> <p>Additionally, you can delete a CA if you are waiting for it to be created (the <b>Status</b> field of the <a>CertificateAuthority</a> is <code>CREATING</code>). You can also delete it if the CA has been created but you haven't yet imported the signed certificate (the <b>Status</b> is <code>PENDING_CERTIFICATE</code>) into ACM PCA. </p> <p>If the CA is in one of the aforementioned states and you call <a>DeleteCertificateAuthority</a>, the CA's status changes to <code>DELETED</code>. However, the CA won't be permentantly deleted until the restoration period has passed. By default, if you do not set the <code>PermanentDeletionTimeInDays</code> parameter, the CA remains restorable for 30 days. You can set the parameter from 7 to 30 days. The <a>DescribeCertificateAuthority</a> operation returns the time remaining in the restoration window of a Private CA in the <code>DELETED</code> state. To restore an eligable CA, call the <a>RestoreCertificateAuthority</a> operation.</p>
+    /// <p>Assigns permissions from a private CA to a designated AWS service. Services are specified by their service principals and can be given permission to create and retrieve certificates on a private CA. Services can also be given permission to list the active permissions that the private CA has granted. For ACM to automatically renew your private CA's certificates, you must assign all possible permissions from the CA to the ACM service principal.</p> <p>At this time, you can only assign permissions to ACM (<code>acm.amazonaws.com</code>). Permissions can be revoked with the <a>DeletePermission</a> operation and listed with the <a>ListPermissions</a> operation.</p>
+    fn create_permission(
+        &self,
+        input: CreatePermissionRequest,
+    ) -> RusotoFuture<(), CreatePermissionError>;
+
+    /// <p>Deletes a private certificate authority (CA). You must provide the ARN (Amazon Resource Name) of the private CA that you want to delete. You can find the ARN by calling the <a>ListCertificateAuthorities</a> operation. Before you can delete a CA, you must disable it. Call the <a>UpdateCertificateAuthority</a> operation and set the <b>CertificateAuthorityStatus</b> parameter to <code>DISABLED</code>. </p> <p>Additionally, you can delete a CA if you are waiting for it to be created (the <b>Status</b> field of the <a>CertificateAuthority</a> is <code>CREATING</code>). You can also delete it if the CA has been created but you haven't yet imported the signed certificate (the <b>Status</b> is <code>PENDING_CERTIFICATE</code>) into ACM PCA. </p> <p>If the CA is in one of the previously mentioned states and you call <a>DeleteCertificateAuthority</a>, the CA's status changes to <code>DELETED</code>. However, the CA won't be permanently deleted until the restoration period has passed. By default, if you do not set the <code>PermanentDeletionTimeInDays</code> parameter, the CA remains restorable for 30 days. You can set the parameter from 7 to 30 days. The <a>DescribeCertificateAuthority</a> operation returns the time remaining in the restoration window of a Private CA in the <code>DELETED</code> state. To restore an eligible CA, call the <a>RestoreCertificateAuthority</a> operation.</p>
     fn delete_certificate_authority(
         &self,
         input: DeleteCertificateAuthorityRequest,
     ) -> RusotoFuture<(), DeleteCertificateAuthorityError>;
+
+    /// <p>Revokes permissions that a private CA assigned to a designated AWS service. Permissions can be created with the <a>CreatePermission</a> operation and listed with the <a>ListPermissions</a> operation. </p>
+    fn delete_permission(
+        &self,
+        input: DeletePermissionRequest,
+    ) -> RusotoFuture<(), DeletePermissionError>;
 
     /// <p><p>Lists information about your private certificate authority (CA). You specify the private CA on input by its ARN (Amazon Resource Name). The output contains the status of your CA. This can be any of the following: </p> <ul> <li> <p> <code>CREATING</code> - ACM PCA is creating your private certificate authority.</p> </li> <li> <p> <code>PENDING_CERTIFICATE</code> - The certificate is pending. You must use your on-premises root or subordinate CA to sign your private CA CSR and then import it into PCA. </p> </li> <li> <p> <code>ACTIVE</code> - Your private CA is active.</p> </li> <li> <p> <code>DISABLED</code> - Your private CA has been disabled.</p> </li> <li> <p> <code>EXPIRED</code> - Your private CA certificate has expired.</p> </li> <li> <p> <code>FAILED</code> - Your private CA has failed. Your CA can fail because of problems such a network outage or backend AWS failure or other errors. A failed CA can never return to the pending state. You must create a new CA. </p> </li> <li> <p> <code>DELETED</code> - Your private CA is within the restoration period, after which it is permanently deleted. The length of time remaining in the CA&#39;s restoration period is also included in this operation&#39;s output.</p> </li> </ul></p>
     fn describe_certificate_authority(
@@ -1657,6 +1931,12 @@ pub trait AcmPca {
         &self,
         input: ListCertificateAuthoritiesRequest,
     ) -> RusotoFuture<ListCertificateAuthoritiesResponse, ListCertificateAuthoritiesError>;
+
+    /// <p>Lists all the permissions, if any, that have been assigned by a private CA. Permissions can be granted with the <a>CreatePermission</a> operation and revoked with the <a>DeletePermission</a> operation.</p>
+    fn list_permissions(
+        &self,
+        input: ListPermissionsRequest,
+    ) -> RusotoFuture<ListPermissionsResponse, ListPermissionsError>;
 
     /// <p>Lists the tags, if any, that are associated with your private CA. Tags are labels that you can use to identify and organize your CAs. Each tag consists of a key and an optional value. Call the <a>TagCertificateAuthority</a> operation to add one or more tags to your CA. Call the <a>UntagCertificateAuthority</a> operation to remove tags. </p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
@@ -1754,7 +2034,7 @@ impl AcmPca for AcmPcaClient {
         })
     }
 
-    /// <p>Creates an audit report that lists every time that the your CA private key is used. The report is saved in the Amazon S3 bucket that you specify on input. The <a>IssueCertificate</a> and <a>RevokeCertificate</a> operations use the private key. You can generate a new report every 30 minutes.</p>
+    /// <p>Creates an audit report that lists every time that your CA private key is used. The report is saved in the Amazon S3 bucket that you specify on input. The <a>IssueCertificate</a> and <a>RevokeCertificate</a> operations use the private key. You can generate a new report every 30 minutes.</p>
     fn create_certificate_authority_audit_report(
         &self,
         input: CreateCertificateAuthorityAuditReportRequest,
@@ -1788,7 +2068,33 @@ impl AcmPca for AcmPcaClient {
         })
     }
 
-    /// <p>Deletes a private certificate authority (CA). You must provide the ARN (Amazon Resource Name) of the private CA that you want to delete. You can find the ARN by calling the <a>ListCertificateAuthorities</a> operation. Before you can delete a CA, you must disable it. Call the <a>UpdateCertificateAuthority</a> operation and set the <b>CertificateAuthorityStatus</b> parameter to <code>DISABLED</code>. </p> <p>Additionally, you can delete a CA if you are waiting for it to be created (the <b>Status</b> field of the <a>CertificateAuthority</a> is <code>CREATING</code>). You can also delete it if the CA has been created but you haven't yet imported the signed certificate (the <b>Status</b> is <code>PENDING_CERTIFICATE</code>) into ACM PCA. </p> <p>If the CA is in one of the aforementioned states and you call <a>DeleteCertificateAuthority</a>, the CA's status changes to <code>DELETED</code>. However, the CA won't be permentantly deleted until the restoration period has passed. By default, if you do not set the <code>PermanentDeletionTimeInDays</code> parameter, the CA remains restorable for 30 days. You can set the parameter from 7 to 30 days. The <a>DescribeCertificateAuthority</a> operation returns the time remaining in the restoration window of a Private CA in the <code>DELETED</code> state. To restore an eligable CA, call the <a>RestoreCertificateAuthority</a> operation.</p>
+    /// <p>Assigns permissions from a private CA to a designated AWS service. Services are specified by their service principals and can be given permission to create and retrieve certificates on a private CA. Services can also be given permission to list the active permissions that the private CA has granted. For ACM to automatically renew your private CA's certificates, you must assign all possible permissions from the CA to the ACM service principal.</p> <p>At this time, you can only assign permissions to ACM (<code>acm.amazonaws.com</code>). Permissions can be revoked with the <a>DeletePermission</a> operation and listed with the <a>ListPermissions</a> operation.</p>
+    fn create_permission(
+        &self,
+        input: CreatePermissionRequest,
+    ) -> RusotoFuture<(), CreatePermissionError> {
+        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ACMPrivateCA.CreatePermission");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreatePermissionError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a private certificate authority (CA). You must provide the ARN (Amazon Resource Name) of the private CA that you want to delete. You can find the ARN by calling the <a>ListCertificateAuthorities</a> operation. Before you can delete a CA, you must disable it. Call the <a>UpdateCertificateAuthority</a> operation and set the <b>CertificateAuthorityStatus</b> parameter to <code>DISABLED</code>. </p> <p>Additionally, you can delete a CA if you are waiting for it to be created (the <b>Status</b> field of the <a>CertificateAuthority</a> is <code>CREATING</code>). You can also delete it if the CA has been created but you haven't yet imported the signed certificate (the <b>Status</b> is <code>PENDING_CERTIFICATE</code>) into ACM PCA. </p> <p>If the CA is in one of the previously mentioned states and you call <a>DeleteCertificateAuthority</a>, the CA's status changes to <code>DELETED</code>. However, the CA won't be permanently deleted until the restoration period has passed. By default, if you do not set the <code>PermanentDeletionTimeInDays</code> parameter, the CA remains restorable for 30 days. You can set the parameter from 7 to 30 days. The <a>DescribeCertificateAuthority</a> operation returns the time remaining in the restoration window of a Private CA in the <code>DELETED</code> state. To restore an eligible CA, call the <a>RestoreCertificateAuthority</a> operation.</p>
     fn delete_certificate_authority(
         &self,
         input: DeleteCertificateAuthorityRequest,
@@ -1807,6 +2113,32 @@ impl AcmPca for AcmPcaClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteCertificateAuthorityError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Revokes permissions that a private CA assigned to a designated AWS service. Permissions can be created with the <a>CreatePermission</a> operation and listed with the <a>ListPermissions</a> operation. </p>
+    fn delete_permission(
+        &self,
+        input: DeletePermissionRequest,
+    ) -> RusotoFuture<(), DeletePermissionError> {
+        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ACMPrivateCA.DeletePermission");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeletePermissionError::from_response(response))),
+                )
             }
         })
     }
@@ -2039,6 +2371,35 @@ impl AcmPca for AcmPcaClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListCertificateAuthoritiesError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Lists all the permissions, if any, that have been assigned by a private CA. Permissions can be granted with the <a>CreatePermission</a> operation and revoked with the <a>DeletePermission</a> operation.</p>
+    fn list_permissions(
+        &self,
+        input: ListPermissionsRequest,
+    ) -> RusotoFuture<ListPermissionsResponse, ListPermissionsError> {
+        let mut request = SignedRequest::new("POST", "acm-pca", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "ACMPrivateCA.ListPermissions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListPermissionsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListPermissionsError::from_response(response))),
+                )
             }
         })
     }

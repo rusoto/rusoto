@@ -12,7 +12,7 @@
 // =================================================================
 
 #![doc(html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png")]
-//! <p>The AWS IoT 1-Click Project API Reference</p>
+//! <p>The AWS IoT 1-Click Projects API Reference</p>
 //!
 //! If you're using the service, you're probably looking for [Iot1ClickProjectsClient](struct.Iot1ClickProjectsClient.html) and [Iot1ClickProjects](trait.Iot1ClickProjects.html).
 

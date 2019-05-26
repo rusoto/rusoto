@@ -770,8 +770,8 @@ pub struct AuthenticateOidcActionConfig {
     pub authorization_endpoint: String,
     /// <p>The OAuth 2.0 client identifier.</p>
     pub client_id: String,
-    /// <p>The OAuth 2.0 client secret.</p>
-    pub client_secret: String,
+    /// <p>The OAuth 2.0 client secret. This parameter is required if you are creating a rule. If you are modifying a rule, you can omit this parameter if you set <code>UseExistingClientSecret</code> to true.</p>
+    pub client_secret: Option<String>,
     /// <p>The OIDC issuer identifier of the IdP. This must be a full URL, including the HTTPS protocol, the domain, and the path.</p>
     pub issuer: String,
     /// <p><p>The behavior if the user is not authenticated. The following are possible values:</p> <ul> <li> <p>deny<code/> - Return an HTTP 401 Unauthorized error.</p> </li> <li> <p>allow<code/> - Allow the request to be forwarded to the target.</p> </li> <li> <p>authenticate<code/> - Redirect the request to the IdP authorization endpoint. This is the default value.</p> </li> </ul></p>
@@ -784,6 +784,8 @@ pub struct AuthenticateOidcActionConfig {
     pub session_timeout: Option<i64>,
     /// <p>The token endpoint of the IdP. This must be a full URL, including the HTTPS protocol, the domain, and the path.</p>
     pub token_endpoint: String,
+    /// <p>Indicates whether to use the existing client secret when modifying a rule. If you are creating a rule, you can omit this parameter or set it to false.</p>
+    pub use_existing_client_secret: Option<bool>,
     /// <p>The user info endpoint of the IdP. This must be a full URL, including the HTTPS protocol, the domain, and the path.</p>
     pub user_info_endpoint: String,
 }
@@ -817,10 +819,10 @@ impl AuthenticateOidcActionConfigDeserializer {
                     }
                     "ClientSecret" => {
                         obj.client_secret =
-                            AuthenticateOidcActionClientSecretDeserializer::deserialize(
+                            Some(AuthenticateOidcActionClientSecretDeserializer::deserialize(
                                 "ClientSecret",
                                 stack,
-                            )?;
+                            )?);
                     }
                     "Issuer" => {
                         obj.issuer =
@@ -862,6 +864,14 @@ impl AuthenticateOidcActionConfigDeserializer {
                                 stack,
                             )?;
                     }
+                    "UseExistingClientSecret" => {
+                        obj.use_existing_client_secret = Some(
+                            AuthenticateOidcActionUseExistingClientSecretDeserializer::deserialize(
+                                "UseExistingClientSecret",
+                                stack,
+                            )?,
+                        );
+                    }
                     "UserInfoEndpoint" => {
                         obj.user_info_endpoint =
                             AuthenticateOidcActionUserInfoEndpointDeserializer::deserialize(
@@ -898,7 +908,9 @@ impl AuthenticateOidcActionConfigSerializer {
             &obj.authorization_endpoint,
         );
         params.put(&format!("{}{}", prefix, "ClientId"), &obj.client_id);
-        params.put(&format!("{}{}", prefix, "ClientSecret"), &obj.client_secret);
+        if let Some(ref field_value) = obj.client_secret {
+            params.put(&format!("{}{}", prefix, "ClientSecret"), &field_value);
+        }
         params.put(&format!("{}{}", prefix, "Issuer"), &obj.issuer);
         if let Some(ref field_value) = obj.on_unauthenticated_request {
             params.put(
@@ -919,6 +931,12 @@ impl AuthenticateOidcActionConfigSerializer {
             &format!("{}{}", prefix, "TokenEndpoint"),
             &obj.token_endpoint,
         );
+        if let Some(ref field_value) = obj.use_existing_client_secret {
+            params.put(
+                &format!("{}{}", prefix, "UseExistingClientSecret"),
+                &field_value,
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "UserInfoEndpoint"),
             &obj.user_info_endpoint,
@@ -991,6 +1009,20 @@ impl AuthenticateOidcActionTokenEndpointDeserializer {
     ) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct AuthenticateOidcActionUseExistingClientSecretDeserializer;
+impl AuthenticateOidcActionUseExistingClientSecretDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
 
         Ok(obj)
@@ -2791,6 +2823,55 @@ impl HealthCheckTimeoutSecondsDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HostHeaderConditionConfig {
+    pub values: Option<Vec<String>>,
+}
+
+struct HostHeaderConditionConfigDeserializer;
+impl HostHeaderConditionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HostHeaderConditionConfig, XmlParseError> {
+        deserialize_elements::<_, HostHeaderConditionConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Values" => {
+                        obj.values
+                            .get_or_insert(vec![])
+                            .extend(ListOfStringDeserializer::deserialize("Values", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `HostHeaderConditionConfig` contents to a `SignedRequest`.
+struct HostHeaderConditionConfigSerializer;
+impl HostHeaderConditionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &HostHeaderConditionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.values {
+            ListOfStringSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Values"),
+                field_value,
+            );
+        }
+    }
+}
+
 struct HttpCodeDeserializer;
 impl HttpCodeDeserializer {
     #[allow(unused_variables)]
@@ -2805,6 +2886,129 @@ impl HttpCodeDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HttpHeaderConditionConfig {
+    pub http_header_name: Option<String>,
+    pub values: Option<Vec<String>>,
+}
+
+struct HttpHeaderConditionConfigDeserializer;
+impl HttpHeaderConditionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HttpHeaderConditionConfig, XmlParseError> {
+        deserialize_elements::<_, HttpHeaderConditionConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "HttpHeaderName" => {
+                        obj.http_header_name =
+                            Some(HttpHeaderConditionNameDeserializer::deserialize(
+                                "HttpHeaderName",
+                                stack,
+                            )?);
+                    }
+                    "Values" => {
+                        obj.values
+                            .get_or_insert(vec![])
+                            .extend(ListOfStringDeserializer::deserialize("Values", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `HttpHeaderConditionConfig` contents to a `SignedRequest`.
+struct HttpHeaderConditionConfigSerializer;
+impl HttpHeaderConditionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &HttpHeaderConditionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.http_header_name {
+            params.put(&format!("{}{}", prefix, "HttpHeaderName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.values {
+            ListOfStringSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Values"),
+                field_value,
+            );
+        }
+    }
+}
+
+struct HttpHeaderConditionNameDeserializer;
+impl HttpHeaderConditionNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct HttpRequestMethodConditionConfig {
+    pub values: Option<Vec<String>>,
+}
+
+struct HttpRequestMethodConditionConfigDeserializer;
+impl HttpRequestMethodConditionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HttpRequestMethodConditionConfig, XmlParseError> {
+        deserialize_elements::<_, HttpRequestMethodConditionConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Values" => {
+                        obj.values
+                            .get_or_insert(vec![])
+                            .extend(ListOfStringDeserializer::deserialize("Values", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `HttpRequestMethodConditionConfig` contents to a `SignedRequest`.
+struct HttpRequestMethodConditionConfigSerializer;
+impl HttpRequestMethodConditionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &HttpRequestMethodConditionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.values {
+            ListOfStringSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Values"),
+                field_value,
+            );
+        }
+    }
+}
+
 struct IpAddressDeserializer;
 impl IpAddressDeserializer {
     #[allow(unused_variables)]
@@ -3230,7 +3434,7 @@ impl LoadBalancerArnsSerializer {
 /// <p>Information about a load balancer attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LoadBalancerAttribute {
-    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>deletion<em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>access</em>logs.s3.enabled</code> - Indicates whether access logs are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>access<em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.</p> </li> <li> <p> <code>access</em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket for the access logs.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds.</p> </li> <li> <p> <code>routing.http2.enabled</code> - Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>load<em>balancing.cross</em>zone.enabled</code> - Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <p>The following attributes are supported by both Application Load Balancers and Network Load Balancers:</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - Indicates whether access logs are enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket for the access logs.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul> <p>The following attributes are supported by only Application Load Balancers:</p> <ul> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds.</p> </li> <li> <p> <code>routing.http2.enabled</code> - Indicates whether HTTP/2 is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>true</code>.</p> </li> </ul> <p>The following attributes are supported by only Network Load Balancers:</p> <ul> <li> <p> <code>load<em>balancing.cross</em>zone.enabled</code> - Indicates whether cross-zone load balancing is enabled. The value is <code>true</code> or <code>false</code>. The default is <code>false</code>.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -3535,7 +3739,7 @@ pub struct ModifyListenerInput {
     pub port: Option<i64>,
     /// <p>The protocol for connections from clients to the load balancer. Application Load Balancers support the HTTP and HTTPS protocols. Network Load Balancers support the TCP and TLS protocols.</p>
     pub protocol: Option<String>,
-    /// <p>[HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>[HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     pub ssl_policy: Option<String>,
 }
 
@@ -3918,6 +4122,55 @@ impl PathDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PathPatternConditionConfig {
+    pub values: Option<Vec<String>>,
+}
+
+struct PathPatternConditionConfigDeserializer;
+impl PathPatternConditionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PathPatternConditionConfig, XmlParseError> {
+        deserialize_elements::<_, PathPatternConditionConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Values" => {
+                        obj.values
+                            .get_or_insert(vec![])
+                            .extend(ListOfStringDeserializer::deserialize("Values", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `PathPatternConditionConfig` contents to a `SignedRequest`.
+struct PathPatternConditionConfigSerializer;
+impl PathPatternConditionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PathPatternConditionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.values {
+            ListOfStringSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Values"),
+                field_value,
+            );
+        }
+    }
+}
+
 struct PortDeserializer;
 impl PortDeserializer {
     #[allow(unused_variables)]
@@ -3946,6 +4199,136 @@ impl ProtocolEnumDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct QueryStringConditionConfig {
+    pub values: Option<Vec<QueryStringKeyValuePair>>,
+}
+
+struct QueryStringConditionConfigDeserializer;
+impl QueryStringConditionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<QueryStringConditionConfig, XmlParseError> {
+        deserialize_elements::<_, QueryStringConditionConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Values" => {
+                        obj.values.get_or_insert(vec![]).extend(
+                            QueryStringKeyValuePairListDeserializer::deserialize("Values", stack)?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `QueryStringConditionConfig` contents to a `SignedRequest`.
+struct QueryStringConditionConfigSerializer;
+impl QueryStringConditionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &QueryStringConditionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.values {
+            QueryStringKeyValuePairListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Values"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct QueryStringKeyValuePair {
+    pub key: Option<String>,
+    pub value: Option<String>,
+}
+
+struct QueryStringKeyValuePairDeserializer;
+impl QueryStringKeyValuePairDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<QueryStringKeyValuePair, XmlParseError> {
+        deserialize_elements::<_, QueryStringKeyValuePair, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Key" => {
+                        obj.key = Some(StringValueDeserializer::deserialize("Key", stack)?);
+                    }
+                    "Value" => {
+                        obj.value = Some(StringValueDeserializer::deserialize("Value", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `QueryStringKeyValuePair` contents to a `SignedRequest`.
+struct QueryStringKeyValuePairSerializer;
+impl QueryStringKeyValuePairSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &QueryStringKeyValuePair) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.key {
+            params.put(&format!("{}{}", prefix, "Key"), &field_value);
+        }
+        if let Some(ref field_value) = obj.value {
+            params.put(&format!("{}{}", prefix, "Value"), &field_value);
+        }
+    }
+}
+
+struct QueryStringKeyValuePairListDeserializer;
+impl QueryStringKeyValuePairListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<QueryStringKeyValuePair>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(QueryStringKeyValuePairDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `QueryStringKeyValuePairList` contents to a `SignedRequest`.
+struct QueryStringKeyValuePairListSerializer;
+impl QueryStringKeyValuePairListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<QueryStringKeyValuePair>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            QueryStringKeyValuePairSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
 /// <p>Information about a redirect action.</p> <p>A URI consists of the following components: protocol://hostname:port/path?query. You must modify at least one of the following components to avoid a redirect loop: protocol, hostname, port, or path. Any components that you do not modify retain their original values.</p> <p>You can reuse URI components using the following reserved keywords:</p> <ul> <li> <p>#{protocol}</p> </li> <li> <p>#{host}</p> </li> <li> <p>#{port}</p> </li> <li> <p>#{path} (the leading "/" is removed)</p> </li> <li> <p>#{query}</p> </li> </ul> <p>For example, you can change the path to "/new/#{path}", the hostname to "example.#{host}", or the query to "#{query}&amp;value=xyz".</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RedirectActionConfig {
@@ -4358,6 +4741,12 @@ impl RuleArnsSerializer {
 pub struct RuleCondition {
     /// <p>The name of the field. The possible values are <code>host-header</code> and <code>path-pattern</code>.</p>
     pub field: Option<String>,
+    pub host_header_config: Option<HostHeaderConditionConfig>,
+    pub http_header_config: Option<HttpHeaderConditionConfig>,
+    pub http_request_method_config: Option<HttpRequestMethodConditionConfig>,
+    pub path_pattern_config: Option<PathPatternConditionConfig>,
+    pub query_string_config: Option<QueryStringConditionConfig>,
+    pub source_ip_config: Option<SourceIpConditionConfig>,
     /// <p><p>The condition value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern (for example, /img/<em>). A path pattern is case-sensitive, can be up to 128 characters in length, and can contain any of the following characters. You can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p></em> (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub values: Option<Vec<String>>,
 }
@@ -4373,6 +4762,47 @@ impl RuleConditionDeserializer {
             match name {
                 "Field" => {
                     obj.field = Some(ConditionFieldNameDeserializer::deserialize("Field", stack)?);
+                }
+                "HostHeaderConfig" => {
+                    obj.host_header_config =
+                        Some(HostHeaderConditionConfigDeserializer::deserialize(
+                            "HostHeaderConfig",
+                            stack,
+                        )?);
+                }
+                "HttpHeaderConfig" => {
+                    obj.http_header_config =
+                        Some(HttpHeaderConditionConfigDeserializer::deserialize(
+                            "HttpHeaderConfig",
+                            stack,
+                        )?);
+                }
+                "HttpRequestMethodConfig" => {
+                    obj.http_request_method_config =
+                        Some(HttpRequestMethodConditionConfigDeserializer::deserialize(
+                            "HttpRequestMethodConfig",
+                            stack,
+                        )?);
+                }
+                "PathPatternConfig" => {
+                    obj.path_pattern_config =
+                        Some(PathPatternConditionConfigDeserializer::deserialize(
+                            "PathPatternConfig",
+                            stack,
+                        )?);
+                }
+                "QueryStringConfig" => {
+                    obj.query_string_config =
+                        Some(QueryStringConditionConfigDeserializer::deserialize(
+                            "QueryStringConfig",
+                            stack,
+                        )?);
+                }
+                "SourceIpConfig" => {
+                    obj.source_ip_config = Some(SourceIpConditionConfigDeserializer::deserialize(
+                        "SourceIpConfig",
+                        stack,
+                    )?);
                 }
                 "Values" => {
                     obj.values
@@ -4397,6 +4827,48 @@ impl RuleConditionSerializer {
 
         if let Some(ref field_value) = obj.field {
             params.put(&format!("{}{}", prefix, "Field"), &field_value);
+        }
+        if let Some(ref field_value) = obj.host_header_config {
+            HostHeaderConditionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "HostHeaderConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.http_header_config {
+            HttpHeaderConditionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "HttpHeaderConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.http_request_method_config {
+            HttpRequestMethodConditionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "HttpRequestMethodConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.path_pattern_config {
+            PathPatternConditionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PathPatternConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.query_string_config {
+            QueryStringConditionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "QueryStringConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.source_ip_config {
+            SourceIpConditionConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SourceIpConfig"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.values {
             ListOfStringSerializer::serialize(
@@ -4764,6 +5236,55 @@ impl SetSubnetsOutputDeserializer {
         })
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SourceIpConditionConfig {
+    pub values: Option<Vec<String>>,
+}
+
+struct SourceIpConditionConfigDeserializer;
+impl SourceIpConditionConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SourceIpConditionConfig, XmlParseError> {
+        deserialize_elements::<_, SourceIpConditionConfig, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Values" => {
+                        obj.values
+                            .get_or_insert(vec![])
+                            .extend(ListOfStringDeserializer::deserialize("Values", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `SourceIpConditionConfig` contents to a `SignedRequest`.
+struct SourceIpConditionConfigSerializer;
+impl SourceIpConditionConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SourceIpConditionConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.values {
+            ListOfStringSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Values"),
+                field_value,
+            );
+        }
+    }
+}
+
 struct SslPoliciesDeserializer;
 impl SslPoliciesDeserializer {
     #[allow(unused_variables)]
@@ -8241,25 +8762,25 @@ pub trait Elb {
     /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
     fn add_tags(&self, input: AddTagsInput) -> RusotoFuture<AddTagsOutput, AddTagsError>;
 
-    /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_listener(
         &self,
         input: CreateListenerInput,
     ) -> RusotoFuture<CreateListenerOutput, CreateListenerError>;
 
-    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: CreateLoadBalancerInput,
     ) -> RusotoFuture<CreateLoadBalancerOutput, CreateLoadBalancerError>;
 
-    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(
         &self,
         input: CreateRuleInput,
     ) -> RusotoFuture<CreateRuleOutput, CreateRuleError>;
 
-    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
         input: CreateTargetGroupInput,
@@ -8295,7 +8816,7 @@ pub trait Elb {
         input: DeregisterTargetsInput,
     ) -> RusotoFuture<DeregisterTargetsOutput, DeregisterTargetsError>;
 
-    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_account_limits(
         &self,
         input: DescribeAccountLimitsInput,
@@ -8313,7 +8834,7 @@ pub trait Elb {
         input: DescribeListenersInput,
     ) -> RusotoFuture<DescribeListenersOutput, DescribeListenersError>;
 
-    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: DescribeLoadBalancerAttributesInput,
@@ -8331,7 +8852,7 @@ pub trait Elb {
         input: DescribeRulesInput,
     ) -> RusotoFuture<DescribeRulesOutput, DescribeRulesError>;
 
-    /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn describe_ssl_policies(
         &self,
         input: DescribeSSLPoliciesInput,
@@ -8343,7 +8864,7 @@ pub trait Elb {
         input: DescribeTagsInput,
     ) -> RusotoFuture<DescribeTagsOutput, DescribeTagsError>;
 
-    /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_target_group_attributes(
         &self,
         input: DescribeTargetGroupAttributesInput,
@@ -8563,7 +9084,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_listener(
         &self,
         input: CreateListenerInput,
@@ -8614,7 +9135,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, public subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: CreateLoadBalancerInput,
@@ -8665,7 +9186,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the conditions for a rule are met, its actions are performed. If the conditions for no rules are met, the actions for the default rule are performed. For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(
         &self,
         input: CreateRuleInput,
@@ -8714,7 +9235,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
         input: CreateTargetGroupInput,
@@ -9018,7 +9539,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_account_limits(
         &self,
         input: DescribeAccountLimitsInput,
@@ -9165,7 +9686,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html#load-balancer-attributes">Load Balancer Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: DescribeLoadBalancerAttributesInput,
@@ -9313,7 +9834,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>Describes the specified policies or all policies used for SSL negotiation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     fn describe_ssl_policies(
         &self,
         input: DescribeSSLPoliciesInput,
@@ -9414,7 +9935,7 @@ impl Elb for ElbClient {
         })
     }
 
-    /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
+    /// <p>Describes the attributes for the specified target group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Application Load Balancers Guide</i> or <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html#target-group-attributes">Target Group Attributes</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_target_group_attributes(
         &self,
         input: DescribeTargetGroupAttributesInput,

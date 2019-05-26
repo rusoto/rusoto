@@ -199,6 +199,10 @@ pub struct Environment {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>The state of the environment in its creation or deletion lifecycle.</p>
+    #[serde(rename = "lifecycle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle: Option<EnvironmentLifecycle>,
     /// <p>The name of the environment.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,6 +215,24 @@ pub struct Environment {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>Information about the current creation or deletion lifecycle state of an AWS Cloud9 development environment.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EnvironmentLifecycle {
+    /// <p>If the environment failed to delete, the Amazon Resource Name (ARN) of the related AWS resource.</p>
+    #[serde(rename = "failureResource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_resource: Option<String>,
+    /// <p>Any informational message about the lifecycle state of the environment.</p>
+    #[serde(rename = "reason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+    /// <p><p>The current creation or deletion lifecycle state of the environment.</p> <ul> <li> <p> <code>CREATED</code>: The environment was successfully created.</p> </li> <li> <p> <code>DELETE_FAILED</code>: The environment failed to delete.</p> </li> <li> <p> <code>DELETING</code>: The environment is in the process of being deleted.</p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>Information about an environment member for an AWS Cloud9 development environment.</p>

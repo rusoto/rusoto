@@ -59,7 +59,6 @@ impl AddRoleToDBClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddSourceIdentifierToSubscriptionMessage {
     /// <p><p>The identifier of the event source to be added.</p> <p>Constraints:</p> <ul> <li> <p>If the source type is a DB instance, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is a DB security group, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB parameter group, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is a DB snapshot, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> </ul></p>
@@ -118,10 +117,9 @@ impl AddSourceIdentifierToSubscriptionResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddTagsToResourceMessage {
-    /// <p>The Amazon Neptune resource that the tags are added to. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
+    /// <p>The Amazon Neptune resource that the tags are added to. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
     pub resource_name: String,
     /// <p>The tags to be assigned to the Amazon Neptune resource.</p>
     pub tags: Vec<Tag>,
@@ -155,14 +153,13 @@ impl ApplyMethodDeserializer {
         Ok(obj)
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplyPendingMaintenanceActionMessage {
     /// <p>The pending maintenance action to apply to this resource.</p> <p>Valid values: <code>system-update</code>, <code>db-upgrade</code> </p>
     pub apply_action: String,
     /// <p><p>A value that specifies the type of opt-in request, or undoes an opt-in request. An opt-in request of type <code>immediate</code> can&#39;t be undone.</p> <p>Valid values:</p> <ul> <li> <p> <code>immediate</code> - Apply the maintenance action immediately.</p> </li> <li> <p> <code>next-maintenance</code> - Apply the maintenance action during the next maintenance window for the resource.</p> </li> <li> <p> <code>undo-opt-in</code> - Cancel any existing <code>next-maintenance</code> opt-in requests.</p> </li> </ul></p>
     pub opt_in_type: String,
-    /// <p>The Amazon Resource Name (ARN) of the resource that the pending maintenance action applies to. For information about creating an ARN, see <a href="http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource that the pending maintenance action applies to. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
     pub resource_identifier: String,
 }
 
@@ -244,7 +241,7 @@ impl AttributeValueListSerializer {
     }
 }
 
-/// <p><p>Contains Availability Zone information.</p> <p> This data type is used as an element in the following data type:</p> <ul> <li> <p> <a>OrderableDBInstanceOption</a> </p> </li> </ul></p>
+/// <p>Specifies an Availability Zone.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AvailabilityZone {
     /// <p>The name of the availability zone.</p>
@@ -346,7 +343,7 @@ impl BooleanOptionalDeserializer {
         Ok(obj)
     }
 }
-/// <p> This data type is used as a response element in the action <a>DescribeDBEngineVersions</a>. </p>
+/// <p>Specifies a character set.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CharacterSet {
     /// <p>The description of the character set.</p>
@@ -417,8 +414,9 @@ impl CloudwatchLogsExportConfigurationSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBClusterParameterGroupMessage {
-    /// <p><p>The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter group. For information about creating an ARN, see <a href="http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB cluster parameter group.</p> </li> <li> <p>If the source DB cluster parameter group is in the same AWS Region as the copy, specify a valid DB parameter group identifier, for example <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source DB parameter group is in a different AWS Region than the copy, specify a valid DB cluster parameter group ARN, for example <code>arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1</code>.</p> </li> </ul></p>
+    /// <p><p>The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter group. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB cluster parameter group.</p> </li> <li> <p>If the source DB cluster parameter group is in the same AWS Region as the copy, specify a valid DB parameter group identifier, for example <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source DB parameter group is in a different AWS Region than the copy, specify a valid DB cluster parameter group ARN, for example <code>arn:aws:rds:us-east-1:123456789012:cluster-pg:custom-cluster-group1</code>.</p> </li> </ul></p>
     pub source_db_cluster_parameter_group_identifier: String,
+    /// <p>The tags to be assigned to the copied DB cluster parameter group.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>A description for the copied DB cluster parameter group.</p>
     pub target_db_cluster_parameter_group_description: String,
@@ -484,17 +482,17 @@ impl CopyDBClusterParameterGroupResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBClusterSnapshotMessage {
     /// <p>True to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot, and otherwise false. The default is false.</p>
     pub copy_tags: Option<bool>,
-    /// <p>The AWS AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you copy an unencrypted DB cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, Amazon Neptune encrypts the target DB cluster snapshot using the specified KMS encryption key. </p> <p>If you copy an encrypted DB cluster snapshot from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the DB cluster snapshot is encrypted with the same KMS key as the source DB cluster snapshot. </p> <p>If you copy an encrypted DB cluster snapshot that is shared from another AWS account, then you must specify a value for <code>KmsKeyId</code>. </p> <p>To copy an encrypted DB cluster snapshot to another AWS Region, you must set <code>KmsKeyId</code> to the KMS key ID you want to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region.</p>
+    /// <p>The AWS AWS KMS key ID for an encrypted DB cluster snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p> <p>If you copy an unencrypted DB cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, Amazon Neptune encrypts the target DB cluster snapshot using the specified KMS encryption key.</p> <p>If you copy an encrypted DB cluster snapshot from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the DB cluster snapshot is encrypted with the same KMS key as the source DB cluster snapshot.</p> <p>If you copy an encrypted DB cluster snapshot that is shared from another AWS account, then you must specify a value for <code>KmsKeyId</code>.</p> <p> KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region.</p>
     pub kms_key_id: Option<String>,
-    /// <p>The URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> API action in the AWS Region that contains the source DB cluster snapshot to copy. The <code>PreSignedUrl</code> parameter must be used when copying an encrypted DB cluster snapshot from another AWS Region.</p> <p>The pre-signed URL must be a valid request for the <code>CopyDBSClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied. The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:neptune-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p>
+    /// <p>Not currently supported.</p>
     pub pre_signed_url: Option<String>,
-    /// <p>The identifier of the DB cluster snapshot to copy. This parameter is not case-sensitive.</p> <p>You can't copy an encrypted, shared DB cluster snapshot from one AWS Region to another.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid system snapshot in the "available" state.</p> </li> <li> <p>If the source snapshot is in the same AWS Region as the copy, specify a valid DB snapshot identifier.</p> </li> <li> <p>If the source snapshot is in a different AWS Region than the copy, specify a valid DB cluster snapshot ARN. </p> </li> </ul> <p>Example: <code>my-cluster-snapshot1</code> </p>
+    /// <p>The identifier of the DB cluster snapshot to copy. This parameter is not case-sensitive.</p> <p>You can't copy from one AWS Region to another.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid system snapshot in the "available" state.</p> </li> <li> <p>Specify a valid DB snapshot identifier.</p> </li> </ul> <p>Example: <code>my-cluster-snapshot1</code> </p>
     pub source_db_cluster_snapshot_identifier: String,
+    /// <p>The tags to assign to the new DB cluster snapshot copy.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The identifier of the new DB cluster snapshot to create from the source DB cluster snapshot. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster-snapshot2</code> </p>
     pub target_db_cluster_snapshot_identifier: String,
@@ -562,15 +560,15 @@ impl CopyDBClusterSnapshotResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyDBParameterGroupMessage {
-    /// <p><p> The identifier or ARN for the source DB parameter group. For information about creating an ARN, see <a href="http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>. </p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB parameter group.</p> </li> <li> <p>Must specify a valid DB parameter group identifier, for example <code>my-db-param-group</code>, or a valid ARN.</p> </li> </ul></p>
+    /// <p><p>The identifier or ARN for the source DB parameter group. For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid DB parameter group.</p> </li> <li> <p>Must specify a valid DB parameter group identifier, for example <code>my-db-param-group</code>, or a valid ARN.</p> </li> </ul></p>
     pub source_db_parameter_group_identifier: String,
+    /// <p>The tags to be assigned to the copied DB parameter group.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>A description for the copied DB parameter group.</p>
     pub target_db_parameter_group_description: String,
-    /// <p>The identifier for the copied DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 letters, numbers, or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-db-parameter-group</code> </p>
+    /// <p>The identifier for the copied DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank.</p> </li> <li> <p>Must contain from 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-db-parameter-group</code> </p>
     pub target_db_parameter_group_identifier: String,
 }
 
@@ -631,10 +629,9 @@ impl CopyDBParameterGroupResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterMessage {
-    /// <p>A list of EC2 Availability Zones that instances in the DB cluster can be created in. </p>
+    /// <p>A list of EC2 Availability Zones that instances in the DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
     /// <p><p>The number of days for which automated backups are retained. You must specify a minimum value of 1.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 1 to 35</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
@@ -642,7 +639,7 @@ pub struct CreateDBClusterMessage {
     pub character_set_name: Option<String>,
     /// <p>The DB cluster identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
     pub db_cluster_identifier: String,
-    /// <p><p> The name of the DB cluster parameter group to associate with this DB cluster. If this argument is omitted, the default is used. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
+    /// <p><p> The name of the DB cluster parameter group to associate with this DB cluster. If this argument is omitted, the default is used.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: Option<String>,
     /// <p>A DB subnet group to associate with this DB cluster.</p> <p>Constraints: Must match the name of an existing DBSubnetGroup. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: Option<String>,
@@ -654,7 +651,7 @@ pub struct CreateDBClusterMessage {
     pub engine: String,
     /// <p>The version number of the database engine to use.</p> <p>Example: <code>1.0.1</code> </p>
     pub engine_version: Option<String>,
-    /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon Neptune will use the encryption key used to encrypt the source. Otherwise, Amazon Neptune will use your default encryption key. </p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is true and <code>ReplicationSourceIdentifier</code> is not specified, then Amazon Neptune will use your default encryption key.</p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p> <p>If you create a Read Replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a KMS key ID that is valid in the destination AWS Region. This key is used to encrypt the Read Replica in that AWS Region.</p>
+    /// <p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB cluster with the same AWS account that owns the KMS encryption key used to encrypt the new DB cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon Neptune will use the encryption key used to encrypt the source. Otherwise, Amazon Neptune will use your default encryption key.</p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is true and <code>ReplicationSourceIdentifier</code> is not specified, then Amazon Neptune will use your default encryption key.</p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p> <p>If you create a Read Replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a KMS key ID that is valid in the destination AWS Region. This key is used to encrypt the Read Replica in that AWS Region.</p>
     pub kms_key_id: Option<String>,
     /// <p>The password for the master database user. This password can contain any printable ASCII character except "/", """, or "@".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>
     pub master_user_password: Option<String>,
@@ -664,16 +661,17 @@ pub struct CreateDBClusterMessage {
     pub option_group_name: Option<String>,
     /// <p>The port number on which the instances in the DB cluster accept connections.</p> <p> Default: <code>8182</code> </p>
     pub port: Option<i64>,
-    /// <p>A URL that contains a Signature Version 4 signed request for the <code>CreateDBCluster</code> action to be called in the source AWS Region where the DB cluster is replicated from. You only need to specify <code>PreSignedUrl</code> when you are performing cross-region replication from an encrypted DB cluster.</p> <p>The pre-signed URL must be a valid request for the <code>CreateDBCluster</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS KMS key identifier for the key to use to encrypt the copy of the DB cluster in the destination AWS Region. This should refer to the same KMS key for both the <code>CreateDBCluster</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that Read Replica will be created in.</p> </li> <li> <p> <code>ReplicationSourceIdentifier</code> - The DB cluster identifier for the encrypted DB cluster to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster from the us-west-2 AWS Region, then your <code>ReplicationSourceIdentifier</code> would look like Example: <code>arn:aws:rds:us-west-2:123456789012:cluster:neptune-cluster1</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p>
+    /// <p>This parameter is not currently supported.</p>
     pub pre_signed_url: Option<String>,
-    /// <p><p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. To see the time blocks available, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon Neptune User Guide.</i> </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
+    /// <p><p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. To see the time blocks available, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon Neptune User Guide.</i> </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
     pub preferred_backup_window: Option<String>,
-    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. To see the time blocks available, see <a href="http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon Neptune User Guide.</i> </p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> <p>Constraints: Minimum 30-minute window.</p>
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. To see the time blocks available, see <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html"> Adjusting the Preferred Maintenance Window</a> in the <i>Amazon Neptune User Guide.</i> </p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> <p>Constraints: Minimum 30-minute window.</p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the source DB instance or DB cluster if this DB cluster is created as a Read Replica.</p>
     pub replication_source_identifier: Option<String>,
     /// <p>Specifies whether the DB cluster is encrypted.</p>
     pub storage_encrypted: Option<bool>,
+    /// <p>The tags to assign to the new DB cluster.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>A list of EC2 VPC security groups to associate with this DB cluster.</p>
     pub vpc_security_group_ids: Option<Vec<String>>,
@@ -782,7 +780,6 @@ impl CreateDBClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterParameterGroupMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DBClusterParameterGroup.</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
@@ -791,6 +788,7 @@ pub struct CreateDBClusterParameterGroupMessage {
     pub db_parameter_group_family: String,
     /// <p>The description for the DB cluster parameter group.</p>
     pub description: String,
+    /// <p>The tags to be assigned to the new DB cluster parameter group.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -872,7 +870,6 @@ impl CreateDBClusterResultDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBClusterSnapshotMessage {
     /// <p>The identifier of the DB cluster to create a snapshot for. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul> <p>Example: <code>my-cluster1</code> </p>
@@ -936,14 +933,13 @@ impl CreateDBClusterSnapshotResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBInstanceMessage {
     /// <p>The amount of storage (in gibibytes) to allocate for the DB instance.</p> <p>Type: Integer</p> <p>Not applicable. Neptune cluster volumes automatically grow as the amount of data in your database increases, though you are only charged for the space that you use in a Neptune cluster volume.</p>
     pub allocated_storage: Option<i64>,
     /// <p>Indicates that minor engine upgrades are applied automatically to the DB instance during the maintenance window.</p> <p>Default: <code>true</code> </p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p> The EC2 Availability Zone that the DB instance is created in. </p> <p>Default: A random, system-chosen Availability Zone in the endpoint's AWS Region.</p> <p> Example: <code>us-east-1d</code> </p> <p> Constraint: The AvailabilityZone parameter can't be specified if the MultiAZ parameter is set to <code>true</code>. The specified Availability Zone must be in the same AWS Region as the current endpoint. </p>
+    /// <p> The EC2 Availability Zone that the DB instance is created in</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's AWS Region.</p> <p> Example: <code>us-east-1d</code> </p> <p> Constraint: The AvailabilityZone parameter can't be specified if the MultiAZ parameter is set to <code>true</code>. The specified Availability Zone must be in the same AWS Region as the current endpoint.</p>
     pub availability_zone: Option<String>,
     /// <p><p>The number of days for which automated backups are retained.</p> <p>Not applicable. The retention period for automated backups is managed by the DB cluster. For more information, see <a>CreateDBCluster</a>.</p> <p>Default: 1</p> <p>Constraints:</p> <ul> <li> <p>Must be a value from 0 to 35</p> </li> <li> <p>Cannot be set to 0 if the DB instance is a source to Read Replicas</p> </li> </ul></p>
     pub backup_retention_period: Option<i64>,
@@ -953,11 +949,11 @@ pub struct CreateDBInstanceMessage {
     pub copy_tags_to_snapshot: Option<bool>,
     /// <p>The identifier of the DB cluster that the instance will belong to.</p> <p>For information on creating a DB cluster, see <a>CreateDBCluster</a>.</p> <p>Type: String</p>
     pub db_cluster_identifier: Option<String>,
-    /// <p>The compute and memory capacity of the DB instance, for example, <code>db.m4.large</code>. Not all DB instance classes are available in all AWS Regions. </p>
+    /// <p>The compute and memory capacity of the DB instance, for example, <code>db.m4.large</code>. Not all DB instance classes are available in all AWS Regions.</p>
     pub db_instance_class: String,
     /// <p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>
     pub db_instance_identifier: String,
-    /// <p>The database name. </p> <p>Type: String</p>
+    /// <p>Not supported.</p>
     pub db_name: Option<String>,
     /// <p><p>The name of the DB parameter group to associate with this DB instance. If this argument is omitted, the default DBParameterGroup for the specified engine is used.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub db_parameter_group_name: Option<String>,
@@ -973,19 +969,19 @@ pub struct CreateDBInstanceMessage {
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>True to enable AWS Identity and Access Management (IAM) authentication for Neptune.</p> <p>Default: <code>false</code> </p>
     pub enable_iam_database_authentication: Option<bool>,
-    /// <p>True to enable Performance Insights for the DB instance, and otherwise false. </p>
+    /// <p>True to enable Performance Insights for the DB instance, and otherwise false.</p>
     pub enable_performance_insights: Option<bool>,
-    /// <p>The name of the database engine to be used for this instance. </p> <p>Valid Values: <code>neptune</code> </p>
+    /// <p>The name of the database engine to be used for this instance.</p> <p>Valid Values: <code>neptune</code> </p>
     pub engine: String,
     /// <p>The version number of the database engine to use.</p>
     pub engine_version: Option<String>,
-    /// <p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance. </p>
+    /// <p>The amount of Provisioned IOPS (input/output operations per second) to be initially allocated for the DB instance.</p>
     pub iops: Option<i64>,
     /// <p>The AWS KMS key identifier for an encrypted DB instance.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a DB instance with the same AWS account that owns the KMS encryption key used to encrypt the new DB instance, then you can use the KMS key alias instead of the ARN for the KM encryption key.</p> <p>Not applicable. The KMS key identifier is managed by the DB cluster. For more information, see <a>CreateDBCluster</a>.</p> <p>If the <code>StorageEncrypted</code> parameter is true, and you do not specify a value for the <code>KmsKeyId</code> parameter, then Amazon Neptune will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     pub kms_key_id: Option<String>,
     /// <p>License model information for this DB instance.</p> <p> Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>
     pub license_model: Option<String>,
-    /// <p>The password for the master user. The password can include any printable ASCII character except "/", """, or "@".</p> <p> Not used. </p>
+    /// <p>The password for the master user. The password can include any printable ASCII character except "/", """, or "@".</p> <p> Not used.</p>
     pub master_user_password: Option<String>,
     /// <p>The name for the master user. Not used.</p>
     pub master_username: Option<String>,
@@ -1001,9 +997,9 @@ pub struct CreateDBInstanceMessage {
     pub performance_insights_kms_key_id: Option<String>,
     /// <p>The port number on which the database accepts connections.</p> <p>Not applicable. The port is managed by the DB cluster. For more information, see <a>CreateDBCluster</a>.</p> <p> Default: <code>8182</code> </p> <p>Type: Integer</p>
     pub port: Option<i64>,
-    /// <p> The daily time range during which automated backups are created. </p> <p>Not applicable. The daily time range for creating automated backups is managed by the DB cluster. For more information, see <a>CreateDBCluster</a>.</p>
+    /// <p> The daily time range during which automated backups are created.</p> <p>Not applicable. The daily time range for creating automated backups is managed by the DB cluster. For more information, see <a>CreateDBCluster</a>.</p>
     pub preferred_backup_window: Option<String>,
-    /// <p>The time range each week during which system maintenance can occur, in Universal Coordinated Time (UTC). </p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. </p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> <p>Constraints: Minimum 30-minute window.</p>
+    /// <p>The time range each week during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> <p>Constraints: Minimum 30-minute window.</p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>A value that specifies the order in which an Read Replica is promoted to the primary instance after a failure of the existing primary instance. </p> <p>Default: 1</p> <p>Valid Values: 0 - 15</p>
     pub promotion_tier: Option<i64>,
@@ -1011,12 +1007,13 @@ pub struct CreateDBInstanceMessage {
     pub storage_encrypted: Option<bool>,
     /// <p>Specifies the storage type to be associated with the DB instance.</p> <p>Not applicable. Storage is managed by the DB Cluster.</p>
     pub storage_type: Option<String>,
+    /// <p>The tags to assign to the new instance.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The ARN from the key store with which to associate the instance for TDE encryption.</p>
     pub tde_credential_arn: Option<String>,
     /// <p>The password for the given ARN from the key store in order to access the device.</p>
     pub tde_credential_password: Option<String>,
-    /// <p>The time zone of the DB instance. </p>
+    /// <p>The time zone of the DB instance.</p>
     pub timezone: Option<String>,
     /// <p>A list of EC2 VPC security groups to associate with this DB instance.</p> <p>Not applicable. The associated list of EC2 VPC security groups is managed by the DB cluster. For more information, see <a>CreateDBCluster</a>.</p> <p>Default: The default EC2 VPC security group for the DB subnet group's VPC.</p>
     pub vpc_security_group_ids: Option<Vec<String>>,
@@ -1224,7 +1221,6 @@ impl CreateDBInstanceResultDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBParameterGroupMessage {
     /// <p>The DB parameter group family name. A DB parameter group can be associated with one and only one DB parameter group family, and can be applied only to a DB instance running a database engine and engine version compatible with that DB parameter group family.</p>
@@ -1233,6 +1229,7 @@ pub struct CreateDBParameterGroupMessage {
     pub db_parameter_group_name: String,
     /// <p>The description for the DB parameter group.</p>
     pub description: String,
+    /// <p>The tags to be assigned to the new DB parameter group.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -1290,7 +1287,6 @@ impl CreateDBParameterGroupResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDBSubnetGroupMessage {
     /// <p>The description for the DB subnet group.</p>
@@ -1299,6 +1295,7 @@ pub struct CreateDBSubnetGroupMessage {
     pub db_subnet_group_name: String,
     /// <p>The EC2 Subnet IDs for the DB subnet group.</p>
     pub subnet_ids: Vec<String>,
+    /// <p>The tags to be assigned to the new DB subnet group.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -1360,12 +1357,11 @@ impl CreateDBSubnetGroupResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateEventSubscriptionMessage {
-    /// <p> A Boolean value; set to <b>true</b> to activate the subscription, set to <b>false</b> to create the subscription but not active it. </p>
+    /// <p> A Boolean value; set to <b>true</b> to activate the subscription, set to <b>false</b> to create the subscription but not active it.</p>
     pub enabled: Option<bool>,
-    /// <p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType by using the <b>DescribeEventCategories</b> action. </p>
+    /// <p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType by using the <b>DescribeEventCategories</b> action.</p>
     pub event_categories: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of the SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>
     pub sns_topic_arn: String,
@@ -1375,6 +1371,7 @@ pub struct CreateEventSubscriptionMessage {
     pub source_type: Option<String>,
     /// <p>The name of the subscription.</p> <p>Constraints: The name must be less than 255 characters.</p>
     pub subscription_name: String,
+    /// <p>The tags to be applied to the new event subscription.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -1448,7 +1445,7 @@ impl CreateEventSubscriptionResultDeserializer {
         )
     }
 }
-/// <p>Contains the details of an Amazon Neptune DB cluster. </p> <p>This data type is used as a response element in the <a>DescribeDBClusters</a> action. </p>
+/// <p>Contains the details of an Amazon Neptune DB cluster.</p> <p>This data type is used as a response element in the <a>DescribeDBClusters</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBCluster {
     /// <p> <code>AllocatedStorage</code> always returns 1, because Neptune DB cluster storage size is not fixed, but instead automatically adjusts as needed.</p>
@@ -1505,15 +1502,15 @@ pub struct DBCluster {
     pub percent_progress: Option<String>,
     /// <p>Specifies the port that the database engine is listening on.</p>
     pub port: Option<i64>,
-    /// <p>Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the <code>BackupRetentionPeriod</code>. </p>
+    /// <p>Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the <code>BackupRetentionPeriod</code>.</p>
     pub preferred_backup_window: Option<String>,
     /// <p>Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>Contains one or more identifiers of the Read Replicas associated with this DB cluster.</p>
     pub read_replica_identifiers: Option<Vec<String>>,
-    /// <p>The reader endpoint for the DB cluster. The reader endpoint for a DB cluster load-balances connections across the Read Replicas that are available in a DB cluster. As clients request new connections to the reader endpoint, Neptune distributes the connection requests among the Read Replicas in the DB cluster. This functionality can help balance your read workload across multiple Read Replicas in your DB cluster. </p> <p>If a failover occurs, and the Read Replica that you are connected to is promoted to be the primary instance, your connection is dropped. To continue sending your read workload to other Read Replicas in the cluster, you can then reconnect to the reader endpoint.</p>
+    /// <p>The reader endpoint for the DB cluster. The reader endpoint for a DB cluster load-balances connections across the Read Replicas that are available in a DB cluster. As clients request new connections to the reader endpoint, Neptune distributes the connection requests among the Read Replicas in the DB cluster. This functionality can help balance your read workload across multiple Read Replicas in your DB cluster.</p> <p>If a failover occurs, and the Read Replica that you are connected to is promoted to be the primary instance, your connection is dropped. To continue sending your read workload to other Read Replicas in the cluster, you can then reconnect to the reader endpoint.</p>
     pub reader_endpoint: Option<String>,
-    /// <p>Contains the identifier of the source DB cluster if this DB cluster is a Read Replica.</p>
+    /// <p>Not supported by Neptune.</p>
     pub replication_source_identifier: Option<String>,
     /// <p>Specifies the current state of this DB cluster.</p>
     pub status: Option<String>,
@@ -1736,7 +1733,7 @@ pub struct DBClusterMember {
     pub db_instance_identifier: Option<String>,
     /// <p>Value that is <code>true</code> if the cluster member is the primary instance for the DB cluster and <code>false</code> otherwise.</p>
     pub is_cluster_writer: Option<bool>,
-    /// <p>A value that specifies the order in which a Read Replica is promoted to the primary instance after a failure of the existing primary instance. </p>
+    /// <p>A value that specifies the order in which a Read Replica is promoted to the primary instance after a failure of the existing primary instance.</p>
     pub promotion_tier: Option<i64>,
 }
 
@@ -1797,7 +1794,6 @@ impl DBClusterMemberListDeserializer {
         })
     }
 }
-/// <p>Contains the result of a successful invocation of the <a>DescribeDBClusters</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterMessage {
     /// <p>Contains a list of DB clusters for the user.</p>
@@ -1886,7 +1882,7 @@ impl DBClusterOptionGroupStatusDeserializer {
         )
     }
 }
-/// <p>Contains the details of an Amazon Neptune DB cluster parameter group. </p> <p>This data type is used as a response element in the <a>DescribeDBClusterParameterGroups</a> action. </p>
+/// <p>Contains the details of an Amazon Neptune DB cluster parameter group.</p> <p>This data type is used as a response element in the <a>DescribeDBClusterParameterGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB cluster parameter group.</p>
@@ -1939,10 +1935,9 @@ impl DBClusterParameterGroupDeserializer {
         )
     }
 }
-/// <p>Provides details about a DB cluster parameter group including the parameters in the DB cluster parameter group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroupDetails {
-    /// <p> An optional pagination token provided by a previous DescribeDBClusterParameters request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    /// <p> An optional pagination token provided by a previous DescribeDBClusterParameters request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
     /// <p>Provides a list of parameters for the DB cluster parameter group.</p>
     pub parameters: Option<Vec<Parameter>>,
@@ -1995,7 +1990,6 @@ impl DBClusterParameterGroupListDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroupNameMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters or numbers.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <note> <p>This value is stored as a lowercase string.</p> </note></p>
@@ -2026,12 +2020,11 @@ impl DBClusterParameterGroupNameMessageDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterParameterGroupsMessage {
     /// <p>A list of DB cluster parameter groups.</p>
     pub db_cluster_parameter_groups: Option<Vec<DBClusterParameterGroup>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
 }
 
@@ -2115,7 +2108,7 @@ impl DBClusterRolesDeserializer {
         })
     }
 }
-/// <p>Contains the details for an Amazon Neptune DB cluster snapshot </p> <p>This data type is used as a response element in the <a>DescribeDBClusterSnapshots</a> action. </p>
+/// <p>Contains the details for an Amazon Neptune DB cluster snapshot</p> <p>This data type is used as a response element in the <a>DescribeDBClusterSnapshots</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterSnapshot {
     /// <p>Specifies the allocated storage size in gibibytes (GiB).</p>
@@ -2383,7 +2376,6 @@ impl DBClusterSnapshotListDeserializer {
         })
     }
 }
-/// <p> Provides a list of DB cluster snapshots for the user as the result of a call to the <a>DescribeDBClusterSnapshots</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBClusterSnapshotMessage {
     /// <p>Provides a list of DB cluster snapshots for the user.</p>
@@ -2422,7 +2414,7 @@ impl DBClusterSnapshotMessageDeserializer {
         )
     }
 }
-/// <p> This data type is used as a response element in the action <a>DescribeDBEngineVersions</a>. </p>
+/// <p> This data type is used as a response element in the action <a>DescribeDBEngineVersions</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBEngineVersion {
     /// <p>The description of the database engine.</p>
@@ -2431,7 +2423,7 @@ pub struct DBEngineVersion {
     pub db_engine_version_description: Option<String>,
     /// <p>The name of the DB parameter group family for the database engine.</p>
     pub db_parameter_group_family: Option<String>,
-    /// <p> The default character set for new instances of this engine version, if the <code>CharacterSetName</code> parameter of the CreateDBInstance API is not specified. </p>
+    /// <p> The default character set for new instances of this engine version, if the <code>CharacterSetName</code> parameter of the CreateDBInstance API is not specified.</p>
     pub default_character_set: Option<CharacterSet>,
     /// <p>The name of the database engine.</p>
     pub engine: Option<String>,
@@ -2439,9 +2431,9 @@ pub struct DBEngineVersion {
     pub engine_version: Option<String>,
     /// <p>The types of logs that the database engine has available for export to CloudWatch Logs.</p>
     pub exportable_log_types: Option<Vec<String>>,
-    /// <p> A list of the character sets supported by this engine for the <code>CharacterSetName</code> parameter of the <code>CreateDBInstance</code> action. </p>
+    /// <p> A list of the character sets supported by this engine for the <code>CharacterSetName</code> parameter of the <code>CreateDBInstance</code> action.</p>
     pub supported_character_sets: Option<Vec<CharacterSet>>,
-    /// <p>A list of the time zones supported by this engine for the <code>Timezone</code> parameter of the <code>CreateDBInstance</code> action. </p>
+    /// <p>A list of the time zones supported by this engine for the <code>Timezone</code> parameter of the <code>CreateDBInstance</code> action.</p>
     pub supported_timezones: Option<Vec<Timezone>>,
     /// <p>A value that indicates whether the engine version supports exporting the log types specified by ExportableLogTypes to CloudWatch Logs.</p>
     pub supports_log_exports_to_cloudwatch_logs: Option<bool>,
@@ -2559,12 +2551,11 @@ impl DBEngineVersionListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>DescribeDBEngineVersions</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBEngineVersionMessage {
-    /// <p> A list of <code>DBEngineVersion</code> elements. </p>
+    /// <p> A list of <code>DBEngineVersion</code> elements.</p>
     pub db_engine_versions: Option<Vec<DBEngineVersion>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
 }
 
@@ -2591,7 +2582,7 @@ impl DBEngineVersionMessageDeserializer {
         })
     }
 }
-/// <p>Contains the details of an Amazon Neptune DB instance. </p> <p>This data type is used as a response element in the <a>DescribeDBInstances</a> action. </p>
+/// <p>Contains the details of an Amazon Neptune DB instance.</p> <p>This data type is used as a response element in the <a>DescribeDBInstances</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBInstance {
     /// <p>Specifies the allocated storage size specified in gibibytes.</p>
@@ -2622,7 +2613,7 @@ pub struct DBInstance {
     pub db_name: Option<String>,
     /// <p>Provides the list of DB parameter groups applied to this DB instance.</p>
     pub db_parameter_groups: Option<Vec<DBParameterGroupStatus>>,
-    /// <p> Provides List of DB security group elements containing only <code>DBSecurityGroup.Name</code> and <code>DBSecurityGroup.Status</code> subelements. </p>
+    /// <p> Provides List of DB security group elements containing only <code>DBSecurityGroup.Name</code> and <code>DBSecurityGroup.Status</code> subelements.</p>
     pub db_security_groups: Option<Vec<DBSecurityGroupMembership>>,
     /// <p>Specifies information on the subnet group associated with the DB instance, including the name, description, and subnets in the subnet group.</p>
     pub db_subnet_group: Option<DBSubnetGroup>,
@@ -2648,7 +2639,7 @@ pub struct DBInstance {
     pub instance_create_time: Option<String>,
     /// <p>Specifies the Provisioned IOPS (I/O operations per second) value.</p>
     pub iops: Option<i64>,
-    /// <p> If <code>StorageEncrypted</code> is true, the AWS KMS key identifier for the encrypted DB instance. </p>
+    /// <p> Not supported: The encryption for DB instances is managed by the DB cluster.</p>
     pub kms_key_id: Option<String>,
     /// <p>Specifies the latest time to which a database can be restored with point-in-time restore.</p>
     pub latest_restorable_time: Option<String>,
@@ -2670,7 +2661,7 @@ pub struct DBInstance {
     pub performance_insights_enabled: Option<bool>,
     /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p>
     pub performance_insights_kms_key_id: Option<String>,
-    /// <p> Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the <code>BackupRetentionPeriod</code>. </p>
+    /// <p> Specifies the daily time range during which automated backups are created if automated backups are enabled, as determined by the <code>BackupRetentionPeriod</code>.</p>
     pub preferred_backup_window: Option<String>,
     /// <p>Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p>
     pub preferred_maintenance_window: Option<String>,
@@ -2686,13 +2677,13 @@ pub struct DBInstance {
     pub secondary_availability_zone: Option<String>,
     /// <p>The status of a Read Replica. If the instance is not a Read Replica, this is blank.</p>
     pub status_infos: Option<Vec<DBInstanceStatusInfo>>,
-    /// <p>Specifies whether the DB instance is encrypted.</p>
+    /// <p>Not supported: The encryption for DB instances is managed by the DB cluster.</p>
     pub storage_encrypted: Option<bool>,
     /// <p>Specifies the storage type associated with DB instance.</p>
     pub storage_type: Option<String>,
     /// <p>The ARN from the key store with which the instance is associated for TDE encryption.</p>
     pub tde_credential_arn: Option<String>,
-    /// <p>Not supported. </p>
+    /// <p>Not supported.</p>
     pub timezone: Option<String>,
     /// <p>Provides a list of VPC security group elements that the DB instance belongs to.</p>
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
@@ -3002,12 +2993,11 @@ impl DBInstanceListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>DescribeDBInstances</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBInstanceMessage {
-    /// <p> A list of <a>DBInstance</a> instances. </p>
+    /// <p> A list of <a>DBInstance</a> instances.</p>
     pub db_instances: Option<Vec<DBInstance>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
 }
 
@@ -3094,7 +3084,7 @@ impl DBInstanceStatusInfoListDeserializer {
         })
     }
 }
-/// <p>Contains the details of an Amazon Neptune DB parameter group. </p> <p>This data type is used as a response element in the <a>DescribeDBParameterGroups</a> action. </p>
+/// <p>Contains the details of an Amazon Neptune DB parameter group.</p> <p>This data type is used as a response element in the <a>DescribeDBParameterGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB parameter group.</p>
@@ -3143,12 +3133,11 @@ impl DBParameterGroupDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>DescribeDBParameters</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroupDetails {
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> A list of <a>Parameter</a> values. </p>
+    /// <p>A list of <a>Parameter</a> values.</p>
     pub parameters: Option<Vec<Parameter>>,
 }
 
@@ -3199,7 +3188,6 @@ impl DBParameterGroupListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>ModifyDBParameterGroup</a> or <a>ResetDBParameterGroup</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroupNameMessage {
     /// <p>Provides the name of the DB parameter group.</p>
@@ -3287,12 +3275,11 @@ impl DBParameterGroupStatusListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>DescribeDBParameterGroups</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBParameterGroupsMessage {
-    /// <p> A list of <a>DBParameterGroup</a> instances. </p>
+    /// <p>A list of <a>DBParameterGroup</a> instances.</p>
     pub db_parameter_groups: Option<Vec<DBParameterGroup>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
 }
 
@@ -3326,7 +3313,7 @@ impl DBParameterGroupsMessageDeserializer {
         )
     }
 }
-/// <p><p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>ModifyDBInstance</a> </p> </li> <li> <p> <a>RebootDBInstance</a> </p> </li> </ul></p>
+/// <p>Specifies membership in a designated DB security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSecurityGroupMembership {
     /// <p>The name of the DB security group.</p>
@@ -3395,7 +3382,7 @@ impl DBSecurityGroupNameListSerializer {
     }
 }
 
-/// <p>Contains the details of an Amazon Neptune DB subnet group. </p> <p>This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action. </p>
+/// <p>Contains the details of an Amazon Neptune DB subnet group.</p> <p>This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSubnetGroup {
     /// <p>The Amazon Resource Name (ARN) for the DB subnet group.</p>
@@ -3406,7 +3393,7 @@ pub struct DBSubnetGroup {
     pub db_subnet_group_name: Option<String>,
     /// <p>Provides the status of the DB subnet group.</p>
     pub subnet_group_status: Option<String>,
-    /// <p> Contains a list of <a>Subnet</a> elements. </p>
+    /// <p> Contains a list of <a>Subnet</a> elements.</p>
     pub subnets: Option<Vec<Subnet>>,
     /// <p>Provides the VpcId of the DB subnet group.</p>
     pub vpc_id: Option<String>,
@@ -3453,12 +3440,11 @@ impl DBSubnetGroupDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>DescribeDBSubnetGroups</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DBSubnetGroupMessage {
-    /// <p> A list of <a>DBSubnetGroup</a> instances. </p>
+    /// <p> A list of <a>DBSubnetGroup</a> instances.</p>
     pub db_subnet_groups: Option<Vec<DBSubnetGroup>>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
 }
 
@@ -3505,14 +3491,13 @@ impl DBSubnetGroupsDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBClusterMessage {
     /// <p><p>The DB cluster identifier for the DB cluster to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: String,
-    /// <p><p> The DB cluster snapshot identifier of the new DB cluster snapshot created when <code>SkipFinalSnapshot</code> is set to <code>false</code>. </p> <note> <p> Specifying this parameter and also setting the <code>SkipFinalShapshot</code> parameter to true results in an error. </p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
+    /// <p><p> The DB cluster snapshot identifier of the new DB cluster snapshot created when <code>SkipFinalSnapshot</code> is set to <code>false</code>.</p> <note> <p> Specifying this parameter and also setting the <code>SkipFinalShapshot</code> parameter to true results in an error.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters, numbers, or hyphens.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub final_db_snapshot_identifier: Option<String>,
-    /// <p> Determines whether a final DB cluster snapshot is created before the DB cluster is deleted. If <code>true</code> is specified, no DB cluster snapshot is created. If <code>false</code> is specified, a DB cluster snapshot is created before the DB cluster is deleted. </p> <note> <p>You must specify a <code>FinalDBSnapshotIdentifier</code> parameter if <code>SkipFinalSnapshot</code> is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>
+    /// <p> Determines whether a final DB cluster snapshot is created before the DB cluster is deleted. If <code>true</code> is specified, no DB cluster snapshot is created. If <code>false</code> is specified, a DB cluster snapshot is created before the DB cluster is deleted.</p> <note> <p>You must specify a <code>FinalDBSnapshotIdentifier</code> parameter if <code>SkipFinalSnapshot</code> is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>
     pub skip_final_snapshot: Option<bool>,
 }
 
@@ -3541,7 +3526,6 @@ impl DeleteDBClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBClusterParameterGroupMessage {
     /// <p><p>The name of the DB cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB cluster parameter group.</p> </li> <li> <p>You can&#39;t delete a default DB cluster parameter group.</p> </li> <li> <p>Cannot be associated with any DB clusters.</p> </li> </ul></p>
@@ -3587,7 +3571,6 @@ impl DeleteDBClusterResultDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBClusterSnapshotMessage {
     /// <p>The identifier of the DB cluster snapshot to delete.</p> <p>Constraints: Must be the name of an existing DB cluster snapshot in the <code>available</code> state.</p>
@@ -3640,14 +3623,13 @@ impl DeleteDBClusterSnapshotResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBInstanceMessage {
     /// <p><p>The DB instance identifier for the DB instance to be deleted. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DB instance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
-    /// <p><p> The DBSnapshotIdentifier of the new DBSnapshot created when SkipFinalSnapshot is set to <code>false</code>. </p> <note> <p>Specifying this parameter and also setting the SkipFinalShapshot parameter to true results in an error.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters or numbers.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> <li> <p>Cannot be specified when deleting a Read Replica.</p> </li> </ul></p>
+    /// <p><p> The DBSnapshotIdentifier of the new DBSnapshot created when SkipFinalSnapshot is set to <code>false</code>.</p> <note> <p>Specifying this parameter and also setting the SkipFinalShapshot parameter to true results in an error.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 letters or numbers.</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> <li> <p>Cannot be specified when deleting a Read Replica.</p> </li> </ul></p>
     pub final_db_snapshot_identifier: Option<String>,
-    /// <p> Determines whether a final DB snapshot is created before the DB instance is deleted. If <code>true</code> is specified, no DBSnapshot is created. If <code>false</code> is specified, a DB snapshot is created before the DB instance is deleted. </p> <p>Note that when a DB instance is in a failure state and has a status of 'failed', 'incompatible-restore', or 'incompatible-network', it can only be deleted when the SkipFinalSnapshot parameter is set to "true".</p> <p>Specify <code>true</code> when deleting a Read Replica.</p> <note> <p>The FinalDBSnapshotIdentifier parameter must be specified if SkipFinalSnapshot is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>
+    /// <p> Determines whether a final DB snapshot is created before the DB instance is deleted. If <code>true</code> is specified, no DBSnapshot is created. If <code>false</code> is specified, a DB snapshot is created before the DB instance is deleted.</p> <p>Note that when a DB instance is in a failure state and has a status of 'failed', 'incompatible-restore', or 'incompatible-network', it can only be deleted when the SkipFinalSnapshot parameter is set to "true".</p> <p>Specify <code>true</code> when deleting a Read Replica.</p> <note> <p>The FinalDBSnapshotIdentifier parameter must be specified if SkipFinalSnapshot is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>
     pub skip_final_snapshot: Option<bool>,
 }
 
@@ -3700,7 +3682,6 @@ impl DeleteDBInstanceResultDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must be the name of an existing DB parameter group</p> </li> <li> <p>You can&#39;t delete a default DB parameter group</p> </li> <li> <p>Cannot be associated with any DB instances</p> </li> </ul></p>
@@ -3723,7 +3704,6 @@ impl DeleteDBParameterGroupMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteDBSubnetGroupMessage {
     /// <p>The name of the database subnet group to delete.</p> <note> <p>You can't delete the default subnet group.</p> </note> <p>Constraints:</p> <p>Constraints: Must match the name of an existing DBSubnetGroup. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
@@ -3746,7 +3726,6 @@ impl DeleteDBSubnetGroupMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteEventSubscriptionMessage {
     /// <p>The name of the event notification subscription you want to delete.</p>
@@ -3799,16 +3778,15 @@ impl DeleteEventSubscriptionResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterParameterGroupsMessage {
     /// <p><p>The name of a specific DB cluster parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_cluster_parameter_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
 }
 
@@ -3843,7 +3821,6 @@ impl DescribeDBClusterParameterGroupsMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterParametersMessage {
     /// <p><p>The name of a specific DB cluster parameter group to return parameter details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
@@ -3852,9 +3829,9 @@ pub struct DescribeDBClusterParametersMessage {
     pub filters: Option<Vec<Filter>>,
     /// <p> An optional pagination token provided by a previous <code>DescribeDBClusterParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
-    /// <p> A value that indicates to return only parameters for a specific source. Parameter sources can be <code>engine</code>, <code>service</code>, or <code>customer</code>. </p>
+    /// <p> A value that indicates to return only parameters for a specific source. Parameter sources can be <code>engine</code>, <code>service</code>, or <code>customer</code>.</p>
     pub source: Option<String>,
 }
 
@@ -3890,7 +3867,6 @@ impl DescribeDBClusterParametersMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterSnapshotAttributesMessage {
     /// <p>The identifier for the DB cluster snapshot to describe the attributes for.</p>
@@ -3948,12 +3924,11 @@ impl DescribeDBClusterSnapshotAttributesResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClusterSnapshotsMessage {
-    /// <p><p>The ID of the DB cluster to retrieve the list of DB cluster snapshots for. This parameter can&#39;t be used in conjunction with the <code>DBClusterSnapshotIdentifier</code> parameter. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBCluster.</p> </li> </ul></p>
+    /// <p><p>The ID of the DB cluster to retrieve the list of DB cluster snapshots for. This parameter can&#39;t be used in conjunction with the <code>DBClusterSnapshotIdentifier</code> parameter. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
-    /// <p><p>A specific DB cluster snapshot identifier to describe. This parameter can&#39;t be used in conjunction with the <code>DBClusterIdentifier</code> parameter. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBClusterSnapshot.</p> </li> <li> <p>If this identifier is for an automated snapshot, the <code>SnapshotType</code> parameter must also be specified.</p> </li> </ul></p>
+    /// <p><p>A specific DB cluster snapshot identifier to describe. This parameter can&#39;t be used in conjunction with the <code>DBClusterIdentifier</code> parameter. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBClusterSnapshot.</p> </li> <li> <p>If this identifier is for an automated snapshot, the <code>SnapshotType</code> parameter must also be specified.</p> </li> </ul></p>
     pub db_cluster_snapshot_identifier: Option<String>,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
@@ -3963,7 +3938,7 @@ pub struct DescribeDBClusterSnapshotsMessage {
     pub include_shared: Option<bool>,
     /// <p>An optional pagination token provided by a previous <code>DescribeDBClusterSnapshots</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     pub marker: Option<String>,
-    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
     /// <p>The type of DB cluster snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all DB cluster snapshots that have been automatically taken by Amazon Neptune for my AWS account.</p> </li> <li> <p> <code>manual</code> - Return all DB cluster snapshots that have been taken by my AWS account.</p> </li> <li> <p> <code>shared</code> - Return all manual DB cluster snapshots that have been shared to my AWS account.</p> </li> <li> <p> <code>public</code> - Return all DB cluster snapshots that have been marked as public.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual DB cluster snapshots are returned. You can include shared DB cluster snapshots with these results by setting the <code>IncludeShared</code> parameter to <code>true</code>. You can include public DB cluster snapshots with these results by setting the <code>IncludePublic</code> parameter to <code>true</code>.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>
     pub snapshot_type: Option<String>,
@@ -4015,16 +3990,15 @@ impl DescribeDBClusterSnapshotsMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBClustersMessage {
     /// <p><p>The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match an existing DBClusterIdentifier.</p> </li> </ul></p>
     pub db_cluster_identifier: Option<String>,
     /// <p><p>A filter that specifies one or more DB clusters to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB clusters identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>An optional pagination token provided by a previous <a>DescribeDBClusters</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p>An optional pagination token provided by a previous <a>DescribeDBClusters</a> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
 }
 
@@ -4071,13 +4045,13 @@ pub struct DescribeDBEngineVersionsMessage {
     pub engine_version: Option<String>,
     /// <p>Not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>If this parameter is specified and the requested engine supports the <code>CharacterSetName</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported character sets for each engine version. </p>
+    /// <p>If this parameter is specified and the requested engine supports the <code>CharacterSetName</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported character sets for each engine version.</p>
     pub list_supported_character_sets: Option<bool>,
-    /// <p>If this parameter is specified and the requested engine supports the <code>TimeZone</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported time zones for each engine version. </p>
+    /// <p>If this parameter is specified and the requested engine supports the <code>TimeZone</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported time zones for each engine version.</p>
     pub list_supported_timezones: Option<bool>,
-    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so that the following results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more than the <code>MaxRecords</code> value is available, a pagination token called a marker is included in the response so that the following results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
 }
 
@@ -4133,16 +4107,15 @@ impl DescribeDBEngineVersionsMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBInstancesMessage {
     /// <p><p>The user-supplied instance identifier. If this parameter is specified, information from only the specific DB instance is returned. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: Option<String>,
     /// <p><p>A filter that specifies one or more DB instances to describe.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include information about the DB instances associated with the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance Amazon Resource Names (ARNs). The results list will only include information about the DB instances identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeDBInstances</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous <code>DescribeDBInstances</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
 }
 
@@ -4177,16 +4150,15 @@ impl DescribeDBInstancesMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBParameterGroupsMessage {
     /// <p><p>The name of a specific DB parameter group to return details for.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeDBParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p>An optional pagination token provided by a previous <code>DescribeDBParameterGroups</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
 }
 
@@ -4227,9 +4199,9 @@ pub struct DescribeDBParametersMessage {
     pub db_parameter_group_name: String,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeDBParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p>An optional pagination token provided by a previous <code>DescribeDBParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
     /// <p>The parameter types to return.</p> <p>Default: All parameter types returned</p> <p>Valid Values: <code>user | system | engine-default</code> </p>
     pub source: Option<String>,
@@ -4267,16 +4239,15 @@ impl DescribeDBParametersMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeDBSubnetGroupsMessage {
     /// <p>The name of the DB subnet group to return details for.</p>
     pub db_subnet_group_name: Option<String>,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous DescribeDBSubnetGroups request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous DescribeDBSubnetGroups request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
 }
 
@@ -4308,16 +4279,15 @@ impl DescribeDBSubnetGroupsMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEngineDefaultClusterParametersMessage {
     /// <p>The name of the DB cluster parameter group family to return engine parameter information for.</p>
     pub db_parameter_group_family: String,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeEngineDefaultClusterParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous <code>DescribeEngineDefaultClusterParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
 }
 
@@ -4384,16 +4354,15 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEngineDefaultParametersMessage {
     /// <p>The name of the DB parameter group family.</p>
     pub db_parameter_group_family: String,
     /// <p>Not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribeEngineDefaultParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous <code>DescribeEngineDefaultParameters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
 }
 
@@ -4456,7 +4425,6 @@ impl DescribeEngineDefaultParametersResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEventCategoriesMessage {
     /// <p>This parameter is not currently supported.</p>
@@ -4487,14 +4455,13 @@ impl DescribeEventCategoriesMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEventSubscriptionsMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
     /// <p>The name of the event notification subscription you want to describe.</p>
     pub subscription_name: Option<String>,
@@ -4528,7 +4495,6 @@ impl DescribeEventSubscriptionsMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeEventsMessage {
     /// <p>The number of minutes to retrieve events for.</p> <p>Default: 60</p>
@@ -4539,9 +4505,9 @@ pub struct DescribeEventsMessage {
     pub event_categories: Option<Vec<String>>,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous DescribeEvents request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous DescribeEvents request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
     /// <p><p>The identifier of the event source for which events are returned. If not specified, then all sources are included in the response.</p> <p>Constraints:</p> <ul> <li> <p>If SourceIdentifier is supplied, SourceType must also be provided.</p> </li> <li> <p>If the source type is <code>DBInstance</code>, then a <code>DBInstanceIdentifier</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBSecurityGroup</code>, a <code>DBSecurityGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBParameterGroup</code>, a <code>DBParameterGroupName</code> must be supplied.</p> </li> <li> <p>If the source type is <code>DBSnapshot</code>, a <code>DBSnapshotIdentifier</code> must be supplied.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub source_identifier: Option<String>,
@@ -4598,7 +4564,6 @@ impl DescribeEventsMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeOrderableDBInstanceOptionsMessage {
     /// <p>The DB instance class filter value. Specify this parameter to show only the available offerings matching the specified DB instance class.</p>
@@ -4611,9 +4576,9 @@ pub struct DescribeOrderableDBInstanceOptionsMessage {
     pub filters: Option<Vec<Filter>>,
     /// <p>The license model filter value. Specify this parameter to show only the available offerings matching the specified license model.</p>
     pub license_model: Option<String>,
-    /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
     /// <p>The VPC filter value. Specify this parameter to show only the available VPC or non-VPC offerings.</p>
     pub vpc: Option<bool>,
@@ -4657,14 +4622,13 @@ impl DescribeOrderableDBInstanceOptionsMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePendingMaintenanceActionsMessage {
     /// <p><p>A filter that specifies one or more resources to return pending maintenance actions for.</p> <p>Supported filters:</p> <ul> <li> <p> <code>db-cluster-id</code> - Accepts DB cluster identifiers and DB cluster Amazon Resource Names (ARNs). The results list will only include pending maintenance actions for the DB clusters identified by these ARNs.</p> </li> <li> <p> <code>db-instance-id</code> - Accepts DB instance identifiers and DB instance ARNs. The results list will only include pending maintenance actions for the DB instances identified by these ARNs.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
     /// <p>The ARN of a resource to return pending maintenance actions for.</p>
     pub resource_identifier: Option<String>,
@@ -4698,10 +4662,9 @@ impl DescribePendingMaintenanceActionsMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeValidDBInstanceModificationsMessage {
-    /// <p>The customer identifier or the ARN of your DB instance. </p>
+    /// <p>The customer identifier or the ARN of your DB instance.</p>
     pub db_instance_identifier: String,
 }
 
@@ -4757,7 +4720,7 @@ impl DescribeValidDBInstanceModificationsResultDeserializer {
         )
     }
 }
-/// <p>An Active Directory Domain membership record associated with the DB instance.</p>
+/// <p>An Active Directory Domain membership record associated with a DB instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DomainMembership {
     /// <p>The identifier of the Active Directory Domain.</p>
@@ -4893,7 +4856,7 @@ impl DoubleRangeListDeserializer {
         })
     }
 }
-/// <p><p>This data type is used as a response element in the following actions:</p> <ul> <li> <p> <a>CreateDBInstance</a> </p> </li> <li> <p> <a>DescribeDBInstances</a> </p> </li> <li> <p> <a>DeleteDBInstance</a> </p> </li> </ul></p>
+/// <p>Specifies a connection endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Endpoint {
     /// <p>Specifies the DNS address of the DB instance.</p>
@@ -4929,12 +4892,12 @@ impl EndpointDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>DescribeEngineDefaultParameters</a> action. </p>
+/// <p> Contains the result of a successful invocation of the <a>DescribeEngineDefaultParameters</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EngineDefaults {
     /// <p>Specifies the name of the DB parameter group family that the engine default parameters apply to.</p>
     pub db_parameter_group_family: Option<String>,
-    /// <p> An optional pagination token provided by a previous EngineDefaults request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    /// <p> An optional pagination token provided by a previous EngineDefaults request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
     /// <p>Contains a list of engine default parameters.</p>
     pub parameters: Option<Vec<Parameter>>,
@@ -4969,7 +4932,7 @@ impl EngineDefaultsDeserializer {
         })
     }
 }
-/// <p> This data type is used as a response element in the <a>DescribeEvents</a> action. </p>
+/// <p> This data type is used as a response element in the <a>DescribeEvents</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Event {
     /// <p>Specifies the date and time of the event.</p>
@@ -5104,7 +5067,6 @@ impl EventCategoriesMapListDeserializer {
         })
     }
 }
-/// <p>Data returned from the <b>DescribeEventCategories</b> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventCategoriesMessage {
     /// <p>A list of EventCategoriesMap data types.</p>
@@ -5256,12 +5218,11 @@ impl EventSubscriptionsListDeserializer {
         })
     }
 }
-/// <p>Data returned by the <b>DescribeEventSubscriptions</b> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventSubscriptionsMessage {
     /// <p>A list of EventSubscriptions data types.</p>
     pub event_subscriptions_list: Option<Vec<EventSubscription>>,
-    /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous DescribeOrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
 }
 
@@ -5295,12 +5256,11 @@ impl EventSubscriptionsMessageDeserializer {
         )
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>DescribeEvents</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventsMessage {
-    /// <p> A list of <a>Event</a> instances. </p>
+    /// <p> A list of <a>Event</a> instances.</p>
     pub events: Option<Vec<Event>>,
-    /// <p> An optional pagination token provided by a previous Events request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    /// <p> An optional pagination token provided by a previous Events request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
 }
 
@@ -5327,7 +5287,6 @@ impl EventsMessageDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct FailoverDBClusterMessage {
     /// <p><p>A DB cluster identifier to force a failover for. This parameter is not case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul></p>
@@ -5477,12 +5436,11 @@ impl KeyListSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListTagsForResourceMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The Amazon Neptune resource with tags to be listed. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
+    /// <p>The Amazon Neptune resource with tags to be listed. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
     pub resource_name: String,
 }
 
@@ -5535,7 +5493,6 @@ impl LogTypeListSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBClusterMessage {
     /// <p>A value that specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB cluster. If this parameter is set to <code>false</code>, changes to the DB cluster are applied during the next maintenance window.</p> <p>The <code>ApplyImmediately</code> parameter only affects the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values. If you set the <code>ApplyImmediately</code> parameter value to false, then changes to the <code>NewDBClusterIdentifier</code> and <code>MasterUserPassword</code> values are applied during the next maintenance window. All other changes are applied immediately, regardless of the value of the <code>ApplyImmediately</code> parameter.</p> <p>Default: <code>false</code> </p>
@@ -5554,13 +5511,13 @@ pub struct ModifyDBClusterMessage {
     pub master_user_password: Option<String>,
     /// <p>The new DB cluster identifier for the DB cluster when renaming a DB cluster. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens</p> </li> <li> <p>The first character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-cluster2</code> </p>
     pub new_db_cluster_identifier: Option<String>,
-    /// <p>A value that indicates that the DB cluster should be associated with the specified option group. Changing this parameter doesn't result in an outage except in the following case, and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. If the parameter change results in an option group that enables OEM, this change can cause a brief (sub-second) period during which new connections are rejected but existing connections are not interrupted. </p> <p>Permanent options can't be removed from an option group. The option group can't be removed from a DB cluster once it is associated with a DB cluster.</p>
+    /// <p>A value that indicates that the DB cluster should be associated with the specified option group. Changing this parameter doesn't result in an outage except in the following case, and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. If the parameter change results in an option group that enables OEM, this change can cause a brief (sub-second) period during which new connections are rejected but existing connections are not interrupted.</p> <p>Permanent options can't be removed from an option group. The option group can't be removed from a DB cluster once it is associated with a DB cluster.</p>
     pub option_group_name: Option<String>,
     /// <p>The port number on which the DB cluster accepts connections.</p> <p>Constraints: Value must be <code>1150-65535</code> </p> <p>Default: The same port as the original DB cluster.</p>
     pub port: Option<i64>,
-    /// <p><p>The daily time range during which automated backups are created if automated backups are enabled, using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
+    /// <p><p>The daily time range during which automated backups are created if automated backups are enabled, using the <code>BackupRetentionPeriod</code> parameter.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
     pub preferred_backup_window: Option<String>,
-    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. </p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> <p>Constraints: Minimum 30-minute window.</p>
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> <p>Constraints: Minimum 30-minute window.</p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>A list of VPC security groups that the DB cluster will belong to.</p>
     pub vpc_security_group_ids: Option<Vec<String>>,
@@ -5640,7 +5597,6 @@ impl ModifyDBClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBClusterParameterGroupMessage {
     /// <p>The name of the DB cluster parameter group to modify.</p>
@@ -5693,7 +5649,6 @@ impl ModifyDBClusterResultDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
     /// <p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p>
@@ -5771,18 +5726,17 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBInstanceMessage {
-    /// <p>The new amount of storage (in gibibytes) to allocate for the DB instance. </p> <p>Not applicable. Storage is managed by the DB Cluster.</p>
+    /// <p>The new amount of storage (in gibibytes) to allocate for the DB instance.</p> <p>Not applicable. Storage is managed by the DB Cluster.</p>
     pub allocated_storage: Option<i64>,
     /// <p>Indicates that major version upgrades are allowed. Changing this parameter doesn't result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints: This parameter must be set to true when specifying a value for the EngineVersion parameter that is a different major version than the DB instance's current version.</p>
     pub allow_major_version_upgrade: Option<bool>,
-    /// <p>Specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB instance. </p> <p> If this parameter is set to <code>false</code>, changes to the DB instance are applied during the next maintenance window. Some parameter changes can cause an outage and are applied on the next call to <a>RebootDBInstance</a>, or the next failure reboot. </p> <p>Default: <code>false</code> </p>
+    /// <p>Specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the DB instance.</p> <p> If this parameter is set to <code>false</code>, changes to the DB instance are applied during the next maintenance window. Some parameter changes can cause an outage and are applied on the next call to <a>RebootDBInstance</a>, or the next failure reboot.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
-    /// <p> Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window. Changing this parameter doesn't result in an outage except in the following case and the change is asynchronously applied as soon as possible. An outage will result if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and Neptune has enabled auto patching for that engine version. </p>
+    /// <p> Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window. Changing this parameter doesn't result in an outage except in the following case and the change is asynchronously applied as soon as possible. An outage will result if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and Neptune has enabled auto patching for that engine version.</p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The number of days to retain automated backups. Setting this parameter to a positive number enables backups. Setting this parameter to 0 disables automated backups.</p> <p>Not applicable. The retention period for automated backups is managed by the DB cluster. For more information, see <a>ModifyDBCluster</a>.</p> <p>Default: Uses existing setting</p>
+    /// <p>Not applicable. The retention period for automated backups is managed by the DB cluster. For more information, see <a>ModifyDBCluster</a>.</p> <p>Default: Uses existing setting</p>
     pub backup_retention_period: Option<i64>,
     /// <p>Indicates the certificate that needs to be associated with the instance.</p>
     pub ca_certificate_identifier: Option<String>,
@@ -5790,7 +5744,7 @@ pub struct ModifyDBInstanceMessage {
     pub cloudwatch_logs_export_configuration: Option<CloudwatchLogsExportConfiguration>,
     /// <p>True to copy all tags from the DB instance to snapshots of the DB instance, and otherwise false. The default is false.</p>
     pub copy_tags_to_snapshot: Option<bool>,
-    /// <p>The new compute and memory capacity of the DB instance, for example, <code>db.m4.large</code>. Not all DB instance classes are available in all AWS Regions. </p> <p>If you modify the DB instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting</p>
+    /// <p>The new compute and memory capacity of the DB instance, for example, <code>db.m4.large</code>. Not all DB instance classes are available in all AWS Regions.</p> <p>If you modify the DB instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request.</p> <p>Default: Uses existing setting</p>
     pub db_instance_class: Option<String>,
     /// <p><p>The DB instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -5800,43 +5754,43 @@ pub struct ModifyDBInstanceMessage {
     pub db_port_number: Option<i64>,
     /// <p><p>A list of DB security groups to authorize on this DB instance. Changing this setting doesn&#39;t result in an outage and the change is asynchronously applied as soon as possible.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match existing DBSecurityGroups.</p> </li> </ul></p>
     pub db_security_groups: Option<Vec<String>>,
-    /// <p>The new DB subnet group for the DB instance. You can use this parameter to move your DB instance to a different VPC. </p> <p>Changing the subnet group causes an outage during the change. The change is applied during the next maintenance window, unless you specify <code>true</code> for the <code>ApplyImmediately</code> parameter. </p> <p>Constraints: If supplied, must match the name of an existing DBSubnetGroup.</p> <p>Example: <code>mySubnetGroup</code> </p>
+    /// <p>The new DB subnet group for the DB instance. You can use this parameter to move your DB instance to a different VPC.</p> <p>Changing the subnet group causes an outage during the change. The change is applied during the next maintenance window, unless you specify <code>true</code> for the <code>ApplyImmediately</code> parameter.</p> <p>Constraints: If supplied, must match the name of an existing DBSubnetGroup.</p> <p>Example: <code>mySubnetGroup</code> </p>
     pub db_subnet_group_name: Option<String>,
-    /// <p>Not supported. </p>
+    /// <p>Not supported.</p>
     pub domain: Option<String>,
     /// <p>Not supported</p>
     pub domain_iam_role_name: Option<String>,
     /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>You can enable IAM database authentication for the following database engines</p> <p>Not applicable. Mapping AWS IAM accounts to database accounts is managed by the DB cluster. For more information, see <a>ModifyDBCluster</a>.</p> <p>Default: <code>false</code> </p>
     pub enable_iam_database_authentication: Option<bool>,
-    /// <p>True to enable Performance Insights for the DB instance, and otherwise false.</p>
+    /// <p>Not supported.</p>
     pub enable_performance_insights: Option<bool>,
-    /// <p> The version number of the database engine to upgrade to. Changing this parameter results in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. </p> <p>For major version upgrades, if a nondefault DB parameter group is currently in use, a new DB parameter group in the DB parameter group family for the new engine version must be specified. The new DB parameter group can be the default for that DB parameter group family.</p>
+    /// <p> The version number of the database engine to upgrade to. Changing this parameter results in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request.</p> <p>For major version upgrades, if a nondefault DB parameter group is currently in use, a new DB parameter group in the DB parameter group family for the new engine version must be specified. The new DB parameter group can be the default for that DB parameter group family.</p>
     pub engine_version: Option<String>,
-    /// <p>The new Provisioned IOPS (I/O operations per second) value for the instance. </p> <p>Changing this setting doesn't result in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request.</p> <p>Default: Uses existing setting</p>
+    /// <p>The new Provisioned IOPS (I/O operations per second) value for the instance.</p> <p>Changing this setting doesn't result in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request.</p> <p>Default: Uses existing setting</p>
     pub iops: Option<i64>,
-    /// <p>The license model for the DB instance.</p> <p>Valid values: <code>license-included</code> | <code>bring-your-own-license</code> | <code>general-public-license</code> </p>
+    /// <p>Not supported.</p>
     pub license_model: Option<String>,
-    /// <p>The new password for the master user. The password can include any printable ASCII character except "/", """, or "@".</p> <p>Not applicable. </p> <p>Default: Uses existing setting</p>
+    /// <p>Not applicable.</p>
     pub master_user_password: Option<String>,
     /// <p>The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0.</p> <p>If <code>MonitoringRoleArn</code> is specified, then you must also set <code>MonitoringInterval</code> to a value other than 0.</p> <p>Valid Values: <code>0, 1, 5, 10, 15, 30, 60</code> </p>
     pub monitoring_interval: Option<i64>,
-    /// <p>The ARN for the IAM role that permits Neptune to send enhanced monitoring metrics to Amazon CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>. </p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value.</p>
+    /// <p>The ARN for the IAM role that permits Neptune to send enhanced monitoring metrics to Amazon CloudWatch Logs. For example, <code>arn:aws:iam:123456789012:role/emaccess</code>.</p> <p>If <code>MonitoringInterval</code> is set to a value other than 0, then you must supply a <code>MonitoringRoleArn</code> value.</p>
     pub monitoring_role_arn: Option<String>,
-    /// <p>Specifies if the DB instance is a Multi-AZ deployment. Changing this parameter doesn't result in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. </p>
+    /// <p>Specifies if the DB instance is a Multi-AZ deployment. Changing this parameter doesn't result in an outage and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request.</p>
     pub multi_az: Option<bool>,
-    /// <p> The new DB instance identifier for the DB instance when renaming a DB instance. When you change the DB instance identifier, an instance reboot will occur immediately if you set <code>Apply Immediately</code> to true, or will occur during the next maintenance window if <code>Apply Immediately</code> to false. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>
+    /// <p> The new DB instance identifier for the DB instance when renaming a DB instance. When you change the DB instance identifier, an instance reboot will occur immediately if you set <code>Apply Immediately</code> to true, or will occur during the next maintenance window if <code>Apply Immediately</code> to false. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>
     pub new_db_instance_identifier: Option<String>,
-    /// <p> Indicates that the DB instance should be associated with the specified option group. Changing this parameter doesn't result in an outage except in the following case and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. If the parameter change results in an option group that enables OEM, this change can cause a brief (sub-second) period during which new connections are rejected but existing connections are not interrupted. </p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, can't be removed from an option group, and that option group can't be removed from a DB instance once it is associated with a DB instance</p>
+    /// <p> Indicates that the DB instance should be associated with the specified option group. Changing this parameter doesn't result in an outage except in the following case and the change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code> for this request. If the parameter change results in an option group that enables OEM, this change can cause a brief (sub-second) period during which new connections are rejected but existing connections are not interrupted.</p> <p>Permanent options, such as the TDE option for Oracle Advanced Security TDE, can't be removed from an option group, and that option group can't be removed from a DB instance once it is associated with a DB instance</p>
     pub option_group_name: Option<String>,
-    /// <p>The AWS KMS key identifier for encryption of Performance Insights data. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key.</p>
+    /// <p>Not supported.</p>
     pub performance_insights_kms_key_id: Option<String>,
-    /// <p><p> The daily time range during which automated backups are created if automated backups are enabled. </p> <p>Not applicable. The daily time range for creating automated backups is managed by the DB cluster. For more information, see <a>ModifyDBCluster</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the format hh24:mi-hh24:mi</p> </li> <li> <p>Must be in Universal Time Coordinated (UTC)</p> </li> <li> <p>Must not conflict with the preferred maintenance window</p> </li> <li> <p>Must be at least 30 minutes</p> </li> </ul></p>
+    /// <p><p> The daily time range during which automated backups are created if automated backups are enabled.</p> <p>Not applicable. The daily time range for creating automated backups is managed by the DB cluster. For more information, see <a>ModifyDBCluster</a>.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the format hh24:mi-hh24:mi</p> </li> <li> <p>Must be in Universal Time Coordinated (UTC)</p> </li> <li> <p>Must not conflict with the preferred maintenance window</p> </li> <li> <p>Must be at least 30 minutes</p> </li> </ul></p>
     pub preferred_backup_window: Option<String>,
     /// <p>The weekly time range (in UTC) during which system maintenance can occur, which might result in an outage. Changing this parameter doesn't result in an outage, except in the following situation, and the change is asynchronously applied as soon as possible. If there are pending actions that cause a reboot, and the maintenance window is changed to include the current time, then changing this parameter will cause a reboot of the DB instance. If moving this window to the current time, there must be at least 30 minutes between the current time and end of the window to ensure pending changes are applied.</p> <p>Default: Uses existing setting</p> <p>Format: ddd:hh24:mi-ddd:hh24:mi</p> <p>Valid Days: Mon | Tue | Wed | Thu | Fri | Sat | Sun</p> <p>Constraints: Must be at least 30 minutes</p>
     pub preferred_maintenance_window: Option<String>,
-    /// <p>A value that specifies the order in which a Read Replica is promoted to the primary instance after a failure of the existing primary instance. </p> <p>Default: 1</p> <p>Valid Values: 0 - 15</p>
+    /// <p>A value that specifies the order in which a Read Replica is promoted to the primary instance after a failure of the existing primary instance.</p> <p>Default: 1</p> <p>Valid Values: 0 - 15</p>
     pub promotion_tier: Option<i64>,
-    /// <p>Specifies the storage type to be associated with the DB instance. </p> <p>If you specify Provisioned IOPS (<code>io1</code>), you must also include a value for the <code>Iops</code> parameter. </p> <p>If you choose to migrate your DB instance from using standard storage to using Provisioned IOPS, or from using Provisioned IOPS to using standard storage, the process can take time. The duration of the migration depends on several factors such as database load, storage size, storage type (standard or Provisioned IOPS), amount of IOPS provisioned (if any), and the number of prior scale storage operations. Typical migration times are under 24 hours, but the process can take up to several days in some cases. During the migration, the DB instance is available for use, but might experience performance degradation. While the migration takes place, nightly backups for the instance are suspended. No other Amazon Neptune operations can take place for the instance, including modifying the instance, rebooting the instance, deleting the instance, creating a Read Replica for the instance, and creating a DB snapshot of the instance. </p> <p> Valid values: <code>standard | gp2 | io1</code> </p> <p>Default: <code>io1</code> if the <code>Iops</code> parameter is specified, otherwise <code>standard</code> </p>
+    /// <p>Not supported.</p>
     pub storage_type: Option<String>,
     /// <p>The ARN from the key store with which to associate the instance for TDE encryption.</p>
     pub tde_credential_arn: Option<String>,
@@ -6037,7 +5991,6 @@ impl ModifyDBInstanceResultDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
@@ -6067,12 +6020,11 @@ impl ModifyDBParameterGroupMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyDBSubnetGroupMessage {
     /// <p>The description for the DB subnet group.</p>
     pub db_subnet_group_description: Option<String>,
-    /// <p>The name for the DB subnet group. This value is stored as a lowercase string. You can't modify the default subnet group. </p> <p>Constraints: Must match the name of an existing DBSubnetGroup. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
+    /// <p>The name for the DB subnet group. This value is stored as a lowercase string. You can't modify the default subnet group.</p> <p>Constraints: Must match the name of an existing DBSubnetGroup. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: String,
     /// <p>The EC2 subnet IDs for the DB subnet group.</p>
     pub subnet_ids: Vec<String>,
@@ -6135,12 +6087,11 @@ impl ModifyDBSubnetGroupResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyEventSubscriptionMessage {
-    /// <p> A Boolean value; set to <b>true</b> to activate the subscription. </p>
+    /// <p> A Boolean value; set to <b>true</b> to activate the subscription.</p>
     pub enabled: Option<bool>,
-    /// <p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType by using the <b>DescribeEventCategories</b> action. </p>
+    /// <p> A list of event categories for a SourceType that you want to subscribe to. You can see a list of the categories for a given SourceType by using the <b>DescribeEventCategories</b> action.</p>
     pub event_categories: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of the SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>
     pub sns_topic_arn: Option<String>,
@@ -6217,7 +6168,7 @@ impl ModifyEventSubscriptionResultDeserializer {
 pub struct OptionGroupMembership {
     /// <p>The name of the option group that the instance belongs to.</p>
     pub option_group_name: Option<String>,
-    /// <p>The status of the DB instance's option group membership. Valid values are: <code>in-sync</code>, <code>pending-apply</code>, <code>pending-removal</code>, <code>pending-maintenance-apply</code>, <code>pending-maintenance-removal</code>, <code>applying</code>, <code>removing</code>, and <code>failed</code>. </p>
+    /// <p>The status of the DB instance's option group membership. Valid values are: <code>in-sync</code>, <code>pending-apply</code>, <code>pending-removal</code>, <code>pending-maintenance-apply</code>, <code>pending-maintenance-removal</code>, <code>applying</code>, <code>removing</code>, and <code>failed</code>.</p>
     pub status: Option<String>,
 }
 
@@ -6263,7 +6214,7 @@ impl OptionGroupMembershipListDeserializer {
         })
     }
 }
-/// <p>Contains a list of available options for a DB instance.</p> <p> This data type is used as a response element in the <a>DescribeOrderableDBInstanceOptions</a> action. </p>
+/// <p>Contains a list of available options for a DB instance.</p> <p> This data type is used as a response element in the <a>DescribeOrderableDBInstanceOptions</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct OrderableDBInstanceOption {
     /// <p>A list of Availability Zones for a DB instance.</p>
@@ -6454,10 +6405,9 @@ impl OrderableDBInstanceOptionsListDeserializer {
         })
     }
 }
-/// <p> Contains the result of a successful invocation of the <a>DescribeOrderableDBInstanceOptions</a> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct OrderableDBInstanceOptionsMessage {
-    /// <p> An optional pagination token provided by a previous OrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> . </p>
+    /// <p> An optional pagination token provided by a previous OrderableDBInstanceOptions request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code> .</p>
     pub marker: Option<String>,
     /// <p>An <a>OrderableDBInstanceOption</a> structure containing information about orderable options for the DB instance.</p>
     pub orderable_db_instance_options: Option<Vec<OrderableDBInstanceOption>>,
@@ -6493,7 +6443,7 @@ impl OrderableDBInstanceOptionsMessageDeserializer {
         )
     }
 }
-/// <p> This data type is used as a request parameter in the <a>ModifyDBParameterGroup</a> and <a>ResetDBParameterGroup</a> actions. </p> <p>This data type is used as a response element in the <a>DescribeEngineDefaultParameters</a> and <a>DescribeDBParameters</a> actions.</p>
+/// <p>Specifies a parameter.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Parameter {
     /// <p>Specifies the valid range of values for the parameter.</p>
@@ -6506,7 +6456,7 @@ pub struct Parameter {
     pub data_type: Option<String>,
     /// <p>Provides a description of the parameter.</p>
     pub description: Option<String>,
-    /// <p> Indicates whether (<code>true</code>) or not (<code>false</code>) the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed. </p>
+    /// <p> Indicates whether (<code>true</code>) or not (<code>false</code>) the parameter can be modified. Some parameters have security or operational implications that prevent them from being changed.</p>
     pub is_modifiable: Option<bool>,
     /// <p>The earliest engine version to which the parameter can apply.</p>
     pub minimum_engine_version: Option<String>,
@@ -6785,10 +6735,9 @@ impl PendingMaintenanceActionsDeserializer {
         })
     }
 }
-/// <p>Data returned from the <b>DescribePendingMaintenanceActions</b> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingMaintenanceActionsMessage {
-    /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>. </p>
+    /// <p> An optional pagination token provided by a previous <code>DescribePendingMaintenanceActions</code> request. If this parameter is specified, the response includes only records beyond the marker, up to a number of records specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
     /// <p>A list of the pending maintenance actions for the resource.</p>
     pub pending_maintenance_actions: Option<Vec<ResourcePendingMaintenanceActions>>,
@@ -6824,20 +6773,20 @@ impl PendingMaintenanceActionsMessageDeserializer {
         )
     }
 }
-/// <p> This data type is used as a response element in the <a>ModifyDBInstance</a> action. </p>
+/// <p> This data type is used as a response element in the <a>ModifyDBInstance</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PendingModifiedValues {
-    /// <p> Contains the new <code>AllocatedStorage</code> size for the DB instance that will be applied or is currently being applied. </p>
+    /// <p> Contains the new <code>AllocatedStorage</code> size for the DB instance that will be applied or is currently being applied.</p>
     pub allocated_storage: Option<i64>,
     /// <p>Specifies the pending number of days for which automated backups are retained.</p>
     pub backup_retention_period: Option<i64>,
     /// <p>Specifies the identifier of the CA certificate for the DB instance.</p>
     pub ca_certificate_identifier: Option<String>,
-    /// <p> Contains the new <code>DBInstanceClass</code> for the DB instance that will be applied or is currently being applied. </p>
+    /// <p> Contains the new <code>DBInstanceClass</code> for the DB instance that will be applied or is currently being applied.</p>
     pub db_instance_class: Option<String>,
-    /// <p> Contains the new <code>DBInstanceIdentifier</code> for the DB instance that will be applied or is currently being applied. </p>
+    /// <p> Contains the new <code>DBInstanceIdentifier</code> for the DB instance that will be applied or is currently being applied.</p>
     pub db_instance_identifier: Option<String>,
-    /// <p>The new DB subnet group for the DB instance. </p>
+    /// <p>The new DB subnet group for the DB instance.</p>
     pub db_subnet_group_name: Option<String>,
     /// <p>Indicates the database engine version.</p>
     pub engine_version: Option<String>,
@@ -6849,6 +6798,7 @@ pub struct PendingModifiedValues {
     pub master_user_password: Option<String>,
     /// <p>Indicates that the Single-AZ DB instance is to change to a Multi-AZ deployment.</p>
     pub multi_az: Option<bool>,
+    /// <p>Specifies the CloudWatch logs to be exported.</p>
     pub pending_cloudwatch_logs_exports: Option<PendingCloudwatchLogsExports>,
     /// <p>Specifies the pending port for the DB instance.</p>
     pub port: Option<i64>,
@@ -6937,10 +6887,9 @@ impl PendingModifiedValuesDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PromoteReadReplicaDBClusterMessage {
-    /// <p>The identifier of the DB cluster Read Replica to promote. This parameter is not case-sensitive. </p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster Read Replica.</p> </li> </ul> <p>Example: <code>my-cluster-replica1</code> </p>
+    /// <p>Not supported.</p>
     pub db_cluster_identifier: String,
 }
 
@@ -6993,7 +6942,7 @@ impl PromoteReadReplicaDBClusterResultDeserializer {
 pub struct Range {
     /// <p>The minimum value in the range.</p>
     pub from: Option<i64>,
-    /// <p>The step value for the range. For example, if you have a range of 5,000 to 10,000, with a step value of 1,000, the valid values start at 5,000 and step up by 1,000. Even though 7,500 is within the range, it isn't a valid value for the range. The valid values are 5,000, 6,000, 7,000, 8,000... </p>
+    /// <p>The step value for the range. For example, if you have a range of 5,000 to 10,000, with a step value of 1,000, the valid values start at 5,000 and step up by 1,000. Even though 7,500 is within the range, it isn't a valid value for the range. The valid values are 5,000, 6,000, 7,000, 8,000...</p>
     pub step: Option<i64>,
     /// <p>The maximum value in the range.</p>
     pub to: Option<i64>,
@@ -7100,12 +7049,11 @@ impl ReadReplicaIdentifierListDeserializer {
         })
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RebootDBInstanceMessage {
     /// <p><p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBInstance.</p> </li> </ul></p>
     pub db_instance_identifier: String,
-    /// <p> When <code>true</code>, the reboot is conducted through a MultiAZ failover. </p> <p>Constraint: You can't specify <code>true</code> if the instance is not configured for MultiAZ.</p>
+    /// <p> When <code>true</code>, the reboot is conducted through a MultiAZ failover.</p> <p>Constraint: You can't specify <code>true</code> if the instance is not configured for MultiAZ.</p>
     pub force_failover: Option<bool>,
 }
 
@@ -7177,10 +7125,9 @@ impl RemoveRoleFromDBClusterMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveSourceIdentifierFromSubscriptionMessage {
-    /// <p> The source identifier to be removed from the subscription, such as the <b>DB instance identifier</b> for a DB instance or the name of a security group. </p>
+    /// <p> The source identifier to be removed from the subscription, such as the <b>DB instance identifier</b> for a DB instance or the name of a security group.</p>
     pub source_identifier: String,
     /// <p>The name of the event notification subscription you want to remove a source identifier from.</p>
     pub subscription_name: String,
@@ -7240,10 +7187,9 @@ impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveTagsFromResourceMessage {
-    /// <p>The Amazon Neptune resource that the tags are removed from. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
+    /// <p>The Amazon Neptune resource that the tags are removed from. This value is an Amazon Resource Name (ARN). For information about creating an ARN, see <a href="https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing"> Constructing an Amazon Resource Name (ARN)</a>.</p>
     pub resource_name: String,
     /// <p>The tag key (name) of the tag to be removed.</p>
     pub tag_keys: Vec<String>,
@@ -7263,7 +7209,6 @@ impl RemoveTagsFromResourceMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetDBClusterParameterGroupMessage {
     /// <p>The name of the DB cluster parameter group to reset.</p>
@@ -7300,14 +7245,13 @@ impl ResetDBClusterParameterGroupMessageSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetDBParameterGroupMessage {
     /// <p><p>The name of the DB parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must match the name of an existing DBParameterGroup.</p> </li> </ul></p>
     pub db_parameter_group_name: String,
     /// <p>To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request.</p> <p>Valid Values (for Apply method): <code>pending-reboot</code> </p>
     pub parameters: Option<Vec<Parameter>>,
-    /// <p> Specifies whether (<code>true</code>) or not (<code>false</code>) to reset all parameters in the DB parameter group to default values. </p> <p>Default: <code>true</code> </p>
+    /// <p>Specifies whether (<code>true</code>) or not (<code>false</code>) to reset all parameters in the DB parameter group to default values.</p> <p>Default: <code>true</code> </p>
     pub reset_all_parameters: Option<bool>,
 }
 
@@ -7379,16 +7323,17 @@ impl ResourcePendingMaintenanceActionsDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBClusterFromSnapshotMessage {
     /// <p>Provides the list of EC2 Availability Zones that instances in the restored DB cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
     /// <p>The name of the DB cluster to create from the DB snapshot or DB cluster snapshot. This parameter isn't case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>
     pub db_cluster_identifier: String,
+    /// <p><p>The name of the DB cluster parameter group to associate with the new DB cluster.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
+    pub db_cluster_parameter_group_name: Option<String>,
     /// <p>The name of the DB subnet group to use for the new DB cluster.</p> <p>Constraints: If supplied, must match the name of an existing DBSubnetGroup.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: Option<String>,
-    /// <p>The database name for the restored DB cluster.</p>
+    /// <p>Not supported.</p>
     pub database_name: Option<String>,
     /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>
     pub enable_iam_database_authentication: Option<bool>,
@@ -7430,6 +7375,12 @@ impl RestoreDBClusterFromSnapshotMessageSerializer {
             &format!("{}{}", prefix, "DBClusterIdentifier"),
             &obj.db_cluster_identifier,
         );
+        if let Some(ref field_value) = obj.db_cluster_parameter_group_name {
+            params.put(
+                &format!("{}{}", prefix, "DBClusterParameterGroupName"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.db_subnet_group_name {
             params.put(&format!("{}{}", prefix, "DBSubnetGroupName"), &field_value);
         }
@@ -7500,11 +7451,12 @@ impl RestoreDBClusterFromSnapshotResultDeserializer {
         )
     }
 }
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RestoreDBClusterToPointInTimeMessage {
     /// <p><p>The name of the new DB cluster to be created.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul></p>
     pub db_cluster_identifier: String,
+    /// <p><p>The name of the DB cluster parameter group to associate with the new DB cluster.</p> <p>Constraints:</p> <ul> <li> <p>If supplied, must match the name of an existing DBClusterParameterGroup.</p> </li> </ul></p>
+    pub db_cluster_parameter_group_name: Option<String>,
     /// <p>The DB subnet group name to use for the new DB cluster.</p> <p>Constraints: If supplied, must match the name of an existing DBSubnetGroup.</p> <p>Example: <code>mySubnetgroup</code> </p>
     pub db_subnet_group_name: Option<String>,
     /// <p>True to enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts, and otherwise false.</p> <p>Default: <code>false</code> </p>
@@ -7517,12 +7469,13 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     pub port: Option<i64>,
     /// <p>The date and time to restore the DB cluster to.</p> <p>Valid Values: Value must be a time in Universal Coordinated Time (UTC) format</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the DB instance</p> </li> <li> <p>Must be specified if <code>UseLatestRestorableTime</code> parameter is not provided</p> </li> <li> <p>Cannot be specified if <code>UseLatestRestorableTime</code> parameter is true</p> </li> <li> <p>Cannot be specified if <code>RestoreType</code> parameter is <code>copy-on-write</code> </p> </li> </ul> <p>Example: <code>2015-03-07T23:45:00Z</code> </p>
     pub restore_to_time: Option<String>,
-    /// <p>The type of restore to be performed. You can specify one of the following values:</p> <ul> <li> <p> <code>full-copy</code> - The new DB cluster is restored as a full copy of the source DB cluster.</p> </li> <li> <p> <code>copy-on-write</code> - The new DB cluster is restored as a clone of the source DB cluster.</p> </li> </ul> <p>Constraints: You can't specify <code>copy-on-write</code> if the engine version of the source DB cluster is earlier than 1.11.</p> <p>If you don't specify a <code>RestoreType</code> value, then the new DB cluster is restored as a full copy of the source DB cluster.</p>
+    /// <p>The type of restore to be performed. The only type of restore currently supported is <code>full-copy</code> (the default).</p>
     pub restore_type: Option<String>,
     /// <p><p>The identifier of the source DB cluster from which to restore.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing DBCluster.</p> </li> </ul></p>
     pub source_db_cluster_identifier: String,
+    /// <p>The tags to be applied to the restored DB cluster.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p>A value that is set to <code>true</code> to restore the DB cluster to the latest restorable backup time, and <code>false</code> otherwise. </p> <p>Default: <code>false</code> </p> <p>Constraints: Cannot be specified if <code>RestoreToTime</code> parameter is provided.</p>
+    /// <p>A value that is set to <code>true</code> to restore the DB cluster to the latest restorable backup time, and <code>false</code> otherwise.</p> <p>Default: <code>false</code> </p> <p>Constraints: Cannot be specified if <code>RestoreToTime</code> parameter is provided.</p>
     pub use_latest_restorable_time: Option<bool>,
     /// <p>A list of VPC security groups that the new DB cluster belongs to.</p>
     pub vpc_security_group_ids: Option<Vec<String>>,
@@ -7541,6 +7494,12 @@ impl RestoreDBClusterToPointInTimeMessageSerializer {
             &format!("{}{}", prefix, "DBClusterIdentifier"),
             &obj.db_cluster_identifier,
         );
+        if let Some(ref field_value) = obj.db_cluster_parameter_group_name {
+            params.put(
+                &format!("{}{}", prefix, "DBClusterParameterGroupName"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.db_subnet_group_name {
             params.put(&format!("{}{}", prefix, "DBSubnetGroupName"), &field_value);
         }
@@ -7673,9 +7632,10 @@ impl StringDeserializer {
         Ok(obj)
     }
 }
-/// <p> This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action. </p>
+/// <p>Specifies a subnet.</p> <p> This data type is used as a response element in the <a>DescribeDBSubnetGroups</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Subnet {
+    /// <p>Specifies the EC2 Availability Zone that the subnet is in.</p>
     pub subnet_availability_zone: Option<AvailabilityZone>,
     /// <p>Specifies the identifier of the subnet.</p>
     pub subnet_identifier: Option<String>,
@@ -7870,7 +7830,6 @@ impl TagListSerializer {
     }
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagListMessage {
     /// <p>List of tags returned by the ListTagsForResource operation.</p>
@@ -7897,7 +7856,7 @@ impl TagListMessageDeserializer {
         })
     }
 }
-/// <p>A time zone associated with a <a>DBInstance</a>. This data type is an element in the response to the <a>DescribeDBInstances</a>, and the <a>DescribeDBEngineVersions</a> actions. </p>
+/// <p>A time zone associated with a <a>DBInstance</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Timezone {
     /// <p>The name of the time zone.</p>
@@ -7976,7 +7935,7 @@ impl UpgradeTargetDeserializer {
 /// <p>Information about valid modifications that you can make to your DB instance. Contains the result of a successful call to the <a>DescribeValidDBInstanceModifications</a> action. You can use this information when you call <a>ModifyDBInstance</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ValidDBInstanceModificationsMessage {
-    /// <p>Valid storage options for your DB instance. </p>
+    /// <p>Valid storage options for your DB instance.</p>
     pub storage: Option<Vec<ValidStorageOptions>>,
 }
 
@@ -8004,16 +7963,16 @@ impl ValidDBInstanceModificationsMessageDeserializer {
         )
     }
 }
-/// <p>Information about valid modifications that you can make to your DB instance. Contains the result of a successful call to the <a>DescribeValidDBInstanceModifications</a> action. </p>
+/// <p>Information about valid modifications that you can make to your DB instance.</p> <p>Contains the result of a successful call to the <a>DescribeValidDBInstanceModifications</a> action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ValidStorageOptions {
-    /// <p>The valid range of Provisioned IOPS to gibibytes of storage multiplier. For example, 3-10, which means that provisioned IOPS can be between 3 and 10 times storage. </p>
+    /// <p>The valid range of Provisioned IOPS to gibibytes of storage multiplier. For example, 3-10, which means that provisioned IOPS can be between 3 and 10 times storage.</p>
     pub iops_to_storage_ratio: Option<Vec<DoubleRange>>,
-    /// <p>The valid range of provisioned IOPS. For example, 1000-20000. </p>
+    /// <p>The valid range of provisioned IOPS. For example, 1000-20000.</p>
     pub provisioned_iops: Option<Vec<Range>>,
-    /// <p>The valid range of storage in gibibytes. For example, 100 to 16384. </p>
+    /// <p>The valid range of storage in gibibytes. For example, 100 to 16384.</p>
     pub storage_size: Option<Vec<Range>>,
-    /// <p>The valid storage types for your DB instance. For example, gp2, io1. </p>
+    /// <p>The valid storage types for your DB instance. For example, gp2, io1.</p>
     pub storage_type: Option<String>,
 }
 
@@ -8162,7 +8121,7 @@ impl VpcSecurityGroupMembershipListDeserializer {
 /// Errors returned by AddRoleToDBCluster
 #[derive(Debug, PartialEq)]
 pub enum AddRoleToDBClusterError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
     /// <p>The specified IAM role Amazon Resource Name (ARN) is already associated with the specified DB cluster.</p>
     DBClusterRoleAlreadyExistsFault(String),
@@ -8241,8 +8200,9 @@ impl Error for AddRoleToDBClusterError {
 /// Errors returned by AddSourceIdentifierToSubscription
 #[derive(Debug, PartialEq)]
 pub enum AddSourceIdentifierToSubscriptionError {
+    /// <p>The source could not be found.</p>
     SourceNotFoundFault(String),
-
+    /// <p>The designated subscription could not be found.</p>
     SubscriptionNotFoundFault(String),
 }
 
@@ -8301,11 +8261,11 @@ impl Error for AddSourceIdentifierToSubscriptionError {
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
-    /// <p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
+    /// <p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot.</p>
     DBSnapshotNotFoundFault(String),
 }
 
@@ -8423,7 +8383,7 @@ impl Error for ApplyPendingMaintenanceActionError {
 pub enum CopyDBClusterParameterGroupError {
     /// <p>A DB parameter group with the same name exists.</p>
     DBParameterGroupAlreadyExistsFault(String),
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
     /// <p>Request would result in user exceeding the allowed number of DB parameter groups.</p>
     DBParameterGroupQuotaExceededFault(String),
@@ -8498,7 +8458,7 @@ impl Error for CopyDBClusterParameterGroupError {
 pub enum CopyDBClusterSnapshotError {
     /// <p>User already has a DB cluster snapshot with the given identifier.</p>
     DBClusterSnapshotAlreadyExistsFault(String),
-    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot.</p>
     DBClusterSnapshotNotFoundFault(String),
     /// <p>The supplied value is not a valid DB cluster snapshot state.</p>
     InvalidDBClusterSnapshotStateFault(String),
@@ -8597,7 +8557,7 @@ impl Error for CopyDBClusterSnapshotError {
 pub enum CopyDBParameterGroupError {
     /// <p>A DB parameter group with the same name exists.</p>
     DBParameterGroupAlreadyExistsFault(String),
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
     /// <p>Request would result in user exceeding the allowed number of DB parameter groups.</p>
     DBParameterGroupQuotaExceededFault(String),
@@ -8666,23 +8626,23 @@ impl Error for CopyDBParameterGroupError {
 pub enum CreateDBClusterError {
     /// <p>User already has a DB cluster with the given identifier.</p>
     DBClusterAlreadyExistsFault(String),
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
-    /// <p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group. </p>
+    /// <p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group.</p>
     DBClusterParameterGroupNotFoundFault(String),
     /// <p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
     DBClusterQuotaExceededFault(String),
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
     /// <p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
     DBSubnetGroupDoesNotCoverEnoughAZs(String),
-    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group.</p>
     DBSubnetGroupNotFoundFault(String),
     /// <p>There is insufficient storage available for the current action. You may be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available.</p>
     InsufficientStorageClusterCapacityFault(String),
     /// <p>The DB cluster is not in a valid state.</p>
     InvalidDBClusterStateFault(String),
-    /// <p> The specified DB instance is not in the <i>available</i> state. </p>
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
     InvalidDBInstanceStateFault(String),
     /// <p>The DB subnet group cannot be deleted because it is in use.</p>
     InvalidDBSubnetGroupStateFault(String),
@@ -8912,7 +8872,7 @@ impl Error for CreateDBClusterParameterGroupError {
 /// Errors returned by CreateDBClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateDBClusterSnapshotError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
     /// <p>User already has a DB cluster snapshot with the given identifier.</p>
     DBClusterSnapshotAlreadyExistsFault(String),
@@ -9003,19 +8963,19 @@ impl Error for CreateDBClusterSnapshotError {
 pub enum CreateDBInstanceError {
     /// <p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>Neptune may not also be authorized via IAM to perform necessary actions on your behalf.</p>
     AuthorizationNotFoundFault(String),
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
     /// <p>User already has a DB instance with the given identifier.</p>
     DBInstanceAlreadyExistsFault(String),
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
-    /// <p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
+    /// <p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group.</p>
     DBSecurityGroupNotFoundFault(String),
     /// <p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
     DBSubnetGroupDoesNotCoverEnoughAZs(String),
-    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group.</p>
     DBSubnetGroupNotFoundFault(String),
-    /// <p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
+    /// <p> <i>Domain</i> does not refer to an existing Active Directory Domain.</p>
     DomainNotFoundFault(String),
     /// <p>Request would result in user exceeding the allowed number of DB instances.</p>
     InstanceQuotaExceededFault(String),
@@ -9029,13 +8989,13 @@ pub enum CreateDBInstanceError {
     InvalidVPCNetworkStateFault(String),
     /// <p>Error accessing KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-
+    /// <p>The designated option group could not be found.</p>
     OptionGroupNotFoundFault(String),
     /// <p>Provisioned IOPS not available in the specified Availability Zone.</p>
     ProvisionedIopsNotAvailableInAZFault(String),
     /// <p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
-    /// <p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
+    /// <p> <i>StorageType</i> specified cannot be associated with the DB Instance.</p>
     StorageTypeNotSupportedFault(String),
 }
 
@@ -9273,7 +9233,7 @@ impl Error for CreateDBParameterGroupError {
 /// Errors returned by CreateDBSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDBSubnetGroupError {
-    /// <p> <i>DBSubnetGroupName</i> is already used by an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> is already used by an existing DB subnet group.</p>
     DBSubnetGroupAlreadyExistsFault(String),
     /// <p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
     DBSubnetGroupDoesNotCoverEnoughAZs(String),
@@ -9360,18 +9320,19 @@ impl Error for CreateDBSubnetGroupError {
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
+    /// <p>You have exceeded the number of events you can subscribe to.</p>
     EventSubscriptionQuotaExceededFault(String),
-
+    /// <p>The SNS topic is invalid.</p>
     SNSInvalidTopicFault(String),
-
+    /// <p>There is no SNS authorization.</p>
     SNSNoAuthorizationFault(String),
-
+    /// <p>The ARN of the SNS topic could not be found.</p>
     SNSTopicArnNotFoundFault(String),
-
+    /// <p>The source could not be found.</p>
     SourceNotFoundFault(String),
-
+    /// <p>This subscription already exists.</p>
     SubscriptionAlreadyExistFault(String),
-
+    /// <p>The designated subscription category could not be found.</p>
     SubscriptionCategoryNotFoundFault(String),
 }
 
@@ -9468,7 +9429,7 @@ impl Error for CreateEventSubscriptionError {
 /// Errors returned by DeleteDBCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
     /// <p>User already has a DB cluster snapshot with the given identifier.</p>
     DBClusterSnapshotAlreadyExistsFault(String),
@@ -9555,7 +9516,7 @@ impl Error for DeleteDBClusterError {
 /// Errors returned by DeleteDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterParameterGroupError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you cannot delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
@@ -9618,7 +9579,7 @@ impl Error for DeleteDBClusterParameterGroupError {
 /// Errors returned by DeleteDBClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterSnapshotError {
-    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot.</p>
     DBClusterSnapshotNotFoundFault(String),
     /// <p>The supplied value is not a valid DB cluster snapshot state.</p>
     InvalidDBClusterSnapshotStateFault(String),
@@ -9677,13 +9638,13 @@ impl Error for DeleteDBClusterSnapshotError {
 /// Errors returned by DeleteDBInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBInstanceError {
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
-    /// <p> <i>DBSnapshotIdentifier</i> is already used by an existing snapshot. </p>
+    /// <p> <i>DBSnapshotIdentifier</i> is already used by an existing snapshot.</p>
     DBSnapshotAlreadyExistsFault(String),
     /// <p>The DB cluster is not in a valid state.</p>
     InvalidDBClusterStateFault(String),
-    /// <p> The specified DB instance is not in the <i>available</i> state. </p>
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
     InvalidDBInstanceStateFault(String),
     /// <p>Request would result in user exceeding the allowed number of DB snapshots.</p>
     SnapshotQuotaExceededFault(String),
@@ -9766,7 +9727,7 @@ impl Error for DeleteDBInstanceError {
 /// Errors returned by DeleteDBParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBParameterGroupError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you cannot delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
@@ -9825,11 +9786,11 @@ impl Error for DeleteDBParameterGroupError {
 /// Errors returned by DeleteDBSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBSubnetGroupError {
-    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group.</p>
     DBSubnetGroupNotFoundFault(String),
     /// <p>The DB subnet group cannot be deleted because it is in use.</p>
     InvalidDBSubnetGroupStateFault(String),
-    /// <p> The DB subnet is not in the <i>available</i> state. </p>
+    /// <p>The DB subnet is not in the <i>available</i> state.</p>
     InvalidDBSubnetStateFault(String),
 }
 
@@ -9894,8 +9855,9 @@ impl Error for DeleteDBSubnetGroupError {
 /// Errors returned by DeleteEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSubscriptionError {
+    /// <p>The event subscription is in an invalid state.</p>
     InvalidEventSubscriptionStateFault(String),
-
+    /// <p>The designated subscription could not be found.</p>
     SubscriptionNotFoundFault(String),
 }
 
@@ -9952,7 +9914,7 @@ impl Error for DeleteEventSubscriptionError {
 /// Errors returned by DescribeDBClusterParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterParameterGroupsError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
 }
 
@@ -10005,7 +9967,7 @@ impl Error for DescribeDBClusterParameterGroupsError {
 /// Errors returned by DescribeDBClusterParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterParametersError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
 }
 
@@ -10056,7 +10018,7 @@ impl Error for DescribeDBClusterParametersError {
 /// Errors returned by DescribeDBClusterSnapshotAttributes
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterSnapshotAttributesError {
-    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot.</p>
     DBClusterSnapshotNotFoundFault(String),
 }
 
@@ -10107,7 +10069,7 @@ impl Error for DescribeDBClusterSnapshotAttributesError {
 /// Errors returned by DescribeDBClusterSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClusterSnapshotsError {
-    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot.</p>
     DBClusterSnapshotNotFoundFault(String),
 }
 
@@ -10158,7 +10120,7 @@ impl Error for DescribeDBClusterSnapshotsError {
 /// Errors returned by DescribeDBClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBClustersError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
 }
 
@@ -10244,7 +10206,7 @@ impl Error for DescribeDBEngineVersionsError {
 /// Errors returned by DescribeDBInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBInstancesError {
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
 }
 
@@ -10293,7 +10255,7 @@ impl Error for DescribeDBInstancesError {
 /// Errors returned by DescribeDBParameterGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBParameterGroupsError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
 }
 
@@ -10342,7 +10304,7 @@ impl Error for DescribeDBParameterGroupsError {
 /// Errors returned by DescribeDBParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBParametersError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
 }
 
@@ -10391,7 +10353,7 @@ impl Error for DescribeDBParametersError {
 /// Errors returned by DescribeDBSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeDBSubnetGroupsError {
-    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group.</p>
     DBSubnetGroupNotFoundFault(String),
 }
 
@@ -10555,6 +10517,7 @@ impl Error for DescribeEventCategoriesError {
 /// Errors returned by DescribeEventSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventSubscriptionsError {
+    /// <p>The designated subscription could not be found.</p>
     SubscriptionNotFoundFault(String),
 }
 
@@ -10732,9 +10695,9 @@ impl Error for DescribePendingMaintenanceActionsError {
 /// Errors returned by DescribeValidDBInstanceModifications
 #[derive(Debug, PartialEq)]
 pub enum DescribeValidDBInstanceModificationsError {
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
-    /// <p> The specified DB instance is not in the <i>available</i> state. </p>
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
     InvalidDBInstanceStateFault(String),
 }
 
@@ -10795,11 +10758,11 @@ impl Error for DescribeValidDBInstanceModificationsError {
 /// Errors returned by FailoverDBCluster
 #[derive(Debug, PartialEq)]
 pub enum FailoverDBClusterError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
     /// <p>The DB cluster is not in a valid state.</p>
     InvalidDBClusterStateFault(String),
-    /// <p> The specified DB instance is not in the <i>available</i> state. </p>
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
     InvalidDBInstanceStateFault(String),
 }
 
@@ -10864,11 +10827,11 @@ impl Error for FailoverDBClusterError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
-    /// <p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
+    /// <p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot.</p>
     DBSnapshotNotFoundFault(String),
 }
 
@@ -10935,15 +10898,15 @@ impl Error for ListTagsForResourceError {
 pub enum ModifyDBClusterError {
     /// <p>User already has a DB cluster with the given identifier.</p>
     DBClusterAlreadyExistsFault(String),
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
-    /// <p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group. </p>
+    /// <p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group.</p>
     DBClusterParameterGroupNotFoundFault(String),
-    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group.</p>
     DBSubnetGroupNotFoundFault(String),
     /// <p>The DB cluster is not in a valid state.</p>
     InvalidDBClusterStateFault(String),
-    /// <p> The specified DB instance is not in the <i>available</i> state. </p>
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
     InvalidDBInstanceStateFault(String),
     /// <p>The state of the DB security group does not allow deletion.</p>
     InvalidDBSecurityGroupStateFault(String),
@@ -11078,7 +11041,7 @@ impl Error for ModifyDBClusterError {
 /// Errors returned by ModifyDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterParameterGroupError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you cannot delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
@@ -11141,7 +11104,7 @@ impl Error for ModifyDBClusterParameterGroupError {
 /// Errors returned by ModifyDBClusterSnapshotAttribute
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBClusterSnapshotAttributeError {
-    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot.</p>
     DBClusterSnapshotNotFoundFault(String),
     /// <p>The supplied value is not a valid DB cluster snapshot state.</p>
     InvalidDBClusterSnapshotStateFault(String),
@@ -11218,35 +11181,35 @@ impl Error for ModifyDBClusterSnapshotAttributeError {
 pub enum ModifyDBInstanceError {
     /// <p>Specified CIDRIP or EC2 security group is not authorized for the specified DB security group.</p> <p>Neptune may not also be authorized via IAM to perform necessary actions on your behalf.</p>
     AuthorizationNotFoundFault(String),
-    /// <p> <i>CertificateIdentifier</i> does not refer to an existing certificate. </p>
+    /// <p> <i>CertificateIdentifier</i> does not refer to an existing certificate.</p>
     CertificateNotFoundFault(String),
     /// <p>User already has a DB instance with the given identifier.</p>
     DBInstanceAlreadyExistsFault(String),
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
-    /// <p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group. </p>
+    /// <p> <i>DBSecurityGroupName</i> does not refer to an existing DB security group.</p>
     DBSecurityGroupNotFoundFault(String),
     /// <p>The DB upgrade failed because a resource the DB depends on could not be modified.</p>
     DBUpgradeDependencyFailureFault(String),
-    /// <p> <i>Domain</i> does not refer to an existing Active Directory Domain. </p>
+    /// <p> <i>Domain</i> does not refer to an existing Active Directory Domain.</p>
     DomainNotFoundFault(String),
     /// <p>Specified DB instance class is not available in the specified Availability Zone.</p>
     InsufficientDBInstanceCapacityFault(String),
-    /// <p> The specified DB instance is not in the <i>available</i> state. </p>
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
     InvalidDBInstanceStateFault(String),
     /// <p>The state of the DB security group does not allow deletion.</p>
     InvalidDBSecurityGroupStateFault(String),
     /// <p>DB subnet group does not cover all Availability Zones after it is created because users' change.</p>
     InvalidVPCNetworkStateFault(String),
-
+    /// <p>The designated option group could not be found.</p>
     OptionGroupNotFoundFault(String),
     /// <p>Provisioned IOPS not available in the specified Availability Zone.</p>
     ProvisionedIopsNotAvailableInAZFault(String),
     /// <p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
-    /// <p> <i>StorageType</i> specified cannot be associated with the DB Instance. </p>
+    /// <p> <i>StorageType</i> specified cannot be associated with the DB Instance.</p>
     StorageTypeNotSupportedFault(String),
 }
 
@@ -11413,7 +11376,7 @@ impl Error for ModifyDBInstanceError {
 /// Errors returned by ModifyDBParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyDBParameterGroupError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you cannot delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
@@ -11474,7 +11437,7 @@ impl Error for ModifyDBParameterGroupError {
 pub enum ModifyDBSubnetGroupError {
     /// <p>Subnets in the DB subnet group should cover at least two Availability Zones unless there is only one Availability Zone.</p>
     DBSubnetGroupDoesNotCoverEnoughAZs(String),
-    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group.</p>
     DBSubnetGroupNotFoundFault(String),
     /// <p>Request would result in user exceeding the allowed number of subnets in a DB subnet groups.</p>
     DBSubnetQuotaExceededFault(String),
@@ -11557,16 +11520,17 @@ impl Error for ModifyDBSubnetGroupError {
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
+    /// <p>You have exceeded the number of events you can subscribe to.</p>
     EventSubscriptionQuotaExceededFault(String),
-
+    /// <p>The SNS topic is invalid.</p>
     SNSInvalidTopicFault(String),
-
+    /// <p>There is no SNS authorization.</p>
     SNSNoAuthorizationFault(String),
-
+    /// <p>The ARN of the SNS topic could not be found.</p>
     SNSTopicArnNotFoundFault(String),
-
+    /// <p>The designated subscription category could not be found.</p>
     SubscriptionCategoryNotFoundFault(String),
-
+    /// <p>The designated subscription could not be found.</p>
     SubscriptionNotFoundFault(String),
 }
 
@@ -11655,7 +11619,7 @@ impl Error for ModifyEventSubscriptionError {
 /// Errors returned by PromoteReadReplicaDBCluster
 #[derive(Debug, PartialEq)]
 pub enum PromoteReadReplicaDBClusterError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
     /// <p>The DB cluster is not in a valid state.</p>
     InvalidDBClusterStateFault(String),
@@ -11716,9 +11680,9 @@ impl Error for PromoteReadReplicaDBClusterError {
 /// Errors returned by RebootDBInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootDBInstanceError {
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
-    /// <p> The specified DB instance is not in the <i>available</i> state. </p>
+    /// <p>The specified DB instance is not in the <i>available</i> state.</p>
     InvalidDBInstanceStateFault(String),
 }
 
@@ -11775,7 +11739,7 @@ impl Error for RebootDBInstanceError {
 /// Errors returned by RemoveRoleFromDBCluster
 #[derive(Debug, PartialEq)]
 pub enum RemoveRoleFromDBClusterError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
     /// <p>The specified IAM role Amazon Resource Name (ARN) is not associated with the specified DB cluster.</p>
     DBClusterRoleNotFoundFault(String),
@@ -11844,8 +11808,9 @@ impl Error for RemoveRoleFromDBClusterError {
 /// Errors returned by RemoveSourceIdentifierFromSubscription
 #[derive(Debug, PartialEq)]
 pub enum RemoveSourceIdentifierFromSubscriptionError {
+    /// <p>The source could not be found.</p>
     SourceNotFoundFault(String),
-
+    /// <p>The designated subscription could not be found.</p>
     SubscriptionNotFoundFault(String),
 }
 
@@ -11906,11 +11871,11 @@ impl Error for RemoveSourceIdentifierFromSubscriptionError {
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
-    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance. </p>
+    /// <p> <i>DBInstanceIdentifier</i> does not refer to an existing DB instance.</p>
     DBInstanceNotFoundFault(String),
-    /// <p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
+    /// <p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot.</p>
     DBSnapshotNotFoundFault(String),
 }
 
@@ -11975,7 +11940,7 @@ impl Error for RemoveTagsFromResourceError {
 /// Errors returned by ResetDBClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ResetDBClusterParameterGroupError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you cannot delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
@@ -12038,7 +12003,7 @@ impl Error for ResetDBClusterParameterGroupError {
 /// Errors returned by ResetDBParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ResetDBParameterGroupError {
-    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group. </p>
+    /// <p> <i>DBParameterGroupName</i> does not refer to an existing DB parameter group.</p>
     DBParameterGroupNotFoundFault(String),
     /// <p>The DB parameter group is in use or is in an invalid state. If you are attempting to delete the parameter group, you cannot delete it when the parameter group is in this state.</p>
     InvalidDBParameterGroupStateFault(String),
@@ -12099,13 +12064,15 @@ impl Error for ResetDBParameterGroupError {
 pub enum RestoreDBClusterFromSnapshotError {
     /// <p>User already has a DB cluster with the given identifier.</p>
     DBClusterAlreadyExistsFault(String),
+    /// <p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group.</p>
+    DBClusterParameterGroupNotFoundFault(String),
     /// <p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
     DBClusterQuotaExceededFault(String),
-    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot.</p>
     DBClusterSnapshotNotFoundFault(String),
-    /// <p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot. </p>
+    /// <p> <i>DBSnapshotIdentifier</i> does not refer to an existing DB snapshot.</p>
     DBSnapshotNotFoundFault(String),
-    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group.</p>
     DBSubnetGroupNotFoundFault(String),
     /// <p>The DB cluster does not have enough capacity for the current operation.</p>
     InsufficientDBClusterCapacityFault(String),
@@ -12123,7 +12090,7 @@ pub enum RestoreDBClusterFromSnapshotError {
     InvalidVPCNetworkStateFault(String),
     /// <p>Error accessing KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-
+    /// <p>The designated option group could not be found.</p>
     OptionGroupNotFoundFault(String),
     /// <p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
@@ -12142,6 +12109,13 @@ impl RestoreDBClusterFromSnapshotError {
                     "DBClusterAlreadyExistsFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(
+                                String::from(parsed_error.message),
+                            ),
+                        )
+                    }
+                    "DBClusterParameterGroupNotFound" => {
+                        return RusotoError::Service(
+                            RestoreDBClusterFromSnapshotError::DBClusterParameterGroupNotFoundFault(
                                 String::from(parsed_error.message),
                             ),
                         )
@@ -12266,6 +12240,9 @@ impl Error for RestoreDBClusterFromSnapshotError {
     fn description(&self) -> &str {
         match *self {
             RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(ref cause) => cause,
+            RestoreDBClusterFromSnapshotError::DBClusterParameterGroupNotFoundFault(ref cause) => {
+                cause
+            }
             RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(ref cause) => cause,
             RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
             RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(ref cause) => cause,
@@ -12294,13 +12271,15 @@ impl Error for RestoreDBClusterFromSnapshotError {
 pub enum RestoreDBClusterToPointInTimeError {
     /// <p>User already has a DB cluster with the given identifier.</p>
     DBClusterAlreadyExistsFault(String),
-    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster. </p>
+    /// <p> <i>DBClusterIdentifier</i> does not refer to an existing DB cluster.</p>
     DBClusterNotFoundFault(String),
+    /// <p> <i>DBClusterParameterGroupName</i> does not refer to an existing DB Cluster parameter group.</p>
+    DBClusterParameterGroupNotFoundFault(String),
     /// <p>User attempted to create a new DB cluster and the user has already reached the maximum allowed DB cluster quota.</p>
     DBClusterQuotaExceededFault(String),
-    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot. </p>
+    /// <p> <i>DBClusterSnapshotIdentifier</i> does not refer to an existing DB cluster snapshot.</p>
     DBClusterSnapshotNotFoundFault(String),
-    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group. </p>
+    /// <p> <i>DBSubnetGroupName</i> does not refer to an existing DB subnet group.</p>
     DBSubnetGroupNotFoundFault(String),
     /// <p>The DB cluster does not have enough capacity for the current operation.</p>
     InsufficientDBClusterCapacityFault(String),
@@ -12320,7 +12299,7 @@ pub enum RestoreDBClusterToPointInTimeError {
     InvalidVPCNetworkStateFault(String),
     /// <p>Error accessing KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-
+    /// <p>The designated option group could not be found.</p>
     OptionGroupNotFoundFault(String),
     /// <p>Request would result in user exceeding the allowed amount of storage available across all DB instances.</p>
     StorageQuotaExceededFault(String),
@@ -12350,6 +12329,11 @@ impl RestoreDBClusterToPointInTimeError {
                             ),
                         )
                     }
+                    "DBClusterParameterGroupNotFound" => return RusotoError::Service(
+                        RestoreDBClusterToPointInTimeError::DBClusterParameterGroupNotFoundFault(
+                            String::from(parsed_error.message),
+                        ),
+                    ),
                     "DBClusterQuotaExceededFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(
@@ -12471,6 +12455,9 @@ impl Error for RestoreDBClusterToPointInTimeError {
         match *self {
             RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(ref cause) => cause,
             RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(ref cause) => cause,
+            RestoreDBClusterToPointInTimeError::DBClusterParameterGroupNotFoundFault(ref cause) => {
+                cause
+            }
             RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(ref cause) => cause,
             RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(ref cause) => cause,
             RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(ref cause) => cause,
@@ -12496,7 +12483,7 @@ impl Error for RestoreDBClusterToPointInTimeError {
 }
 /// Trait representing the capabilities of the Amazon Neptune API. Amazon Neptune clients implement this trait.
 pub trait Neptune {
-    /// <p>Associates an Identity and Access Management (IAM) role from an Neptune DB cluster. </p>
+    /// <p>Associates an Identity and Access Management (IAM) role from an Neptune DB cluster.</p>
     fn add_role_to_db_cluster(
         &self,
         input: AddRoleToDBClusterMessage,
@@ -12526,7 +12513,7 @@ pub trait Neptune {
         input: CopyDBClusterParameterGroupMessage,
     ) -> RusotoFuture<CopyDBClusterParameterGroupResult, CopyDBClusterParameterGroupError>;
 
-    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:neptune-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in "copying" status.</p>
+    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can't copy from one AWS Region to another.</p>
     fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
@@ -12538,19 +12525,19 @@ pub trait Neptune {
         input: CopyDBParameterGroupMessage,
     ) -> RusotoFuture<CopyDBParameterGroupResult, CopyDBParameterGroupError>;
 
-    /// <p>Creates a new Amazon Neptune DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon Neptune DB instance. For cross-region replication where the DB cluster identified by <code>ReplicationSourceIdentifier</code> is encrypted, you must also specify the <code>PreSignedUrl</code> parameter.</p>
+    /// <p>Creates a new Amazon Neptune DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon Neptune DB instance.</p>
     fn create_db_cluster(
         &self,
         input: CreateDBClusterMessage,
     ) -> RusotoFuture<CreateDBClusterResult, CreateDBClusterError>;
 
-    /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon Neptune console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
+    /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon Neptune console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     fn create_db_cluster_parameter_group(
         &self,
         input: CreateDBClusterParameterGroupMessage,
     ) -> RusotoFuture<CreateDBClusterParameterGroupResult, CreateDBClusterParameterGroupError>;
 
-    /// <p>Creates a snapshot of a DB cluster. </p>
+    /// <p>Creates a snapshot of a DB cluster.</p>
     fn create_db_cluster_snapshot(
         &self,
         input: CreateDBClusterSnapshotMessage,
@@ -12562,7 +12549,7 @@ pub trait Neptune {
         input: CreateDBInstanceMessage,
     ) -> RusotoFuture<CreateDBInstanceResult, CreateDBInstanceError>;
 
-    /// <p><p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
+    /// <p><p>Creates a new DB parameter group.</p> <p>A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect.</p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn create_db_parameter_group(
         &self,
         input: CreateDBParameterGroupMessage,
@@ -12580,7 +12567,7 @@ pub trait Neptune {
         input: CreateEventSubscriptionMessage,
     ) -> RusotoFuture<CreateEventSubscriptionResult, CreateEventSubscriptionError>;
 
-    /// <p><p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/></p>
+    /// <p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can't be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p>
     fn delete_db_cluster(
         &self,
         input: DeleteDBClusterMessage,
@@ -12598,7 +12585,7 @@ pub trait Neptune {
         input: DeleteDBClusterSnapshotMessage,
     ) -> RusotoFuture<DeleteDBClusterSnapshotResult, DeleteDBClusterSnapshotError>;
 
-    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of a DB cluster, you can't delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <a>PromoteReadReplicaDBCluster</a> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>
+    /// <p><p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can&#39;t be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can&#39;t be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of a DB cluster, you can&#39;t delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul></p>
     fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
@@ -12622,7 +12609,7 @@ pub trait Neptune {
         input: DeleteEventSubscriptionMessage,
     ) -> RusotoFuture<DeleteEventSubscriptionResult, DeleteEventSubscriptionError>;
 
-    /// <p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p>
+    /// <p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group.</p>
     fn describe_db_cluster_parameter_groups(
         &self,
         input: DescribeDBClusterParameterGroupsMessage,
@@ -12667,7 +12654,7 @@ pub trait Neptune {
         input: DescribeDBInstancesMessage,
     ) -> RusotoFuture<DBInstanceMessage, DescribeDBInstancesError>;
 
-    /// <p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>
+    /// <p>Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group.</p>
     fn describe_db_parameter_groups(
         &self,
         input: DescribeDBParameterGroupsMessage,
@@ -12679,7 +12666,7 @@ pub trait Neptune {
         input: DescribeDBParametersMessage,
     ) -> RusotoFuture<DBParameterGroupDetails, DescribeDBParametersError>;
 
-    /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
+    /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>.</p>
     fn describe_db_subnet_groups(
         &self,
         input: DescribeDBSubnetGroupsMessage,
@@ -12700,7 +12687,7 @@ pub trait Neptune {
         input: DescribeEngineDefaultParametersMessage,
     ) -> RusotoFuture<DescribeEngineDefaultParametersResult, DescribeEngineDefaultParametersError>;
 
-    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. </p>
+    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type.</p>
     fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
@@ -12730,7 +12717,7 @@ pub trait Neptune {
         input: DescribePendingMaintenanceActionsMessage,
     ) -> RusotoFuture<PendingMaintenanceActionsMessage, DescribePendingMaintenanceActionsError>;
 
-    /// <p>You can call <a>DescribeValidDBInstanceModifications</a> to learn what modifications you can make to your DB instance. You can use this information when you call <a>ModifyDBInstance</a>. </p>
+    /// <p>You can call <a>DescribeValidDBInstanceModifications</a> to learn what modifications you can make to your DB instance. You can use this information when you call <a>ModifyDBInstance</a>.</p>
     fn describe_valid_db_instance_modifications(
         &self,
         input: DescribeValidDBInstanceModificationsMessage,
@@ -12751,13 +12738,13 @@ pub trait Neptune {
         input: ListTagsForResourceMessage,
     ) -> RusotoFuture<TagListMessage, ListTagsForResourceError>;
 
-    /// <p>Modify a setting for a DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. </p>
+    /// <p>Modify a setting for a DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>
     fn modify_db_cluster(
         &self,
         input: ModifyDBClusterMessage,
     ) -> RusotoFuture<ModifyDBClusterResult, ModifyDBClusterError>;
 
-    /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
+    /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request.</p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     fn modify_db_cluster_parameter_group(
         &self,
         input: ModifyDBClusterParameterGroupMessage,
@@ -12769,13 +12756,13 @@ pub trait Neptune {
         input: ModifyDBClusterSnapshotAttributeMessage,
     ) -> RusotoFuture<ModifyDBClusterSnapshotAttributeResult, ModifyDBClusterSnapshotAttributeError>;
 
-    /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <a>DescribeValidDBInstanceModifications</a> before you call <a>ModifyDBInstance</a>. </p>
+    /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <a>DescribeValidDBInstanceModifications</a> before you call <a>ModifyDBInstance</a>.</p>
     fn modify_db_instance(
         &self,
         input: ModifyDBInstanceMessage,
     ) -> RusotoFuture<ModifyDBInstanceResult, ModifyDBInstanceError>;
 
-    /// <p><p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon Neptune to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
+    /// <p><p>Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request.</p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon Neptune to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn modify_db_parameter_group(
         &self,
         input: ModifyDBParameterGroupMessage,
@@ -12793,19 +12780,19 @@ pub trait Neptune {
         input: ModifyEventSubscriptionMessage,
     ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
 
-    /// <p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p>
+    /// <p>Not supported.</p>
     fn promote_read_replica_db_cluster(
         &self,
         input: PromoteReadReplicaDBClusterMessage,
     ) -> RusotoFuture<PromoteReadReplicaDBClusterResult, PromoteReadReplicaDBClusterError>;
 
-    /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting. </p>
+    /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect.</p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting.</p>
     fn reboot_db_instance(
         &self,
         input: RebootDBInstanceMessage,
     ) -> RusotoFuture<RebootDBInstanceResult, RebootDBInstanceError>;
 
-    /// <p>Disassociates an Identity and Access Management (IAM) role from a DB cluster. </p>
+    /// <p>Disassociates an Identity and Access Management (IAM) role from a DB cluster.</p>
     fn remove_role_from_db_cluster(
         &self,
         input: RemoveRoleFromDBClusterMessage,
@@ -12826,13 +12813,13 @@ pub trait Neptune {
         input: RemoveTagsFromResourceMessage,
     ) -> RusotoFuture<(), RemoveTagsFromResourceError>;
 
-    /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p>
+    /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters.</p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p>
     fn reset_db_cluster_parameter_group(
         &self,
         input: ResetDBClusterParameterGroupMessage,
     ) -> RusotoFuture<DBClusterParameterGroupNameMessage, ResetDBClusterParameterGroupError>;
 
-    /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>
+    /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request.</p>
     fn reset_db_parameter_group(
         &self,
         input: ResetDBParameterGroupMessage,
@@ -12844,7 +12831,7 @@ pub trait Neptune {
         input: RestoreDBClusterFromSnapshotMessage,
     ) -> RusotoFuture<RestoreDBClusterFromSnapshotResult, RestoreDBClusterFromSnapshotError>;
 
-    /// <p><p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <a>CreateDBInstance</a> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note></p>
+    /// <p><p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group.</p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <a>CreateDBInstance</a> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note></p>
     fn restore_db_cluster_to_point_in_time(
         &self,
         input: RestoreDBClusterToPointInTimeMessage,
@@ -12887,7 +12874,7 @@ impl NeptuneClient {
 }
 
 impl Neptune for NeptuneClient {
-    /// <p>Associates an Identity and Access Management (IAM) role from an Neptune DB cluster. </p>
+    /// <p>Associates an Identity and Access Management (IAM) role from an Neptune DB cluster.</p>
     fn add_role_to_db_cluster(
         &self,
         input: AddRoleToDBClusterMessage,
@@ -13090,7 +13077,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can copy an encrypted DB cluster snapshot from another AWS Region. In that case, the AWS Region where you call the <code>CopyDBClusterSnapshot</code> action is the destination AWS Region for the encrypted DB cluster snapshot to be copied to. To copy an encrypted DB cluster snapshot from another AWS Region, you must provide the following values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The AWS Key Management System (AWS KMS) key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>PreSignedUrl</code> - A URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> action to be called in the source AWS Region where the DB cluster snapshot is copied from. The pre-signed URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the encrypted DB cluster snapshot to be copied.</p> <p>The pre-signed URL request must contain the following parameter values:</p> <ul> <li> <p> <code>KmsKeyId</code> - The KMS key identifier for the key to use to encrypt the copy of the DB cluster snapshot in the destination AWS Region. This is the same identifier for both the <code>CopyDBClusterSnapshot</code> action that is called in the destination AWS Region, and the action contained in the pre-signed URL.</p> </li> <li> <p> <code>DestinationRegion</code> - The name of the AWS Region that the DB cluster snapshot will be created in.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted DB cluster snapshot from the us-west-2 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks like the following example: <code>arn:aws:rds:us-west-2:123456789012:cluster-snapshot:neptune-cluster1-snapshot-20161115</code>.</p> </li> </ul> <p>To learn how to generate a Signature Version 4 signed request, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html"> Authenticating Requests: Using Query Parameters (AWS Signature Version 4)</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html"> Signature Version 4 Signing Process</a>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new copy of the DB cluster snapshot in the destination AWS Region.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The DB cluster snapshot identifier for the encrypted DB cluster snapshot to be copied. This identifier must be in the ARN format for the source AWS Region and is the same value as the <code>SourceDBClusterSnapshotIdentifier</code> in the pre-signed URL. </p> </li> </ul> <p>To cancel the copy operation once it is in progress, delete the target DB cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that DB cluster snapshot is in "copying" status.</p>
+    /// <p>Copies a snapshot of a DB cluster.</p> <p>To copy a DB cluster snapshot from a shared manual DB cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.</p> <p>You can't copy from one AWS Region to another.</p>
     fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
@@ -13188,7 +13175,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Creates a new Amazon Neptune DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon Neptune DB instance. For cross-region replication where the DB cluster identified by <code>ReplicationSourceIdentifier</code> is encrypted, you must also specify the <code>PreSignedUrl</code> parameter.</p>
+    /// <p>Creates a new Amazon Neptune DB cluster.</p> <p>You can use the <code>ReplicationSourceIdentifier</code> parameter to create the DB cluster as a Read Replica of another DB cluster or Amazon Neptune DB instance.</p>
     fn create_db_cluster(
         &self,
         input: CreateDBClusterMessage,
@@ -13239,7 +13226,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect. </p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon Neptune console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
+    /// <p><p>Creates a new DB cluster parameter group.</p> <p>Parameters in a DB cluster parameter group apply to all of the instances in a DB cluster.</p> <p> A DB cluster parameter group is initially created with the default parameters for the database engine used by instances in the DB cluster. To provide custom values for any of the parameters, you must modify the group after creating it using <a>ModifyDBClusterParameterGroup</a>. Once you&#39;ve created a DB cluster parameter group, you need to associate it with your DB cluster using <a>ModifyDBCluster</a>. When you associate a new DB cluster parameter group with a running DB cluster, you need to reboot the DB instances in the DB cluster without failover for the new DB cluster parameter group and associated settings to take effect.</p> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the DB cluster parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the <a href="https://console.aws.amazon.com/rds/">Amazon Neptune console</a> or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     fn create_db_cluster_parameter_group(
         &self,
         input: CreateDBClusterParameterGroupMessage,
@@ -13287,7 +13274,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Creates a snapshot of a DB cluster. </p>
+    /// <p>Creates a snapshot of a DB cluster.</p>
     fn create_db_cluster_snapshot(
         &self,
         input: CreateDBClusterSnapshotMessage,
@@ -13386,7 +13373,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p><p>Creates a new DB parameter group.</p> <p> A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect. </p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
+    /// <p><p>Creates a new DB parameter group.</p> <p>A DB parameter group is initially created with the default parameters for the database engine used by the DB instance. To provide custom values for any of the parameters, you must modify the group after creating it using <i>ModifyDBParameterGroup</i>. Once you&#39;ve created a DB parameter group, you need to associate it with your DB instance using <i>ModifyDBInstance</i>. When you associate a new DB parameter group with a running DB instance, you need to reboot the DB instance without failover for the new DB parameter group and associated settings to take effect.</p> <important> <p>After you create a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn create_db_parameter_group(
         &self,
         input: CreateDBParameterGroupMessage,
@@ -13532,7 +13519,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p><p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p> <p/></p>
+    /// <p>The DeleteDBCluster action deletes a previously provisioned DB cluster. When you delete a DB cluster, all automated backups for that DB cluster are deleted and can't be recovered. Manual DB cluster snapshots of the specified DB cluster are not deleted.</p>
     fn delete_db_cluster(
         &self,
         input: DeleteDBClusterMessage,
@@ -13656,7 +13643,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can't be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can't be canceled or reverted once submitted. </p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of a DB cluster, you can't delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB cluster is a Read Replica of another DB cluster.</p> </li> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul> <p>To delete a DB instance in this case, first call the <a>PromoteReadReplicaDBCluster</a> API action to promote the DB cluster so it's no longer a Read Replica. After the promotion completes, then call the <code>DeleteDBInstance</code> API action to delete the final instance in the DB cluster.</p>
+    /// <p><p>The DeleteDBInstance action deletes a previously provisioned DB instance. When you delete a DB instance, all automated backups for that instance are deleted and can&#39;t be recovered. Manual DB snapshots of the DB instance to be deleted by <code>DeleteDBInstance</code> are not deleted.</p> <p> If you request a final DB snapshot the status of the Amazon Neptune DB instance is <code>deleting</code> until the DB snapshot is created. The API action <code>DescribeDBInstance</code> is used to monitor the status of this operation. The action can&#39;t be canceled or reverted once submitted.</p> <p>Note that when a DB instance is in a failure state and has a status of <code>failed</code>, <code>incompatible-restore</code>, or <code>incompatible-network</code>, you can only delete it when the <code>SkipFinalSnapshot</code> parameter is set to <code>true</code>.</p> <p>If the specified DB instance is part of a DB cluster, you can&#39;t delete the DB instance if both of the following conditions are true:</p> <ul> <li> <p>The DB instance is the only instance in the DB cluster.</p> </li> </ul></p>
     fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
@@ -13807,7 +13794,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group. </p>
+    /// <p> Returns a list of <code>DBClusterParameterGroup</code> descriptions. If a <code>DBClusterParameterGroupName</code> parameter is specified, the list will contain only the description of the specified DB cluster parameter group.</p>
     fn describe_db_cluster_parameter_groups(
         &self,
         input: DescribeDBClusterParameterGroupsMessage,
@@ -14155,7 +14142,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p> Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group. </p>
+    /// <p>Returns a list of <code>DBParameterGroup</code> descriptions. If a <code>DBParameterGroupName</code> is specified, the list will contain only the description of the specified DB parameter group.</p>
     fn describe_db_parameter_groups(
         &self,
         input: DescribeDBParameterGroupsMessage,
@@ -14253,7 +14240,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>. </p>
+    /// <p>Returns a list of DBSubnetGroup descriptions. If a DBSubnetGroupName is specified, the list will contain only the descriptions of the specified DBSubnetGroup.</p> <p>For an overview of CIDR ranges, go to the <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Wikipedia Tutorial</a>.</p>
     fn describe_db_subnet_groups(
         &self,
         input: DescribeDBSubnetGroupsMessage,
@@ -14405,7 +14392,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type. </p>
+    /// <p>Displays a list of categories for all event source types, or, if specified, for a specified source type.</p>
     fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
@@ -14652,7 +14639,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>You can call <a>DescribeValidDBInstanceModifications</a> to learn what modifications you can make to your DB instance. You can use this information when you call <a>ModifyDBInstance</a>. </p>
+    /// <p>You can call <a>DescribeValidDBInstanceModifications</a> to learn what modifications you can make to your DB instance. You can use this information when you call <a>ModifyDBInstance</a>.</p>
     fn describe_valid_db_instance_modifications(
         &self,
         input: DescribeValidDBInstanceModificationsMessage,
@@ -14806,7 +14793,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Modify a setting for a DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. </p>
+    /// <p>Modify a setting for a DB cluster. You can change one or more database configuration parameters by specifying these parameters and the new values in the request.</p>
     fn modify_db_cluster(
         &self,
         input: ModifyDBClusterMessage,
@@ -14857,7 +14844,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
+    /// <p><p> Modifies the parameters of a DB cluster parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request.</p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB cluster associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you create a DB cluster parameter group, you should wait at least 5 minutes before creating your first DB cluster that uses that DB cluster parameter group as the default parameter group. This allows Amazon Neptune to fully complete the create action before the parameter group is used as the default for a new DB cluster. This is especially important for parameters that are critical when creating the default database for a DB cluster, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <a>DescribeDBClusterParameters</a> command to verify that your DB cluster parameter group has been created or modified.</p> </important></p>
     fn modify_db_cluster_parameter_group(
         &self,
         input: ModifyDBClusterParameterGroupMessage,
@@ -14956,7 +14943,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <a>DescribeValidDBInstanceModifications</a> before you call <a>ModifyDBInstance</a>. </p>
+    /// <p>Modifies settings for a DB instance. You can change one or more database configuration parameters by specifying these parameters and the new values in the request. To learn what modifications you can make to your DB instance, call <a>DescribeValidDBInstanceModifications</a> before you call <a>ModifyDBInstance</a>.</p>
     fn modify_db_instance(
         &self,
         input: ModifyDBInstanceMessage,
@@ -15007,7 +14994,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p><p> Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request. </p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon Neptune to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
+    /// <p><p>Modifies the parameters of a DB parameter group. To modify more than one parameter, submit a list of the following: <code>ParameterName</code>, <code>ParameterValue</code>, and <code>ApplyMethod</code>. A maximum of 20 parameters can be modified in a single request.</p> <note> <p>Changes to dynamic parameters are applied immediately. Changes to static parameters require a reboot without failover to the DB instance associated with the parameter group before the change can take effect.</p> </note> <important> <p>After you modify a DB parameter group, you should wait at least 5 minutes before creating your first DB instance that uses that DB parameter group as the default parameter group. This allows Amazon Neptune to fully complete the modify action before the parameter group is used as the default for a new DB instance. This is especially important for parameters that are critical when creating the default database for a DB instance, such as the character set for the default database defined by the <code>character<em>set</em>database</code> parameter. You can use the <i>Parameter Groups</i> option of the Amazon Neptune console or the <i>DescribeDBParameters</i> command to verify that your DB parameter group has been created or modified.</p> </important></p>
     fn modify_db_parameter_group(
         &self,
         input: ModifyDBParameterGroupMessage,
@@ -15153,7 +15140,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Promotes a Read Replica DB cluster to a standalone DB cluster.</p>
+    /// <p>Not supported.</p>
     fn promote_read_replica_db_cluster(
         &self,
         input: PromoteReadReplicaDBClusterMessage,
@@ -15201,7 +15188,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting. </p>
+    /// <p>You might need to reboot your DB instance, usually for maintenance reasons. For example, if you make certain modifications, or if you change the DB parameter group associated with the DB instance, you must reboot the instance for the changes to take effect.</p> <p>Rebooting a DB instance restarts the database engine service. Rebooting a DB instance results in a momentary outage, during which the DB instance status is set to rebooting.</p>
     fn reboot_db_instance(
         &self,
         input: RebootDBInstanceMessage,
@@ -15252,7 +15239,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Disassociates an Identity and Access Management (IAM) role from a DB cluster. </p>
+    /// <p>Disassociates an Identity and Access Management (IAM) role from a DB cluster.</p>
     fn remove_role_from_db_cluster(
         &self,
         input: RemoveRoleFromDBClusterMessage,
@@ -15355,7 +15342,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p>
+    /// <p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters.</p> <p> When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <a>RebootDBInstance</a> request. You must call <a>RebootDBInstance</a> for every DB instance in your DB cluster that you want the updated static parameter to apply to.</p>
     fn reset_db_cluster_parameter_group(
         &self,
         input: ResetDBClusterParameterGroupMessage,
@@ -15403,7 +15390,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request. </p>
+    /// <p>Modifies the parameters of a DB parameter group to the engine/system default value. To reset specific parameters, provide a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB parameter group, specify the <code>DBParameterGroup</code> name and <code>ResetAllParameters</code> parameters. When resetting the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance restart or <code>RebootDBInstance</code> request.</p>
     fn reset_db_parameter_group(
         &self,
         input: ResetDBParameterGroupMessage,
@@ -15499,7 +15486,7 @@ impl Neptune for NeptuneClient {
         })
     }
 
-    /// <p><p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <a>CreateDBInstance</a> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note></p>
+    /// <p><p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group.</p> <note> <p>This action only restores the DB cluster, not the DB instances for that DB cluster. You must invoke the <a>CreateDBInstance</a> action to create DB instances for the restored DB cluster, specifying the identifier of the restored DB cluster in <code>DBClusterIdentifier</code>. You can create DB instances only after the <code>RestoreDBClusterToPointInTime</code> action has completed and the DB cluster is available.</p> </note></p>
     fn restore_db_cluster_to_point_in_time(
         &self,
         input: RestoreDBClusterToPointInTimeMessage,

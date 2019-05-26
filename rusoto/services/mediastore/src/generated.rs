@@ -32,6 +32,10 @@ pub struct Container {
     #[serde(rename = "ARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The state of access logging on the container. This value is <code>false</code> by default, indicating that AWS Elemental MediaStore does not send access logs to Amazon CloudWatch Logs. When you enable access logging on the container, MediaStore changes this value to <code>true</code>, indicating that the service delivers access logs for objects stored in that container to CloudWatch Logs.</p>
+    #[serde(rename = "AccessLoggingEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_logging_enabled: Option<bool>,
     /// <p>Unix timestamp.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -259,6 +263,28 @@ pub struct PutLifecyclePolicyInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PutLifecyclePolicyOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartAccessLoggingInput {
+    /// <p>The name of the container that you want to start access logging on.</p>
+    #[serde(rename = "ContainerName")]
+    pub container_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartAccessLoggingOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopAccessLoggingInput {
+    /// <p>The name of the container that you want to stop access logging on.</p>
+    #[serde(rename = "ContainerName")]
+    pub container_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopAccessLoggingOutput {}
 
 /// Errors returned by CreateContainer
 #[derive(Debug, PartialEq)]
@@ -899,6 +925,102 @@ impl Error for PutLifecyclePolicyError {
         }
     }
 }
+/// Errors returned by StartAccessLogging
+#[derive(Debug, PartialEq)]
+pub enum StartAccessLoggingError {
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
+    ContainerInUse(String),
+    /// <p>The container that you specified in the request does not exist.</p>
+    ContainerNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+}
+
+impl StartAccessLoggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartAccessLoggingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ContainerInUseException" => {
+                    return RusotoError::Service(StartAccessLoggingError::ContainerInUse(err.msg))
+                }
+                "ContainerNotFoundException" => {
+                    return RusotoError::Service(StartAccessLoggingError::ContainerNotFound(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(StartAccessLoggingError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StartAccessLoggingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartAccessLoggingError {
+    fn description(&self) -> &str {
+        match *self {
+            StartAccessLoggingError::ContainerInUse(ref cause) => cause,
+            StartAccessLoggingError::ContainerNotFound(ref cause) => cause,
+            StartAccessLoggingError::InternalServerError(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopAccessLogging
+#[derive(Debug, PartialEq)]
+pub enum StopAccessLoggingError {
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
+    ContainerInUse(String),
+    /// <p>The container that you specified in the request does not exist.</p>
+    ContainerNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+}
+
+impl StopAccessLoggingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopAccessLoggingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ContainerInUseException" => {
+                    return RusotoError::Service(StopAccessLoggingError::ContainerInUse(err.msg))
+                }
+                "ContainerNotFoundException" => {
+                    return RusotoError::Service(StopAccessLoggingError::ContainerNotFound(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(StopAccessLoggingError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for StopAccessLoggingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopAccessLoggingError {
+    fn description(&self) -> &str {
+        match *self {
+            StopAccessLoggingError::ContainerInUse(ref cause) => cause,
+            StopAccessLoggingError::ContainerNotFound(ref cause) => cause,
+            StopAccessLoggingError::InternalServerError(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the MediaStore API. MediaStore clients implement this trait.
 pub trait MediaStore {
     /// <p>Creates a storage container to hold objects. A container is similar to a bucket in the Amazon S3 service.</p>
@@ -925,7 +1047,7 @@ pub trait MediaStore {
         input: DeleteCorsPolicyInput,
     ) -> RusotoFuture<DeleteCorsPolicyOutput, DeleteCorsPolicyError>;
 
-    /// <p>Removes an object lifecycle policy from a container.</p>
+    /// <p>Removes an object lifecycle policy from a container. It takes up to 20 minutes for the change to take effect.</p>
     fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyInput,
@@ -967,17 +1089,29 @@ pub trait MediaStore {
         input: PutContainerPolicyInput,
     ) -> RusotoFuture<PutContainerPolicyOutput, PutContainerPolicyError>;
 
-    /// <p>Sets the cross-origin resource sharing (CORS) configuration on a container so that the container can service cross-origin requests. For example, you might want to enable a request whose origin is http://www.example.com to access your AWS Elemental MediaStore container at my.example.container.com by using the browser's XMLHttpRequest capability.</p> <p>To enable CORS on a container, you attach a CORS policy to the container. In the CORS policy, you configure rules that identify origins and the HTTP methods that can be executed on your container. The policy can contain up to 398,000 characters. You can add up to 100 rules to a CORS policy. If more than one rule applies, the service uses the first applicable rule listed.</p>
+    /// <p>Sets the cross-origin resource sharing (CORS) configuration on a container so that the container can service cross-origin requests. For example, you might want to enable a request whose origin is http://www.example.com to access your AWS Elemental MediaStore container at my.example.container.com by using the browser's XMLHttpRequest capability.</p> <p>To enable CORS on a container, you attach a CORS policy to the container. In the CORS policy, you configure rules that identify origins and the HTTP methods that can be executed on your container. The policy can contain up to 398,000 characters. You can add up to 100 rules to a CORS policy. If more than one rule applies, the service uses the first applicable rule listed.</p> <p>To learn more about CORS, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/cors-policy.html">Cross-Origin Resource Sharing (CORS) in AWS Elemental MediaStore</a>.</p>
     fn put_cors_policy(
         &self,
         input: PutCorsPolicyInput,
     ) -> RusotoFuture<PutCorsPolicyOutput, PutCorsPolicyError>;
 
-    /// <p>Writes an object lifecycle policy to a container. If the container already has an object lifecycle policy, the service replaces the existing policy with the new policy. </p>
+    /// <p>Writes an object lifecycle policy to a container. If the container already has an object lifecycle policy, the service replaces the existing policy with the new policy. It takes up to 20 minutes for the change to take effect.</p> <p>For information about how to construct an object lifecycle policy, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/policies-object-lifecycle-components.html">Components of an Object Lifecycle Policy</a>.</p>
     fn put_lifecycle_policy(
         &self,
         input: PutLifecyclePolicyInput,
     ) -> RusotoFuture<PutLifecyclePolicyOutput, PutLifecyclePolicyError>;
+
+    /// <p>Starts access logging on the specified container. When you enable access logging on a container, MediaStore delivers access logs for objects stored in that container to Amazon CloudWatch Logs.</p>
+    fn start_access_logging(
+        &self,
+        input: StartAccessLoggingInput,
+    ) -> RusotoFuture<StartAccessLoggingOutput, StartAccessLoggingError>;
+
+    /// <p>Stops access logging on the specified container. When you stop access logging on a container, MediaStore stops sending access logs to Amazon CloudWatch Logs. These access logs are not saved and are not retrievable.</p>
+    fn stop_access_logging(
+        &self,
+        input: StopAccessLoggingInput,
+    ) -> RusotoFuture<StopAccessLoggingOutput, StopAccessLoggingError>;
 }
 /// A client for the MediaStore API.
 #[derive(Clone)]
@@ -1131,7 +1265,7 @@ impl MediaStore for MediaStoreClient {
         })
     }
 
-    /// <p>Removes an object lifecycle policy from a container.</p>
+    /// <p>Removes an object lifecycle policy from a container. It takes up to 20 minutes for the change to take effect.</p>
     fn delete_lifecycle_policy(
         &self,
         input: DeleteLifecyclePolicyInput,
@@ -1333,7 +1467,7 @@ impl MediaStore for MediaStoreClient {
         })
     }
 
-    /// <p>Sets the cross-origin resource sharing (CORS) configuration on a container so that the container can service cross-origin requests. For example, you might want to enable a request whose origin is http://www.example.com to access your AWS Elemental MediaStore container at my.example.container.com by using the browser's XMLHttpRequest capability.</p> <p>To enable CORS on a container, you attach a CORS policy to the container. In the CORS policy, you configure rules that identify origins and the HTTP methods that can be executed on your container. The policy can contain up to 398,000 characters. You can add up to 100 rules to a CORS policy. If more than one rule applies, the service uses the first applicable rule listed.</p>
+    /// <p>Sets the cross-origin resource sharing (CORS) configuration on a container so that the container can service cross-origin requests. For example, you might want to enable a request whose origin is http://www.example.com to access your AWS Elemental MediaStore container at my.example.container.com by using the browser's XMLHttpRequest capability.</p> <p>To enable CORS on a container, you attach a CORS policy to the container. In the CORS policy, you configure rules that identify origins and the HTTP methods that can be executed on your container. The policy can contain up to 398,000 characters. You can add up to 100 rules to a CORS policy. If more than one rule applies, the service uses the first applicable rule listed.</p> <p>To learn more about CORS, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/cors-policy.html">Cross-Origin Resource Sharing (CORS) in AWS Elemental MediaStore</a>.</p>
     fn put_cors_policy(
         &self,
         input: PutCorsPolicyInput,
@@ -1362,7 +1496,7 @@ impl MediaStore for MediaStoreClient {
         })
     }
 
-    /// <p>Writes an object lifecycle policy to a container. If the container already has an object lifecycle policy, the service replaces the existing policy with the new policy. </p>
+    /// <p>Writes an object lifecycle policy to a container. If the container already has an object lifecycle policy, the service replaces the existing policy with the new policy. It takes up to 20 minutes for the change to take effect.</p> <p>For information about how to construct an object lifecycle policy, see <a href="https://docs.aws.amazon.com/mediastore/latest/ug/policies-object-lifecycle-components.html">Components of an Object Lifecycle Policy</a>.</p>
     fn put_lifecycle_policy(
         &self,
         input: PutLifecyclePolicyInput,
@@ -1386,6 +1520,64 @@ impl MediaStore for MediaStoreClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(PutLifecyclePolicyError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Starts access logging on the specified container. When you enable access logging on a container, MediaStore delivers access logs for objects stored in that container to Amazon CloudWatch Logs.</p>
+    fn start_access_logging(
+        &self,
+        input: StartAccessLoggingInput,
+    ) -> RusotoFuture<StartAccessLoggingOutput, StartAccessLoggingError> {
+        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "MediaStore_20170901.StartAccessLogging");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StartAccessLoggingOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartAccessLoggingError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Stops access logging on the specified container. When you stop access logging on a container, MediaStore stops sending access logs to Amazon CloudWatch Logs. These access logs are not saved and are not retrievable.</p>
+    fn stop_access_logging(
+        &self,
+        input: StopAccessLoggingInput,
+    ) -> RusotoFuture<StopAccessLoggingOutput, StopAccessLoggingError> {
+        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "MediaStore_20170901.StopAccessLogging");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<StopAccessLoggingOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopAccessLoggingError::from_response(response))),
                 )
             }
         })

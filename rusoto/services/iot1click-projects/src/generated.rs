@@ -76,6 +76,10 @@ pub struct CreateProjectRequest {
     /// <p>The name of the project to create.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
+    /// <p>Optional tags (metadata key/value pairs) to be associated with the project. For example, <code>{ {"key1": "value1", "key2": "value2"} }</code>. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -239,6 +243,22 @@ pub struct ListProjectsResponse {
     pub projects: Vec<ProjectSummary>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The ARN of the resource whose tags you want to list.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags (metadata key/value pairs) which you have assigned to the resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>An object describing a project's placement.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -295,6 +315,10 @@ pub struct PlacementTemplate {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ProjectDescription {
+    /// <p>The ARN of the project.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The date when the project was originally created, in UNIX epoch time format.</p>
     #[serde(rename = "createdDate")]
     pub created_date: f64,
@@ -309,6 +333,10 @@ pub struct ProjectDescription {
     /// <p>The name of the project for which to obtain information from.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
+    /// <p>The tags (metadata key/value pairs) associated with the project.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The date when the project was last updated, in UNIX epoch time format. If the project was not updated, then <code>createdDate</code> and <code>updatedDate</code> are the same.</p>
     #[serde(rename = "updatedDate")]
     pub updated_date: f64,
@@ -318,16 +346,52 @@ pub struct ProjectDescription {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ProjectSummary {
+    /// <p>The ARN of the project.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The date when the project was originally created, in UNIX epoch time format.</p>
     #[serde(rename = "createdDate")]
     pub created_date: f64,
     /// <p>The name of the project being summarized.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
+    /// <p>The tags (metadata key/value pairs) associated with the project.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The date when the project was last updated, in UNIX epoch time format. If the project was not updated, then <code>createdDate</code> and <code>updatedDate</code> are the same.</p>
     #[serde(rename = "updatedDate")]
     pub updated_date: f64,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The ARN of the resouce for which tag(s) should be added or modified.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The new or modifying tag(s) for the resource. See <a href="https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per resource.</p>
+    #[serde(rename = "tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The ARN of the resource whose tag you want to remove.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The keys of those tags which you want to remove.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePlacementRequest {
@@ -911,6 +975,143 @@ impl Error for ListProjectsError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p><p/></p>
+    InternalFailure(String),
+    /// <p><p/></p>
+    InvalidRequest(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InternalFailure(ref cause) => cause,
+            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p><p/></p>
+    InternalFailure(String),
+    /// <p><p/></p>
+    InvalidRequest(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InternalFailure(ref cause) => cause,
+            TagResourceError::InvalidRequest(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p><p/></p>
+    InternalFailure(String),
+    /// <p><p/></p>
+    InvalidRequest(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InternalFailure(ref cause) => cause,
+            UntagResourceError::InvalidRequest(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdatePlacement
 #[derive(Debug, PartialEq)]
 pub enum UpdatePlacementError {
@@ -1080,6 +1281,24 @@ pub trait Iot1ClickProjects {
         &self,
         input: ListProjectsRequest,
     ) -> RusotoFuture<ListProjectsResponse, ListProjectsError>;
+
+    /// <p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
+    /// <p>Creates or modifies tags for a resource. Tags are key/value pairs (metadata) that can be used to manage a resource. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p>Removes one or more tags (metadata key/value pairs) from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p>Updates a placement with the given attributes. To clear an attribute, pass an empty value (i.e., "").</p>
     fn update_placement(
@@ -1520,6 +1739,106 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListProjectsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Lists the tags (metadata key/value pairs) which you have assigned to the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("projects.iot1click".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates or modifies tags for a resource. Tags are key/value pairs (metadata) that can be used to manage a resource. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("projects.iot1click".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes one or more tags (metadata key/value pairs) from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("projects.iot1click".to_string());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })

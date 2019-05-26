@@ -590,6 +590,53 @@ pub struct GetServiceGraphResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetTimeSeriesServiceStatisticsRequest {
+    /// <p>The end of the time frame for which to aggregate statistics.</p>
+    #[serde(rename = "EndTime")]
+    pub end_time: f64,
+    /// <p>A filter expression defining entities that will be aggregated for statistics. Supports ID, service, and edge functions. If no selector expression is specified, edge statistics are returned. </p>
+    #[serde(rename = "EntitySelectorExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_selector_expression: Option<String>,
+    /// <p>The ARN of the group for which to pull statistics from.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The case-sensitive name of the group for which to pull statistics from.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+    /// <p>Pagination token. Not used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Aggregation period in seconds.</p>
+    #[serde(rename = "Period")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub period: Option<i64>,
+    /// <p>The start of the time frame for which to aggregate statistics.</p>
+    #[serde(rename = "StartTime")]
+    pub start_time: f64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetTimeSeriesServiceStatisticsResult {
+    /// <p>A flag indicating whether or not a group's filter expression has been consistent, or if a returned aggregation may show statistics from an older version of the group's filter expression.</p>
+    #[serde(rename = "ContainsOldGroupVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contains_old_group_versions: Option<bool>,
+    /// <p>Pagination token. Not used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The collection of statistics.</p>
+    #[serde(rename = "TimeSeriesServiceStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_series_service_statistics: Option<Vec<TimeSeriesServiceStatistics>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTraceGraphRequest {
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
@@ -630,9 +677,17 @@ pub struct GetTraceSummariesRequest {
     #[serde(rename = "Sampling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sampling: Option<bool>,
+    /// <p>A paramater to indicate whether to enable sampling on trace summaries. Input parameters are Name and Value.</p>
+    #[serde(rename = "SamplingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_strategy: Option<SamplingStrategy>,
     /// <p>The start of the time frame for which to retrieve traces.</p>
     #[serde(rename = "StartTime")]
     pub start_time: f64,
+    /// <p>A parameter to indicate whether to query trace summaries by TraceId or Event time.</p>
+    #[serde(rename = "TimeRangeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_range_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1051,6 +1106,19 @@ pub struct SamplingStatisticsDocument {
     pub timestamp: f64,
 }
 
+/// <p>The name and value of a sampling rule to apply to a trace summary.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SamplingStrategy {
+    /// <p>The name of a sampling rule.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The value of a sampling rule.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<f64>,
+}
+
 /// <p>Temporary changes to a sampling rule configuration. To meet the global sampling target for a rule, X-Ray calculates a new reservoir for each service based on the recent sampling results of all services that called <a>GetSamplingTargets</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1225,6 +1293,26 @@ pub struct TelemetryRecord {
     pub timestamp: f64,
 }
 
+/// <p>A list of TimeSeriesStatistic structures.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TimeSeriesServiceStatistics {
+    #[serde(rename = "EdgeSummaryStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub edge_summary_statistics: Option<EdgeStatistics>,
+    /// <p>The response time histogram for the selected entities.</p>
+    #[serde(rename = "ResponseTimeHistogram")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_time_histogram: Option<Vec<HistogramEntry>>,
+    #[serde(rename = "ServiceSummaryStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_summary_statistics: Option<ServiceStatistics>,
+    /// <p>Timestamp of the window for which statistics are aggregated.</p>
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<f64>,
+}
+
 /// <p>A collection of segment documents with matching trace IDs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1299,6 +1387,10 @@ pub struct TraceSummary {
     #[serde(rename = "IsPartial")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_partial: Option<bool>,
+    /// <p>The matched time stamp of a defined event.</p>
+    #[serde(rename = "MatchedEventTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub matched_event_time: Option<f64>,
     /// <p>A list of resource ARNs for any resource corresponding to the trace segments.</p>
     #[serde(rename = "ResourceARNs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1912,6 +2004,51 @@ impl Error for GetServiceGraphError {
         }
     }
 }
+/// Errors returned by GetTimeSeriesServiceStatistics
+#[derive(Debug, PartialEq)]
+pub enum GetTimeSeriesServiceStatisticsError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+}
+
+impl GetTimeSeriesServiceStatisticsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetTimeSeriesServiceStatisticsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        GetTimeSeriesServiceStatisticsError::InvalidRequest(err.msg),
+                    )
+                }
+                "ThrottledException" => {
+                    return RusotoError::Service(GetTimeSeriesServiceStatisticsError::Throttled(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetTimeSeriesServiceStatisticsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTimeSeriesServiceStatisticsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTimeSeriesServiceStatisticsError::InvalidRequest(ref cause) => cause,
+            GetTimeSeriesServiceStatisticsError::Throttled(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetTraceGraph
 #[derive(Debug, PartialEq)]
 pub enum GetTraceGraphError {
@@ -2252,13 +2389,19 @@ pub trait XRay {
         input: GetServiceGraphRequest,
     ) -> RusotoFuture<GetServiceGraphResult, GetServiceGraphError>;
 
+    /// <p>Get an aggregation of service statistics defined by a specific time range.</p>
+    fn get_time_series_service_statistics(
+        &self,
+        input: GetTimeSeriesServiceStatisticsRequest,
+    ) -> RusotoFuture<GetTimeSeriesServiceStatisticsResult, GetTimeSeriesServiceStatisticsError>;
+
     /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
     fn get_trace_graph(
         &self,
         input: GetTraceGraphRequest,
     ) -> RusotoFuture<GetTraceGraphResult, GetTraceGraphError>;
 
-    /// <p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="http://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
+    /// <p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
     fn get_trace_summaries(
         &self,
         input: GetTraceSummariesRequest,
@@ -2701,6 +2844,36 @@ impl XRay for XRayClient {
         })
     }
 
+    /// <p>Get an aggregation of service statistics defined by a specific time range.</p>
+    fn get_time_series_service_statistics(
+        &self,
+        input: GetTimeSeriesServiceStatisticsRequest,
+    ) -> RusotoFuture<GetTimeSeriesServiceStatisticsResult, GetTimeSeriesServiceStatisticsError>
+    {
+        let request_uri = "/TimeSeriesServiceStatistics";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetTimeSeriesServiceStatisticsResult, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetTimeSeriesServiceStatisticsError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
     fn get_trace_graph(
         &self,
@@ -2733,7 +2906,7 @@ impl XRay for XRayClient {
         })
     }
 
-    /// <p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="http://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
+    /// <p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
     fn get_trace_summaries(
         &self,
         input: GetTraceSummariesRequest,

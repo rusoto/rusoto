@@ -1613,6 +1613,22 @@ pub struct ListSuitesResult {
     pub suites: Option<Vec<Suite>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource(s) for which to list tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>Represents a request to the list tests operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTestsRequest {
@@ -2523,6 +2539,31 @@ pub struct Suite {
     pub type_: Option<String>,
 }
 
+/// <p>The metadata that you apply to a resource to help you categorize and organize it. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label that acts like a category for more specific tag values.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The optional part of a key-value pair that make up a tag. A <code>value</code> acts as a descriptor within a tag category (key).</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource(s) to which to add tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>Represents a condition that is evaluated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2600,6 +2641,20 @@ pub struct UniqueProblem {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub problems: Option<Vec<Problem>>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource(s) from which to delete tags. You can associate tags with the following Device Farm resources: <code>PROJECT</code>, <code>RUN</code>, <code>NETWORK_PROFILE</code>, <code>INSTANCE_PROFILE</code>, <code>DEVICE_INSTANCE</code>, <code>SESSION</code>, <code>DEVICE_POOL</code>, <code>DEVICE</code>, and <code>VPCE_CONFIGURATION</code>.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The keys of the tags to be removed.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDeviceInstanceRequest {
@@ -3083,6 +3138,8 @@ pub enum CreateProjectError {
     NotFound(String),
     /// <p>There was a problem with the service account.</p>
     ServiceAccount(String),
+    /// <p>The operation was not successful. Try again.</p>
+    TagOperation(String),
 }
 
 impl CreateProjectError {
@@ -3100,6 +3157,9 @@ impl CreateProjectError {
                 }
                 "ServiceAccountException" => {
                     return RusotoError::Service(CreateProjectError::ServiceAccount(err.msg))
+                }
+                "TagOperationException" => {
+                    return RusotoError::Service(CreateProjectError::TagOperation(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3120,6 +3180,7 @@ impl Error for CreateProjectError {
             CreateProjectError::LimitExceeded(ref cause) => cause,
             CreateProjectError::NotFound(ref cause) => cause,
             CreateProjectError::ServiceAccount(ref cause) => cause,
+            CreateProjectError::TagOperation(ref cause) => cause,
         }
     }
 }
@@ -5372,6 +5433,45 @@ impl Error for ListSuitesError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>The operation was not successful. Try again.</p>
+    TagOperation(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::NotFound(err.msg))
+                }
+                "TagOperationException" => {
+                    return RusotoError::Service(ListTagsForResourceError::TagOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::NotFound(ref cause) => cause,
+            ListTagsForResourceError::TagOperation(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTests
 #[derive(Debug, PartialEq)]
 pub enum ListTestsError {
@@ -5891,6 +5991,96 @@ impl Error for StopRunError {
             StopRunError::LimitExceeded(ref cause) => cause,
             StopRunError::NotFound(ref cause) => cause,
             StopRunError::ServiceAccount(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>The operation was not successful. Try again.</p>
+    TagOperation(String),
+    /// <p>The request doesn't comply with the AWS Identity and Access Management (IAM) tag policy. Correct your request and then retry it.</p>
+    TagPolicy(String),
+    /// <p>The list of tags on the repository is over the limit. The maximum number of tags that can be applied to a repository is 50. </p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
+                }
+                "TagOperationException" => {
+                    return RusotoError::Service(TagResourceError::TagOperation(err.msg))
+                }
+                "TagPolicyException" => {
+                    return RusotoError::Service(TagResourceError::TagPolicy(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::TagOperation(ref cause) => cause,
+            TagResourceError::TagPolicy(ref cause) => cause,
+            TagResourceError::TooManyTags(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The specified entity was not found.</p>
+    NotFound(String),
+    /// <p>The operation was not successful. Try again.</p>
+    TagOperation(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
+                }
+                "TagOperationException" => {
+                    return RusotoError::Service(UntagResourceError::TagOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::TagOperation(ref cause) => cause,
         }
     }
 }
@@ -6513,6 +6703,12 @@ pub trait DeviceFarm {
         input: ListSuitesRequest,
     ) -> RusotoFuture<ListSuitesResult, ListSuitesError>;
 
+    /// <p>List the tags for an AWS Device Farm resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
     /// <p>Gets information about tests in a given test suite.</p>
     fn list_tests(&self, input: ListTestsRequest) -> RusotoFuture<ListTestsResult, ListTestsError>;
 
@@ -6563,6 +6759,18 @@ pub trait DeviceFarm {
 
     /// <p>Initiates a stop request for the current test run. AWS Device Farm will immediately stop the run on devices where tests have not started executing, and you will not be billed for these devices. On devices where tests have started executing, Setup Suite and Teardown Suite tests will run to completion before stopping execution on those devices. You will be billed for Setup, Teardown, and any tests that were in progress or already completed.</p>
     fn stop_run(&self, input: StopRunRequest) -> RusotoFuture<StopRunResult, StopRunError>;
+
+    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p>Deletes the specified tags from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p>Updates information about an existing private device instance.</p>
     fn update_device_instance(
@@ -7958,6 +8166,34 @@ impl DeviceFarm for DeviceFarmClient {
         })
     }
 
+    /// <p>List the tags for an AWS Device Farm resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Gets information about tests in a given test suite.</p>
     fn list_tests(&self, input: ListTestsRequest) -> RusotoFuture<ListTestsResult, ListTestsError> {
         let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
@@ -8230,6 +8466,64 @@ impl DeviceFarm for DeviceFarmClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StopRunError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes the specified tags from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "devicefarm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DeviceFarm_20150623.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })

@@ -137,7 +137,7 @@ pub struct BatchGetApplicationRevisionsInput {
     /// <p>The name of an AWS CodeDeploy application about which to get revision information.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
-    /// <p>Information to get about the application revisions, including type and location.</p>
+    /// <p>An array of <code>RevisionLocation</code> objects that specify information to get about the application revisions, including type and location. The maximum number of <code>RevisionLocation</code> objects you can specify is 25.</p>
     #[serde(rename = "revisions")]
     pub revisions: Vec<RevisionLocation>,
 }
@@ -163,7 +163,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 /// <p>Represents the input of a BatchGetApplications operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetApplicationsInput {
-    /// <p>A list of application names separated by spaces.</p>
+    /// <p>A list of application names separated by spaces. The maximum number of application names you can specify is 25.</p>
     #[serde(rename = "applicationNames")]
     pub application_names: Vec<String>,
 }
@@ -209,7 +209,7 @@ pub struct BatchGetDeploymentInstancesInput {
     /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    /// <p>The unique IDs of instances used in the deployment.</p>
+    /// <p>The unique IDs of instances used in the deployment. The maximum number of instance IDs you can specify is 25.</p>
     #[serde(rename = "instanceIds")]
     pub instance_ids: Vec<String>,
 }
@@ -234,7 +234,7 @@ pub struct BatchGetDeploymentTargetsInput {
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p><p> The unique IDs of the deployment targets. The compute platform of the deployment determines the type of the targets and their formats. </p> <ul> <li> <p> For deployments that use the EC2/On-premises compute platform, the target IDs are EC2 or on-premises instances IDs, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the AWS Lambda compute platform, the target IDs are the names of Lambda functions, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the Amazon ECS compute platform, the target IDs are pairs of Amazon ECS clusters and services specified using the format <code>&lt;clustername&gt;:&lt;servicename&gt;</code>. Their target type is <code>ecsTarget</code>. </p> </li> </ul></p>
+    /// <p><p> The unique IDs of the deployment targets. The compute platform of the deployment determines the type of the targets and their formats. The maximum number of deployment target IDs you can specify is 25.</p> <ul> <li> <p> For deployments that use the EC2/On-premises compute platform, the target IDs are EC2 or on-premises instances IDs, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the AWS Lambda compute platform, the target IDs are the names of Lambda functions, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the Amazon ECS compute platform, the target IDs are pairs of Amazon ECS clusters and services specified using the format <code>&lt;clustername&gt;:&lt;servicename&gt;</code>. Their target type is <code>ecsTarget</code>. </p> </li> </ul></p>
     #[serde(rename = "targetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_ids: Option<Vec<String>>,
@@ -252,7 +252,7 @@ pub struct BatchGetDeploymentTargetsOutput {
 /// <p> Represents the input of a BatchGetDeployments operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetDeploymentsInput {
-    /// <p> A list of deployment IDs, separated by spaces. </p>
+    /// <p> A list of deployment IDs, separated by spaces. The maximum number of deployment IDs you can specify is 25.</p>
     #[serde(rename = "deploymentIds")]
     pub deployment_ids: Vec<String>,
 }
@@ -270,7 +270,7 @@ pub struct BatchGetDeploymentsOutput {
 /// <p>Represents the input of a BatchGetOnPremisesInstances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetOnPremisesInstancesInput {
-    /// <p>The names of the on-premises instances about which to get information.</p>
+    /// <p>The names of the on-premises instances about which to get information. The maximum number of instance names you can specify is 25.</p>
     #[serde(rename = "instanceNames")]
     pub instance_names: Vec<String>,
 }
@@ -333,10 +333,14 @@ pub struct CreateApplicationInput {
     /// <p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
-    /// <p> The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>).</p>
+    /// <p> The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_platform: Option<String>,
+    /// <p> The metadata that you apply to CodeDeploy applications to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define. </p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>Represents the output of a CreateApplication operation.</p>
@@ -352,7 +356,7 @@ pub struct CreateApplicationOutput {
 /// <p>Represents the input of a CreateDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeploymentConfigInput {
-    /// <p>The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>&gt;).</p>
+    /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_platform: Option<String>,
@@ -401,7 +405,7 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename = "blueGreenDeploymentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    /// <p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>
+    /// <p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
@@ -439,7 +443,11 @@ pub struct CreateDeploymentGroupInput {
     /// <p>A service role ARN that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>
     #[serde(rename = "serviceRoleArn")]
     pub service_role_arn: String,
-    /// <p>Information about triggers to create when the deployment group is created. For examples, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-sns.html">Create a Trigger for an AWS CodeDeploy Event</a> in the AWS CodeDeploy User Guide.</p>
+    /// <p> The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define. </p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Information about triggers to create when the deployment group is created. For examples, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-sns.html">Create a Trigger for an AWS CodeDeploy Event</a> in the AWS CodeDeploy User Guide.</p>
     #[serde(rename = "triggerConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_configurations: Option<Vec<TriggerConfig>>,
@@ -481,7 +489,7 @@ pub struct CreateDeploymentInput {
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
-    /// <p> If set to true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance is considered to have failed at that point and continues on to the BeforeInstall deployment lifecycle event. </p> <p> If set to false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to fail to an instance, the deployment to that instance stops, and the deployment to that instance is considered to have failed. </p>
+    /// <p> If true, then if an ApplicationStop, BeforeBlockTraffic, or AfterBlockTraffic deployment lifecycle event to an instance fails, then the deployment continues to the next deployment lifecycle event. For example, if ApplicationStop fails, the deployment continues with DownloadBundle. If BeforeBlockTraffic fails, the deployment continues with BlockTraffic. If AfterBlockTraffic fails, the deployment continues with ApplicationStop. </p> <p> If false or not specified, then if a lifecycle event fails during a deployment to an instance, that deployment fails. If deployment to that instance is part of an overall deployment and the number of healthy hosts is not less than the minimum number of healthy hosts, then a deployment to the next instance is attempted. </p> <p> During a deployment, the AWS CodeDeploy agent runs the scripts specified for ApplicationStop, BeforeBlockTraffic, and AfterBlockTraffic in the AppSpec file from the previous successful deployment. (All other scripts are run from the AppSpec file in the current deployment.) If one of these scripts contains an error and does not run successfully, the deployment can fail. </p> <p> If the cause of the failure is a script from the last successful deployment that will never run successfully, create a new deployment and use <code>ignoreApplicationStopFailures</code> to specify that the ApplicationStop, BeforeBlockTraffic, and AfterBlockTraffic failures should be ignored. </p>
     #[serde(rename = "ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_application_stop_failures: Option<bool>,
@@ -569,7 +577,7 @@ pub struct DeleteGitHubAccountTokenOutput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeploymentConfigInfo {
-    /// <p>The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>).</p>
+    /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_platform: Option<String>,
@@ -619,7 +627,7 @@ pub struct DeploymentGroupInfo {
     #[serde(rename = "blueGreenDeploymentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    /// <p>The destination platform type for the deployment group (<code>Lambda</code> or <code>Server</code>).</p>
+    /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_platform: Option<String>,
@@ -671,7 +679,7 @@ pub struct DeploymentGroupInfo {
     #[serde(rename = "onPremisesTagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
-    /// <p>A service role ARN.</p>
+    /// <p>A service role Amazon Resource Name (ARN) that grants CodeDeploy permission to make calls to AWS services on your behalf. For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-service-role.html">Create a Service Role for AWS CodeDeploy</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "serviceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -709,7 +717,7 @@ pub struct DeploymentInfo {
     #[serde(rename = "completeTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub complete_time: Option<f64>,
-    /// <p> The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>). </p>
+    /// <p>The destination platform type for the deployment (<code>Lambda</code>, <code>Server</code>, or <code>ECS</code>).</p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_platform: Option<String>,
@@ -757,7 +765,7 @@ pub struct DeploymentInfo {
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
-    /// <p>If true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance is not considered to have failed at that point and continues on to the BeforeInstall deployment lifecycle event.</p> <p>If false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance stops, and the deployment to that instance is considered to have failed.</p>
+    /// <p> If true, then if an <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, or <code>AfterBlockTraffic</code> deployment lifecycle event to an instance fails, then the deployment continues to the next deployment lifecycle event. For example, if <code>ApplicationStop</code> fails, the deployment continues with DownloadBundle. If <code>BeforeBlockTraffic</code> fails, the deployment continues with <code>BlockTraffic</code>. If <code>AfterBlockTraffic</code> fails, the deployment continues with <code>ApplicationStop</code>. </p> <p> If false or not specified, then if a lifecycle event fails during a deployment to an instance, that deployment fails. If deployment to that instance is part of an overall deployment and the number of healthy hosts is not less than the minimum number of healthy hosts, then a deployment to the next instance is attempted. </p> <p> During a deployment, the AWS CodeDeploy agent runs the scripts specified for <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, and <code>AfterBlockTraffic</code> in the AppSpec file from the previous successful deployment. (All other scripts are run from the AppSpec file in the current deployment.) If one of these scripts contains an error and does not run successfully, the deployment can fail. </p> <p> If the cause of the failure is a script from the last successful deployment that will never run successfully, create a new deployment and use <code>ignoreApplicationStopFailures</code> to specify that the <code>ApplicationStop</code>, <code>BeforeBlockTraffic</code>, and <code>AfterBlockTraffic</code> failures should be ignored. </p>
     #[serde(rename = "ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_application_stop_failures: Option<bool>,
@@ -1031,7 +1039,7 @@ pub struct ELBInfo {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ErrorInformation {
-    /// <p><p>For more information, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code is most likely raised if the application is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code is most likely raised if the deployment group is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to Amazon EC2.</p> </li> <li> <p>NO</em>INSTANCES: No instances were specified, or no instances can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instances was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code is most likely raised if the revision is deleted after the deployment is created, but before it is started.</p> </li> </ul></p>
+    /// <p><p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code is most likely raised if the application is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code is most likely raised if the deployment group is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to Amazon EC2.</p> </li> <li> <p>NO</em>INSTANCES: No instances were specified, or no instances can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instances was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code is most likely raised if the revision is deleted after the deployment is created, but before it is started.</p> </li> </ul></p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
@@ -1351,6 +1359,32 @@ pub struct InstanceTarget {
     pub target_id: Option<String>,
 }
 
+/// <p> Information about a Lambda function specified in a deployment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LambdaFunctionInfo {
+    /// <p> The version of a Lambda function that production traffic points to. </p>
+    #[serde(rename = "currentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_version: Option<String>,
+    /// <p> The alias of a Lambda function. For more information, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>. </p>
+    #[serde(rename = "functionAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_alias: Option<String>,
+    /// <p> The name of a Lambda function. </p>
+    #[serde(rename = "functionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_name: Option<String>,
+    /// <p> The version of a Lambda function that production traffic points to after the Lambda function is deployed. </p>
+    #[serde(rename = "targetVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_version: Option<String>,
+    /// <p> The percentage of production traffic that the target version of a Lambda function receives. </p>
+    #[serde(rename = "targetVersionWeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_version_weight: Option<f64>,
+}
+
 /// <p> Information about the target AWS Lambda function during an AWS Lambda deployment. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1359,6 +1393,10 @@ pub struct LambdaTarget {
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
+    /// <p> A <code>LambdaFunctionInfo</code> object that describes a target Lambda function. </p>
+    #[serde(rename = "lambdaFunctionInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_function_info: Option<LambdaFunctionInfo>,
     /// <p> The date and time when the target Lambda function was updated by a deployment. </p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1617,7 +1655,7 @@ pub struct ListDeploymentTargetsOutput {
 /// <p>Represents the input of a ListDeployments operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentsInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
+    /// <p><p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p> <note> <p>If <code>applicationName</code> is specified, then <code>deploymentGroupName</code> must be specified. If it is not specified, then <code>deploymentGroupName</code> must not be specified. </p> </note></p>
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
@@ -1625,7 +1663,7 @@ pub struct ListDeploymentsInput {
     #[serde(rename = "createTimeRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time_range: Option<TimeRange>,
-    /// <p>The name of a deployment group for the specified application.</p>
+    /// <p><p>The name of a deployment group for the specified application.</p> <note> <p>If <code>deploymentGroupName</code> is specified, then <code>applicationName</code> must be specified. If it is not specified, then <code>applicationName</code> must not be specified. </p> </note></p>
     #[serde(rename = "deploymentGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
@@ -1707,6 +1745,30 @@ pub struct ListOnPremisesInstancesOutput {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceInput {
+    /// <p>An identifier returned from the previous <code>ListTagsForResource</code> call. It can be used to return the next set of applications in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The ARN of a CodeDeploy resource. <code>ListTagsForResource</code> returns all the tags associated with the resource that is identified by the <code>ResourceArn</code>. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceOutput {
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> A list of tags returned by <code>ListTagsForResource</code>. The tags are associated with the resource identified by the input <code>ResourceArn</code> parameter. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadBalancerInfo {
@@ -1727,7 +1789,7 @@ pub struct LoadBalancerInfo {
 /// <p>Information about minimum healthy instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MinimumHealthyHosts {
-    /// <p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment is successful if six or more instances are deployed to successfully. Otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment is successful if four or more instance are deployed to successfully. Otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime returns a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy attempts to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment is still successful.</p> </note> <p>For more information, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
+    /// <p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment is successful if six or more instances are deployed to successfully. Otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment is successful if four or more instance are deployed to successfully. Otherwise, the deployment fails.</p> <note> <p>In a call to the <code>GetDeploymentConfig</code>, CodeDeployDefault.OneAtATime returns a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy attempts to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment is still successful.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1972,6 +2034,20 @@ pub struct TagFilter {
     pub value: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceInput {
+    /// <p> The ARN of a resource, such as a CodeDeploy application or deployment group. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p> A list of tags that <code>TagResource</code> associates with a resource. The resource is identified by the <code>ResourceArn</code> input parameter. </p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceOutput {}
+
 /// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetGroupInfo {
@@ -2097,6 +2173,20 @@ pub struct TriggerConfig {
     pub trigger_target_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceInput {
+    /// <p> The ARN that specifies from which resource to disassociate the tags with the keys in the <code>TagKeys</code> input paramter. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p> A list of keys of <code>Tag</code> objects. The <code>Tag</code> objects identified by the keys are disassociated from the resource specified by the <code>ResourceArn</code> input parameter. </p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceOutput {}
+
 /// <p>Represents the input of an UpdateApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApplicationInput {
@@ -2175,7 +2265,7 @@ pub struct UpdateDeploymentGroupInput {
     #[serde(rename = "serviceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>Information about triggers to change when the deployment group is updated. For examples, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-edit.html">Modify Triggers in an AWS CodeDeploy Deployment Group</a> in the AWS CodeDeploy User Guide.</p>
+    /// <p>Information about triggers to change when the deployment group is updated. For examples, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/how-to-notify-edit.html">Modify Triggers in an AWS CodeDeploy Deployment Group</a> in the AWS CodeDeploy User Guide.</p>
     #[serde(rename = "triggerConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_configurations: Option<Vec<TriggerConfig>>,
@@ -2587,6 +2677,8 @@ pub enum BatchGetDeploymentTargetsError {
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
+    /// <p>The specified deployment has not started.</p>
+    DeploymentNotStarted(String),
     /// <p> The provided target ID does not belong to the attempted deployment. </p>
     DeploymentTargetDoesNotExist(String),
     /// <p> A deployment target ID was not provided. </p>
@@ -2611,6 +2703,11 @@ impl BatchGetDeploymentTargetsError {
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(
                         BatchGetDeploymentTargetsError::DeploymentIdRequired(err.msg),
+                    )
+                }
+                "DeploymentNotStartedException" => {
+                    return RusotoError::Service(
+                        BatchGetDeploymentTargetsError::DeploymentNotStarted(err.msg),
                     )
                 }
                 "DeploymentTargetDoesNotExistException" => {
@@ -2655,6 +2752,7 @@ impl Error for BatchGetDeploymentTargetsError {
         match *self {
             BatchGetDeploymentTargetsError::DeploymentDoesNotExist(ref cause) => cause,
             BatchGetDeploymentTargetsError::DeploymentIdRequired(ref cause) => cause,
+            BatchGetDeploymentTargetsError::DeploymentNotStarted(ref cause) => cause,
             BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(ref cause) => cause,
             BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(ref cause) => cause,
             BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(ref cause) => cause,
@@ -2871,6 +2969,8 @@ pub enum CreateApplicationError {
     InvalidApplicationName(String),
     /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
     InvalidComputePlatform(String),
+    /// <p> The specified tags are not valid. </p>
+    InvalidTagsToAdd(String),
 }
 
 impl CreateApplicationError {
@@ -2902,6 +3002,9 @@ impl CreateApplicationError {
                         err.msg,
                     ))
                 }
+                "InvalidTagsToAddException" => {
+                    return RusotoError::Service(CreateApplicationError::InvalidTagsToAdd(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2922,6 +3025,7 @@ impl Error for CreateApplicationError {
             CreateApplicationError::ApplicationNameRequired(ref cause) => cause,
             CreateApplicationError::InvalidApplicationName(ref cause) => cause,
             CreateApplicationError::InvalidComputePlatform(ref cause) => cause,
+            CreateApplicationError::InvalidTagsToAdd(ref cause) => cause,
         }
     }
 }
@@ -3260,6 +3364,8 @@ pub enum CreateDeploymentGroupError {
     InvalidRole(String),
     /// <p>The tag was specified in an invalid format.</p>
     InvalidTag(String),
+    /// <p> The specified tags are not valid. </p>
+    InvalidTagsToAdd(String),
     /// <p> A target group pair associated with this deployment is not valid. </p>
     InvalidTargetGroupPair(String),
     /// <p>The trigger was specified in an invalid format.</p>
@@ -3394,6 +3500,11 @@ impl CreateDeploymentGroupError {
                 "InvalidTagException" => {
                     return RusotoError::Service(CreateDeploymentGroupError::InvalidTag(err.msg))
                 }
+                "InvalidTagsToAddException" => {
+                    return RusotoError::Service(CreateDeploymentGroupError::InvalidTagsToAdd(
+                        err.msg,
+                    ))
+                }
                 "InvalidTargetGroupPairException" => {
                     return RusotoError::Service(
                         CreateDeploymentGroupError::InvalidTargetGroupPair(err.msg),
@@ -3464,6 +3575,7 @@ impl Error for CreateDeploymentGroupError {
             CreateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
             CreateDeploymentGroupError::InvalidRole(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTag(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidTagsToAdd(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
             CreateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
@@ -3481,6 +3593,8 @@ pub enum DeleteApplicationError {
     ApplicationNameRequired(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Amazon EC2 Auto Scaling.</p>
+    InvalidRole(String),
 }
 
 impl DeleteApplicationError {
@@ -3496,6 +3610,9 @@ impl DeleteApplicationError {
                     return RusotoError::Service(DeleteApplicationError::InvalidApplicationName(
                         err.msg,
                     ))
+                }
+                "InvalidRoleException" => {
+                    return RusotoError::Service(DeleteApplicationError::InvalidRole(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3514,6 +3631,7 @@ impl Error for DeleteApplicationError {
         match *self {
             DeleteApplicationError::ApplicationNameRequired(ref cause) => cause,
             DeleteApplicationError::InvalidApplicationName(ref cause) => cause,
+            DeleteApplicationError::InvalidRole(ref cause) => cause,
         }
     }
 }
@@ -4158,6 +4276,8 @@ pub enum GetDeploymentTargetError {
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
+    /// <p>The specified deployment has not started.</p>
+    DeploymentNotStarted(String),
     /// <p> The provided target ID does not belong to the attempted deployment. </p>
     DeploymentTargetDoesNotExist(String),
     /// <p> A deployment target ID was not provided. </p>
@@ -4181,6 +4301,11 @@ impl GetDeploymentTargetError {
                 }
                 "DeploymentIdRequiredException" => {
                     return RusotoError::Service(GetDeploymentTargetError::DeploymentIdRequired(
+                        err.msg,
+                    ))
+                }
+                "DeploymentNotStartedException" => {
+                    return RusotoError::Service(GetDeploymentTargetError::DeploymentNotStarted(
                         err.msg,
                     ))
                 }
@@ -4226,6 +4351,7 @@ impl Error for GetDeploymentTargetError {
         match *self {
             GetDeploymentTargetError::DeploymentDoesNotExist(ref cause) => cause,
             GetDeploymentTargetError::DeploymentIdRequired(ref cause) => cause,
+            GetDeploymentTargetError::DeploymentNotStarted(ref cause) => cause,
             GetDeploymentTargetError::DeploymentTargetDoesNotExist(ref cause) => cause,
             GetDeploymentTargetError::DeploymentTargetIdRequired(ref cause) => cause,
             GetDeploymentTargetError::InvalidDeploymentId(ref cause) => cause,
@@ -4916,6 +5042,53 @@ impl Error for ListOnPremisesInstancesError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p> The specified ARN is not supported. For example, it might be an ARN for a resource that is not expected. </p>
+    ArnNotSupported(String),
+    /// <p> The specified ARN is not in a valid format. </p>
+    InvalidArn(String),
+    /// <p> The ARN of a resource is required, but was not found. </p>
+    ResourceArnRequired(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ArnNotSupportedException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ArnNotSupported(err.msg))
+                }
+                "InvalidArnException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(err.msg))
+                }
+                "ResourceArnRequiredException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceArnRequired(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::ArnNotSupported(ref cause) => cause,
+            ListTagsForResourceError::InvalidArn(ref cause) => cause,
+            ListTagsForResourceError::ResourceArnRequired(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutLifecycleEventHookExecutionStatus
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleEventHookExecutionStatusError {
@@ -5398,6 +5571,166 @@ impl Error for StopDeploymentError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
+    ApplicationDoesNotExist(String),
+    /// <p> The specified ARN is not supported. For example, it might be an ARN for a resource that is not expected. </p>
+    ArnNotSupported(String),
+    /// <p>The deployment configuration does not exist with the IAM user or AWS account.</p>
+    DeploymentConfigDoesNotExist(String),
+    /// <p>The named deployment group with the IAM user or AWS account does not exist.</p>
+    DeploymentGroupDoesNotExist(String),
+    /// <p> The specified ARN is not in a valid format. </p>
+    InvalidArn(String),
+    /// <p> The specified tags are not valid. </p>
+    InvalidTagsToAdd(String),
+    /// <p> The ARN of a resource is required, but was not found. </p>
+    ResourceArnRequired(String),
+    /// <p>A tag was not specified.</p>
+    TagRequired(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ApplicationDoesNotExistException" => {
+                    return RusotoError::Service(TagResourceError::ApplicationDoesNotExist(err.msg))
+                }
+                "ArnNotSupportedException" => {
+                    return RusotoError::Service(TagResourceError::ArnNotSupported(err.msg))
+                }
+                "DeploymentConfigDoesNotExistException" => {
+                    return RusotoError::Service(TagResourceError::DeploymentConfigDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "DeploymentGroupDoesNotExistException" => {
+                    return RusotoError::Service(TagResourceError::DeploymentGroupDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return RusotoError::Service(TagResourceError::InvalidArn(err.msg))
+                }
+                "InvalidTagsToAddException" => {
+                    return RusotoError::Service(TagResourceError::InvalidTagsToAdd(err.msg))
+                }
+                "ResourceArnRequiredException" => {
+                    return RusotoError::Service(TagResourceError::ResourceArnRequired(err.msg))
+                }
+                "TagRequiredException" => {
+                    return RusotoError::Service(TagResourceError::TagRequired(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::ApplicationDoesNotExist(ref cause) => cause,
+            TagResourceError::ArnNotSupported(ref cause) => cause,
+            TagResourceError::DeploymentConfigDoesNotExist(ref cause) => cause,
+            TagResourceError::DeploymentGroupDoesNotExist(ref cause) => cause,
+            TagResourceError::InvalidArn(ref cause) => cause,
+            TagResourceError::InvalidTagsToAdd(ref cause) => cause,
+            TagResourceError::ResourceArnRequired(ref cause) => cause,
+            TagResourceError::TagRequired(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
+    ApplicationDoesNotExist(String),
+    /// <p> The specified ARN is not supported. For example, it might be an ARN for a resource that is not expected. </p>
+    ArnNotSupported(String),
+    /// <p>The deployment configuration does not exist with the IAM user or AWS account.</p>
+    DeploymentConfigDoesNotExist(String),
+    /// <p>The named deployment group with the IAM user or AWS account does not exist.</p>
+    DeploymentGroupDoesNotExist(String),
+    /// <p> The specified ARN is not in a valid format. </p>
+    InvalidArn(String),
+    /// <p> The specified tags are not valid. </p>
+    InvalidTagsToAdd(String),
+    /// <p> The ARN of a resource is required, but was not found. </p>
+    ResourceArnRequired(String),
+    /// <p>A tag was not specified.</p>
+    TagRequired(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ApplicationDoesNotExistException" => {
+                    return RusotoError::Service(UntagResourceError::ApplicationDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "ArnNotSupportedException" => {
+                    return RusotoError::Service(UntagResourceError::ArnNotSupported(err.msg))
+                }
+                "DeploymentConfigDoesNotExistException" => {
+                    return RusotoError::Service(UntagResourceError::DeploymentConfigDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "DeploymentGroupDoesNotExistException" => {
+                    return RusotoError::Service(UntagResourceError::DeploymentGroupDoesNotExist(
+                        err.msg,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidArn(err.msg))
+                }
+                "InvalidTagsToAddException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidTagsToAdd(err.msg))
+                }
+                "ResourceArnRequiredException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceArnRequired(err.msg))
+                }
+                "TagRequiredException" => {
+                    return RusotoError::Service(UntagResourceError::TagRequired(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::ApplicationDoesNotExist(ref cause) => cause,
+            UntagResourceError::ArnNotSupported(ref cause) => cause,
+            UntagResourceError::DeploymentConfigDoesNotExist(ref cause) => cause,
+            UntagResourceError::DeploymentGroupDoesNotExist(ref cause) => cause,
+            UntagResourceError::InvalidArn(ref cause) => cause,
+            UntagResourceError::InvalidTagsToAdd(ref cause) => cause,
+            UntagResourceError::ResourceArnRequired(ref cause) => cause,
+            UntagResourceError::TagRequired(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
@@ -5724,13 +6057,13 @@ pub trait CodeDeploy {
         input: AddTagsToOnPremisesInstancesInput,
     ) -> RusotoFuture<(), AddTagsToOnPremisesInstancesError>;
 
-    /// <p>Gets information about one or more application revisions.</p>
+    /// <p>Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.</p>
     fn batch_get_application_revisions(
         &self,
         input: BatchGetApplicationRevisionsInput,
     ) -> RusotoFuture<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError>;
 
-    /// <p>Gets information about one or more applications.</p>
+    /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
     fn batch_get_applications(
         &self,
         input: BatchGetApplicationsInput,
@@ -5742,25 +6075,25 @@ pub trait CodeDeploy {
         input: BatchGetDeploymentGroupsInput,
     ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
 
-    /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. </p></p>
+    /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. The maximum number of instances that can be returned is 25.</p></p>
     fn batch_get_deployment_instances(
         &self,
         input: BatchGetDeploymentInstancesInput,
     ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
 
-    /// <p><p> Returns an array of targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. </p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
+    /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
     fn batch_get_deployment_targets(
         &self,
         input: BatchGetDeploymentTargetsInput,
     ) -> RusotoFuture<BatchGetDeploymentTargetsOutput, BatchGetDeploymentTargetsError>;
 
-    /// <p>Gets information about one or more deployments.</p>
+    /// <p>Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.</p>
     fn batch_get_deployments(
         &self,
         input: BatchGetDeploymentsInput,
     ) -> RusotoFuture<BatchGetDeploymentsOutput, BatchGetDeploymentsError>;
 
-    /// <p>Gets information about one or more on-premises instances.</p>
+    /// <p>Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.</p>
     fn batch_get_on_premises_instances(
         &self,
         input: BatchGetOnPremisesInstancesInput,
@@ -5838,7 +6171,7 @@ pub trait CodeDeploy {
         input: GetApplicationRevisionInput,
     ) -> RusotoFuture<GetApplicationRevisionOutput, GetApplicationRevisionError>;
 
-    /// <p>Gets information about a deployment.</p>
+    /// <p><p>Gets information about a deployment.</p> <note> <p> The <code>content</code> property of the <code>appSpecContent</code> object in the returned revision is always null. Use <code>GetApplicationRevision</code> and the <code>sha256</code> property of the returned <code>appSpecContent</code> object to get the content of the deployment’s AppSpec file. </p> </note></p>
     fn get_deployment(
         &self,
         input: GetDeploymentInput,
@@ -5928,6 +6261,12 @@ pub trait CodeDeploy {
         input: ListOnPremisesInstancesInput,
     ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
 
+    /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+
     /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
     fn put_lifecycle_event_hook_execution_status(
         &self,
@@ -5966,6 +6305,18 @@ pub trait CodeDeploy {
         &self,
         input: StopDeploymentInput,
     ) -> RusotoFuture<StopDeploymentOutput, StopDeploymentError>;
+
+    /// <p> Associates the list of tags in the input <code>Tags</code> parameter with the resource identified by the <code>ResourceArn</code> input parameter. </p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+
+    /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
 
     /// <p>Changes the name of an application.</p>
     fn update_application(
@@ -6042,7 +6393,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Gets information about one or more application revisions.</p>
+    /// <p>Gets information about one or more application revisions. The maximum number of application revisions that can be returned is 25.</p>
     fn batch_get_application_revisions(
         &self,
         input: BatchGetApplicationRevisionsInput,
@@ -6071,7 +6422,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Gets information about one or more applications.</p>
+    /// <p>Gets information about one or more applications. The maximum number of applications that can be returned is 25.</p>
     fn batch_get_applications(
         &self,
         input: BatchGetApplicationsInput,
@@ -6128,7 +6479,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. </p></p>
+    /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of one or more instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. The maximum number of instances that can be returned is 25.</p></p>
     fn batch_get_deployment_instances(
         &self,
         input: BatchGetDeploymentInstancesInput,
@@ -6157,7 +6508,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p><p> Returns an array of targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. </p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
+    /// <p><p> Returns an array of one or more targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. The maximum number of targets that can be returned is 25.</p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
     fn batch_get_deployment_targets(
         &self,
         input: BatchGetDeploymentTargetsInput,
@@ -6186,7 +6537,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Gets information about one or more deployments.</p>
+    /// <p>Gets information about one or more deployments. The maximum number of deployments that can be returned is 25.</p>
     fn batch_get_deployments(
         &self,
         input: BatchGetDeploymentsInput,
@@ -6214,7 +6565,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Gets information about one or more on-premises instances.</p>
+    /// <p>Gets information about one or more on-premises instances. The maximum number of on-premises instances that can be returned is 25.</p>
     fn batch_get_on_premises_instances(
         &self,
         input: BatchGetOnPremisesInstancesInput,
@@ -6574,7 +6925,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Gets information about a deployment.</p>
+    /// <p><p>Gets information about a deployment.</p> <note> <p> The <code>content</code> property of the <code>appSpecContent</code> object in the returned revision is always null. Use <code>GetApplicationRevision</code> and the <code>sha256</code> property of the returned <code>appSpecContent</code> object to get the content of the deployment’s AppSpec file. </p> </note></p>
     fn get_deployment(
         &self,
         input: GetDeploymentInput,
@@ -7002,6 +7353,34 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
+    /// <p> Returns a list of tags for the resource identified by a specified ARN. Tags are used to organize and categorize your CodeDeploy resources. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeDeploy_20141006.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
     fn put_lifecycle_event_hook_execution_status(
         &self,
@@ -7168,6 +7547,64 @@ impl CodeDeploy for CodeDeployClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StopDeploymentError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Associates the list of tags in the input <code>Tags</code> parameter with the resource identified by the <code>ResourceArn</code> input parameter. </p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeDeploy_20141006.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p> Disassociates a resource from a list of tags. The resource is identified by the <code>ResourceArn</code> input parameter. The tags are identfied by the list of keys in the <code>TagKeys</code> input parameter. </p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeDeploy_20141006.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })

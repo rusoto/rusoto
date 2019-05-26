@@ -107,14 +107,14 @@ pub struct ActionConfigurationProperty {
     /// <p>The name of the action configuration property.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>Indicates that the property will be used in conjunction with PollForJobs. When creating a custom action, an action can have up to one queryable property. If it has one, that property must be both required and not secret.</p> <p>If you create a pipeline with a custom action type, and that custom action contains a queryable property, the value for that configuration property is subject to additional restrictions. The value must be less than or equal to twenty (20) characters. The value can contain only alphanumeric characters, underscores, and hyphens.</p>
+    /// <p>Indicates that the property will be used in conjunction with <code>PollForJobs</code>. When creating a custom action, an action can have up to one queryable property. If it has one, that property must be both required and not secret.</p> <p>If you create a pipeline with a custom action type, and that custom action contains a queryable property, the value for that configuration property is subject to additional restrictions. The value must be less than or equal to twenty (20) characters. The value can contain only alphanumeric characters, underscores, and hyphens.</p>
     #[serde(rename = "queryable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queryable: Option<bool>,
     /// <p>Whether the configuration property is a required value.</p>
     #[serde(rename = "required")]
     pub required: bool,
-    /// <p>Whether the configuration property is secret. Secrets are hidden from all calls except for GetJobDetails, GetThirdPartyJobDetails, PollForJobs, and PollForThirdPartyJobs.</p> <p>When updating a pipeline, passing * * * * * without changing any other values of the action will preserve the prior value of the secret.</p>
+    /// <p>Whether the configuration property is secret. Secrets are hidden from all calls except for <code>GetJobDetails</code>, <code>GetThirdPartyJobDetails</code>, <code>PollForJobs</code>, and <code>PollForThirdPartyJobs</code>.</p> <p>When updating a pipeline, passing * * * * * without changing any other values of the action will preserve the prior value of the secret.</p>
     #[serde(rename = "secret")]
     pub secret: bool,
     /// <p>The type of the configuration property.</p>
@@ -127,6 +127,10 @@ pub struct ActionConfigurationProperty {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ActionContext {
+    /// <p>The system-generated unique ID that corresponds to an action's execution.</p>
+    #[serde(rename = "actionExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_execution_id: Option<String>,
     /// <p>The name of the action within the context of a job.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -204,10 +208,122 @@ pub struct ActionExecution {
     #[serde(rename = "summary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summary: Option<String>,
-    /// <p>The system-generated token used to identify a unique approval request. The token for each open approval request can be obtained using the GetPipelineState command and is used to validate that the approval request corresponding to this token is still valid.</p>
+    /// <p>The system-generated token used to identify a unique approval request. The token for each open approval request can be obtained using the <code>GetPipelineState</code> command and is used to validate that the approval request corresponding to this token is still valid.</p>
     #[serde(rename = "token")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token: Option<String>,
+}
+
+/// <p>Returns information about an execution of an action, including the action execution ID, and the name, version, and timing of the action. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ActionExecutionDetail {
+    /// <p>The action execution ID.</p>
+    #[serde(rename = "actionExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_execution_id: Option<String>,
+    /// <p>The name of the action.</p>
+    #[serde(rename = "actionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_name: Option<String>,
+    /// <p>Input details for the action execution, such as role ARN, Region, and input artifacts.</p>
+    #[serde(rename = "input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input: Option<ActionExecutionInput>,
+    /// <p>The last update time of the action execution.</p>
+    #[serde(rename = "lastUpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_time: Option<f64>,
+    /// <p>Output details for the action execution, such as the action execution result.</p>
+    #[serde(rename = "output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output: Option<ActionExecutionOutput>,
+    /// <p>The pipeline execution ID for the action execution.</p>
+    #[serde(rename = "pipelineExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_id: Option<String>,
+    /// <p>The version of the pipeline where the action was run.</p>
+    #[serde(rename = "pipelineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_version: Option<i64>,
+    /// <p>The name of the stage that contains the action.</p>
+    #[serde(rename = "stageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_name: Option<String>,
+    /// <p>The start time of the action execution.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p> The status of the action execution. Status categories are <code>InProgress</code>, <code>Succeeded</code>, and <code>Failed</code>.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Filter values for the action execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ActionExecutionFilter {
+    /// <p>The pipeline execution ID used to filter action execution history.</p>
+    #[serde(rename = "pipelineExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_id: Option<String>,
+}
+
+/// <p>Input information used for an action execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ActionExecutionInput {
+    #[serde(rename = "actionTypeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type_id: Option<ActionTypeId>,
+    /// <p>Configuration data for an action execution.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Details of input artifacts of the action that correspond to the action execution.</p>
+    #[serde(rename = "inputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_artifacts: Option<Vec<ArtifactDetail>>,
+    /// <p>The AWS Region for the action, such as us-east-1.</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+    /// <p>The ARN of the IAM service role that performs the declared action. This is assumed through the roleArn for the pipeline. </p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+/// <p>Output details listed for an action execution, such as the action execution result.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ActionExecutionOutput {
+    /// <p>Execution result information listed in the output details for an action execution.</p>
+    #[serde(rename = "executionResult")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_result: Option<ActionExecutionResult>,
+    /// <p>Details of output artifacts of the action that correspond to the action execution.</p>
+    #[serde(rename = "outputArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_artifacts: Option<Vec<ArtifactDetail>>,
+}
+
+/// <p>Execution result information, such as the external execution ID.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ActionExecutionResult {
+    /// <p>The action provider's external ID for the action execution.</p>
+    #[serde(rename = "externalExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_execution_id: Option<String>,
+    /// <p>The action provider's summary for the action execution.</p>
+    #[serde(rename = "externalExecutionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_execution_summary: Option<String>,
+    /// <p>The deepest external link to the external resource (for example, a repository URL or deployment endpoint) that is used when running the action.</p>
+    #[serde(rename = "externalExecutionUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_execution_url: Option<String>,
 }
 
 /// <p>Represents information about the version (or revision) of an action.</p>
@@ -282,7 +398,7 @@ pub struct ActionTypeId {
     /// <p>The creator of the action being called.</p>
     #[serde(rename = "owner")]
     pub owner: String,
-    /// <p>The provider of the service being called by the action. Valid providers are determined by the action category. For example, an action in the Deploy category type might have a provider of AWS CodeDeploy, which would be specified as CodeDeploy.</p>
+    /// <p>The provider of the service being called by the action. Valid providers are determined by the action category. For example, an action in the Deploy category type might have a provider of AWS CodeDeploy, which would be specified as CodeDeploy. To reference a list of action providers by action type, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#actions-valid-providers">Valid Action Types and Providers in CodePipeline</a>.</p>
     #[serde(rename = "provider")]
     pub provider: String,
     /// <p>A string that describes the action version.</p>
@@ -338,6 +454,20 @@ pub struct Artifact {
     #[serde(rename = "revision")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision: Option<String>,
+}
+
+/// <p>Artifact details for the action execution, such as the artifact location.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ArtifactDetail {
+    /// <p>The artifact object name for the action execution.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Amazon S3 artifact location for the action execution.</p>
+    #[serde(rename = "s3location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3location: Option<S3Location>,
 }
 
 /// <p>Returns information about the details of an artifact.</p>
@@ -424,10 +554,10 @@ pub struct BlockerDeclaration {
 /// <p>Represents the input of a CreateCustomActionType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCustomActionTypeInput {
-    /// <p><p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although Source and Approval are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note></p>
+    /// <p><p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although <code>Source</code> and <code>Approval</code> are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note></p>
     #[serde(rename = "category")]
     pub category: String,
-    /// <p><p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href="http://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html">Create a Custom Action for a Pipeline</a>.</p> </note></p>
+    /// <p><p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html">Create a Custom Action for a Pipeline</a>.</p> </note></p>
     #[serde(rename = "configurationProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_properties: Option<Vec<ActionConfigurationProperty>>,
@@ -440,33 +570,45 @@ pub struct CreateCustomActionTypeInput {
     /// <p>The provider of the service used in the custom action, such as AWS CodeDeploy.</p>
     #[serde(rename = "provider")]
     pub provider: String,
-    /// <p>Returns information about the settings for an action type.</p>
+    /// <p>URLs that provide users information about this custom action.</p>
     #[serde(rename = "settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settings: Option<ActionTypeSettings>,
+    /// <p>The tags for the custom action.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The version identifier of the custom action.</p>
     #[serde(rename = "version")]
     pub version: String,
 }
 
-/// <p>Represents the output of a CreateCustomActionType operation.</p>
+/// <p>Represents the output of a <code>CreateCustomActionType</code> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateCustomActionTypeOutput {
     /// <p>Returns information about the details of an action type.</p>
     #[serde(rename = "actionType")]
     pub action_type: ActionType,
+    /// <p>Specifies the tags applied to the custom action.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
-/// <p>Represents the input of a CreatePipeline action.</p>
+/// <p>Represents the input of a <code>CreatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePipelineInput {
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
     #[serde(rename = "pipeline")]
     pub pipeline: PipelineDeclaration,
+    /// <p>The tags for the pipeline.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
-/// <p>Represents the output of a CreatePipeline action.</p>
+/// <p>Represents the output of a <code>CreatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreatePipelineOutput {
@@ -474,6 +616,10 @@ pub struct CreatePipelineOutput {
     #[serde(rename = "pipeline")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline: Option<PipelineDeclaration>,
+    /// <p>Specifies the tags applied to the pipeline.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>Represents information about a current revision.</p>
@@ -495,7 +641,7 @@ pub struct CurrentRevision {
     pub revision_summary: Option<String>,
 }
 
-/// <p>Represents the input of a DeleteCustomActionType operation. The custom action will be marked as deleted.</p>
+/// <p>Represents the input of a <code>DeleteCustomActionType</code> operation. The custom action will be marked as deleted.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCustomActionTypeInput {
     /// <p>The category of the custom action that you want to delete, such as source or deploy.</p>
@@ -509,7 +655,7 @@ pub struct DeleteCustomActionTypeInput {
     pub version: String,
 }
 
-/// <p>Represents the input of a DeletePipeline action.</p>
+/// <p>Represents the input of a <code>DeletePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePipelineInput {
     /// <p>The name of the pipeline to be deleted.</p>
@@ -540,7 +686,7 @@ pub struct DeregisterWebhookWithThirdPartyInput {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeregisterWebhookWithThirdPartyOutput {}
 
-/// <p>Represents the input of a DisableStageTransition action.</p>
+/// <p>Represents the input of a <code>DisableStageTransition</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to disable the flow of artifacts from one stage to another.</p>
@@ -557,7 +703,7 @@ pub struct DisableStageTransitionInput {
     pub transition_type: String,
 }
 
-/// <p>Represents the input of an EnableStageTransition action.</p>
+/// <p>Represents the input of an <code>EnableStageTransition</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to enable the flow of artifacts from one stage to another.</p>
@@ -628,7 +774,7 @@ pub struct FailureDetails {
     pub type_: String,
 }
 
-/// <p>Represents the input of a GetJobDetails action.</p>
+/// <p>Represents the input of a <code>GetJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetJobDetailsInput {
     /// <p>The unique system-generated ID for the job.</p>
@@ -636,17 +782,17 @@ pub struct GetJobDetailsInput {
     pub job_id: String,
 }
 
-/// <p>Represents the output of a GetJobDetails action.</p>
+/// <p>Represents the output of a <code>GetJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetJobDetailsOutput {
-    /// <p><p>The details of the job.</p> <note> <p>If AWSSessionCredentials is used, a long-running job can call GetJobDetails again to obtain new credentials.</p> </note></p>
+    /// <p><p>The details of the job.</p> <note> <p>If AWSSessionCredentials is used, a long-running job can call <code>GetJobDetails</code> again to obtain new credentials.</p> </note></p>
     #[serde(rename = "jobDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_details: Option<JobDetails>,
 }
 
-/// <p>Represents the input of a GetPipelineExecution action.</p>
+/// <p>Represents the input of a <code>GetPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPipelineExecutionInput {
     /// <p>The ID of the pipeline execution about which you want to get execution details.</p>
@@ -657,7 +803,7 @@ pub struct GetPipelineExecutionInput {
     pub pipeline_name: String,
 }
 
-/// <p>Represents the output of a GetPipelineExecution action.</p>
+/// <p>Represents the output of a <code>GetPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetPipelineExecutionOutput {
@@ -667,7 +813,7 @@ pub struct GetPipelineExecutionOutput {
     pub pipeline_execution: Option<PipelineExecution>,
 }
 
-/// <p>Represents the input of a GetPipeline action.</p>
+/// <p>Represents the input of a <code>GetPipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPipelineInput {
     /// <p>The name of the pipeline for which you want to get information. Pipeline names must be unique under an Amazon Web Services (AWS) user account.</p>
@@ -679,11 +825,11 @@ pub struct GetPipelineInput {
     pub version: Option<i64>,
 }
 
-/// <p>Represents the output of a GetPipeline action.</p>
+/// <p>Represents the output of a <code>GetPipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetPipelineOutput {
-    /// <p>Represents the pipeline metadata information returned as part of the output of a GetPipeline action.</p>
+    /// <p>Represents the pipeline metadata information returned as part of the output of a <code>GetPipeline</code> action.</p>
     #[serde(rename = "metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<PipelineMetadata>,
@@ -693,7 +839,7 @@ pub struct GetPipelineOutput {
     pub pipeline: Option<PipelineDeclaration>,
 }
 
-/// <p>Represents the input of a GetPipelineState action.</p>
+/// <p>Represents the input of a <code>GetPipelineState</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPipelineStateInput {
     /// <p>The name of the pipeline about which you want to get information.</p>
@@ -701,7 +847,7 @@ pub struct GetPipelineStateInput {
     pub name: String,
 }
 
-/// <p>Represents the output of a GetPipelineState action.</p>
+/// <p>Represents the output of a <code>GetPipelineState</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetPipelineStateOutput {
@@ -727,7 +873,7 @@ pub struct GetPipelineStateOutput {
     pub updated: Option<f64>,
 }
 
-/// <p>Represents the input of a GetThirdPartyJobDetails action.</p>
+/// <p>Represents the input of a <code>GetThirdPartyJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetThirdPartyJobDetailsInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -738,7 +884,7 @@ pub struct GetThirdPartyJobDetailsInput {
     pub job_id: String,
 }
 
-/// <p>Represents the output of a GetThirdPartyJobDetails action.</p>
+/// <p>Represents the output of a <code>GetThirdPartyJobDetails</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetThirdPartyJobDetailsOutput {
@@ -790,7 +936,7 @@ pub struct JobData {
     #[serde(rename = "actionTypeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_type_id: Option<ActionTypeId>,
-    /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>
+    /// <p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifacts for the pipeline in AWS CodePipeline.</p>
     #[serde(rename = "artifactCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_credentials: Option<AWSSessionCredentials>,
@@ -810,7 +956,7 @@ pub struct JobData {
     #[serde(rename = "outputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_artifacts: Option<Vec<Artifact>>,
-    /// <p>Represents information about a pipeline to a job worker.</p>
+    /// <p><p>Represents information about a pipeline to a job worker.</p> <note> <p>Includes <code>pipelineArn</code> and <code>pipelineExecutionId</code> for Custom jobs.</p> </note></p>
     #[serde(rename = "pipelineContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_context: Option<PipelineContext>,
@@ -834,7 +980,39 @@ pub struct JobDetails {
     pub id: Option<String>,
 }
 
-/// <p>Represents the input of a ListActionTypes action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListActionExecutionsInput {
+    /// <p>Input information used to filter action execution history.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<ActionExecutionFilter>,
+    /// <p><p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. Action execution history is retained for up to 12 months, based on action execution start times. Default value is 100. </p> <note> <p>Detailed execution history is available for executions run on or after February 21, 2019.</p> </note></p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that was returned from the previous <code>ListActionExecutions</code> call, which can be used to return the next set of action executions in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The name of the pipeline for which you want to list action execution history.</p>
+    #[serde(rename = "pipelineName")]
+    pub pipeline_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListActionExecutionsOutput {
+    /// <p>The details for a list of recent executions, such as action execution ID.</p>
+    #[serde(rename = "actionExecutionDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_execution_details: Option<Vec<ActionExecutionDetail>>,
+    /// <p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent <code>ListActionExecutions</code> call to return the next set of action executions in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Represents the input of a <code>ListActionTypes</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListActionTypesInput {
     /// <p>Filters the list of action types to those created by a specified entity.</p>
@@ -847,7 +1025,7 @@ pub struct ListActionTypesInput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a ListActionTypes action.</p>
+/// <p>Represents the output of a <code>ListActionTypes</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListActionTypesOutput {
@@ -860,14 +1038,14 @@ pub struct ListActionTypesOutput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the input of a ListPipelineExecutions action.</p>
+/// <p>Represents the input of a <code>ListPipelineExecutions</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPipelineExecutionsInput {
-    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. The available pipeline execution history is limited to the most recent 12 months, based on pipeline execution start times. Default value is 100.</p>
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. Pipeline history is limited to the most recent 12 months, based on pipeline execution start times. Default value is 100.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token that was returned from the previous ListPipelineExecutions call, which can be used to return the next set of pipeline executions in the list.</p>
+    /// <p>The token that was returned from the previous <code>ListPipelineExecutions</code> call, which can be used to return the next set of pipeline executions in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -876,11 +1054,11 @@ pub struct ListPipelineExecutionsInput {
     pub pipeline_name: String,
 }
 
-/// <p>Represents the output of a ListPipelineExecutions action.</p>
+/// <p>Represents the output of a <code>ListPipelineExecutions</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListPipelineExecutionsOutput {
-    /// <p>A token that can be used in the next ListPipelineExecutions call. To view all items in the list, continue to call this operation with each subsequent token until no more nextToken values are returned.</p>
+    /// <p>A token that can be used in the next <code>ListPipelineExecutions</code> call. To view all items in the list, continue to call this operation with each subsequent token until no more nextToken values are returned.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -890,7 +1068,7 @@ pub struct ListPipelineExecutionsOutput {
     pub pipeline_execution_summaries: Option<Vec<PipelineExecutionSummary>>,
 }
 
-/// <p>Represents the input of a ListPipelines action.</p>
+/// <p>Represents the input of a <code>ListPipelines</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPipelinesInput {
     /// <p>An identifier that was returned from the previous list pipelines call, which can be used to return the next set of pipelines in the list.</p>
@@ -899,7 +1077,7 @@ pub struct ListPipelinesInput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a ListPipelines action.</p>
+/// <p>Represents the output of a <code>ListPipelines</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListPipelinesOutput {
@@ -911,6 +1089,34 @@ pub struct ListPipelinesOutput {
     #[serde(rename = "pipelines")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipelines: Option<Vec<PipelineSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceInput {
+    /// <p>The maximum number of results to return in a single call.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that was returned from the previous API call, which would be used to return the next page of the list. However, the ListTagsforResource call lists all available tags in one call and does not use pagination.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the resource to get tags for.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceOutput {
+    /// <p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent API call to return the next page of the list. However, the ListTagsforResource call lists all available tags in one call and does not use pagination.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The tags for the resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>The detail returned for each webhook after listing webhooks, such as the webhook URL, the webhook name, and the webhook ARN.</p>
@@ -936,6 +1142,10 @@ pub struct ListWebhookItem {
     #[serde(rename = "lastTriggered")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_triggered: Option<f64>,
+    /// <p>Specifies the tags applied to the webhook.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>A unique URL generated by CodePipeline. When a POST request is made to this URL, the defined pipeline is started as long as the body of the post request satisfies the defined authentication and filtering conditions. Deleting and re-creating a webhook will make the old URL invalid and generate a new URL.</p>
     #[serde(rename = "url")]
     pub url: String,
@@ -974,7 +1184,7 @@ pub struct OutputArtifact {
     pub name: String,
 }
 
-/// <p>Represents information about a pipeline to a job worker.</p>
+/// <p><p>Represents information about a pipeline to a job worker.</p> <note> <p>PipelineContext contains <code>pipelineArn</code> and <code>pipelineExecutionId</code> for custom action jobs. The <code>pipelineArn</code> and <code>pipelineExecutionId</code> fields are not populated for ThirdParty action jobs.</p> </note></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PipelineContext {
@@ -982,6 +1192,14 @@ pub struct PipelineContext {
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<ActionContext>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline.</p>
+    #[serde(rename = "pipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+    /// <p>The execution ID of the pipeline.</p>
+    #[serde(rename = "pipelineExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_execution_id: Option<String>,
     /// <p>The name of the pipeline. This is a user-specified value. Pipeline names must be unique across all pipeline names under an Amazon Web Services account.</p>
     #[serde(rename = "pipelineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -999,14 +1217,14 @@ pub struct PipelineDeclaration {
     #[serde(rename = "artifactStore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_store: Option<ArtifactStore>,
-    /// <p>A mapping of artifactStore objects and their corresponding regions. There must be an artifact store for the pipeline region and for each cross-region action within the pipeline. You can only use either artifactStore or artifactStores, not both.</p> <p>If you create a cross-region action in your pipeline, you must use artifactStores.</p>
+    /// <p>A mapping of <code>artifactStore</code> objects and their corresponding regions. There must be an artifact store for the pipeline region and for each cross-region action within the pipeline. You can only use either <code>artifactStore</code> or <code>artifactStores</code>, not both.</p> <p>If you create a cross-region action in your pipeline, you must use <code>artifactStores</code>.</p>
     #[serde(rename = "artifactStores")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_stores: Option<::std::collections::HashMap<String, ArtifactStore>>,
     /// <p>The name of the action to be performed.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The Amazon Resource Name (ARN) for AWS CodePipeline to use to either perform actions with no actionRoleArn, or to use to assume roles for actions with an actionRoleArn.</p>
+    /// <p>The Amazon Resource Name (ARN) for AWS CodePipeline to use to either perform actions with no <code>actionRoleArn</code>, or to use to assume roles for actions with an <code>actionRoleArn</code>.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
     /// <p>The stage in which to perform the action.</p>
@@ -1022,7 +1240,7 @@ pub struct PipelineDeclaration {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PipelineExecution {
-    /// <p>A list of ArtifactRevision objects included in a pipeline execution.</p>
+    /// <p>A list of <code>ArtifactRevision</code> objects included in a pipeline execution.</p>
     #[serde(rename = "artifactRevisions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifact_revisions: Option<Vec<ArtifactRevision>>,
@@ -1110,7 +1328,7 @@ pub struct PipelineSummary {
     pub version: Option<i64>,
 }
 
-/// <p>Represents the input of a PollForJobs action.</p>
+/// <p>Represents the input of a <code>PollForJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PollForJobsInput {
     /// <p>Represents information about an action type.</p>
@@ -1126,7 +1344,7 @@ pub struct PollForJobsInput {
     pub query_param: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Represents the output of a PollForJobs action.</p>
+/// <p>Represents the output of a <code>PollForJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PollForJobsOutput {
@@ -1136,7 +1354,7 @@ pub struct PollForJobsOutput {
     pub jobs: Option<Vec<Job>>,
 }
 
-/// <p>Represents the input of a PollForThirdPartyJobs action.</p>
+/// <p>Represents the input of a <code>PollForThirdPartyJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PollForThirdPartyJobsInput {
     /// <p>Represents information about an action type.</p>
@@ -1148,7 +1366,7 @@ pub struct PollForThirdPartyJobsInput {
     pub max_batch_size: Option<i64>,
 }
 
-/// <p>Represents the output of a PollForThirdPartyJobs action.</p>
+/// <p>Represents the output of a <code>PollForThirdPartyJobs</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PollForThirdPartyJobsOutput {
@@ -1158,7 +1376,7 @@ pub struct PollForThirdPartyJobsOutput {
     pub jobs: Option<Vec<ThirdPartyJob>>,
 }
 
-/// <p>Represents the input of a PutActionRevision action.</p>
+/// <p>Represents the input of a <code>PutActionRevision</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutActionRevisionInput {
     /// <p>The name of the action that will process the revision.</p>
@@ -1175,7 +1393,7 @@ pub struct PutActionRevisionInput {
     pub stage_name: String,
 }
 
-/// <p>Represents the output of a PutActionRevision action.</p>
+/// <p>Represents the output of a <code>PutActionRevision</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PutActionRevisionOutput {
@@ -1189,7 +1407,7 @@ pub struct PutActionRevisionOutput {
     pub pipeline_execution_id: Option<String>,
 }
 
-/// <p>Represents the input of a PutApprovalResult action.</p>
+/// <p>Represents the input of a <code>PutApprovalResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutApprovalResultInput {
     /// <p>The name of the action for which approval is requested.</p>
@@ -1209,7 +1427,7 @@ pub struct PutApprovalResultInput {
     pub token: String,
 }
 
-/// <p>Represents the output of a PutApprovalResult action.</p>
+/// <p>Represents the output of a <code>PutApprovalResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PutApprovalResultOutput {
@@ -1219,18 +1437,18 @@ pub struct PutApprovalResultOutput {
     pub approved_at: Option<f64>,
 }
 
-/// <p>Represents the input of a PutJobFailureResult action.</p>
+/// <p>Represents the input of a <code>PutJobFailureResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutJobFailureResultInput {
     /// <p>The details about the failure of a job.</p>
     #[serde(rename = "failureDetails")]
     pub failure_details: FailureDetails,
-    /// <p>The unique system-generated ID of the job that failed. This is the same ID returned from PollForJobs.</p>
+    /// <p>The unique system-generated ID of the job that failed. This is the same ID returned from <code>PollForJobs</code>.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
 
-/// <p>Represents the input of a PutJobSuccessResult action.</p>
+/// <p>Represents the input of a <code>PutJobSuccessResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutJobSuccessResultInput {
     /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a custom action in progress. Future jobs will use this token in order to identify the running instance of the action. It can be reused to return additional information about the progress of the custom action. When the action is complete, no continuation token should be supplied.</p>
@@ -1245,12 +1463,12 @@ pub struct PutJobSuccessResultInput {
     #[serde(rename = "executionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_details: Option<ExecutionDetails>,
-    /// <p>The unique system-generated ID of the job that succeeded. This is the same ID returned from PollForJobs.</p>
+    /// <p>The unique system-generated ID of the job that succeeded. This is the same ID returned from <code>PollForJobs</code>.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
 
-/// <p>Represents the input of a PutThirdPartyJobFailureResult action.</p>
+/// <p>Represents the input of a <code>PutThirdPartyJobFailureResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutThirdPartyJobFailureResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -1259,12 +1477,12 @@ pub struct PutThirdPartyJobFailureResultInput {
     /// <p>Represents information about failure details.</p>
     #[serde(rename = "failureDetails")]
     pub failure_details: FailureDetails,
-    /// <p>The ID of the job that failed. This is the same ID returned from PollForThirdPartyJobs.</p>
+    /// <p>The ID of the job that failed. This is the same ID returned from <code>PollForThirdPartyJobs</code>.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
 
-/// <p>Represents the input of a PutThirdPartyJobSuccessResult action.</p>
+/// <p>Represents the input of a <code>PutThirdPartyJobSuccessResult</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutThirdPartyJobSuccessResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -1282,13 +1500,17 @@ pub struct PutThirdPartyJobSuccessResultInput {
     #[serde(rename = "executionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_details: Option<ExecutionDetails>,
-    /// <p>The ID of the job that successfully completed. This is the same ID returned from PollForThirdPartyJobs.</p>
+    /// <p>The ID of the job that successfully completed. This is the same ID returned from <code>PollForThirdPartyJobs</code>.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutWebhookInput {
+    /// <p>The tags for the webhook.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The detail provided in an input file to create the webhook, such as the webhook name, the pipeline name, and the action name. Give the webhook a unique name which identifies the webhook being defined. You may choose to name the webhook after the pipeline and action it targets so that you can easily recognize what it's used for later.</p>
     #[serde(rename = "webhook")]
     pub webhook: WebhookDefinition,
@@ -1315,7 +1537,7 @@ pub struct RegisterWebhookWithThirdPartyInput {
 #[cfg_attr(test, derive(Serialize))]
 pub struct RegisterWebhookWithThirdPartyOutput {}
 
-/// <p>Represents the input of a RetryStageExecution action.</p>
+/// <p>Represents the input of a <code>RetryStageExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RetryStageExecutionInput {
     /// <p>The ID of the pipeline execution in the failed stage to be retried. Use the <a>GetPipelineState</a> action to retrieve the current pipelineExecutionId of the failed stage</p>
@@ -1332,7 +1554,7 @@ pub struct RetryStageExecutionInput {
     pub stage_name: String,
 }
 
-/// <p>Represents the output of a RetryStageExecution action.</p>
+/// <p>Represents the output of a <code>RetryStageExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RetryStageExecutionOutput {
@@ -1352,6 +1574,20 @@ pub struct S3ArtifactLocation {
     /// <p>The key of the object in the Amazon S3 bucket, which uniquely identifies the object in the bucket.</p>
     #[serde(rename = "objectKey")]
     pub object_key: String,
+}
+
+/// <p>The Amazon S3 artifact location for an action's artifacts.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct S3Location {
+    /// <p>The Amazon S3 artifact bucket for an action's artifacts.</p>
+    #[serde(rename = "bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>The artifact name.</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
 }
 
 /// <p>Information about the version (or revision) of a source artifact that initiated a pipeline execution.</p>
@@ -1434,7 +1670,7 @@ pub struct StageState {
     pub stage_name: Option<String>,
 }
 
-/// <p>Represents the input of a StartPipelineExecution action.</p>
+/// <p>Represents the input of a <code>StartPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartPipelineExecutionInput {
     /// <p>The system-generated unique ID used to identify a unique execution request.</p>
@@ -1446,7 +1682,7 @@ pub struct StartPipelineExecutionInput {
     pub name: String,
 }
 
-/// <p>Represents the output of a StartPipelineExecution action.</p>
+/// <p>Represents the output of a <code>StartPipelineExecution</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StartPipelineExecutionOutput {
@@ -1456,11 +1692,36 @@ pub struct StartPipelineExecutionOutput {
     pub pipeline_execution_id: Option<String>,
 }
 
-/// <p>A response to a PollForThirdPartyJobs request returned by AWS CodePipeline when there is a job to be worked upon by a partner action.</p>
+/// <p>A tag is a key/value pair that is used to manage the resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The tag's key.</p>
+    #[serde(rename = "key")]
+    pub key: String,
+    /// <p>The tag's value.</p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceInput {
+    /// <p>The Amazon Resource Name (ARN) of the resource you want to add tags to.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags you want to modify or add to the resource.</p>
+    #[serde(rename = "tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceOutput {}
+
+/// <p>A response to a <code>PollForThirdPartyJobs </code>request returned by AWS CodePipeline when there is a job to be worked upon by a partner action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ThirdPartyJob {
-    /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
+    /// <p>The <code>clientToken</code> portion of the <code>clientId</code> and <code>clientToken</code> pair used to verify that the calling entity is allowed access to the job and its details.</p>
     #[serde(rename = "clientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
@@ -1502,13 +1763,13 @@ pub struct ThirdPartyJobData {
     #[serde(rename = "outputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_artifacts: Option<Vec<Artifact>>,
-    /// <p>Represents information about a pipeline to a job worker.</p>
+    /// <p><p>Represents information about a pipeline to a job worker.</p> <note> <p>Does not include <code>pipelineArn</code> and <code>pipelineExecutionId</code> for ThirdParty jobs.</p> </note></p>
     #[serde(rename = "pipelineContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_context: Option<PipelineContext>,
 }
 
-/// <p>The details of a job sent in response to a GetThirdPartyJobDetails request.</p>
+/// <p>The details of a job sent in response to a <code>GetThirdPartyJobDetails</code> request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ThirdPartyJobDetails {
@@ -1548,7 +1809,21 @@ pub struct TransitionState {
     pub last_changed_by: Option<String>,
 }
 
-/// <p>Represents the input of an UpdatePipeline action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceInput {
+    /// <p> The Amazon Resource Name (ARN) of the resource to remove tags from.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The list of keys for the tags to be removed from the resource.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceOutput {}
+
+/// <p>Represents the input of an <code>UpdatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePipelineInput {
     /// <p>The name of the pipeline to be updated.</p>
@@ -1556,7 +1831,7 @@ pub struct UpdatePipelineInput {
     pub pipeline: PipelineDeclaration,
 }
 
-/// <p>Represents the output of an UpdatePipeline action.</p>
+/// <p>Represents the output of an <code>UpdatePipeline</code> action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdatePipelineOutput {
@@ -1569,11 +1844,11 @@ pub struct UpdatePipelineOutput {
 /// <p>The authentication applied to incoming webhook trigger requests.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebhookAuthConfiguration {
-    /// <p>The property used to configure acceptance of webhooks within a specific IP range. For IP, only the AllowedIPRange property must be set, and this property must be set to a valid CIDR range.</p>
+    /// <p>The property used to configure acceptance of webhooks within a specific IP range. For IP, only the <code>AllowedIPRange</code> property must be set, and this property must be set to a valid CIDR range.</p>
     #[serde(rename = "AllowedIPRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_ip_range: Option<String>,
-    /// <p>The property used to configure GitHub authentication. For GITHUB_HMAC, only the SecretToken property must be set.</p>
+    /// <p>The property used to configure GitHub authentication. For GITHUB_HMAC, only the <code>SecretToken</code> property must be set.</p>
     #[serde(rename = "SecretToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_token: Option<String>,
@@ -1582,10 +1857,10 @@ pub struct WebhookAuthConfiguration {
 /// <p>Represents information about a webhook and its definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebhookDefinition {
-    /// <p><p>Supported options are GITHUB<em>HMAC, IP and UNAUTHENTICATED.</p> <ul> <li> <p> GITHUB</em>HMAC implements the authentication scheme described here: https://developer.github.com/webhooks/securing/</p> </li> <li> <p> IP will reject webhooks trigger requests unless they originate from an IP within the IP range whitelisted in the authentication configuration.</p> </li> <li> <p> UNAUTHENTICATED will accept all webhook trigger requests regardless of origin.</p> </li> </ul></p>
+    /// <p><p>Supported options are GITHUB<em>HMAC, IP and UNAUTHENTICATED.</p> <ul> <li> <p>For information about the authentication scheme implemented by GITHUB</em>HMAC, see <a href="https://developer.github.com/webhooks/securing/">Securing your webhooks</a> on the GitHub Developer website.</p> </li> <li> <p> IP will reject webhooks trigger requests unless they originate from an IP within the IP range whitelisted in the authentication configuration.</p> </li> <li> <p> UNAUTHENTICATED will accept all webhook trigger requests regardless of origin.</p> </li> </ul></p>
     #[serde(rename = "authentication")]
     pub authentication: String,
-    /// <p>Properties that configure the authentication applied to incoming webhook trigger requests. The required properties depend on the authentication type. For GITHUB_HMAC, only the SecretToken property must be set. For IP, only the AllowedIPRange property must be set to a valid CIDR range. For UNAUTHENTICATED, no properties can be set.</p>
+    /// <p>Properties that configure the authentication applied to incoming webhook trigger requests. The required properties depend on the authentication type. For GITHUB_HMAC, only the <code>SecretToken </code>property must be set. For IP, only the <code>AllowedIPRange </code>property must be set to a valid CIDR range. For UNAUTHENTICATED, no properties can be set.</p>
     #[serde(rename = "authenticationConfiguration")]
     pub authentication_configuration: WebhookAuthConfiguration,
     /// <p>A list of rules applied to the body/payload sent in the POST request to a webhook URL. All defined rules must pass for the request to be accepted and the pipeline started.</p>
@@ -1605,10 +1880,10 @@ pub struct WebhookDefinition {
 /// <p>The event criteria that specify when a webhook notification is sent to your URL.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebhookFilterRule {
-    /// <p>A JsonPath expression that will be applied to the body/payload of the webhook. The value selected by JsonPath expression must match the value specified in the matchEquals field, otherwise the request will be ignored. More information on JsonPath expressions can be found here: https://github.com/json-path/JsonPath.</p>
+    /// <p>A JsonPath expression that will be applied to the body/payload of the webhook. The value selected by the JsonPath expression must match the value specified in the <code>MatchEquals</code> field, otherwise the request will be ignored. For more information about JsonPath expressions, see <a href="https://github.com/json-path/JsonPath">Java JsonPath implementation</a> in GitHub.</p>
     #[serde(rename = "jsonPath")]
     pub json_path: String,
-    /// <p>The value selected by the JsonPath expression must match what is supplied in the MatchEquals field, otherwise the request will be ignored. Properties from the target action configuration can be included as placeholders in this value by surrounding the action configuration key with curly braces. For example, if the value supplied here is "refs/heads/{Branch}" and the target action has an action configuration property called "Branch" with a value of "master", the MatchEquals value will be evaluated as "refs/heads/master". A list of action configuration properties for built-in action types can be found here: <a href="http://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements">Pipeline Structure Reference Action Requirements</a>.</p>
+    /// <p>The value selected by the <code>JsonPath</code> expression must match what is supplied in the <code>MatchEquals</code> field, otherwise the request will be ignored. Properties from the target action configuration can be included as placeholders in this value by surrounding the action configuration key with curly braces. For example, if the value supplied here is "refs/heads/{Branch}" and the target action has an action configuration property called "Branch" with a value of "master", the <code>MatchEquals</code> value will be evaluated as "refs/heads/master". For a list of action configuration properties for built-in action types, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements">Pipeline Structure Reference Action Requirements</a>.</p>
     #[serde(rename = "matchEquals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub match_equals: Option<String>,
@@ -1707,18 +1982,35 @@ impl Error for AcknowledgeThirdPartyJobError {
 /// Errors returned by CreateCustomActionType
 #[derive(Debug, PartialEq)]
 pub enum CreateCustomActionTypeError {
+    /// <p>Unable to modify the tag due to a simultaneous update request.</p>
+    ConcurrentModification(String),
+    /// <p>The specified resource tags are invalid.</p>
+    InvalidTags(String),
     /// <p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
     LimitExceeded(String),
+    /// <p>The tags limit for a resource has been exceeded.</p>
+    TooManyTags(String),
 }
 
 impl CreateCustomActionTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateCustomActionTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        CreateCustomActionTypeError::ConcurrentModification(err.msg),
+                    )
+                }
+                "InvalidTagsException" => {
+                    return RusotoError::Service(CreateCustomActionTypeError::InvalidTags(err.msg))
+                }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateCustomActionTypeError::LimitExceeded(
                         err.msg,
                     ))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateCustomActionTypeError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1735,13 +2027,18 @@ impl fmt::Display for CreateCustomActionTypeError {
 impl Error for CreateCustomActionTypeError {
     fn description(&self) -> &str {
         match *self {
+            CreateCustomActionTypeError::ConcurrentModification(ref cause) => cause,
+            CreateCustomActionTypeError::InvalidTags(ref cause) => cause,
             CreateCustomActionTypeError::LimitExceeded(ref cause) => cause,
+            CreateCustomActionTypeError::TooManyTags(ref cause) => cause,
         }
     }
 }
 /// Errors returned by CreatePipeline
 #[derive(Debug, PartialEq)]
 pub enum CreatePipelineError {
+    /// <p>Unable to modify the tag due to a simultaneous update request.</p>
+    ConcurrentModification(String),
     /// <p>The specified action declaration was specified in an invalid format.</p>
     InvalidActionDeclaration(String),
     /// <p>Reserved for future use.</p>
@@ -1750,16 +2047,25 @@ pub enum CreatePipelineError {
     InvalidStageDeclaration(String),
     /// <p>The specified structure was specified in an invalid format.</p>
     InvalidStructure(String),
+    /// <p>The specified resource tags are invalid.</p>
+    InvalidTags(String),
     /// <p>The number of pipelines associated with the AWS account has exceeded the limit allowed for the account.</p>
     LimitExceeded(String),
     /// <p>The specified pipeline name is already in use.</p>
     PipelineNameInUse(String),
+    /// <p>The tags limit for a resource has been exceeded.</p>
+    TooManyTags(String),
 }
 
 impl CreatePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(CreatePipelineError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
                 "InvalidActionDeclarationException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidActionDeclaration(
                         err.msg,
@@ -1778,11 +2084,17 @@ impl CreatePipelineError {
                 "InvalidStructureException" => {
                     return RusotoError::Service(CreatePipelineError::InvalidStructure(err.msg))
                 }
+                "InvalidTagsException" => {
+                    return RusotoError::Service(CreatePipelineError::InvalidTags(err.msg))
+                }
                 "LimitExceededException" => {
                     return RusotoError::Service(CreatePipelineError::LimitExceeded(err.msg))
                 }
                 "PipelineNameInUseException" => {
                     return RusotoError::Service(CreatePipelineError::PipelineNameInUse(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreatePipelineError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1799,23 +2111,34 @@ impl fmt::Display for CreatePipelineError {
 impl Error for CreatePipelineError {
     fn description(&self) -> &str {
         match *self {
+            CreatePipelineError::ConcurrentModification(ref cause) => cause,
             CreatePipelineError::InvalidActionDeclaration(ref cause) => cause,
             CreatePipelineError::InvalidBlockerDeclaration(ref cause) => cause,
             CreatePipelineError::InvalidStageDeclaration(ref cause) => cause,
             CreatePipelineError::InvalidStructure(ref cause) => cause,
+            CreatePipelineError::InvalidTags(ref cause) => cause,
             CreatePipelineError::LimitExceeded(ref cause) => cause,
             CreatePipelineError::PipelineNameInUse(ref cause) => cause,
+            CreatePipelineError::TooManyTags(ref cause) => cause,
         }
     }
 }
 /// Errors returned by DeleteCustomActionType
 #[derive(Debug, PartialEq)]
-pub enum DeleteCustomActionTypeError {}
+pub enum DeleteCustomActionTypeError {
+    /// <p>Unable to modify the tag due to a simultaneous update request.</p>
+    ConcurrentModification(String),
+}
 
 impl DeleteCustomActionTypeError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteCustomActionTypeError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        DeleteCustomActionTypeError::ConcurrentModification(err.msg),
+                    )
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1830,17 +2153,27 @@ impl fmt::Display for DeleteCustomActionTypeError {
 }
 impl Error for DeleteCustomActionTypeError {
     fn description(&self) -> &str {
-        match *self {}
+        match *self {
+            DeleteCustomActionTypeError::ConcurrentModification(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DeletePipeline
 #[derive(Debug, PartialEq)]
-pub enum DeletePipelineError {}
+pub enum DeletePipelineError {
+    /// <p>Unable to modify the tag due to a simultaneous update request.</p>
+    ConcurrentModification(String),
+}
 
 impl DeletePipelineError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePipelineError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeletePipelineError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1855,17 +2188,27 @@ impl fmt::Display for DeletePipelineError {
 }
 impl Error for DeletePipelineError {
     fn description(&self) -> &str {
-        match *self {}
+        match *self {
+            DeletePipelineError::ConcurrentModification(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DeleteWebhook
 #[derive(Debug, PartialEq)]
-pub enum DeleteWebhookError {}
+pub enum DeleteWebhookError {
+    /// <p>Unable to modify the tag due to a simultaneous update request.</p>
+    ConcurrentModification(String),
+}
 
 impl DeleteWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWebhookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteWebhookError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1880,7 +2223,9 @@ impl fmt::Display for DeleteWebhookError {
 }
 impl Error for DeleteWebhookError {
     fn description(&self) -> &str {
-        match *self {}
+        match *self {
+            DeleteWebhookError::ConcurrentModification(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by DeregisterWebhookWithThirdParty
@@ -2199,6 +2544,57 @@ impl Error for GetThirdPartyJobDetailsError {
         }
     }
 }
+/// Errors returned by ListActionExecutions
+#[derive(Debug, PartialEq)]
+pub enum ListActionExecutionsError {
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    InvalidNextToken(String),
+    /// <p>The pipeline execution was specified in an invalid format or cannot be found, or an execution ID does not belong to the specified pipeline. </p>
+    PipelineExecutionNotFound(String),
+    /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
+    PipelineNotFound(String),
+}
+
+impl ListActionExecutionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListActionExecutionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListActionExecutionsError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "PipelineExecutionNotFoundException" => {
+                    return RusotoError::Service(
+                        ListActionExecutionsError::PipelineExecutionNotFound(err.msg),
+                    )
+                }
+                "PipelineNotFoundException" => {
+                    return RusotoError::Service(ListActionExecutionsError::PipelineNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListActionExecutionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListActionExecutionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListActionExecutionsError::InvalidNextToken(ref cause) => cause,
+            ListActionExecutionsError::PipelineExecutionNotFound(ref cause) => cause,
+            ListActionExecutionsError::PipelineNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListActionTypes
 #[derive(Debug, PartialEq)]
 pub enum ListActionTypesError {
@@ -2305,6 +2701,55 @@ impl Error for ListPipelinesError {
     fn description(&self) -> &str {
         match *self {
             ListPipelinesError::InvalidNextToken(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The specified resource ARN is invalid.</p>
+    InvalidArn(String),
+    /// <p>The next token was specified in an invalid format. Make sure that the next token you provided is the token returned by a previous call.</p>
+    InvalidNextToken(String),
+    /// <p>The specified resource was specified in an invalid format.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidArnException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidArn(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InvalidArn(ref cause) => cause,
+            ListTagsForResourceError::InvalidNextToken(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -2702,6 +3147,10 @@ impl Error for PutThirdPartyJobSuccessResultError {
 /// Errors returned by PutWebhook
 #[derive(Debug, PartialEq)]
 pub enum PutWebhookError {
+    /// <p>Unable to modify the tag due to a simultaneous update request.</p>
+    ConcurrentModification(String),
+    /// <p>The specified resource tags are invalid.</p>
+    InvalidTags(String),
     /// <p>The specified authentication type is in an invalid format.</p>
     InvalidWebhookAuthenticationParameters(String),
     /// <p>The specified event filter rule is in an invalid format.</p>
@@ -2710,12 +3159,20 @@ pub enum PutWebhookError {
     LimitExceeded(String),
     /// <p>The specified pipeline was specified in an invalid format or cannot be found.</p>
     PipelineNotFound(String),
+    /// <p>The tags limit for a resource has been exceeded.</p>
+    TooManyTags(String),
 }
 
 impl PutWebhookError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutWebhookError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(PutWebhookError::ConcurrentModification(err.msg))
+                }
+                "InvalidTagsException" => {
+                    return RusotoError::Service(PutWebhookError::InvalidTags(err.msg))
+                }
                 "InvalidWebhookAuthenticationParametersException" => {
                     return RusotoError::Service(
                         PutWebhookError::InvalidWebhookAuthenticationParameters(err.msg),
@@ -2732,6 +3189,9 @@ impl PutWebhookError {
                 "PipelineNotFoundException" => {
                     return RusotoError::Service(PutWebhookError::PipelineNotFound(err.msg))
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(PutWebhookError::TooManyTags(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2747,10 +3207,13 @@ impl fmt::Display for PutWebhookError {
 impl Error for PutWebhookError {
     fn description(&self) -> &str {
         match *self {
+            PutWebhookError::ConcurrentModification(ref cause) => cause,
+            PutWebhookError::InvalidTags(ref cause) => cause,
             PutWebhookError::InvalidWebhookAuthenticationParameters(ref cause) => cause,
             PutWebhookError::InvalidWebhookFilterPattern(ref cause) => cause,
             PutWebhookError::LimitExceeded(ref cause) => cause,
             PutWebhookError::PipelineNotFound(ref cause) => cause,
+            PutWebhookError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -2883,6 +3346,116 @@ impl Error for StartPipelineExecutionError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>Unable to modify the tag due to a simultaneous update request.</p>
+    ConcurrentModification(String),
+    /// <p>The specified resource ARN is invalid.</p>
+    InvalidArn(String),
+    /// <p>The specified resource tags are invalid.</p>
+    InvalidTags(String),
+    /// <p>The specified resource was specified in an invalid format.</p>
+    ResourceNotFound(String),
+    /// <p>The tags limit for a resource has been exceeded.</p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(TagResourceError::ConcurrentModification(err.msg))
+                }
+                "InvalidArnException" => {
+                    return RusotoError::Service(TagResourceError::InvalidArn(err.msg))
+                }
+                "InvalidTagsException" => {
+                    return RusotoError::Service(TagResourceError::InvalidTags(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::ConcurrentModification(ref cause) => cause,
+            TagResourceError::InvalidArn(ref cause) => cause,
+            TagResourceError::InvalidTags(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::TooManyTags(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>Unable to modify the tag due to a simultaneous update request.</p>
+    ConcurrentModification(String),
+    /// <p>The specified resource ARN is invalid.</p>
+    InvalidArn(String),
+    /// <p>The specified resource tags are invalid.</p>
+    InvalidTags(String),
+    /// <p>The specified resource was specified in an invalid format.</p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UntagResourceError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InvalidArnException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidArn(err.msg))
+                }
+                "InvalidTagsException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidTags(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::ConcurrentModification(ref cause) => cause,
+            UntagResourceError::InvalidArn(ref cause) => cause,
+            UntagResourceError::InvalidTags(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdatePipeline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineError {
@@ -2972,7 +3545,7 @@ pub trait CodePipeline {
         input: CreatePipelineInput,
     ) -> RusotoFuture<CreatePipelineOutput, CreatePipelineError>;
 
-    /// <p><p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
+    /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
     fn delete_custom_action_type(
         &self,
         input: DeleteCustomActionTypeInput,
@@ -3023,7 +3596,7 @@ pub trait CodePipeline {
         input: GetPipelineExecutionInput,
     ) -> RusotoFuture<GetPipelineExecutionOutput, GetPipelineExecutionError>;
 
-    /// <p>Returns information about the state of a pipeline, including the stages and actions.</p>
+    /// <p><p>Returns information about the state of a pipeline, including the stages and actions.</p> <note> <p>Values returned in the <code>revisionId</code> and <code>revisionUrl</code> fields indicate the source revision information, such as the commit ID, for the current state.</p> </note></p>
     fn get_pipeline_state(
         &self,
         input: GetPipelineStateInput,
@@ -3034,6 +3607,12 @@ pub trait CodePipeline {
         &self,
         input: GetThirdPartyJobDetailsInput,
     ) -> RusotoFuture<GetThirdPartyJobDetailsOutput, GetThirdPartyJobDetailsError>;
+
+    /// <p>Lists the action executions that have occurred in a pipeline.</p>
+    fn list_action_executions(
+        &self,
+        input: ListActionExecutionsInput,
+    ) -> RusotoFuture<ListActionExecutionsOutput, ListActionExecutionsError>;
 
     /// <p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>
     fn list_action_types(
@@ -3053,13 +3632,19 @@ pub trait CodePipeline {
         input: ListPipelinesInput,
     ) -> RusotoFuture<ListPipelinesOutput, ListPipelinesError>;
 
+    /// <p>Gets the set of key/value pairs (metadata) that are used to manage the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
+
     /// <p>Gets a listing of all the webhooks in this region for this account. The output lists all webhooks and includes the webhook URL and ARN, as well the configuration for each webhook.</p>
     fn list_webhooks(
         &self,
         input: ListWebhooksInput,
     ) -> RusotoFuture<ListWebhooksOutput, ListWebhooksError>;
 
-    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. PollForJobs is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the PollForJobs action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. <code>PollForJobs</code> is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn poll_for_jobs(
         &self,
         input: PollForJobsInput,
@@ -3131,7 +3716,19 @@ pub trait CodePipeline {
         input: StartPipelineExecutionInput,
     ) -> RusotoFuture<StartPipelineExecutionOutput, StartPipelineExecutionError>;
 
-    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource. </p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+
+    /// <p>Removes tags from an AWS resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+
+    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     fn update_pipeline(
         &self,
         input: UpdatePipelineInput,
@@ -3292,7 +3889,7 @@ impl CodePipeline for CodePipelineClient {
         })
     }
 
-    /// <p><p>Marks a custom action as deleted. PollForJobs for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
+    /// <p><p>Marks a custom action as deleted. <code>PollForJobs</code> for the custom action will fail after the action is marked for deletion. Only used for custom actions.</p> <important> <p>To re-create a custom action after it has been deleted you must use a string in the version field that has never been used before. This string can be an incremented version number, for example. To restore a deleted custom action, use a JSON file that is identical to the deleted action, including the original string in the version field.</p> </important></p>
     fn delete_custom_action_type(
         &self,
         input: DeleteCustomActionTypeInput,
@@ -3546,7 +4143,7 @@ impl CodePipeline for CodePipelineClient {
         })
     }
 
-    /// <p>Returns information about the state of a pipeline, including the stages and actions.</p>
+    /// <p><p>Returns information about the state of a pipeline, including the stages and actions.</p> <note> <p>Values returned in the <code>revisionId</code> and <code>revisionUrl</code> fields indicate the source revision information, such as the commit ID, for the current state.</p> </note></p>
     fn get_pipeline_state(
         &self,
         input: GetPipelineStateInput,
@@ -3600,6 +4197,34 @@ impl CodePipeline for CodePipelineClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetThirdPartyJobDetailsError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Lists the action executions that have occurred in a pipeline.</p>
+    fn list_action_executions(
+        &self,
+        input: ListActionExecutionsInput,
+    ) -> RusotoFuture<ListActionExecutionsOutput, ListActionExecutionsError> {
+        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodePipeline_20150709.ListActionExecutions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListActionExecutionsOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListActionExecutionsError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3693,6 +4318,34 @@ impl CodePipeline for CodePipelineClient {
         })
     }
 
+    /// <p>Gets the set of key/value pairs (metadata) that are used to manage the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodePipeline_20150709.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Gets a listing of all the webhooks in this region for this account. The output lists all webhooks and includes the webhook URL and ARN, as well the configuration for each webhook.</p>
     fn list_webhooks(
         &self,
@@ -3722,7 +4375,7 @@ impl CodePipeline for CodePipelineClient {
         })
     }
 
-    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. PollForJobs is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the PollForJobs action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
+    /// <p><p>Returns information about any jobs for AWS CodePipeline to act upon. <code>PollForJobs</code> is only valid for action types with &quot;Custom&quot; in the owner field. If the action type contains &quot;AWS&quot; or &quot;ThirdParty&quot; in the owner field, the <code>PollForJobs</code> action returns an error.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important></p>
     fn poll_for_jobs(
         &self,
         input: PollForJobsInput,
@@ -4059,7 +4712,65 @@ impl CodePipeline for CodePipelineClient {
         })
     }
 
-    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata that can be used to manage a resource. </p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodePipeline_20150709.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes tags from an AWS resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "codepipeline", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodePipeline_20150709.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     fn update_pipeline(
         &self,
         input: UpdatePipelineInput,

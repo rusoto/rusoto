@@ -32,7 +32,7 @@ pub struct AssociateDelegateToResourceRequest {
     /// <p>The organization under which the resource exists.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
-    /// <p>The resource for which members are associated.</p>
+    /// <p>The resource for which members (users or groups) are associated.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
@@ -43,10 +43,10 @@ pub struct AssociateDelegateToResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateMemberToGroupRequest {
-    /// <p>The group for which the member is associated.</p>
+    /// <p>The group to which the member (user or group) is associated.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
-    /// <p>The member to associate to the group.</p>
+    /// <p>The member (user or group) to associate to the group.</p>
     #[serde(rename = "MemberId")]
     pub member_id: String,
     /// <p>The organization under which the group exists.</p>
@@ -77,13 +77,13 @@ pub struct BookingOptions {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAliasRequest {
-    /// <p>The alias to add to the user.</p>
+    /// <p>The alias to add to the member set.</p>
     #[serde(rename = "Alias")]
     pub alias: String,
-    /// <p>The alias is added to this Amazon WorkMail entity.</p>
+    /// <p>The member (user or group) to which this alias is added.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
-    /// <p>The organization under which the member exists.</p>
+    /// <p>The organization under which the member (user or group) exists.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
 }
@@ -105,7 +105,7 @@ pub struct CreateGroupRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateGroupResponse {
-    /// <p>The ID of the group.</p>
+    /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
@@ -113,13 +113,13 @@ pub struct CreateGroupResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateResourceRequest {
-    /// <p>The name of the created resource.</p>
+    /// <p>The name of the new resource.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The identifier associated with the organization for which the resource is created.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
-    /// <p>The type of the created resource.</p>
+    /// <p>The type of the new resource. The available types are <code>equipment</code> and <code>room</code>.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -127,7 +127,7 @@ pub struct CreateResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateResourceResponse {
-    /// <p>The identifier of the created resource.</p>
+    /// <p>The identifier of the new resource.</p>
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
@@ -135,16 +135,16 @@ pub struct CreateResourceResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserRequest {
-    /// <p>The display name for the user to be created.</p>
+    /// <p>The display name for the new user.</p>
     #[serde(rename = "DisplayName")]
     pub display_name: String,
-    /// <p>The name for the user to be created.</p>
+    /// <p>The name for the new user. Simple AD or AD Connector user names have a maximum length of 20. All others have a maximum length of 64.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The identifier of the organization for which the user is created.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
-    /// <p>The password for the user to be created.</p>
+    /// <p>The password for the new user.</p>
     #[serde(rename = "Password")]
     pub password: String,
 }
@@ -152,7 +152,7 @@ pub struct CreateUserRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserResponse {
-    /// <p>The information regarding the newly created user.</p>
+    /// <p>The identifier for the new user.</p>
     #[serde(rename = "UserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
@@ -162,7 +162,7 @@ pub struct CreateUserResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Delegate {
-    /// <p>The identifier for the user or group is associated as the resource's delegate.</p>
+    /// <p>The identifier for the user or group associated as the resource's delegate.</p>
     #[serde(rename = "Id")]
     pub id: String,
     /// <p>The type of the delegate: user or group.</p>
@@ -175,7 +175,7 @@ pub struct DeleteAliasRequest {
     /// <p>The aliases to be removed from the user's set of aliases. Duplicate entries in the list are collapsed into single entries (the list is transformed into a set).</p>
     #[serde(rename = "Alias")]
     pub alias: String,
-    /// <p>The identifier for the Amazon WorkMail entity to have the aliases removed.</p>
+    /// <p>The identifier for the member (user or group) from which to have the aliases removed.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
     /// <p>The identifier for the organization under which the user exists.</p>
@@ -203,13 +203,13 @@ pub struct DeleteGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteMailboxPermissionsRequest {
-    /// <p>The identifier of the entity (user or group) for which to delete mailbox permissions.</p>
+    /// <p>The identifier of the member (user or group)that owns the mailbox.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
-    /// <p>The identifier of the entity (user or group) for which to delete granted permissions.</p>
+    /// <p>The identifier of the member (user or group) for which to delete granted permissions.</p>
     #[serde(rename = "GranteeId")]
     pub grantee_id: String,
-    /// <p>The identifier of the organization under which the entity (user or group) exists.</p>
+    /// <p>The identifier of the organization under which the member (user or group) exists.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
 }
@@ -220,7 +220,7 @@ pub struct DeleteMailboxPermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteResourceRequest {
-    /// <p>The identifier associated with the organization for which the resource is deleted.</p>
+    /// <p>The identifier associated with the organization from which the resource is deleted.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
     /// <p>The identifier of the resource to be deleted.</p>
@@ -234,7 +234,7 @@ pub struct DeleteResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserRequest {
-    /// <p>The organization that contains the user.</p>
+    /// <p>The organization that contains the user to be deleted.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
     /// <p>The identifier of the user to be deleted.</p>
@@ -248,7 +248,7 @@ pub struct DeleteUserResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeregisterFromWorkMailRequest {
-    /// <p>The identifier for the entity to be updated.</p>
+    /// <p>The identifier for the member (user or group) to be updated.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
     /// <p>The identifier for the organization under which the Amazon WorkMail entity exists.</p>
@@ -273,7 +273,7 @@ pub struct DescribeGroupRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeGroupResponse {
-    /// <p>The date and time when a user was deregistered from Amazon WorkMail, in UNIX epoch time format.</p>
+    /// <p>The date and time when a user was deregistered from WorkMail, in UNIX epoch time format.</p>
     #[serde(rename = "DisabledDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disabled_date: Option<f64>,
@@ -281,7 +281,7 @@ pub struct DescribeGroupResponse {
     #[serde(rename = "Email")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
-    /// <p>The date and time when a user was registered to Amazon WorkMail, in UNIX epoch time format.</p>
+    /// <p>The date and time when a user was registered to WorkMail, in UNIX epoch time format.</p>
     #[serde(rename = "EnabledDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled_date: Option<f64>,
@@ -293,7 +293,7 @@ pub struct DescribeGroupResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The state of the user: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to Amazon WorkMail).</p>
+    /// <p>The state of the user: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to WorkMail).</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -313,7 +313,7 @@ pub struct DescribeOrganizationResponse {
     #[serde(rename = "Alias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alias: Option<String>,
-    /// <p>The date at which the organization became usable in the Amazon WorkMail context, in UNIX epoch time format.</p>
+    /// <p>The date at which the organization became usable in the WorkMail context, in UNIX epoch time format.</p>
     #[serde(rename = "CompletedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_date: Option<f64>,
@@ -325,11 +325,11 @@ pub struct DescribeOrganizationResponse {
     #[serde(rename = "DirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_id: Option<String>,
-    /// <p>The type of directory associated with the Amazon WorkMail organization.</p>
+    /// <p>The type of directory associated with the WorkMail organization.</p>
     #[serde(rename = "DirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_type: Option<String>,
-    /// <p>The (optional) error message indicating if unexpected behavior was encountered with regards to the organization.</p>
+    /// <p>(Optional) The error message indicating if unexpected behavior was encountered with regards to the organization.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -360,7 +360,7 @@ pub struct DescribeResourceResponse {
     #[serde(rename = "BookingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub booking_options: Option<BookingOptions>,
-    /// <p>The date and time when a resource was registered from Amazon WorkMail, in UNIX epoch time format.</p>
+    /// <p>The date and time when a resource was disabled from WorkMail, in UNIX epoch time format.</p>
     #[serde(rename = "DisabledDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disabled_date: Option<f64>,
@@ -368,7 +368,7 @@ pub struct DescribeResourceResponse {
     #[serde(rename = "Email")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
-    /// <p>The date and time when a resource was registered to Amazon WorkMail, in UNIX epoch time format.</p>
+    /// <p>The date and time when a resource was enabled for WorkMail, in UNIX epoch time format.</p>
     #[serde(rename = "EnabledDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled_date: Option<f64>,
@@ -380,7 +380,7 @@ pub struct DescribeResourceResponse {
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    /// <p>The state of the resource: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to Amazon WorkMail).</p>
+    /// <p>The state of the resource: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to WorkMail).</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -423,7 +423,7 @@ pub struct DescribeUserResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The state of a user: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to Amazon WorkMail).</p>
+    /// <p>The state of a user: enabled (registered to Amazon WorkMail) or disabled (deregistered or never registered to WorkMail).</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -431,7 +431,7 @@ pub struct DescribeUserResponse {
     #[serde(rename = "UserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
-    /// <p>In certain cases other entities are modeled as users. If interoperability is enabled, resources are imported into Amazon WorkMail as users. Because different Amazon WorkMail organizations rely on different directory types, administrators can distinguish between a user that is not registered to Amazon WorkMail (is disabled and has a user role) and the administrative users of the directory. The values are USER, RESOURCE, and SYSTEM_USER.</p>
+    /// <p>In certain cases, other entities are modeled as users. If interoperability is enabled, resources are imported into Amazon WorkMail as users. Because different WorkMail organizations rely on different directory types, administrators can distinguish between an unregistered user (account is disabled and has a user role) and the directory administrators. The values are USER, RESOURCE, and SYSTEM_USER.</p>
     #[serde(rename = "UserRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_role: Option<String>,
@@ -470,6 +470,29 @@ pub struct DisassociateMemberFromGroupRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateMemberFromGroupResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetMailboxDetailsRequest {
+    /// <p>The identifier for the organization that contains the user whose mailbox details are being requested.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+    /// <p>The identifier for the user whose mailbox details are being requested.</p>
+    #[serde(rename = "UserId")]
+    pub user_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetMailboxDetailsResponse {
+    /// <p>The maximum allowed mailbox size, in MB, for the specified user.</p>
+    #[serde(rename = "MailboxQuota")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mailbox_quota: Option<i64>,
+    /// <p>The current mailbox size, in MB, for the specified user.</p>
+    #[serde(rename = "MailboxSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mailbox_size: Option<f64>,
+}
 
 /// <p>The representation of an Amazon WorkMail group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -534,7 +557,7 @@ pub struct ListAliasesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGroupMembersRequest {
-    /// <p>The identifier for the group to which the members are associated.</p>
+    /// <p>The identifier for the group to which the members (users or groups) are associated.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The maximum number of results to return in a single call.</p>
@@ -593,7 +616,7 @@ pub struct ListGroupsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListMailboxPermissionsRequest {
-    /// <p>The identifier of the entity (user or group) for which to list mailbox permissions.</p>
+    /// <p>The identifier of the user, group, or resource for which to list mailbox permissions.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
     /// <p>The maximum number of results to return in a single call.</p>
@@ -604,7 +627,7 @@ pub struct ListMailboxPermissionsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The identifier of the organization under which the entity (user or group) exists.</p>
+    /// <p>The identifier of the organization under which the user, group, or resource exists.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
 }
@@ -616,7 +639,7 @@ pub struct ListMailboxPermissionsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>One page of the entity's mailbox permissions.</p>
+    /// <p>One page of the user, group, or resource mailbox permissions.</p>
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<Permission>>,
@@ -712,7 +735,7 @@ pub struct ListUsersRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>TBD</p>
+    /// <p>The token to use to retrieve the next page of results. The first call does not contain any tokens.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -734,7 +757,7 @@ pub struct ListUsersResponse {
     pub users: Option<Vec<User>>,
 }
 
-/// <p>The representation of a group member (user or group).</p>
+/// <p>The representation of a user or group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Member {
@@ -764,7 +787,7 @@ pub struct Member {
     pub type_: Option<String>,
 }
 
-/// <p>The brief overview associated with an organization.</p>
+/// <p>The representation of an organization.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct OrganizationSummary {
@@ -786,14 +809,14 @@ pub struct OrganizationSummary {
     pub state: Option<String>,
 }
 
-/// <p>Permission granted to an entity (user, group) to access a certain aspect of another entity's mailbox.</p>
+/// <p>Permission granted to a user, group, or resource to access a certain aspect of another user, group, or resource mailbox.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Permission {
-    /// <p>The identifier of the entity (user or group) to which the permissions are granted.</p>
+    /// <p>The identifier of the user, group, or resource to which the permissions are granted.</p>
     #[serde(rename = "GranteeId")]
     pub grantee_id: String,
-    /// <p>The type of entity (user, group) of the entity referred to in GranteeId.</p>
+    /// <p>The type of user, group, or resource referred to in GranteeId.</p>
     #[serde(rename = "GranteeType")]
     pub grantee_type: String,
     /// <p>The permissions granted to the grantee. SEND_AS allows the grantee to send email as the owner of the mailbox (the grantee is not mentioned on these emails). SEND_ON_BEHALF allows the grantee to send email on behalf of the owner of the mailbox (the grantee is not mentioned as the physical sender of these emails). FULL_ACCESS allows the grantee full access to the mailbox, irrespective of other folder-level permissions set on the mailbox.</p>
@@ -803,13 +826,13 @@ pub struct Permission {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutMailboxPermissionsRequest {
-    /// <p>The identifier of the entity (user or group) for which to update mailbox permissions.</p>
+    /// <p>The identifier of the user, group, or resource for which to update mailbox permissions.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
-    /// <p>The identifier of the entity (user or group) to which to grant the permissions.</p>
+    /// <p>The identifier of the user, group, or resource to which to grant the permissions.</p>
     #[serde(rename = "GranteeId")]
     pub grantee_id: String,
-    /// <p>The identifier of the organization under which the entity (user or group) exists.</p>
+    /// <p>The identifier of the organization under which the user, group, or resource exists.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
     /// <p>The permissions granted to the grantee. SEND_AS allows the grantee to send email as the owner of the mailbox (the grantee is not mentioned on these emails). SEND_ON_BEHALF allows the grantee to send email on behalf of the owner of the mailbox (the grantee is not mentioned as the physical sender of these emails). FULL_ACCESS allows the grantee full access to the mailbox, irrespective of other folder-level permissions set on the mailbox.</p>
@@ -823,13 +846,13 @@ pub struct PutMailboxPermissionsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterToWorkMailRequest {
-    /// <p>The email for the entity to be updated.</p>
+    /// <p>The email for the user, group, or resource to be updated.</p>
     #[serde(rename = "Email")]
     pub email: String,
-    /// <p>The identifier for the entity to be updated.</p>
+    /// <p>The identifier for the user, group, or resource to be updated.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
-    /// <p>The identifier for the organization under which the Amazon WorkMail entity exists.</p>
+    /// <p>The identifier for the organization under which the user, group, or resource exists.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
 }
@@ -855,7 +878,7 @@ pub struct ResetPasswordRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct ResetPasswordResponse {}
 
-/// <p>The overview for a resource containing relevant data regarding it.</p>
+/// <p>The representation of a resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Resource {
@@ -890,14 +913,31 @@ pub struct Resource {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateMailboxQuotaRequest {
+    /// <p>The updated mailbox quota, in MB, for the specified user.</p>
+    #[serde(rename = "MailboxQuota")]
+    pub mailbox_quota: i64,
+    /// <p>The identifier for the organization that contains the user for whom to update the mailbox quota.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+    /// <p>The identifer for the user for whom to update the mailbox quota.</p>
+    #[serde(rename = "UserId")]
+    pub user_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateMailboxQuotaResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdatePrimaryEmailAddressRequest {
     /// <p>The value of the email to be updated as primary.</p>
     #[serde(rename = "Email")]
     pub email: String,
-    /// <p>The entity to update (user, group, or resource).</p>
+    /// <p>The user, group, or resource to update.</p>
     #[serde(rename = "EntityId")]
     pub entity_id: String,
-    /// <p>The organization that contains the entity to update.</p>
+    /// <p>The organization that contains the user, group, or resource to update.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
 }
@@ -969,15 +1009,15 @@ pub struct User {
 /// Errors returned by AssociateDelegateToResource
 #[derive(Debug, PartialEq)]
 pub enum AssociateDelegateToResourceError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1038,19 +1078,19 @@ impl Error for AssociateDelegateToResourceError {
 /// Errors returned by AssociateMemberToGroup
 #[derive(Debug, PartialEq)]
 pub enum AssociateMemberToGroupError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -1129,9 +1169,9 @@ impl Error for AssociateMemberToGroupError {
 pub enum CreateAliasError {
     /// <p>The email address that you're trying to assign is already created for a different user, group, or resource.</p>
     EmailAddressInUse(String),
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
@@ -1141,7 +1181,7 @@ pub enum CreateAliasError {
     MailDomainState(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1202,19 +1242,19 @@ impl Error for CreateAliasError {
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
-    /// <p>The entity (user, group, or user) name isn't unique in Amazon WorkMail.</p>
+    /// <p>The user, group, or resource name isn't unique in Amazon WorkMail.</p>
     NameAvailability(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
-    /// <p>This entity name is not allowed in Amazon WorkMail.</p>
+    /// <p>This user, group, or resource name is not allowed in Amazon WorkMail.</p>
     ReservedName(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -1279,19 +1319,19 @@ impl Error for CreateGroupError {
 /// Errors returned by CreateResource
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
-    /// <p>The entity (user, group, or user) name isn't unique in Amazon WorkMail.</p>
+    /// <p>The user, group, or resource name isn't unique in Amazon WorkMail.</p>
     NameAvailability(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
-    /// <p>This entity name is not allowed in Amazon WorkMail.</p>
+    /// <p>This user, group, or resource name is not allowed in Amazon WorkMail.</p>
     ReservedName(String),
 }
 
@@ -1350,21 +1390,21 @@ impl Error for CreateResourceError {
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>The supplied password doesn't match the minimum security constraints, such as length or use of special characters.</p>
     InvalidPassword(String),
-    /// <p>The entity (user, group, or user) name isn't unique in Amazon WorkMail.</p>
+    /// <p>The user, group, or resource name isn't unique in Amazon WorkMail.</p>
     NameAvailability(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
-    /// <p>This entity name is not allowed in Amazon WorkMail.</p>
+    /// <p>This user, group, or resource name is not allowed in Amazon WorkMail.</p>
     ReservedName(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -1433,15 +1473,15 @@ impl Error for CreateUserError {
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1490,17 +1530,17 @@ impl Error for DeleteAliasError {
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -1561,15 +1601,15 @@ impl Error for DeleteGroupError {
 /// Errors returned by DeleteMailboxPermissions
 #[derive(Debug, PartialEq)]
 pub enum DeleteMailboxPermissionsError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1628,13 +1668,13 @@ impl Error for DeleteMailboxPermissionsError {
 /// Errors returned by DeleteResource
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceError {
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1679,17 +1719,17 @@ impl Error for DeleteResourceError {
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -1750,15 +1790,15 @@ impl Error for DeleteUserError {
 /// Errors returned by DeregisterFromWorkMail
 #[derive(Debug, PartialEq)]
 pub enum DeregisterFromWorkMailError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1815,13 +1855,13 @@ impl Error for DeregisterFromWorkMailError {
 /// Errors returned by DescribeGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeGroupError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1909,13 +1949,13 @@ impl Error for DescribeOrganizationError {
 /// Errors returned by DescribeResource
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourceError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -1962,13 +2002,13 @@ impl Error for DescribeResourceError {
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2013,15 +2053,15 @@ impl Error for DescribeUserError {
 /// Errors returned by DisassociateDelegateFromResource
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDelegateFromResourceError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2082,19 +2122,19 @@ impl Error for DisassociateDelegateFromResourceError {
 /// Errors returned by DisassociateMemberFromGroup
 #[derive(Debug, PartialEq)]
 pub enum DisassociateMemberFromGroupError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -2176,18 +2216,65 @@ impl Error for DisassociateMemberFromGroupError {
         }
     }
 }
+/// Errors returned by GetMailboxDetails
+#[derive(Debug, PartialEq)]
+pub enum GetMailboxDetailsError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl GetMailboxDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMailboxDetailsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetMailboxDetailsError::EntityNotFound(err.msg))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(GetMailboxDetailsError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(GetMailboxDetailsError::OrganizationState(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetMailboxDetailsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMailboxDetailsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMailboxDetailsError::EntityNotFound(ref cause) => cause,
+            GetMailboxDetailsError::OrganizationNotFound(ref cause) => cause,
+            GetMailboxDetailsError::OrganizationState(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2236,15 +2323,15 @@ impl Error for ListAliasesError {
 /// Errors returned by ListGroupMembers
 #[derive(Debug, PartialEq)]
 pub enum ListGroupMembersError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2295,13 +2382,13 @@ impl Error for ListGroupMembersError {
 /// Errors returned by ListGroups
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2346,13 +2433,13 @@ impl Error for ListGroupsError {
 /// Errors returned by ListMailboxPermissions
 #[derive(Debug, PartialEq)]
 pub enum ListMailboxPermissionsError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2438,15 +2525,15 @@ impl Error for ListOrganizationsError {
 /// Errors returned by ListResourceDelegates
 #[derive(Debug, PartialEq)]
 pub enum ListResourceDelegatesError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2507,7 +2594,7 @@ pub enum ListResourcesError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2552,7 +2639,7 @@ pub enum ListUsersError {
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2593,15 +2680,15 @@ impl Error for ListUsersError {
 /// Errors returned by PutMailboxPermissions
 #[derive(Debug, PartialEq)]
 pub enum PutMailboxPermissionsError {
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2658,17 +2745,17 @@ impl Error for PutMailboxPermissionsError {
 /// Errors returned by RegisterToWorkMail
 #[derive(Debug, PartialEq)]
 pub enum RegisterToWorkMailError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
     /// <p>The email address that you're trying to assign is already created for a different user, group, or resource.</p>
     EmailAddressInUse(String),
     /// <p>The user, group, or resource that you're trying to register is already registered.</p>
     EntityAlreadyRegistered(String),
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
@@ -2678,7 +2765,7 @@ pub enum RegisterToWorkMailError {
     MailDomainState(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -2765,13 +2852,13 @@ impl Error for RegisterToWorkMailError {
 /// Errors returned by ResetPassword
 #[derive(Debug, PartialEq)]
 pub enum ResetPasswordError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
@@ -2779,7 +2866,7 @@ pub enum ResetPasswordError {
     InvalidPassword(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -2845,18 +2932,79 @@ impl Error for ResetPasswordError {
         }
     }
 }
+/// Errors returned by UpdateMailboxQuota
+#[derive(Debug, PartialEq)]
+pub enum UpdateMailboxQuotaError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
+    EntityState(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl UpdateMailboxQuotaError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateMailboxQuotaError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(UpdateMailboxQuotaError::EntityNotFound(err.msg))
+                }
+                "EntityStateException" => {
+                    return RusotoError::Service(UpdateMailboxQuotaError::EntityState(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateMailboxQuotaError::InvalidParameter(err.msg))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(UpdateMailboxQuotaError::OrganizationNotFound(
+                        err.msg,
+                    ))
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(UpdateMailboxQuotaError::OrganizationState(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateMailboxQuotaError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateMailboxQuotaError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateMailboxQuotaError::EntityNotFound(ref cause) => cause,
+            UpdateMailboxQuotaError::EntityState(ref cause) => cause,
+            UpdateMailboxQuotaError::InvalidParameter(ref cause) => cause,
+            UpdateMailboxQuotaError::OrganizationNotFound(ref cause) => cause,
+            UpdateMailboxQuotaError::OrganizationState(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdatePrimaryEmailAddress
 #[derive(Debug, PartialEq)]
 pub enum UpdatePrimaryEmailAddressError {
-    /// <p>The Directory Service doesn't recognize the credentials supplied by the Amazon WorkMail service.</p>
+    /// <p>The directory service doesn't recognize the credentials supplied by WorkMail.</p>
     DirectoryServiceAuthenticationFailed(String),
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
     /// <p>The email address that you're trying to assign is already created for a different user, group, or resource.</p>
     EmailAddressInUse(String),
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
     /// <p>One or more of the input parameters don't match the service's restrictions.</p>
     InvalidParameter(String),
@@ -2866,7 +3014,7 @@ pub enum UpdatePrimaryEmailAddressError {
     MailDomainState(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
     /// <p>You can't perform a write operation against a read-only directory.</p>
     UnsupportedOperation(String),
@@ -2967,25 +3115,25 @@ impl Error for UpdatePrimaryEmailAddressError {
 /// Errors returned by UpdateResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceError {
-    /// <p>The directory that you are trying to perform operations on isn't available.</p>
+    /// <p>The directory on which you are trying to perform operations isn't available.</p>
     DirectoryUnavailable(String),
     /// <p>The email address that you're trying to assign is already created for a different user, group, or resource.</p>
     EmailAddressInUse(String),
-    /// <p>The identifier supplied for the entity is valid, but it does not exist in your organization.</p>
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
     EntityNotFound(String),
-    /// <p>You are performing an operation on an entity that isn't in the expected state, such as trying to update a deleted user.</p>
+    /// <p>You are performing an operation on a user, group, or resource that isn't in the expected state, such as trying to delete an active user.</p>
     EntityState(String),
-    /// <p>The configuration for a resource isn't valid. A resource must either be able to auto-respond to requests or have at least one delegate associated that can do it on its behalf.</p>
+    /// <p>The configuration for a resource isn't valid. A resource must either be able to auto-respond to requests or have at least one delegate associated that can do so on its behalf.</p>
     InvalidConfiguration(String),
     /// <p>For an email or alias to be created in Amazon WorkMail, the included domain must be defined in the organization.</p>
     MailDomainNotFound(String),
     /// <p>After a domain has been added to the organization, it must be verified. The domain is not yet verified.</p>
     MailDomainState(String),
-    /// <p>The entity (user, group, or user) name isn't unique in Amazon WorkMail.</p>
+    /// <p>The user, group, or resource name isn't unique in Amazon WorkMail.</p>
     NameAvailability(String),
     /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
     OrganizationNotFound(String),
-    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its entities.</p>
+    /// <p>The organization must have a valid state (Active or Synchronizing) to perform certain operations on the organization or its members.</p>
     OrganizationState(String),
 }
 
@@ -3053,43 +3201,43 @@ impl Error for UpdateResourceError {
 }
 /// Trait representing the capabilities of the Amazon WorkMail API. Amazon WorkMail clients implement this trait.
 pub trait Workmail {
-    /// <p>Adds a member to the resource's set of delegates.</p>
+    /// <p>Adds a member (user or group) to the resource's set of delegates.</p>
     fn associate_delegate_to_resource(
         &self,
         input: AssociateDelegateToResourceRequest,
     ) -> RusotoFuture<AssociateDelegateToResourceResponse, AssociateDelegateToResourceError>;
 
-    /// <p>Adds a member to the group's set.</p>
+    /// <p>Adds a member (user or group) to the group's set.</p>
     fn associate_member_to_group(
         &self,
         input: AssociateMemberToGroupRequest,
     ) -> RusotoFuture<AssociateMemberToGroupResponse, AssociateMemberToGroupError>;
 
-    /// <p>Adds an alias to the set of a given member of Amazon WorkMail.</p>
+    /// <p>Adds an alias to the set of a given member (user or group) of Amazon WorkMail.</p>
     fn create_alias(
         &self,
         input: CreateAliasRequest,
     ) -> RusotoFuture<CreateAliasResponse, CreateAliasError>;
 
-    /// <p>Creates a group that can be used in Amazon WorkMail by calling the RegisterToWorkMail operation.</p>
+    /// <p>Creates a group that can be used in Amazon WorkMail by calling the <a>RegisterToWorkMail</a> operation.</p>
     fn create_group(
         &self,
         input: CreateGroupRequest,
     ) -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
 
-    /// <p>Creates a new Amazon WorkMail resource. The available types are equipment and room.</p>
+    /// <p>Creates a new Amazon WorkMail resource. </p>
     fn create_resource(
         &self,
         input: CreateResourceRequest,
     ) -> RusotoFuture<CreateResourceResponse, CreateResourceError>;
 
-    /// <p>Creates a user who can be used in Amazon WorkMail by calling the RegisterToWorkMail operation.</p>
+    /// <p>Creates a user who can be used in Amazon WorkMail by calling the <a>RegisterToWorkMail</a> operation.</p>
     fn create_user(
         &self,
         input: CreateUserRequest,
     ) -> RusotoFuture<CreateUserResponse, CreateUserError>;
 
-    /// <p>Remove the alias from a set of aliases for a given user.</p>
+    /// <p>Remove one or more specified aliases from a set of aliases for a given user.</p>
     fn delete_alias(
         &self,
         input: DeleteAliasRequest,
@@ -3101,7 +3249,7 @@ pub trait Workmail {
         input: DeleteGroupRequest,
     ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError>;
 
-    /// <p>Deletes permissions granted to a user or group.</p>
+    /// <p>Deletes permissions granted to a member (user or group).</p>
     fn delete_mailbox_permissions(
         &self,
         input: DeleteMailboxPermissionsRequest,
@@ -3113,13 +3261,13 @@ pub trait Workmail {
         input: DeleteResourceRequest,
     ) -> RusotoFuture<DeleteResourceResponse, DeleteResourceError>;
 
-    /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. The action can't be undone. The mailbox is kept as-is for a minimum of 30 days, without any means to restore it. </p>
+    /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. Before you can delete a user, the user state must be <code>DISABLED</code>. Use the <a>DescribeUser</a> action to confirm the user state.</p> <p>Deleting a user is permanent and cannot be undone. WorkMail archives user mailboxes for 30 days before they are permanently removed.</p>
     fn delete_user(
         &self,
         input: DeleteUserRequest,
     ) -> RusotoFuture<DeleteUserResponse, DeleteUserError>;
 
-    /// <p>Mark a user, group, or resource as no longer used in Amazon WorkMail. This action disassociates the mailbox and schedules it for clean-up. Amazon WorkMail keeps mailboxes for 30 days before they are permanently removed. The functionality in the console is <i>Disable</i>.</p>
+    /// <p>Mark a user, group, or resource as no longer used in Amazon WorkMail. This action disassociates the mailbox and schedules it for clean-up. WorkMail keeps mailboxes for 30 days before they are permanently removed. The functionality in the console is <i>Disable</i>.</p>
     fn deregister_from_work_mail(
         &self,
         input: DeregisterFromWorkMailRequest,
@@ -3161,13 +3309,19 @@ pub trait Workmail {
         input: DisassociateMemberFromGroupRequest,
     ) -> RusotoFuture<DisassociateMemberFromGroupResponse, DisassociateMemberFromGroupError>;
 
+    /// <p>Requests a user's mailbox details for a specified organization and user.</p>
+    fn get_mailbox_details(
+        &self,
+        input: GetMailboxDetailsRequest,
+    ) -> RusotoFuture<GetMailboxDetailsResponse, GetMailboxDetailsError>;
+
     /// <p>Creates a paginated call to list the aliases associated with a given entity.</p>
     fn list_aliases(
         &self,
         input: ListAliasesRequest,
     ) -> RusotoFuture<ListAliasesResponse, ListAliasesError>;
 
-    /// <p>Returns an overview of the members of a group.</p>
+    /// <p>Returns an overview of the members of a group. Users and groups can be members of a group.</p>
     fn list_group_members(
         &self,
         input: ListGroupMembersRequest,
@@ -3179,7 +3333,7 @@ pub trait Workmail {
         input: ListGroupsRequest,
     ) -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
 
-    /// <p>Lists the mailbox permissions associated with a mailbox.</p>
+    /// <p>Lists the mailbox permissions associated with a user, group, or resource mailbox.</p>
     fn list_mailbox_permissions(
         &self,
         input: ListMailboxPermissionsRequest,
@@ -3209,13 +3363,13 @@ pub trait Workmail {
         input: ListUsersRequest,
     ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
 
-    /// <p>Sets permissions for a user or group. This replaces any pre-existing permissions set for the entity.</p>
+    /// <p>Sets permissions for a user, group, or resource. This replaces any pre-existing permissions.</p>
     fn put_mailbox_permissions(
         &self,
         input: PutMailboxPermissionsRequest,
     ) -> RusotoFuture<PutMailboxPermissionsResponse, PutMailboxPermissionsError>;
 
-    /// <p>Registers an existing and disabled user, group, or resource/entity for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the entity is enabled and fails if the entity is deleted. This operation results in the accumulation of costs. For more information, see <a href="http://aws.amazon.com/workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. Users can either be created by calling the CreateUser API or they can be synchronized from your directory. For more information, see DeregisterFromWorkMail.</p>
+    /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com//workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
     fn register_to_work_mail(
         &self,
         input: RegisterToWorkMailRequest,
@@ -3227,13 +3381,19 @@ pub trait Workmail {
         input: ResetPasswordRequest,
     ) -> RusotoFuture<ResetPasswordResponse, ResetPasswordError>;
 
-    /// <p>Updates the primary email for an entity. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email) and the email provided in the input is promoted as the primary.</p>
+    /// <p>Updates a user's current mailbox quota for a specified organization and user.</p>
+    fn update_mailbox_quota(
+        &self,
+        input: UpdateMailboxQuotaRequest,
+    ) -> RusotoFuture<UpdateMailboxQuotaResponse, UpdateMailboxQuotaError>;
+
+    /// <p>Updates the primary email for a user, group, or resource. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email), and the email provided in the input is promoted as the primary.</p>
     fn update_primary_email_address(
         &self,
         input: UpdatePrimaryEmailAddressRequest,
     ) -> RusotoFuture<UpdatePrimaryEmailAddressResponse, UpdatePrimaryEmailAddressError>;
 
-    /// <p>Updates data for the resource. It must be preceded by a describe call in order to have the latest information. The dataset in the request should be the one expected when performing another describe call.</p>
+    /// <p>Updates data for the resource. To have the latest information, it must be preceded by a <a>DescribeResource</a> call. The dataset in the request should be the one expected when performing another <code>DescribeResource</code> call.</p>
     fn update_resource(
         &self,
         input: UpdateResourceRequest,
@@ -3276,7 +3436,7 @@ impl WorkmailClient {
 }
 
 impl Workmail for WorkmailClient {
-    /// <p>Adds a member to the resource's set of delegates.</p>
+    /// <p>Adds a member (user or group) to the resource's set of delegates.</p>
     fn associate_delegate_to_resource(
         &self,
         input: AssociateDelegateToResourceRequest,
@@ -3305,7 +3465,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Adds a member to the group's set.</p>
+    /// <p>Adds a member (user or group) to the group's set.</p>
     fn associate_member_to_group(
         &self,
         input: AssociateMemberToGroupRequest,
@@ -3333,7 +3493,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Adds an alias to the set of a given member of Amazon WorkMail.</p>
+    /// <p>Adds an alias to the set of a given member (user or group) of Amazon WorkMail.</p>
     fn create_alias(
         &self,
         input: CreateAliasRequest,
@@ -3362,7 +3522,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Creates a group that can be used in Amazon WorkMail by calling the RegisterToWorkMail operation.</p>
+    /// <p>Creates a group that can be used in Amazon WorkMail by calling the <a>RegisterToWorkMail</a> operation.</p>
     fn create_group(
         &self,
         input: CreateGroupRequest,
@@ -3391,7 +3551,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Creates a new Amazon WorkMail resource. The available types are equipment and room.</p>
+    /// <p>Creates a new Amazon WorkMail resource. </p>
     fn create_resource(
         &self,
         input: CreateResourceRequest,
@@ -3420,7 +3580,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Creates a user who can be used in Amazon WorkMail by calling the RegisterToWorkMail operation.</p>
+    /// <p>Creates a user who can be used in Amazon WorkMail by calling the <a>RegisterToWorkMail</a> operation.</p>
     fn create_user(
         &self,
         input: CreateUserRequest,
@@ -3449,7 +3609,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Remove the alias from a set of aliases for a given user.</p>
+    /// <p>Remove one or more specified aliases from a set of aliases for a given user.</p>
     fn delete_alias(
         &self,
         input: DeleteAliasRequest,
@@ -3507,7 +3667,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Deletes permissions granted to a user or group.</p>
+    /// <p>Deletes permissions granted to a member (user or group).</p>
     fn delete_mailbox_permissions(
         &self,
         input: DeleteMailboxPermissionsRequest,
@@ -3562,7 +3722,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. The action can't be undone. The mailbox is kept as-is for a minimum of 30 days, without any means to restore it. </p>
+    /// <p>Deletes a user from Amazon WorkMail and all subsequent systems. Before you can delete a user, the user state must be <code>DISABLED</code>. Use the <a>DescribeUser</a> action to confirm the user state.</p> <p>Deleting a user is permanent and cannot be undone. WorkMail archives user mailboxes for 30 days before they are permanently removed.</p>
     fn delete_user(
         &self,
         input: DeleteUserRequest,
@@ -3591,7 +3751,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Mark a user, group, or resource as no longer used in Amazon WorkMail. This action disassociates the mailbox and schedules it for clean-up. Amazon WorkMail keeps mailboxes for 30 days before they are permanently removed. The functionality in the console is <i>Disable</i>.</p>
+    /// <p>Mark a user, group, or resource as no longer used in Amazon WorkMail. This action disassociates the mailbox and schedules it for clean-up. WorkMail keeps mailboxes for 30 days before they are permanently removed. The functionality in the console is <i>Disable</i>.</p>
     fn deregister_from_work_mail(
         &self,
         input: DeregisterFromWorkMailRequest,
@@ -3795,6 +3955,35 @@ impl Workmail for WorkmailClient {
         })
     }
 
+    /// <p>Requests a user's mailbox details for a specified organization and user.</p>
+    fn get_mailbox_details(
+        &self,
+        input: GetMailboxDetailsRequest,
+    ) -> RusotoFuture<GetMailboxDetailsResponse, GetMailboxDetailsError> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.GetMailboxDetails");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetMailboxDetailsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetMailboxDetailsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Creates a paginated call to list the aliases associated with a given entity.</p>
     fn list_aliases(
         &self,
@@ -3824,7 +4013,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Returns an overview of the members of a group.</p>
+    /// <p>Returns an overview of the members of a group. Users and groups can be members of a group.</p>
     fn list_group_members(
         &self,
         input: ListGroupMembersRequest,
@@ -3882,7 +4071,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Lists the mailbox permissions associated with a mailbox.</p>
+    /// <p>Lists the mailbox permissions associated with a user, group, or resource mailbox.</p>
     fn list_mailbox_permissions(
         &self,
         input: ListMailboxPermissionsRequest,
@@ -4025,7 +4214,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Sets permissions for a user or group. This replaces any pre-existing permissions set for the entity.</p>
+    /// <p>Sets permissions for a user, group, or resource. This replaces any pre-existing permissions.</p>
     fn put_mailbox_permissions(
         &self,
         input: PutMailboxPermissionsRequest,
@@ -4053,7 +4242,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Registers an existing and disabled user, group, or resource/entity for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the entity is enabled and fails if the entity is deleted. This operation results in the accumulation of costs. For more information, see <a href="http://aws.amazon.com/workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. Users can either be created by calling the CreateUser API or they can be synchronized from your directory. For more information, see DeregisterFromWorkMail.</p>
+    /// <p>Registers an existing and disabled user, group, or resource for Amazon WorkMail use by associating a mailbox and calendaring capabilities. It performs no change if the user, group, or resource is enabled and fails if the user, group, or resource is deleted. This operation results in the accumulation of costs. For more information, see <a href="https://aws.amazon.com//workmail/pricing">Pricing</a>. The equivalent console functionality for this operation is <i>Enable</i>. </p> <p>Users can either be created by calling the <a>CreateUser</a> API operation or they can be synchronized from your directory. For more information, see <a>DeregisterFromWorkMail</a>.</p>
     fn register_to_work_mail(
         &self,
         input: RegisterToWorkMailRequest,
@@ -4111,7 +4300,36 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Updates the primary email for an entity. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email) and the email provided in the input is promoted as the primary.</p>
+    /// <p>Updates a user's current mailbox quota for a specified organization and user.</p>
+    fn update_mailbox_quota(
+        &self,
+        input: UpdateMailboxQuotaRequest,
+    ) -> RusotoFuture<UpdateMailboxQuotaResponse, UpdateMailboxQuotaError> {
+        let mut request = SignedRequest::new("POST", "workmail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkMailService.UpdateMailboxQuota");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateMailboxQuotaResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateMailboxQuotaError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates the primary email for a user, group, or resource. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email), and the email provided in the input is promoted as the primary.</p>
     fn update_primary_email_address(
         &self,
         input: UpdatePrimaryEmailAddressRequest,
@@ -4137,7 +4355,7 @@ impl Workmail for WorkmailClient {
         })
     }
 
-    /// <p>Updates data for the resource. It must be preceded by a describe call in order to have the latest information. The dataset in the request should be the one expected when performing another describe call.</p>
+    /// <p>Updates data for the resource. To have the latest information, it must be preceded by a <a>DescribeResource</a> call. The dataset in the request should be the one expected when performing another <code>DescribeResource</code> call.</p>
     fn update_resource(
         &self,
         input: UpdateResourceRequest,

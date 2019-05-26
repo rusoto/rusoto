@@ -55,7 +55,7 @@ impl ActivitiesDeserializer {
 pub struct ActivitiesType {
     /// <p>The scaling activities. Activities are sorted by start time. Activities still in progress are described first.</p>
     pub activities: Vec<Activity>,
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
 }
 
@@ -193,7 +193,7 @@ impl ActivityTypeDeserializer {
         })
     }
 }
-/// <p>Describes a policy adjustment type.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html">Dynamic Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+/// <p>Describes a policy adjustment type.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AdjustmentType {
     /// <p>The policy adjustment type. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p>
@@ -462,7 +462,7 @@ pub struct AutoScalingGroup {
     pub enabled_metrics: Option<Vec<EnabledMetric>>,
     /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service.</p>
     pub health_check_grace_period: Option<i64>,
-    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p>
+    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. If you configure an Auto Scaling group to use ELB health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p>
     pub health_check_type: String,
     /// <p>The EC2 instances associated with the group.</p>
     pub instances: Option<Vec<Instance>>,
@@ -478,9 +478,9 @@ pub struct AutoScalingGroup {
     pub min_size: i64,
     /// <p>The mixed instances policy for the group. </p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
-    /// <p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>
+    /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
-    /// <p>The name of the placement group into which to launch your instances, if any. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The name of the placement group into which to launch your instances, if any.</p>
     pub placement_group: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf.</p>
     pub service_linked_role_arn: Option<String>,
@@ -494,7 +494,7 @@ pub struct AutoScalingGroup {
     pub target_group_ar_ns: Option<Vec<String>>,
     /// <p>The termination policies for the group.</p>
     pub termination_policies: Option<Vec<String>>,
-    /// <p>One or more subnet IDs, if applicable, separated by commas.</p> <p>If you specify <code>VPCZoneIdentifier</code> and <code>AvailabilityZones</code>, ensure that the Availability Zones of the subnets match the values for <code>AvailabilityZones</code>.</p>
+    /// <p>One or more subnet IDs, if applicable, separated by commas.</p>
     pub vpc_zone_identifier: Option<String>,
 }
 
@@ -706,9 +706,9 @@ impl AutoScalingGroupNamesSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AutoScalingGroupNamesType {
-    /// <p>The names of the Auto Scaling groups. You can specify up to <code>MaxRecords</code> names. If you omit this parameter, all Auto Scaling groups are described.</p>
+    /// <p>The names of the Auto Scaling groups. Each name can be a maximum of 1600 characters. By default, you can only specify up to 50 names. You can optionally increase this limit using the <code>MaxRecords</code> parameter. </p> <p>If you omit this parameter, all Auto Scaling groups are described.</p>
     pub auto_scaling_group_names: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>. </p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -760,7 +760,7 @@ impl AutoScalingGroupsDeserializer {
 pub struct AutoScalingGroupsType {
     /// <p>The groups.</p>
     pub auto_scaling_groups: Vec<AutoScalingGroup>,
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
 }
 
@@ -804,7 +804,7 @@ pub struct AutoScalingInstanceDetails {
     pub launch_configuration_name: Option<String>,
     /// <p>The launch template for the instance.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
-    /// <p>The lifecycle state for the instance. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The lifecycle state for the instance.</p>
     pub lifecycle_state: String,
     /// <p>Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub protected_from_scale_in: bool,
@@ -894,7 +894,7 @@ impl AutoScalingInstancesDeserializer {
 pub struct AutoScalingInstancesType {
     /// <p>The instances.</p>
     pub auto_scaling_instances: Option<Vec<AutoScalingInstanceDetails>>,
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
 }
 
@@ -1190,7 +1190,7 @@ impl BlockDeviceEbsVolumeTypeDeserializer {
 /// <p>Describes a block device mapping.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct BlockDeviceMapping {
-    /// <p>The device name exposed to the EC2 instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
+    /// <p>The device name exposed to the EC2 instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>). For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html">Device Naming on Linux Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub device_name: String,
     /// <p>The information about the Amazon EBS volume.</p>
     pub ebs: Option<Ebs>,
@@ -1400,45 +1400,45 @@ impl CooldownDeserializer {
 pub struct CreateAutoScalingGroupType {
     /// <p>The name of the Auto Scaling group. This name must be unique within the scope of your AWS account.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more Availability Zones for the group. This parameter is optional if you specify one or more subnets.</p>
+    /// <p>One or more Availability Zones for the group. This parameter is optional if you specify one or more subnets for <code>VPCZoneIdentifier</code>.</p> <p>Conditional: If your account supports EC2-Classic and VPC, this parameter is required to launch instances into EC2-Classic.</p>
     pub availability_zones: Option<Vec<String>>,
-    /// <p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default is 300.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default value is <code>300</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub default_cooldown: Option<i64>,
     /// <p>The number of EC2 instances that should be running in the group. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group. If you do not specify a desired capacity, the default is the minimum size of the group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. During this time, any health check failures for the instance are ignored. The default is 0.</p> <p>This parameter is required if you are adding an <code>ELB</code> health check.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. During this time, any health check failures for the instance are ignored. The default value is <code>0</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you are adding an <code>ELB</code> health check.</p>
     pub health_check_grace_period: Option<i64>,
-    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p> <p>By default, health checks use Amazon EC2 instance status checks to determine the health of an instance. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. The default value is <code>EC2</code>. If you configure an Auto Scaling group to use ELB health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub health_check_type: Option<String>,
-    /// <p>The ID of the instance used to create a launch configuration for the group. This parameter, a launch configuration, a launch template, or a mixed instances policy must be specified.</p> <p>When you specify an ID of an instance, Amazon EC2 Auto Scaling creates a new launch configuration and associates it with the group. This launch configuration derives its attributes from the specified instance, except for the block device mapping.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-from-instance.html">Create an Auto Scaling Group Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The ID of the instance used to create a launch configuration for the group. This parameter, a launch configuration, a launch template, or a mixed instances policy must be specified.</p> <p>When you specify an ID of an instance, Amazon EC2 Auto Scaling creates a new launch configuration and associates it with the group. This launch configuration derives its attributes from the specified instance, except for the block device mapping.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-from-instance.html">Create an Auto Scaling Group Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub instance_id: Option<String>,
-    /// <p>The name of the launch configuration. This parameter, a launch template, a mixed instances policy, or an EC2 instance must be specified.</p>
+    /// <p>The name of the launch configuration. This parameter, a launch template, a mixed instances policy, or an EC2 instance must be specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg.html">Creating an Auto Scaling Group Using a Launch Configuration</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub launch_configuration_name: Option<String>,
-    /// <p>The launch template to use to launch instances. This parameter, a launch configuration, a mixed instances policy, or an EC2 instance must be specified.</p>
+    /// <p>The launch template to use to launch instances. This parameter, a launch configuration, a mixed instances policy, or an EC2 instance must be specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-launch-template.html">Creating an Auto Scaling Group Using a Launch Template</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>One or more lifecycle hooks.</p>
     pub lifecycle_hook_specification_list: Option<Vec<LifecycleHookSpecification>>,
-    /// <p>One or more Classic Load Balancers. To specify an Application Load Balancer, use <code>TargetGroupARNs</code> instead.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-from-instance.html">Using a Load Balancer With an Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>One or more Classic Load Balancers. To specify an Application Load Balancer or a Network Load Balancer, use <code>TargetGroupARNs</code> instead.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Using a Load Balancer With an Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub load_balancer_names: Option<Vec<String>>,
     /// <p>The maximum size of the group.</p>
     pub max_size: i64,
     /// <p>The minimum size of the group.</p>
     pub min_size: i64,
-    /// <p>The mixed instances policy to use to launch instances. This parameter, a launch template, a launch configuration, or an EC2 instance must be specified.</p>
+    /// <p>The mixed instances policy to use to launch instances. This parameter, a launch template, a launch configuration, or an EC2 instance must be specified.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
-    /// <p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>
+    /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in.</p> <p>For more information about preventing instances from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
-    /// <p>The name of the placement group into which to launch your instances, if any. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The name of the placement group into which to launch your instances, if any. A placement group is a logical grouping of instances within a single Availability Zone. You cannot specify multiple Availability Zones and a placement group. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub placement_group: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf. By default, Amazon EC2 Auto Scaling uses a service-linked role named AWSServiceRoleForAutoScaling, which it creates if it does not exist.</p>
+    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf. By default, Amazon EC2 Auto Scaling uses a service-linked role named AWSServiceRoleForAutoScaling, which it creates if it does not exist. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html">Service-Linked Roles</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub service_linked_role_arn: Option<String>,
-    /// <p>One or more tags.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>One or more tags.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The Amazon Resource Names (ARN) of the target groups.</p>
     pub target_group_ar_ns: Option<Vec<String>>,
-    /// <p>One or more termination policies used to select the instance to terminate. These policies are executed in the order that they are listed.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>One or more termination policies used to select the instance to terminate. These policies are executed in the order that they are listed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub termination_policies: Option<Vec<String>>,
-    /// <p>A comma-separated list of subnet identifiers for your virtual private cloud (VPC).</p> <p>If you specify subnets and Availability Zones with this call, ensure that the subnets' Availability Zones match the Availability Zones specified.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>A comma-separated list of subnet IDs for your virtual private cloud (VPC).</p> <p>If you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, the subnets that you specify for this parameter must reside in those Availability Zones.</p> <p>Conditional: If your account supports EC2-Classic and VPC, this parameter is required to launch instances into a VPC.</p>
     pub vpc_zone_identifier: Option<String>,
 }
 
@@ -1556,41 +1556,41 @@ impl CreateAutoScalingGroupTypeSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateLaunchConfigurationType {
-    /// <p>Used for groups that launch instances into a virtual private cloud (VPC). Specifies whether to assign a public IP address to each instance. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>Default: If the instance is launched into a default subnet, the default is to assign a public IP address. If the instance is launched into a nondefault subnet, the default is not to assign a public IP address.</p>
+    /// <p>Used for groups that launch instances into a virtual private cloud (VPC). Specifies whether to assign a public IP address to each instance. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>Default: If the instance is launched into a default subnet, the default is to assign a public IP address. If the instance is launched into a nondefault subnet, the default is not to assign a public IP address.</p>
     pub associate_public_ip_address: Option<bool>,
-    /// <p>One or more mappings that specify how block devices are exposed to the instance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>One or more mappings that specify how block devices are exposed to the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html">Block Device Mapping</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
-    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter is supported only if you are launching EC2-Classic instances. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter is supported only if you are launching EC2-Classic instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub classic_link_vpc_id: Option<String>,
-    /// <p>The IDs of one or more security groups for the specified ClassicLink-enabled VPC. This parameter is required if you specify a ClassicLink-enabled VPC, and is not supported otherwise. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The IDs of one or more security groups for the specified ClassicLink-enabled VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you specify a ClassicLink-enabled VPC, and is not supported otherwise.</p>
     pub classic_link_vpc_security_groups: Option<Vec<String>>,
-    /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. By default, the instance is not optimized for EBS I/O. The optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization is not available with all instance types. Additional usage charges apply. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. By default, the instance is not optimized for EBS I/O. The optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization is not available with all instance types. Additional usage charges apply. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html">Amazon EBS-Optimized Instances</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub ebs_optimized: Option<bool>,
-    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.</p> <p>EC2 instances launched with an IAM role automatically have AWS security credentials available. You can use IAM roles with Amazon EC2 Auto Scaling to automatically enable applications running on your EC2 instances to securely access other AWS resources. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">Launch Auto Scaling Instances with an IAM Role</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.</p> <p>EC2 instances launched with an IAM role automatically have AWS security credentials available. You can use IAM roles with Amazon EC2 Auto Scaling to automatically enable applications running on your EC2 instances to securely access other AWS resources. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html">Use an IAM Role for Applications That Run on Amazon EC2 Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub iam_instance_profile: Option<String>,
-    /// <p>The ID of the Amazon Machine Image (AMI) to use to launch your EC2 instances.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>ImageId</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html">Finding an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The ID of the Amazon Machine Image (AMI) to use to launch your EC2 instances.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>ImageId</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html">Finding an AMI</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub image_id: Option<String>,
-    /// <p>The ID of the instance to use to create the launch configuration. The new launch configuration derives attributes from the instance, except for the block device mapping.</p> <p>If you do not specify <code>InstanceId</code>, you must specify both <code>ImageId</code> and <code>InstanceType</code>.</p> <p>To create a launch configuration with a block device mapping or override any other instance attributes, specify them as part of the same request.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/create-lc-with-instanceID.html">Create a Launch Configuration Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The ID of the instance to use to create the launch configuration. The new launch configuration derives attributes from the instance, except for the block device mapping.</p> <p>If you do not specify <code>InstanceId</code>, you must specify both <code>ImageId</code> and <code>InstanceType</code>.</p> <p>To create a launch configuration with a block device mapping or override any other instance attributes, specify them as part of the same request.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-lc-with-instanceID.html">Create a Launch Configuration Using an EC2 Instance</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub instance_id: Option<String>,
-    /// <p>Enables detailed monitoring (<code>true</code>) or basic monitoring (<code>false</code>) for the Auto Scaling instances. The default is <code>true</code>.</p>
+    /// <p>Enables detailed monitoring (<code>true</code>) or basic monitoring (<code>false</code>) for the Auto Scaling instances. The default value is <code>true</code>.</p>
     pub instance_monitoring: Option<InstanceMonitoring>,
-    /// <p>The instance type of the EC2 instance.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p> <p>For information about available instance types, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>
+    /// <p>The instance type of the EC2 instance.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p>
     pub instance_type: Option<String>,
     /// <p>The ID of the kernel associated with the AMI.</p>
     pub kernel_id: Option<String>,
-    /// <p>The name of the key pair. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Amazon EC2 Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The name of the key pair. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Amazon EC2 Key Pairs</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub key_name: Option<String>,
     /// <p>The name of the launch configuration. This name must be unique within the scope of your AWS account.</p>
     pub launch_configuration_name: String,
-    /// <p>The tenancy of the instance. An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware and can only be launched into a VPC.</p> <p>To launch Dedicated Instances into a shared tenancy VPC (a VPC with the instance placement tenancy attribute set to <code>default</code>), you must set the value of this parameter to <code>dedicated</code>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Valid values: <code>default</code> | <code>dedicated</code> </p>
+    /// <p>The tenancy of the instance. An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware and can only be launched into a VPC.</p> <p>To launch Dedicated Instances into a shared tenancy VPC (a VPC with the instance placement tenancy attribute set to <code>default</code>), you must set the value of this parameter to <code>dedicated</code>.</p> <p>If you specify this parameter, be sure to specify at least one subnet when you create your group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Valid values: <code>default</code> | <code>dedicated</code> </p>
     pub placement_tenancy: Option<String>,
     /// <p>The ID of the RAM disk associated with the AMI.</p>
     pub ramdisk_id: Option<String>,
-    /// <p>One or more security groups with which to associate the instances.</p> <p>If your instances are launched in EC2-Classic, you can either specify security group names or the security group IDs. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If your instances are launched into a VPC, specify security group IDs. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>One or more security groups with which to associate the instances.</p> <p>If your instances are launched in EC2-Classic, you can either specify security group names or the security group IDs. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>If your instances are launched into a VPC, specify security group IDs. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot market price. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot market price. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Launching Spot Instances in Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub spot_price: Option<String>,
-    /// <p>The user data to make available to the launched EC2 instances. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The user data to make available to the launched EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance Metadata and User Data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub user_data: Option<String>,
 }
 
@@ -1699,10 +1699,10 @@ impl CreateOrUpdateTagsTypeSerializer {
     }
 }
 
-/// <p>Configures a customized metric for a target tracking policy.</p>
+/// <p>Represents a CloudWatch metric of your choosing for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p> <p>To create your customized metric specification:</p> <ul> <li> <p>Add values for each required parameter from CloudWatch. You can use an existing metric, or a new metric that you create. To use your own metric, you must first publish the metric to CloudWatch. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publish Custom Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> </li> <li> <p>Choose a metric that changes proportionally with capacity. The value of the metric should increase or decrease in inverse proportion to the number of capacity units. That is, the value of the metric should decrease when capacity increases. </p> </li> </ul> <p>For more information about CloudWatch, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html">Amazon CloudWatch Concepts</a>. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CustomizedMetricSpecification {
-    /// <p>The dimensions of the metric.</p>
+    /// <p>The dimensions of the metric.</p> <p>Conditional: If you published your metric with dimensions, you must specify the same dimensions in your scaling policy.</p>
     pub dimensions: Option<Vec<MetricDimension>>,
     /// <p>The name of the metric.</p>
     pub metric_name: String,
@@ -1953,9 +1953,9 @@ impl DeleteTagsTypeSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountLimitsAnswer {
-    /// <p>The maximum number of groups allowed for your AWS account. The default limit is 20 per region.</p>
+    /// <p>The maximum number of groups allowed for your AWS account. The default limit is 200 per region.</p>
     pub max_number_of_auto_scaling_groups: Option<i64>,
-    /// <p>The maximum number of launch configurations allowed for your AWS account. The default limit is 100 per region.</p>
+    /// <p>The maximum number of launch configurations allowed for your AWS account. The default limit is 200 per region.</p>
     pub max_number_of_launch_configurations: Option<i64>,
     /// <p>The current number of groups for your AWS account.</p>
     pub number_of_auto_scaling_groups: Option<i64>,
@@ -2044,7 +2044,7 @@ impl DescribeAdjustmentTypesAnswerDeserializer {
 pub struct DescribeAutoScalingInstancesType {
     /// <p>The IDs of the instances. You can specify up to <code>MaxRecords</code> IDs. If you omit this parameter, all Auto Scaling instances are described. If you specify an ID that does not exist, it is ignored with no error.</p>
     pub instance_ids: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 50.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>50</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2206,7 +2206,7 @@ impl DescribeLifecycleHooksTypeSerializer {
 pub struct DescribeLoadBalancerTargetGroupsRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The maximum number of items to return with this call. The default value is 100 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>100</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2238,7 +2238,7 @@ impl DescribeLoadBalancerTargetGroupsRequestSerializer {
 pub struct DescribeLoadBalancerTargetGroupsResponse {
     /// <p>Information about the target groups.</p>
     pub load_balancer_target_groups: Option<Vec<LoadBalancerTargetGroupState>>,
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
 }
 
@@ -2277,7 +2277,7 @@ impl DescribeLoadBalancerTargetGroupsResponseDeserializer {
 pub struct DescribeLoadBalancersRequest {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The maximum number of items to return with this call. The default value is 100 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>100</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2309,7 +2309,7 @@ impl DescribeLoadBalancersRequestSerializer {
 pub struct DescribeLoadBalancersResponse {
     /// <p>The load balancers.</p>
     pub load_balancers: Option<Vec<LoadBalancerState>>,
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
 }
 
@@ -2383,7 +2383,7 @@ impl DescribeMetricCollectionTypesAnswerDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeNotificationConfigurationsAnswer {
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
     /// <p>The notification configurations.</p>
     pub notification_configurations: Vec<NotificationConfiguration>,
@@ -2424,7 +2424,7 @@ impl DescribeNotificationConfigurationsAnswerDeserializer {
 pub struct DescribeNotificationConfigurationsType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_names: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2459,13 +2459,13 @@ impl DescribeNotificationConfigurationsTypeSerializer {
 pub struct DescribePoliciesType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
-    /// <p>The maximum number of items to be returned with each call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to be returned with each call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
     /// <p>The names of one or more policies. If you omit this parameter, all policies are described. If a group name is provided, the results are limited to that group. This list is limited to 50 items. If you specify an unknown policy name, it is ignored with no error.</p>
     pub policy_names: Option<Vec<String>>,
-    /// <p>One or more policy types. Valid values are <code>SimpleScaling</code> and <code>StepScaling</code>.</p>
+    /// <p>One or more policy types. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, and <code>TargetTrackingScaling</code>.</p>
     pub policy_types: Option<Vec<String>>,
 }
 
@@ -2513,7 +2513,7 @@ pub struct DescribeScalingActivitiesType {
     pub activity_ids: Option<Vec<String>>,
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
-    /// <p>The maximum number of items to return with this call. The default value is 100 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>100</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2556,7 +2556,7 @@ pub struct DescribeScheduledActionsType {
     pub auto_scaling_group_name: Option<String>,
     /// <p>The latest scheduled start time to return. If scheduled action names are provided, this parameter is ignored.</p>
     pub end_time: Option<String>,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2607,7 +2607,7 @@ impl DescribeScheduledActionsTypeSerializer {
 pub struct DescribeTagsType {
     /// <p>One or more filters to scope the tags to return. The maximum number of filters per filter type (for example, <code>auto-scaling-group</code>) is 1000.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -2636,7 +2636,7 @@ impl DescribeTagsTypeSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTerminationPolicyTypesAnswer {
-    /// <p>The termination policies supported by Amazon EC2 Auto Scaling: <code>OldestInstance</code>, <code>OldestLaunchConfiguration</code>, <code>NewestInstance</code>, <code>ClosestToNextInstanceHour</code>, <code>Default</code>, <code>OldestLaunchTemplate</code>, and <code>AllocationStrategy</code>. Currently, the <code>OldestLaunchTemplate</code> and <code>AllocationStrategy</code> policies are only supported for Auto Scaling groups with <a>MixedInstancesPolicy</a>.</p>
+    /// <p>The termination policies supported by Amazon EC2 Auto Scaling: <code>OldestInstance</code>, <code>OldestLaunchConfiguration</code>, <code>NewestInstance</code>, <code>ClosestToNextInstanceHour</code>, <code>Default</code>, <code>OldestLaunchTemplate</code>, and <code>AllocationStrategy</code>.</p>
     pub termination_policy_types: Option<Vec<String>>,
 }
 
@@ -2867,20 +2867,20 @@ impl DisableScaleInDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes an Amazon EBS volume.</p>
+/// <p>Describes an Amazon EBS volume. Used in combination with <a>BlockDeviceMapping</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Ebs {
-    /// <p>Indicates whether the volume is deleted on instance termination. The default is <code>true</code>.</p>
+    /// <p>Indicates whether the volume is deleted on instance termination. The default value is <code>true</code>.</p>
     pub delete_on_termination: Option<bool>,
-    /// <p>Indicates whether the volume should be encrypted. Encrypted EBS volumes must be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or an unencrypted volume from an encrypted snapshot. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Specifies whether the volume should be encrypted. Encrypted EBS volumes must be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or an unencrypted volume from an encrypted snapshot. If your AMI uses encrypted volumes, you can only launch it on supported instance types. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>The number of I/O operations per second (IOPS) to provision for the volume.</p> <p>Constraint: Required when the volume type is <code>io1</code>.</p>
+    /// <p>The number of I/O operations per second (IOPS) to provision for the volume. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Conditional: This parameter is required when the volume type is <code>io1</code>. (Not used with <code>standard</code>, <code>gp2</code>, <code>st1</code>, or <code>sc1</code> volumes.) </p>
     pub iops: Option<i64>,
-    /// <p>The ID of the snapshot.</p>
+    /// <p>The ID of the snapshot. This parameter is optional if you specify a volume size. </p>
     pub snapshot_id: Option<String>,
-    /// <p>The volume size, in GiB. For <code>standard</code> volumes, specify a value from 1 to 1,024. For <code>io1</code> volumes, specify a value from 4 to 16,384. For <code>gp2</code> volumes, specify a value from 1 to 16,384. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don't specify a volume size, the default is the snapshot size.</p>
+    /// <p><p>The volume size, in GiB. </p> <p>Constraints: 1-1,024 for <code>standard</code>, 4-16,384 for <code>io1</code>, 1-16,384 for <code>gp2</code>, and 500-16,384 for <code>st1</code> and <code>sc1</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of VolumeSize or SnapshotId is required.</p> </note></p>
     pub volume_size: Option<i64>,
-    /// <p>The volume type. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Valid values: <code>standard</code> | <code>io1</code> | <code>gp2</code> </p>
+    /// <p>The volume type, which can be <code>standard</code> for Magnetic, <code>io1</code> for Provisioned IOPS SSD, <code>gp2</code> for General Purpose SSD, <code>st1</code> for Throughput Optimized HDD, or <code>sc1</code> for Cold HDD. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Valid values: <code>standard</code> | <code>io1</code> | <code>gp2</code> | <code>st1</code> | <code>sc1</code> </p>
     pub volume_type: Option<String>,
 }
 
@@ -3144,11 +3144,11 @@ impl EstimatedInstanceWarmupDeserializer {
 pub struct ExecutePolicyType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
-    /// <p>The breach threshold for the alarm.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
+    /// <p>The breach threshold for the alarm.</p> <p>Conditional: This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
     pub breach_threshold: Option<f64>,
-    /// <p>Indicates whether Amazon EC2 Auto Scaling waits for the cooldown period to complete before executing the policy.</p> <p>This parameter is not supported if the policy type is <code>StepScaling</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Indicates whether Amazon EC2 Auto Scaling waits for the cooldown period to complete before executing the policy.</p> <p>This parameter is not supported if the policy type is <code>StepScaling</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub honor_cooldown: Option<bool>,
-    /// <p>The metric value to compare to <code>BreachThreshold</code>. This enables you to execute a policy of type <code>StepScaling</code> and determine which step adjustment to use. For example, if the breach threshold is 50 and you want to use a step adjustment with a lower bound of 0 and an upper bound of 10, you can set the metric value to 59.</p> <p>If you specify a metric value that doesn't correspond to a step adjustment for the policy, the call returns an error.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
+    /// <p>The metric value to compare to <code>BreachThreshold</code>. This enables you to execute a policy of type <code>StepScaling</code> and determine which step adjustment to use. For example, if the breach threshold is 50 and you want to use a step adjustment with a lower bound of 0 and an upper bound of 10, you can set the metric value to 59.</p> <p>If you specify a metric value that doesn't correspond to a step adjustment for the policy, the call returns an error.</p> <p>Conditional: This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
     pub metric_value: Option<f64>,
     /// <p>The name or ARN of the policy.</p>
     pub policy_name: String,
@@ -3543,17 +3543,17 @@ impl InstancesDeserializer {
 /// <p>Describes an instances distribution for an Auto Scaling group with <a>MixedInstancesPolicy</a>.</p> <p>The instances distribution specifies the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstancesDistribution {
-    /// <p>Indicates how to allocate instance types to fulfill On-Demand capacity. </p> <p>The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance types in the <b>Overrides</b> array of <a>LaunchTemplate</a> to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on. </p>
+    /// <p>Indicates how to allocate instance types to fulfill On-Demand capacity. </p> <p>The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance type overrides for the <a>LaunchTemplate</a> to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on. </p>
     pub on_demand_allocation_strategy: Option<String>,
-    /// <p>The minimum amount of the Auto Scaling group's capacity that must be fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.</p> <p>The default value is 0. If you leave this parameter set to 0, On-Demand Instances are launched as a percentage of the Auto Scaling group's desired capacity, per the <b>OnDemandPercentageAboveBaseCapacity</b> setting.</p>
+    /// <p>The minimum amount of the Auto Scaling group's capacity that must be fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales.</p> <p>The default value is <code>0</code>. If you leave this parameter set to <code>0</code>, On-Demand Instances are launched as a percentage of the Auto Scaling group's desired capacity, per the <code>OnDemandPercentageAboveBaseCapacity</code> setting.</p>
     pub on_demand_base_capacity: Option<i64>,
-    /// <p>Controls the percentages of On-Demand Instances and Spot Instances for your additional capacity beyond <b>OnDemandBaseCapacity</b>. </p> <p>The range is 0–100. The default value is 100. If you leave this parameter set to 100, the percentages are 100% for On-Demand Instances and 0% for Spot Instances. </p>
+    /// <p>Controls the percentages of On-Demand Instances and Spot Instances for your additional capacity beyond <code>OnDemandBaseCapacity</code>.</p> <p>The range is 0–100. The default value is <code>100</code>. If you leave this parameter set to <code>100</code>, the percentages are 100% for On-Demand Instances and 0% for Spot Instances. </p>
     pub on_demand_percentage_above_base_capacity: Option<i64>,
     /// <p>Indicates how to allocate Spot capacity across Spot pools.</p> <p>The only valid value is <code>lowest-price</code>, which is also the default value. The Auto Scaling group selects the cheapest Spot pools and evenly allocates your Spot capacity across the number of Spot pools that you specify. </p>
     pub spot_allocation_strategy: Option<String>,
-    /// <p>The number of Spot pools to use to allocate your Spot capacity. The Spot pools are determined from the different instance types in the <b>Overrides</b> array of <a>LaunchTemplate</a>. </p> <p>The range is 1–20 and the default is 2. </p>
+    /// <p>The number of Spot pools to use to allocate your Spot capacity. The Spot pools are determined from the different instance types in the Overrides array of <a>LaunchTemplate</a>. </p> <p>The range is 1–20 and the default is 2. </p>
     pub spot_instance_pools: Option<i64>,
-    /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. If you leave this value blank (which is the default), the maximum Spot price is set at the On-Demand price. </p>
+    /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. If you leave the value of this parameter blank (which is the default), the maximum Spot price is set at the On-Demand price.</p> <p>To remove a value that you previously set, include the parameter but leave the value blank.</p>
     pub spot_max_price: Option<String>,
 }
 
@@ -3600,8 +3600,10 @@ impl InstancesDistributionDeserializer {
                     )?);
                 }
                 "SpotMaxPrice" => {
-                    obj.spot_max_price =
-                        Some(SpotPriceDeserializer::deserialize("SpotMaxPrice", stack)?);
+                    obj.spot_max_price = Some(MixedInstanceSpotPriceDeserializer::deserialize(
+                        "SpotMaxPrice",
+                        stack,
+                    )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -3659,9 +3661,9 @@ pub struct LaunchConfiguration {
     pub associate_public_ip_address: Option<bool>,
     /// <p>A block device mapping, which specifies the block devices for the instance.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
-    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter can only be used if you are launching EC2-Classic instances. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The ID of a ClassicLink-enabled VPC to link your EC2-Classic instances to. This parameter can only be used if you are launching EC2-Classic instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub classic_link_vpc_id: Option<String>,
-    /// <p>The IDs of one or more security groups for the VPC specified in <code>ClassicLinkVPCId</code>. This parameter is required if you specify a ClassicLink-enabled VPC, and cannot be used otherwise. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The IDs of one or more security groups for the VPC specified in <code>ClassicLinkVPCId</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-classiclink.html">ClassicLink</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html#as-ClassicLink">Linking EC2-Classic Instances to a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you specify a ClassicLink-enabled VPC, and cannot be used otherwise.</p>
     pub classic_link_vpc_security_groups: Option<Vec<String>>,
     /// <p>The creation date and time for the launch configuration.</p>
     pub created_time: String,
@@ -3849,7 +3851,7 @@ impl LaunchConfigurationNamesSerializer {
 pub struct LaunchConfigurationNamesType {
     /// <p>The launch configuration names. If you omit this parameter, all launch configurations are described.</p>
     pub launch_configuration_names: Option<Vec<String>>,
-    /// <p>The maximum number of items to return with this call. The default value is 50 and the maximum value is 100.</p>
+    /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
@@ -3903,7 +3905,7 @@ impl LaunchConfigurationsDeserializer {
 pub struct LaunchConfigurationsType {
     /// <p>The launch configurations.</p>
     pub launch_configurations: Vec<LaunchConfiguration>,
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
 }
 
@@ -4018,7 +4020,7 @@ impl LaunchTemplateNameDeserializer {
 /// <p>Describes an override for a launch template. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateOverrides {
-    /// <p>The instance type. </p> <p>For information about available instance types, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>
+    /// <p>The instance type. </p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide.</i> </p>
     pub instance_type: Option<String>,
 }
 
@@ -4063,7 +4065,7 @@ impl LaunchTemplateOverridesSerializer {
     }
 }
 
-/// <p>Describes a launch template and the launch template version.</p> <p>The launch template that is specified must be configured for use with an Auto Scaling group. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html">Creating a Launch Template for an Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+/// <p>Describes a launch template and the launch template version.</p> <p>The launch template that is specified must be configured for use with an Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html">Creating a Launch Template for an Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateSpecification {
     /// <p>The ID of the launch template. You must specify either a template ID or a template name.</p>
@@ -4147,22 +4149,22 @@ impl LifecycleActionResultDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a lifecycle hook, which tells Amazon EC2 Auto Scaling that you want to perform an action whenever it launches instances or whenever it terminates instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+/// <p>Describes a lifecycle hook, which tells Amazon EC2 Auto Scaling that you want to perform an action whenever it launches instances or whenever it terminates instances. Used in response to <a>DescribeLifecycleHooks</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleHook {
     /// <p>The name of the Auto Scaling group for the lifecycle hook.</p>
     pub auto_scaling_group_name: Option<String>,
-    /// <p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. The valid values are <code>CONTINUE</code> and <code>ABANDON</code>. The default value is <code>CONTINUE</code>.</p>
+    /// <p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. The possible values are <code>CONTINUE</code> and <code>ABANDON</code>.</p>
     pub default_result: Option<String>,
     /// <p>The maximum time, in seconds, that an instance can remain in a <code>Pending:Wait</code> or <code>Terminating:Wait</code> state. The maximum is 172800 seconds (48 hours) or 100 times <code>HeartbeatTimeout</code>, whichever is smaller.</p>
     pub global_timeout: Option<i64>,
-    /// <p>The maximum time, in seconds, that can elapse before the lifecycle hook times out. If the lifecycle hook times out, Amazon EC2 Auto Scaling performs the default action. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>.</p>
+    /// <p>The maximum time, in seconds, that can elapse before the lifecycle hook times out. If the lifecycle hook times out, Amazon EC2 Auto Scaling performs the action that you specified in the <code>DefaultResult</code> parameter.</p>
     pub heartbeat_timeout: Option<i64>,
     /// <p>The name of the lifecycle hook.</p>
     pub lifecycle_hook_name: Option<String>,
     /// <p><p>The state of the EC2 instance to which to attach the lifecycle hook. The following are possible values:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
     pub lifecycle_transition: Option<String>,
-    /// <p>Additional information that you want to include any time Amazon EC2 Auto Scaling sends a message to the notification target.</p>
+    /// <p>Additional information that is included any time Amazon EC2 Auto Scaling sends a message to the notification target.</p>
     pub notification_metadata: Option<String>,
     /// <p>The ARN of the target that Amazon EC2 Auto Scaling sends notifications to when an instance is in the transition state for the lifecycle hook. The notification target can be either an SQS queue or an SNS topic.</p>
     pub notification_target_arn: Option<String>,
@@ -4248,22 +4250,22 @@ impl LifecycleHookNamesSerializer {
     }
 }
 
-/// <p>Describes a lifecycle hook, which tells Amazon EC2 Auto Scaling that you want to perform an action whenever it launches instances or whenever it terminates instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+/// <p>Describes a lifecycle hook. Used in combination with <a>CreateAutoScalingGroup</a>.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for creating a lifecycle hook for an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. You can modify an existing lifecycle hook or create new lifecycle hooks using <a>PutLifecycleHook</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LifecycleHookSpecification {
-    /// <p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. The valid values are <code>CONTINUE</code> and <code>ABANDON</code>.</p>
+    /// <p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. The valid values are <code>CONTINUE</code> and <code>ABANDON</code>. The default value is <code>ABANDON</code>.</p>
     pub default_result: Option<String>,
-    /// <p>The maximum time, in seconds, that can elapse before the lifecycle hook times out. If the lifecycle hook times out, Amazon EC2 Auto Scaling performs the default action. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>.</p>
+    /// <p>The maximum time, in seconds, that can elapse before the lifecycle hook times out.</p> <p>If the lifecycle hook times out, Amazon EC2 Auto Scaling performs the action that you specified in the <code>DefaultResult</code> parameter. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>.</p>
     pub heartbeat_timeout: Option<i64>,
     /// <p>The name of the lifecycle hook.</p>
     pub lifecycle_hook_name: String,
-    /// <p><p>The state of the EC2 instance to which you want to attach the lifecycle hook. The possible values are:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
+    /// <p><p>The state of the EC2 instance to which you want to attach the lifecycle hook. The valid values are:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
     pub lifecycle_transition: String,
     /// <p>Additional information that you want to include any time Amazon EC2 Auto Scaling sends a message to the notification target.</p>
     pub notification_metadata: Option<String>,
     /// <p>The ARN of the target that Amazon EC2 Auto Scaling sends notifications to when an instance is in the transition state for the lifecycle hook. The notification target can be either an SQS queue or an SNS topic.</p>
     pub notification_target_arn: Option<String>,
-    /// <p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p>
+    /// <p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target, for example, an Amazon SNS topic or an Amazon SQS queue.</p>
     pub role_arn: Option<String>,
 }
 
@@ -4850,7 +4852,21 @@ impl MinAdjustmentStepDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html#asg-purchase-options">Using Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>When you create your Auto Scaling group, you can specify a launch configuration or template as a parameter for the top-level object, or you can specify a mixed instances policy, but not both at the same time.</p>
+struct MixedInstanceSpotPriceDeserializer;
+impl MixedInstanceSpotPriceDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. Used in combination with <a>CreateAutoScalingGroup</a>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>When you create your Auto Scaling group, you can specify a launch configuration or template as a parameter for the top-level object, or you can specify a mixed instances policy, but not both at the same time.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MixedInstancesPolicy {
     /// <p>The instances distribution to use. </p> <p>If you leave this parameter unspecified when creating the group, the default values are used.</p>
@@ -5096,7 +5112,7 @@ impl OverridesSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PoliciesType {
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
     /// <p>The scaling policies.</p>
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
@@ -5128,7 +5144,7 @@ impl PoliciesTypeDeserializer {
 /// <p>Contains the output of PutScalingPolicy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyARNType {
-    /// <p>The CloudWatch alarms created for the target tracking policy.</p>
+    /// <p>The CloudWatch alarms created for the target tracking scaling policy.</p>
     pub alarms: Option<Vec<Alarm>>,
     /// <p>The Amazon Resource Name (ARN) of the policy.</p>
     pub policy_arn: Option<String>,
@@ -5195,12 +5211,12 @@ impl PolicyTypesSerializer {
     }
 }
 
-/// <p>Configures a predefined metric for a target tracking policy.</p>
+/// <p>Represents a predefined metric for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PredefinedMetricSpecification {
     /// <p>The metric type.</p>
     pub predefined_metric_type: String,
-    /// <p>Identifies the resource associated with the metric type. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - Average CPU utilization of the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - Average number of bytes received on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - Average number of bytes sent out on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - Number of requests completed per target in an Application Load Balancer target group.</p> </li> </ul> <p>For predefined metric types <code>ASGAverageCPUUtilization</code>, <code>ASGAverageNetworkIn</code>, and <code>ASGAverageNetworkOut</code>, the parameter must not be specified as the resource associated with the metric type is the Auto Scaling group. For predefined metric type <code>ALBRequestCountPerTarget</code>, the parameter must be specified in the format: <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i>/targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code>, where <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> is the final portion of the load balancer ARN, and <code>targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code> is the final portion of the target group ARN. The target group must be attached to the Auto Scaling group.</p>
+    /// <p>Identifies the resource associated with the metric type. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - Average CPU utilization of the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - Average number of bytes received on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - Average number of bytes sent out on all network interfaces by the Auto Scaling group.</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - Number of requests completed per target in an Application Load Balancer or a Network Load Balancer target group.</p> </li> </ul> <p>For predefined metric types <code>ASGAverageCPUUtilization</code>, <code>ASGAverageNetworkIn</code>, and <code>ASGAverageNetworkOut</code>, the parameter must not be specified as the resource associated with the metric type is the Auto Scaling group. For predefined metric type <code>ALBRequestCountPerTarget</code>, the parameter must be specified in the format: <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i>/targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code>, where <code>app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> is the final portion of the load balancer ARN, and <code>targetgroup/<i>target-group-name</i>/<i>target-group-id</i> </code> is the final portion of the target group ARN. The target group must be attached to the Auto Scaling group.</p>
     pub resource_label: Option<String>,
 }
 
@@ -5264,7 +5280,7 @@ impl ProcessNamesSerializer {
     }
 }
 
-/// <p>Describes a process type.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html#process-types">Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+/// <p>Describes a process type.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html#process-types">Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ProcessType {
     /// <p><p>One of the following processes:</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> </ul></p>
@@ -5386,17 +5402,17 @@ pub struct PutLifecycleHookType {
     pub auto_scaling_group_name: String,
     /// <p>Defines the action the Auto Scaling group should take when the lifecycle hook timeout elapses or if an unexpected failure occurs. This parameter can be either <code>CONTINUE</code> or <code>ABANDON</code>. The default value is <code>ABANDON</code>.</p>
     pub default_result: Option<String>,
-    /// <p>The maximum time, in seconds, that can elapse before the lifecycle hook times out. The range is from 30 to 7200 seconds. The default is 3600 seconds (1 hour).</p> <p>If the lifecycle hook times out, Amazon EC2 Auto Scaling performs the default action. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>.</p>
+    /// <p>The maximum time, in seconds, that can elapse before the lifecycle hook times out. The range is from <code>30</code> to <code>7200</code> seconds. The default value is <code>3600</code> seconds (1 hour).</p> <p>If the lifecycle hook times out, Amazon EC2 Auto Scaling performs the action that you specified in the <code>DefaultResult</code> parameter. You can prevent the lifecycle hook from timing out by calling <a>RecordLifecycleActionHeartbeat</a>.</p>
     pub heartbeat_timeout: Option<i64>,
     /// <p>The name of the lifecycle hook.</p>
     pub lifecycle_hook_name: String,
-    /// <p>The instance state to which you want to attach the lifecycle hook. The possible values are:</p> <ul> <li> <p>autoscaling:EC2_INSTANCE_LAUNCHING</p> </li> <li> <p>autoscaling:EC2_INSTANCE_TERMINATING</p> </li> </ul> <p>This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>
+    /// <p>The instance state to which you want to attach the lifecycle hook. The valid values are:</p> <ul> <li> <p>autoscaling:EC2_INSTANCE_LAUNCHING</p> </li> <li> <p>autoscaling:EC2_INSTANCE_TERMINATING</p> </li> </ul> <p>Conditional: This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>
     pub lifecycle_transition: Option<String>,
-    /// <p>Contains additional information that you want to include any time Amazon EC2 Auto Scaling sends a message to the notification target.</p>
+    /// <p>Additional information that you want to include any time Amazon EC2 Auto Scaling sends a message to the notification target.</p>
     pub notification_metadata: Option<String>,
-    /// <p>The ARN of the notification target that Amazon EC2 Auto Scaling uses to notify you when an instance is in the transition state for the lifecycle hook. This target can be either an SQS queue or an SNS topic. If you specify an empty string, this overrides the current ARN.</p> <p>This operation uses the JSON format when sending notifications to an Amazon SQS queue, and an email key-value pair format when sending notifications to an Amazon SNS topic.</p> <p>When you specify a notification target, Amazon EC2 Auto Scaling sends it a test message. Test messages contain the following additional key-value pair: <code>"Event": "autoscaling:TEST_NOTIFICATION"</code>.</p>
+    /// <p>The ARN of the notification target that Amazon EC2 Auto Scaling uses to notify you when an instance is in the transition state for the lifecycle hook. This target can be either an SQS queue or an SNS topic.</p> <p>If you specify an empty string, this overrides the current ARN.</p> <p>This operation uses the JSON format when sending notifications to an Amazon SQS queue, and an email key-value pair format when sending notifications to an Amazon SNS topic.</p> <p>When you specify a notification target, Amazon EC2 Auto Scaling sends it a test message. Test messages contain the following additional key-value pair: <code>"Event": "autoscaling:TEST_NOTIFICATION"</code>.</p>
     pub notification_target_arn: Option<String>,
-    /// <p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p> <p>This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>
+    /// <p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target, for example, an Amazon SNS topic or an Amazon SQS queue.</p> <p>Conditional: This parameter is required for new lifecycle hooks, but optional when updating existing hooks.</p>
     pub role_arn: Option<String>,
 }
 
@@ -5481,11 +5497,11 @@ impl PutNotificationConfigurationTypeSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutScalingPolicyType {
-    /// <p>The adjustment type. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code> or <code>StepScaling</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html">Dynamic Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The adjustment type. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code> or <code>StepScaling</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scale-based-on-demand.html">Dynamic Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub adjustment_type: Option<String>,
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>The amount of time, in seconds, after a scaling activity completes and before the next scaling activity can start. If this parameter is not specified, the default cooldown period for the group applies.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The amount of time, in seconds, after a scaling activity completes and before the next scaling activity can start. If this parameter is not specified, the default cooldown period for the group applies.</p> <p>This parameter is supported if the policy type is <code>SimpleScaling</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub cooldown: Option<i64>,
     /// <p>The estimated time, in seconds, until a newly launched instance can contribute to the CloudWatch metrics. The default is to use the value specified for the default cooldown period for the group.</p> <p>This parameter is supported if the policy type is <code>StepScaling</code> or <code>TargetTrackingScaling</code>.</p>
     pub estimated_instance_warmup: Option<i64>,
@@ -5499,11 +5515,11 @@ pub struct PutScalingPolicyType {
     pub policy_name: String,
     /// <p>The policy type. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, and <code>TargetTrackingScaling</code>. If the policy type is null, the value is treated as <code>SimpleScaling</code>.</p>
     pub policy_type: Option<String>,
-    /// <p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p> <p>This parameter is required if the policy type is <code>SimpleScaling</code> and not supported otherwise.</p>
+    /// <p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p> <p>Conditional: This parameter is required if the policy type is <code>SimpleScaling</code> and not supported otherwise.</p>
     pub scaling_adjustment: Option<i64>,
-    /// <p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p> <p>This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
+    /// <p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p> <p>Conditional: This parameter is required if the policy type is <code>StepScaling</code> and not supported otherwise.</p>
     pub step_adjustments: Option<Vec<StepAdjustment>>,
-    /// <p>A target tracking policy.</p> <p>This parameter is required if the policy type is <code>TargetTrackingScaling</code> and not supported otherwise.</p>
+    /// <p>A target tracking scaling policy. Includes support for predefined or customized metrics.</p> <p>Conditional: This parameter is required if the policy type is <code>TargetTrackingScaling</code> and not supported otherwise.</p>
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
 }
 
@@ -5583,11 +5599,11 @@ pub struct PutScheduledUpdateGroupActionType {
     pub max_size: Option<i64>,
     /// <p>The minimum size for the Auto Scaling group.</p>
     pub min_size: Option<i64>,
-    /// <p>The recurring schedule for this action, in Unix cron syntax format. For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p>
+    /// <p>The recurring schedule for this action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p>
     pub recurrence: Option<String>,
     /// <p>The name of this scaling action.</p>
     pub scheduled_action_name: String,
-    /// <p>The time for this action to start, in "YYYY-MM-DDThh:mm:ssZ" format in UTC/GMT only (for example, <code>2014-06-01T00:00:00Z</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule your action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
+    /// <p>The time for this action to start, in YYYY-MM-DDThh:mm:ssZ format in UTC/GMT only and in quotes (for example, <code>"2019-06-01T00:00:00Z"</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule your action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
     pub start_time: Option<String>,
     /// <p>This parameter is deprecated.</p>
     pub time: Option<String>,
@@ -5742,7 +5758,7 @@ impl ScalingPoliciesDeserializer {
 /// <p>Describes a scaling policy.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScalingPolicy {
-    /// <p>The adjustment type, which specifies how <code>ScalingAdjustment</code> is interpreted. Valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p>
+    /// <p>The adjustment type, which specifies how <code>ScalingAdjustment</code> is interpreted. The valid values are <code>ChangeInCapacity</code>, <code>ExactCapacity</code>, and <code>PercentChangeInCapacity</code>.</p>
     pub adjustment_type: Option<String>,
     /// <p>The CloudWatch alarms related to the policy.</p>
     pub alarms: Option<Vec<Alarm>>,
@@ -5752,7 +5768,7 @@ pub struct ScalingPolicy {
     pub cooldown: Option<i64>,
     /// <p>The estimated time, in seconds, until a newly launched instance can contribute to the CloudWatch metrics.</p>
     pub estimated_instance_warmup: Option<i64>,
-    /// <p>The aggregation type for the CloudWatch metrics. Valid values are <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code>.</p>
+    /// <p>The aggregation type for the CloudWatch metrics. The valid values are <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code>.</p>
     pub metric_aggregation_type: Option<String>,
     /// <p>The minimum number of instances to scale. If the value of <code>AdjustmentType</code> is <code>PercentChangeInCapacity</code>, the scaling policy changes the <code>DesiredCapacity</code> of the Auto Scaling group by at least this many instances. Otherwise, the error is <code>ValidationError</code>.</p>
     pub min_adjustment_magnitude: Option<i64>,
@@ -5762,13 +5778,13 @@ pub struct ScalingPolicy {
     pub policy_arn: Option<String>,
     /// <p>The name of the scaling policy.</p>
     pub policy_name: Option<String>,
-    /// <p>The policy type. Valid values are <code>SimpleScaling</code> and <code>StepScaling</code>.</p>
+    /// <p>The policy type. The valid values are <code>SimpleScaling</code> and <code>StepScaling</code>.</p>
     pub policy_type: Option<String>,
     /// <p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p>
     pub scaling_adjustment: Option<i64>,
     /// <p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p>
     pub step_adjustments: Option<Vec<StepAdjustment>>,
-    /// <p>A target tracking policy.</p>
+    /// <p>A target tracking scaling policy.</p>
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
 }
 
@@ -5910,7 +5926,7 @@ impl ScheduledActionNamesSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledActionsType {
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
     /// <p>The scheduled actions.</p>
     pub scheduled_update_group_actions: Option<Vec<ScheduledUpdateGroupAction>>,
@@ -5949,7 +5965,7 @@ pub struct ScheduledUpdateGroupAction {
     pub auto_scaling_group_name: Option<String>,
     /// <p>The number of instances you prefer to maintain in the group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The date and time that the action is scheduled to end. This date and time can be up to one month in the future.</p>
+    /// <p>The date and time that the action is scheduled to end. </p>
     pub end_time: Option<String>,
     /// <p>The maximum size of the group.</p>
     pub max_size: Option<i64>,
@@ -5961,7 +5977,7 @@ pub struct ScheduledUpdateGroupAction {
     pub scheduled_action_arn: Option<String>,
     /// <p>The name of the scheduled action.</p>
     pub scheduled_action_name: Option<String>,
-    /// <p>The date and time that the action is scheduled to begin. This date and time can be up to one month in the future.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
+    /// <p>The date and time that the action is scheduled to begin. </p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
     pub start_time: Option<String>,
     /// <p>This parameter is deprecated.</p>
     pub time: Option<String>,
@@ -6040,7 +6056,7 @@ impl ScheduledUpdateGroupActionDeserializer {
         )
     }
 }
-/// <p>Describes one or more scheduled scaling action updates for a specified Auto Scaling group. Used in combination with <a>BatchPutScheduledUpdateGroupAction</a>. </p> <p>When updating a scheduled scaling action, all optional parameters are left unchanged if not specified. </p>
+/// <p>Describes one or more scheduled scaling action updates for a specified Auto Scaling group. Used in combination with <a>BatchPutScheduledUpdateGroupAction</a>.</p> <p>When updating a scheduled scaling action, all optional parameters are left unchanged if not specified. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledUpdateGroupActionRequest {
     /// <p>The number of EC2 instances that should be running in the group.</p>
@@ -6051,11 +6067,11 @@ pub struct ScheduledUpdateGroupActionRequest {
     pub max_size: Option<i64>,
     /// <p>The minimum size of the group.</p>
     pub min_size: Option<i64>,
-    /// <p>The recurring schedule for the action, in Unix cron syntax format. For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p>
+    /// <p>The recurring schedule for the action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p>
     pub recurrence: Option<String>,
     /// <p>The name of the scaling action.</p>
     pub scheduled_action_name: String,
-    /// <p>The time for the action to start, in "YYYY-MM-DDThh:mm:ssZ" format in UTC/GMT only (for example, <code>2014-06-01T00:00:00Z</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule the action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
+    /// <p>The time for the action to start, in YYYY-MM-DDThh:mm:ssZ format in UTC/GMT only and in quotes (for example, <code>"2019-06-01T00:00:00Z"</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule the action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
     pub start_time: Option<String>,
 }
 
@@ -6297,7 +6313,7 @@ impl SpotPriceDeserializer {
         Ok(obj)
     }
 }
-/// <p><p>Describes an adjustment based on the difference between the value of the aggregated CloudWatch metric and the breach threshold that you&#39;ve defined for the alarm.</p> <p>For the following examples, suppose that you have an alarm with a breach threshold of 50:</p> <ul> <li> <p>To trigger the adjustment when the metric is greater than or equal to 50 and less than 60, specify a lower bound of 0 and an upper bound of 10.</p> </li> <li> <p>To trigger the adjustment when the metric is greater than 40 and less than or equal to 50, specify a lower bound of -10 and an upper bound of 0.</p> </li> </ul> <p>There are a few rules for the step adjustments for your step policy:</p> <ul> <li> <p>The ranges of your step adjustments can&#39;t overlap or have a gap.</p> </li> <li> <p>At most, one step adjustment can have a null lower bound. If one step adjustment has a negative lower bound, then there must be a step adjustment with a null lower bound.</p> </li> <li> <p>At most, one step adjustment can have a null upper bound. If one step adjustment has a positive upper bound, then there must be a step adjustment with a null upper bound.</p> </li> <li> <p>The upper and lower bound can&#39;t be null in the same step adjustment.</p> </li> </ul></p>
+/// <p><p>Describes an adjustment based on the difference between the value of the aggregated CloudWatch metric and the breach threshold that you&#39;ve defined for the alarm. Used in combination with <a>PutScalingPolicy</a>.</p> <p>For the following examples, suppose that you have an alarm with a breach threshold of 50:</p> <ul> <li> <p>To trigger the adjustment when the metric is greater than or equal to 50 and less than 60, specify a lower bound of 0 and an upper bound of 10.</p> </li> <li> <p>To trigger the adjustment when the metric is greater than 40 and less than or equal to 50, specify a lower bound of -10 and an upper bound of 0.</p> </li> </ul> <p>There are a few rules for the step adjustments for your step policy:</p> <ul> <li> <p>The ranges of your step adjustments can&#39;t overlap or have a gap.</p> </li> <li> <p>At most, one step adjustment can have a null lower bound. If one step adjustment has a negative lower bound, then there must be a step adjustment with a null lower bound.</p> </li> <li> <p>At most, one step adjustment can have a null upper bound. If one step adjustment has a positive upper bound, then there must be a step adjustment with a null upper bound.</p> </li> <li> <p>The upper and lower bound can&#39;t be null in the same step adjustment.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct StepAdjustment {
     /// <p>The lower bound for the difference between the alarm threshold and the CloudWatch metric. If the metric value is above the breach threshold, the lower bound is inclusive (the metric must be greater than or equal to the threshold plus the lower bound). Otherwise, it is exclusive (the metric must be greater than the threshold plus the lower bound). A null value indicates negative infinity.</p>
@@ -6599,7 +6615,7 @@ impl TagsSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TagsType {
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>A string that indicates that the response contains more items than can be returned in a single response. To receive additional items, specify this string for the <code>NextToken</code> value when requesting the next set of items. This value is null when there are no more items to return.</p>
     pub next_token: Option<String>,
     /// <p>One or more tags.</p>
     pub tags: Option<Vec<TagDescription>>,
@@ -6659,12 +6675,12 @@ impl TargetGroupARNsSerializer {
     }
 }
 
-/// <p>Represents a target tracking policy configuration.</p>
+/// <p>Represents a target tracking scaling policy configuration to use with Amazon EC2 Auto Scaling.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TargetTrackingConfiguration {
-    /// <p>A customized metric.</p>
+    /// <p>A customized metric. You can specify either a predefined metric or a customized metric.</p>
     pub customized_metric_specification: Option<CustomizedMetricSpecification>,
-    /// <p>Indicates whether scaling in by the target tracking policy is disabled. If scaling in is disabled, the target tracking policy doesn't remove instances from the Auto Scaling group. Otherwise, the target tracking policy can remove instances from the Auto Scaling group. The default is disabled.</p>
+    /// <p>Indicates whether scaling in by the target tracking scaling policy is disabled. If scaling in is disabled, the target tracking scaling policy doesn't remove instances from the Auto Scaling group. Otherwise, the target tracking scaling policy can remove instances from the Auto Scaling group. The default is disabled.</p>
     pub disable_scale_in: Option<bool>,
     /// <p>A predefined metric. You can specify either a predefined metric or a customized metric.</p>
     pub predefined_metric_specification: Option<PredefinedMetricSpecification>,
@@ -6822,13 +6838,13 @@ pub struct UpdateAutoScalingGroupType {
     pub auto_scaling_group_name: String,
     /// <p>One or more Availability Zones for the group.</p>
     pub availability_zones: Option<Vec<String>>,
-    /// <p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default is 300.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The amount of time, in seconds, after a scaling activity completes before another scaling activity can start. The default value is <code>300</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/Cooldown.html">Scaling Cooldowns</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub default_cooldown: Option<i64>,
     /// <p>The number of EC2 instances that should be running in the Auto Scaling group. This number must be greater than or equal to the minimum size of the group and less than or equal to the maximum size of the group.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. The default is 0.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. The default value is <code>0</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: This parameter is required if you are adding an <code>ELB</code> health check.</p>
     pub health_check_grace_period: Option<i64>,
-    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>.</p>
+    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. If you configure an Auto Scaling group to use ELB health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p>
     pub health_check_type: Option<String>,
     /// <p>The name of the launch configuration. If you specify this parameter, you can't specify a launch template or a mixed instances policy.</p>
     pub launch_configuration_name: Option<String>,
@@ -6838,17 +6854,17 @@ pub struct UpdateAutoScalingGroupType {
     pub max_size: Option<i64>,
     /// <p>The minimum size of the Auto Scaling group.</p>
     pub min_size: Option<i64>,
-    /// <p>The mixed instances policy to use to specify the updates. If you specify this parameter, you can't specify a launch configuration or a launch template. </p>
+    /// <p>The mixed instances policy to use to specify the updates. If you specify this parameter, you can't specify a launch configuration or a launch template. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling Groups with Multiple Instance Types and Purchase Options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
-    /// <p>Indicates whether newly launched instances are protected from termination by Auto Scaling when scaling in.</p>
+    /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in.</p> <p>For more information about preventing instances from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
-    /// <p>The name of the placement group into which to launch your instances, if any. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The name of the placement group into which to launch your instances, if any. A placement group is a logical grouping of instances within a single Availability Zone. You cannot specify multiple Availability Zones and a placement group. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub placement_group: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf.</p>
+    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html">Service-Linked Roles</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub service_linked_role_arn: Option<String>,
-    /// <p>A standalone termination policy or a list of termination policies used to select the instance to terminate. The policies are executed in the order that they are listed.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>A standalone termination policy or a list of termination policies used to select the instance to terminate. The policies are executed in the order that they are listed.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Instances Auto Scaling Terminates During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub termination_policies: Option<Vec<String>>,
-    /// <p>The ID of the subnet, if you are launching into a VPC. You can specify several subnets in a comma-separated list.</p> <p>When you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, ensure that the subnets' Availability Zones match the values you specify for <code>AvailabilityZones</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-in-vpc.html">Launching Auto Scaling Instances in a VPC</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>A comma-separated list of subnet IDs, if you are launching into a VPC.</p> <p>If you specify <code>VPCZoneIdentifier</code> with <code>AvailabilityZones</code>, the subnets that you specify for this parameter must reside in those Availability Zones.</p>
     pub vpc_zone_identifier: Option<String>,
 }
 
@@ -7095,7 +7111,7 @@ impl XmlStringUserDataDeserializer {
 /// Errors returned by AttachInstances
 #[derive(Debug, PartialEq)]
 pub enum AttachInstancesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The service-linked role is not yet ready for use.</p>
     ServiceLinkedRoleFailure(String),
@@ -7152,7 +7168,7 @@ impl Error for AttachInstancesError {
 /// Errors returned by AttachLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancerTargetGroupsError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The service-linked role is not yet ready for use.</p>
     ServiceLinkedRoleFailure(String),
@@ -7213,7 +7229,7 @@ impl Error for AttachLoadBalancerTargetGroupsError {
 /// Errors returned by AttachLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancersError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The service-linked role is not yet ready for use.</p>
     ServiceLinkedRoleFailure(String),
@@ -7272,7 +7288,7 @@ impl Error for AttachLoadBalancersError {
 /// Errors returned by BatchDeleteScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteScheduledActionError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -7325,9 +7341,9 @@ impl Error for BatchDeleteScheduledActionError {
 pub enum BatchPutScheduledUpdateGroupActionError {
     /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -7394,7 +7410,7 @@ impl Error for BatchPutScheduledUpdateGroupActionError {
 /// Errors returned by CompleteLifecycleAction
 #[derive(Debug, PartialEq)]
 pub enum CompleteLifecycleActionError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -7445,9 +7461,9 @@ impl Error for CompleteLifecycleActionError {
 pub enum CreateAutoScalingGroupError {
     /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The service-linked role is not yet ready for use.</p>
     ServiceLinkedRoleFailure(String),
@@ -7524,9 +7540,9 @@ impl Error for CreateAutoScalingGroupError {
 pub enum CreateLaunchConfigurationError {
     /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -7593,9 +7609,9 @@ impl Error for CreateLaunchConfigurationError {
 pub enum CreateOrUpdateTagsError {
     /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
@@ -7664,7 +7680,7 @@ impl Error for CreateOrUpdateTagsError {
 /// Errors returned by DeleteAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteAutoScalingGroupError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
@@ -7733,7 +7749,7 @@ impl Error for DeleteAutoScalingGroupError {
 /// Errors returned by DeleteLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteLaunchConfigurationError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
@@ -7792,7 +7808,7 @@ impl Error for DeleteLaunchConfigurationError {
 /// Errors returned by DeleteLifecycleHook
 #[derive(Debug, PartialEq)]
 pub enum DeleteLifecycleHookError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -7841,7 +7857,7 @@ impl Error for DeleteLifecycleHookError {
 /// Errors returned by DeleteNotificationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationConfigurationError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -7892,7 +7908,7 @@ impl Error for DeleteNotificationConfigurationError {
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The service-linked role is not yet ready for use.</p>
     ServiceLinkedRoleFailure(String),
@@ -7947,7 +7963,7 @@ impl Error for DeletePolicyError {
 /// Errors returned by DeleteScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum DeleteScheduledActionError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -7996,7 +8012,7 @@ impl Error for DeleteScheduledActionError {
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
@@ -8051,7 +8067,7 @@ impl Error for DeleteTagsError {
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8100,7 +8116,7 @@ impl Error for DescribeAccountLimitsError {
 /// Errors returned by DescribeAdjustmentTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAdjustmentTypesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8151,7 +8167,7 @@ impl Error for DescribeAdjustmentTypesError {
 pub enum DescribeAutoScalingGroupsError {
     /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8210,7 +8226,7 @@ impl Error for DescribeAutoScalingGroupsError {
 pub enum DescribeAutoScalingInstancesError {
     /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8269,7 +8285,7 @@ impl Error for DescribeAutoScalingInstancesError {
 /// Errors returned by DescribeAutoScalingNotificationTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoScalingNotificationTypesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8322,7 +8338,7 @@ impl Error for DescribeAutoScalingNotificationTypesError {
 pub enum DescribeLaunchConfigurationsError {
     /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8381,7 +8397,7 @@ impl Error for DescribeLaunchConfigurationsError {
 /// Errors returned by DescribeLifecycleHookTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLifecycleHookTypesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8432,7 +8448,7 @@ impl Error for DescribeLifecycleHookTypesError {
 /// Errors returned by DescribeLifecycleHooks
 #[derive(Debug, PartialEq)]
 pub enum DescribeLifecycleHooksError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8481,7 +8497,7 @@ impl Error for DescribeLifecycleHooksError {
 /// Errors returned by DescribeLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerTargetGroupsError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8532,7 +8548,7 @@ impl Error for DescribeLoadBalancerTargetGroupsError {
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8581,7 +8597,7 @@ impl Error for DescribeLoadBalancersError {
 /// Errors returned by DescribeMetricCollectionTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeMetricCollectionTypesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8634,7 +8650,7 @@ impl Error for DescribeMetricCollectionTypesError {
 pub enum DescribeNotificationConfigurationsError {
     /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8695,7 +8711,7 @@ impl Error for DescribeNotificationConfigurationsError {
 pub enum DescribePoliciesError {
     /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The service-linked role is not yet ready for use.</p>
     ServiceLinkedRoleFailure(String),
@@ -8762,7 +8778,7 @@ impl Error for DescribePoliciesError {
 pub enum DescribeScalingActivitiesError {
     /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8819,7 +8835,7 @@ impl Error for DescribeScalingActivitiesError {
 /// Errors returned by DescribeScalingProcessTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingProcessTypesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8872,7 +8888,7 @@ impl Error for DescribeScalingProcessTypesError {
 pub enum DescribeScheduledActionsError {
     /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8931,7 +8947,7 @@ impl Error for DescribeScheduledActionsError {
 pub enum DescribeTagsError {
     /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -8984,7 +9000,7 @@ impl Error for DescribeTagsError {
 /// Errors returned by DescribeTerminationPolicyTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeTerminationPolicyTypesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9035,7 +9051,7 @@ impl Error for DescribeTerminationPolicyTypesError {
 /// Errors returned by DetachInstances
 #[derive(Debug, PartialEq)]
 pub enum DetachInstancesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9082,7 +9098,7 @@ impl Error for DetachInstancesError {
 /// Errors returned by DetachLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancerTargetGroupsError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9133,7 +9149,7 @@ impl Error for DetachLoadBalancerTargetGroupsError {
 /// Errors returned by DetachLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancersError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9182,7 +9198,7 @@ impl Error for DetachLoadBalancersError {
 /// Errors returned by DisableMetricsCollection
 #[derive(Debug, PartialEq)]
 pub enum DisableMetricsCollectionError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9231,7 +9247,7 @@ impl Error for DisableMetricsCollectionError {
 /// Errors returned by EnableMetricsCollection
 #[derive(Debug, PartialEq)]
 pub enum EnableMetricsCollectionError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9280,7 +9296,7 @@ impl Error for EnableMetricsCollectionError {
 /// Errors returned by EnterStandby
 #[derive(Debug, PartialEq)]
 pub enum EnterStandbyError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9327,7 +9343,7 @@ impl Error for EnterStandbyError {
 /// Errors returned by ExecutePolicy
 #[derive(Debug, PartialEq)]
 pub enum ExecutePolicyError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
@@ -9384,7 +9400,7 @@ impl Error for ExecutePolicyError {
 /// Errors returned by ExitStandby
 #[derive(Debug, PartialEq)]
 pub enum ExitStandbyError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9431,9 +9447,9 @@ impl Error for ExitStandbyError {
 /// Errors returned by PutLifecycleHook
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleHookError {
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9488,9 +9504,9 @@ impl Error for PutLifecycleHookError {
 /// Errors returned by PutNotificationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutNotificationConfigurationError {
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The service-linked role is not yet ready for use.</p>
     ServiceLinkedRoleFailure(String),
@@ -9559,9 +9575,9 @@ impl Error for PutNotificationConfigurationError {
 /// Errors returned by PutScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutScalingPolicyError {
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The service-linked role is not yet ready for use.</p>
     ServiceLinkedRoleFailure(String),
@@ -9628,9 +9644,9 @@ impl Error for PutScalingPolicyError {
 pub enum PutScheduledUpdateGroupActionError {
     /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9697,7 +9713,7 @@ impl Error for PutScheduledUpdateGroupActionError {
 /// Errors returned by RecordLifecycleActionHeartbeat
 #[derive(Debug, PartialEq)]
 pub enum RecordLifecycleActionHeartbeatError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9748,7 +9764,7 @@ impl Error for RecordLifecycleActionHeartbeatError {
 /// Errors returned by ResumeProcesses
 #[derive(Debug, PartialEq)]
 pub enum ResumeProcessesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
@@ -9803,7 +9819,7 @@ impl Error for ResumeProcessesError {
 /// Errors returned by SetDesiredCapacity
 #[derive(Debug, PartialEq)]
 pub enum SetDesiredCapacityError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
@@ -9862,7 +9878,7 @@ impl Error for SetDesiredCapacityError {
 /// Errors returned by SetInstanceHealth
 #[derive(Debug, PartialEq)]
 pub enum SetInstanceHealthError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9911,9 +9927,9 @@ impl Error for SetInstanceHealthError {
 /// Errors returned by SetInstanceProtection
 #[derive(Debug, PartialEq)]
 pub enum SetInstanceProtectionError {
-    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
 }
 
@@ -9970,7 +9986,7 @@ impl Error for SetInstanceProtectionError {
 /// Errors returned by SuspendProcesses
 #[derive(Debug, PartialEq)]
 pub enum SuspendProcessesError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
@@ -10027,7 +10043,7 @@ impl Error for SuspendProcessesError {
 /// Errors returned by TerminateInstanceInAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum TerminateInstanceInAutoScalingGroupError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
@@ -10088,7 +10104,7 @@ impl Error for TerminateInstanceInAutoScalingGroupError {
 /// Errors returned by UpdateAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateAutoScalingGroupError {
-    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
@@ -10156,19 +10172,19 @@ impl Error for UpdateAutoScalingGroupError {
 }
 /// Trait representing the capabilities of the Auto Scaling API. Auto Scaling clients implement this trait.
 pub trait Autoscaling {
-    /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_instances(
         &self,
         input: AttachInstancesQuery,
     ) -> RusotoFuture<(), AttachInstancesError>;
 
-    /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_load_balancer_target_groups(
         &self,
         input: AttachLoadBalancerTargetGroupsType,
     ) -> RusotoFuture<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError>;
 
-    /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer or a Network Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_load_balancers(
         &self,
         input: AttachLoadBalancersType,
@@ -10189,25 +10205,25 @@ pub trait Autoscaling {
         BatchPutScheduledUpdateGroupActionError,
     >;
 
-    /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn complete_lifecycle_action(
         &self,
         input: CompleteLifecycleActionType,
     ) -> RusotoFuture<CompleteLifecycleActionAnswer, CompleteLifecycleActionError>;
 
-    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html">Auto Scaling Groups</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_auto_scaling_group(
         &self,
         input: CreateAutoScalingGroupType,
     ) -> RusotoFuture<(), CreateAutoScalingGroupError>;
 
-    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_launch_configuration(
         &self,
         input: CreateLaunchConfigurationType,
     ) -> RusotoFuture<(), CreateLaunchConfigurationError>;
 
-    /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_or_update_tags(
         &self,
         input: CreateOrUpdateTagsType,
@@ -10237,7 +10253,7 @@ pub trait Autoscaling {
         input: DeleteNotificationConfigurationType,
     ) -> RusotoFuture<(), DeleteNotificationConfigurationError>;
 
-    /// <p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
+    /// <p>Deletes the specified scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
     fn delete_policy(&self, input: DeletePolicyType) -> RusotoFuture<(), DeletePolicyError>;
 
     /// <p>Deletes the specified scheduled action.</p>
@@ -10249,7 +10265,7 @@ pub trait Autoscaling {
     /// <p>Deletes the specified tags.</p>
     fn delete_tags(&self, input: DeleteTagsType) -> RusotoFuture<(), DeleteTagsError>;
 
-    /// <p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Describes the current Amazon EC2 Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn describe_account_limits(
         &self,
     ) -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError>;
@@ -10302,7 +10318,7 @@ pub trait Autoscaling {
         input: DescribeLoadBalancerTargetGroupsRequest,
     ) -> RusotoFuture<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError>;
 
-    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
+    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
     fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersRequest,
@@ -10348,12 +10364,12 @@ pub trait Autoscaling {
     /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>
     fn describe_tags(&self, input: DescribeTagsType) -> RusotoFuture<TagsType, DescribeTagsError>;
 
-    /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn describe_termination_policy_types(
         &self,
     ) -> RusotoFuture<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>;
 
-    /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn detach_instances(
         &self,
         input: DetachInstancesQuery,
@@ -10365,7 +10381,7 @@ pub trait Autoscaling {
         input: DetachLoadBalancerTargetGroupsType,
     ) -> RusotoFuture<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError>;
 
-    /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
+    /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
     fn detach_load_balancers(
         &self,
         input: DetachLoadBalancersType,
@@ -10377,13 +10393,13 @@ pub trait Autoscaling {
         input: DisableMetricsCollectionQuery,
     ) -> RusotoFuture<(), DisableMetricsCollectionError>;
 
-    /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn enable_metrics_collection(
         &self,
         input: EnableMetricsCollectionQuery,
     ) -> RusotoFuture<(), EnableMetricsCollectionError>;
 
-    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn enter_standby(
         &self,
         input: EnterStandbyQuery,
@@ -10392,67 +10408,67 @@ pub trait Autoscaling {
     /// <p>Executes the specified policy.</p>
     fn execute_policy(&self, input: ExecutePolicyType) -> RusotoFuture<(), ExecutePolicyError>;
 
-    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn exit_standby(
         &self,
         input: ExitStandbyQuery,
     ) -> RusotoFuture<ExitStandbyAnswer, ExitStandbyError>;
 
-    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
+    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
     fn put_lifecycle_hook(
         &self,
         input: PutLifecycleHookType,
     ) -> RusotoFuture<PutLifecycleHookAnswer, PutLifecycleHookError>;
 
-    /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting Amazon SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn put_notification_configuration(
         &self,
         input: PutNotificationConfigurationType,
     ) -> RusotoFuture<(), PutNotificationConfigurationError>;
 
-    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
+    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p>
     fn put_scaling_policy(
         &self,
         input: PutScalingPolicyType,
     ) -> RusotoFuture<PolicyARNType, PutScalingPolicyError>;
 
-    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn put_scheduled_update_group_action(
         &self,
         input: PutScheduledUpdateGroupActionType,
     ) -> RusotoFuture<(), PutScheduledUpdateGroupActionError>;
 
-    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn record_lifecycle_action_heartbeat(
         &self,
         input: RecordLifecycleActionHeartbeatType,
     ) -> RusotoFuture<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>;
 
-    /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn resume_processes(
         &self,
         input: ScalingProcessQuery,
     ) -> RusotoFuture<(), ResumeProcessesError>;
 
-    /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/WhatIsAutoScaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_desired_capacity(
         &self,
         input: SetDesiredCapacityType,
     ) -> RusotoFuture<(), SetDesiredCapacityError>;
 
-    /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_instance_health(
         &self,
         input: SetInstanceHealthQuery,
     ) -> RusotoFuture<(), SetInstanceHealthError>;
 
-    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_instance_protection(
         &self,
         input: SetInstanceProtectionQuery,
     ) -> RusotoFuture<SetInstanceProtectionAnswer, SetInstanceProtectionError>;
 
-    /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn suspend_processes(
         &self,
         input: ScalingProcessQuery,
@@ -10507,7 +10523,7 @@ impl AutoscalingClient {
 }
 
 impl Autoscaling for AutoscalingClient {
-    /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Amazon EC2 Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_instances(
         &self,
         input: AttachInstancesQuery,
@@ -10535,7 +10551,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group. </p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>With Application Load Balancers and Network Load Balancers, instances are registered as targets with a target group. With Classic Load Balancers, instances are registered with the load balancer. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_load_balancer_target_groups(
         &self,
         input: AttachLoadBalancerTargetGroupsType,
@@ -10584,7 +10600,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer or a Network Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/attach-load-balancer-asg.html">Attaching a Load Balancer to Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn attach_load_balancers(
         &self,
         input: AttachLoadBalancersType,
@@ -10735,7 +10751,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn complete_lifecycle_action(
         &self,
         input: CompleteLifecycleActionType,
@@ -10783,7 +10799,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html">Auto Scaling Groups</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_auto_scaling_group(
         &self,
         input: CreateAutoScalingGroupType,
@@ -10808,7 +10824,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, the call fails. For information about viewing this limit, see <a>DescribeAccountLimits</a>. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_launch_configuration(
         &self,
         input: CreateLaunchConfigurationType,
@@ -10833,7 +10849,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn create_or_update_tags(
         &self,
         input: CreateOrUpdateTagsType,
@@ -10988,7 +11004,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
+    /// <p>Deletes the specified scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
     fn delete_policy(&self, input: DeletePolicyType) -> RusotoFuture<(), DeletePolicyError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -11063,7 +11079,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Describes the current Amazon EC2 Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling Limits</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn describe_account_limits(
         &self,
     ) -> RusotoFuture<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {
@@ -11499,7 +11515,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
+    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
     fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersRequest,
@@ -11886,7 +11902,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Describes the termination policies supported by Amazon EC2 Auto Scaling.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling Which Auto Scaling Instances Terminate During Scale In</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn describe_termination_policy_types(
         &self,
     ) -> RusotoFuture<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>
@@ -11934,7 +11950,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn detach_instances(
         &self,
         input: DetachInstancesQuery,
@@ -12034,7 +12050,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
+    /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>This operation detaches only Classic Load Balancers. If you have Application Load Balancers or Network Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. The instances remain running.</p>
     fn detach_load_balancers(
         &self,
         input: DetachLoadBalancersType,
@@ -12109,7 +12125,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn enable_metrics_collection(
         &self,
         input: EnableMetricsCollectionQuery,
@@ -12134,7 +12150,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Moves the specified instances into the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn enter_standby(
         &self,
         input: EnterStandbyQuery,
@@ -12210,7 +12226,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Moves the specified instances out of the standby state.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-enter-exit-standby.html">Temporarily Removing Instances from Your Auto Scaling Group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn exit_standby(
         &self,
         input: ExitStandbyQuery,
@@ -12261,7 +12277,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
+    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using using <a>RecordLifecycleActionHeartbeat</a>.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using <a>CompleteLifecycleAction</a>.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling Lifecycle Hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using <a>DescribeLifecycleHooks</a>. If you are no longer using a lifecycle hook, you can delete it using <a>DeleteLifecycleHook</a>.</p>
     fn put_lifecycle_hook(
         &self,
         input: PutLifecycleHookType,
@@ -12312,7 +12328,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>
+    /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ASGettingNotifications.html">Getting Amazon SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn put_notification_configuration(
         &self,
         input: PutNotificationConfigurationType,
@@ -12337,7 +12353,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
+    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p>
     fn put_scaling_policy(
         &self,
         input: PutScalingPolicyType,
@@ -12388,7 +12404,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn put_scheduled_update_group_action(
         &self,
         input: PutScheduledUpdateGroupActionType,
@@ -12413,7 +12429,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn record_lifecycle_action_heartbeat(
         &self,
         input: RecordLifecycleActionHeartbeatType,
@@ -12462,7 +12478,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Resumes the specified suspended automatic scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn resume_processes(
         &self,
         input: ScalingProcessQuery,
@@ -12490,7 +12506,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/WhatIsAutoScaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html">What Is Amazon EC2 Auto Scaling?</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_desired_capacity(
         &self,
         input: SetDesiredCapacityType,
@@ -12518,7 +12534,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html">Health Checks for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_instance_health(
         &self,
         input: SetInstanceHealthQuery,
@@ -12546,7 +12562,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn set_instance_protection(
         &self,
         input: SetInstanceProtectionQuery,
@@ -12594,7 +12610,7 @@ impl Autoscaling for AutoscalingClient {
         })
     }
 
-    /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Suspends the specified automatic scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>If you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-suspend-resume-processes.html">Suspending and Resuming Scaling Processes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     fn suspend_processes(
         &self,
         input: ScalingProcessQuery,

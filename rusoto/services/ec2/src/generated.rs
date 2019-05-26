@@ -292,7 +292,7 @@ impl AcceptVpcPeeringConnectionResultDeserializer {
 pub struct AccountAttribute {
     /// <p>The name of the account attribute.</p>
     pub attribute_name: Option<String>,
-    /// <p>One or more values for the account attribute.</p>
+    /// <p>The values for the account attribute.</p>
     pub attribute_values: Option<Vec<AccountAttributeValue>>,
 }
 
@@ -706,13 +706,13 @@ impl AllocateAddressResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AllocateHostsRequest {
-    /// <p>This is enabled by default. This property allows instances to be automatically placed onto available Dedicated Hosts, when you are launching instances without specifying a host ID.</p> <p>Default: Enabled</p>
+    /// <p>Indicates whether the host accepts any untargeted instance launches that match its instance type configuration, or if it only accepts Host tenancy instance launches that specify its unique host ID. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-dedicated-hosts-work.html#dedicated-hosts-understanding"> Understanding Instance Placement and Host Affinity</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Default: <code>on</code> </p>
     pub auto_placement: Option<String>,
-    /// <p>The Availability Zone for the Dedicated Hosts.</p>
+    /// <p>The Availability Zone in which to allocate the Dedicated Host.</p>
     pub availability_zone: String,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. </p>
     pub client_token: Option<String>,
-    /// <p>Specify the instance type for which to configure your Dedicated Hosts. When you specify the instance type, that is the only instance type that you can launch onto that host.</p>
+    /// <p>Specifies the instance type for which to configure your Dedicated Hosts. When you specify the instance type, that is the only instance type that you can launch onto that host.</p>
     pub instance_type: String,
     /// <p>The number of Dedicated Hosts to allocate to your account with these parameters.</p>
     pub quantity: i64,
@@ -1088,11 +1088,11 @@ pub struct AssociateAddressRequest {
     pub dry_run: Option<bool>,
     /// <p>The ID of the instance. This is required for EC2-Classic. For EC2-VPC, you can specify either the instance ID or the network interface ID, but not both. The operation fails if you specify an instance ID unless exactly one network interface is attached.</p>
     pub instance_id: Option<String>,
-    /// <p>[EC2-VPC] The ID of the network interface. If the instance has more than one network interface, you must specify a network interface ID.</p>
+    /// <p>[EC2-VPC] The ID of the network interface. If the instance has more than one network interface, you must specify a network interface ID.</p> <p>For EC2-VPC, you can specify either the instance ID or the network interface ID, but not both. </p>
     pub network_interface_id: Option<String>,
     /// <p>[EC2-VPC] The primary or secondary private IP address to associate with the Elastic IP address. If no private IP address is specified, the Elastic IP address is associated with the primary private IP address.</p>
     pub private_ip_address: Option<String>,
-    /// <p>The Elastic IP address. This is required for EC2-Classic.</p>
+    /// <p>The Elastic IP address to associate with the instance. This is required for EC2-Classic.</p>
     pub public_ip: Option<String>,
 }
 
@@ -1156,6 +1156,8 @@ impl AssociateAddressResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociateClientVpnTargetNetworkRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -1173,6 +1175,9 @@ impl AssociateClientVpnTargetNetworkRequestSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
         params.put(
             &format!("{}{}", prefix, "ClientVpnEndpointId"),
             &obj.client_vpn_endpoint_id,
@@ -1573,9 +1578,9 @@ impl AssociateVpcCidrBlockResultDeserializer {
 /// <p>Describes a target network that is associated with a Client VPN endpoint. A target network is a subnet in a VPC.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AssociatedTargetNetwork {
-    /// <p> <b>The ID of the subnet.</b> </p>
+    /// <p>The ID of the subnet.</p>
     pub network_id: Option<String>,
-    /// <p> <b>The target network type.</b> </p>
+    /// <p>The target network type.</p>
     pub network_type: Option<String>,
 }
 
@@ -1976,7 +1981,7 @@ impl AttributeValueSerializer {
     }
 }
 
-/// <p> <b>Information about an authorization rule.</b> </p>
+/// <p>Information about an authorization rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AuthorizationRule {
     /// <p>Indicates whether the authorization rule grants access to all clients.</p>
@@ -2055,6 +2060,8 @@ pub struct AuthorizeClientVpnIngressRequest {
     pub access_group_id: Option<String>,
     /// <p>Indicates whether to grant access to all clients. Use <code>true</code> to grant all clients who successfully establish a VPN connection access to the network.</p>
     pub authorize_all_groups: Option<bool>,
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
     /// <p>The ID of the Client VPN endpoint.</p>
     pub client_vpn_endpoint_id: String,
     /// <p>A brief description of the authorization rule.</p>
@@ -2079,6 +2086,9 @@ impl AuthorizeClientVpnIngressRequestSerializer {
         }
         if let Some(ref field_value) = obj.authorize_all_groups {
             params.put(&format!("{}{}", prefix, "AuthorizeAllGroups"), &field_value);
+        }
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
         }
         params.put(
             &format!("{}{}", prefix, "ClientVpnEndpointId"),
@@ -2138,7 +2148,7 @@ pub struct AuthorizeSecurityGroupEgressRequest {
     pub from_port: Option<i64>,
     /// <p>The ID of the security group.</p>
     pub group_id: String,
-    /// <p>One or more sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.</p>
+    /// <p>The sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
     /// <p>Not supported. Use a set of IP permissions to specify the protocol name or number.</p>
     pub ip_protocol: Option<String>,
@@ -2199,25 +2209,25 @@ impl AuthorizeSecurityGroupEgressRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AuthorizeSecurityGroupIngressRequest {
-    /// <p>The CIDR IPv4 address range. You can't specify this parameter when specifying a source security group.</p>
+    /// <p>The IPv4 address range, in CIDR format. You can't specify this parameter when specifying a source security group. To specify an IPv6 address range, use a set of IP permissions.</p> <p>Alternatively, use a set of IP permissions to specify multiple rules and a description for the rule.</p>
     pub cidr_ip: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. For the ICMP/ICMPv6 type number, use <code>-1</code> to specify all types. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
+    /// <p>The start of port range for the TCP and UDP protocols, or an ICMP type number. For the ICMP type number, use <code>-1</code> to specify all types. If you specify all ICMP types, you must specify all codes.</p> <p>Alternatively, use a set of IP permissions to specify multiple rules and a description for the rule.</p>
     pub from_port: Option<i64>,
     /// <p>The ID of the security group. You must specify either the security group ID or the security group name in the request. For security groups in a nondefault VPC, you must specify the security group ID.</p>
     pub group_id: Option<String>,
     /// <p>[EC2-Classic, default VPC] The name of the security group. You must specify either the security group ID or the security group name in the request.</p>
     pub group_name: Option<String>,
-    /// <p>One or more sets of IP permissions. Can be used to specify multiple rules in a single command.</p>
+    /// <p>The sets of IP permissions.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
-    /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>). (VPC only) Use <code>-1</code> to specify all protocols. If you specify <code>-1</code>, or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>58</code> (ICMPv6), traffic on all ports is allowed, regardless of any ports you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For protocol <code>58</code> (ICMPv6), you can optionally specify a port range; if you don't, traffic for all types and codes is allowed.</p>
+    /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>). To specify <code>icmpv6</code>, use a set of IP permissions.</p> <p>[VPC only] Use <code>-1</code> to specify all protocols. If you specify <code>-1</code> or a protocol other than <code>tcp</code>, <code>udp</code>, or <code>icmp</code>, traffic on all ports is allowed, regardless of any ports you specify.</p> <p>Alternatively, use a set of IP permissions to specify multiple rules and a description for the rule.</p>
     pub ip_protocol: Option<String>,
     /// <p>[EC2-Classic, default VPC] The name of the source security group. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the start of the port range, the IP protocol, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead. For EC2-VPC, the source security group must be in the same VPC.</p>
     pub source_security_group_name: Option<String>,
     /// <p>[nondefault VPC] The AWS account ID for the source security group, if the source security group is in a different account. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the IP protocol, the start of the port range, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead.</p>
     pub source_security_group_owner_id: Option<String>,
-    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code number. For the ICMP/ICMPv6 code number, use <code>-1</code> to specify all codes. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
+    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP code number. For the ICMP code number, use <code>-1</code> to specify all codes. If you specify all ICMP types, you must specify all codes.</p> <p>Alternatively, use a set of IP permissions to specify multiple rules and a description for the rule.</p>
     pub to_port: Option<i64>,
 }
 
@@ -2306,7 +2316,7 @@ impl AutoPlacementDeserializer {
 pub struct AvailabilityZone {
     /// <p>Any messages about the Availability Zone.</p>
     pub messages: Option<Vec<AvailabilityZoneMessage>>,
-    /// <p>The name of the region.</p>
+    /// <p>The name of the Region.</p>
     pub region_name: Option<String>,
     /// <p>The state of the Availability Zone.</p>
     pub state: Option<String>,
@@ -3954,10 +3964,10 @@ impl CapacityReservationTenancyDeserializer {
         Ok(obj)
     }
 }
-/// <p> <b>Information about the client certificate used for authentication.</b> </p>
+/// <p>Information about the client certificate used for authentication.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CertificateAuthentication {
-    /// <p> <b>The ARN of the client certificate. </b> </p>
+    /// <p>The ARN of the client certificate. </p>
     pub client_root_certificate_chain: Option<String>,
 }
 
@@ -3986,10 +3996,10 @@ impl CertificateAuthenticationDeserializer {
         )
     }
 }
-/// <p> <b>Information about the client certificate to be used for authentication.</b> </p>
+/// <p>Information about the client certificate to be used for authentication.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CertificateAuthenticationRequest {
-    /// <p> <b>The ARN of the client certificate. The certificate must be signed by a certificate authority (CA) and it must be provisioned in AWS Certificate Manager (ACM).</b> </p>
+    /// <p>The ARN of the client certificate. The certificate must be signed by a certificate authority (CA) and it must be provisioned in AWS Certificate Manager (ACM).</p>
     pub client_root_certificate_chain_arn: Option<String>,
 }
 
@@ -4011,7 +4021,7 @@ impl CertificateAuthenticationRequestSerializer {
     }
 }
 
-/// <p>Provides authorization for Amazon to bring a specific IP address range to a specific AWS account using bring your own IP addresses (BYOIP).</p>
+/// <p>Provides authorization for Amazon to bring a specific IP address range to a specific AWS account using bring your own IP addresses (BYOIP). For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html#prepare-for-byoip">Prepare to Bring Your Address Range to Your AWS Account</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CidrAuthorizationContext {
     /// <p>The plain-text authorization message for the prefix and account.</p>
@@ -4402,7 +4412,7 @@ impl ClientDataSerializer {
     }
 }
 
-/// <p>Describes the authentication methods used by a Client VPN endpoint. Client VPN supports Active Directory and mutual authentication. For more information, see <a href="vpn/latest/clientvpn-admin/authentication-authrization.html#client-authentication">Authentication</a> in the <i>AWS Client VPN Admin Guide</i>.</p>
+/// <p>Describes the authentication methods used by a Client VPN endpoint. Client VPN supports Active Directory and mutual authentication. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/authentication-authrization.html#client-authentication">Authentication</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClientVpnAuthentication {
     /// <p>Information about the Active Directory, if applicable.</p>
@@ -4470,7 +4480,7 @@ impl ClientVpnAuthenticationListDeserializer {
         })
     }
 }
-/// <p>Describes the authentication method to be used by a Client VPN endpoint. Client VPN supports Active Directory and mutual authentication. For more information, see <a href="vpn/latest/clientvpn-admin/authentication-authrization.html#client-authentication">Authentication</a> in the <i>AWS Client VPN Admin Guide</i>.</p>
+/// <p>Describes the authentication method to be used by a Client VPN endpoint. Client VPN supports Active Directory and mutual authentication. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/authentication-authrization.html#client-authentication">Authentication</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClientVpnAuthenticationRequest {
     /// <p>Information about the Active Directory to be used, if applicable. You must provide this information if <b>Type</b> is <code>directory-service-authentication</code>.</p>
@@ -4594,7 +4604,7 @@ pub struct ClientVpnConnection {
     pub client_ip: Option<String>,
     /// <p>The ID of the Client VPN endpoint to which the client is connected.</p>
     pub client_vpn_endpoint_id: Option<String>,
-    /// <p> <b>The common name associated with the client. This is either the name of the client certificate, or the Active Directory user name.</b> </p>
+    /// <p>The common name associated with the client. This is either the name of the client certificate, or the Active Directory user name.</p>
     pub common_name: Option<String>,
     /// <p>The date and time the client connection was terminated.</p>
     pub connection_end_time: Option<String>,
@@ -4612,7 +4622,7 @@ pub struct ClientVpnConnection {
     pub ingress_packets: Option<String>,
     /// <p>The current state of the client connection.</p>
     pub status: Option<ClientVpnConnectionStatus>,
-    /// <p> <b>The current date and time.</b> </p>
+    /// <p>The current date and time.</p>
     pub timestamp: Option<String>,
     /// <p>The username of the client who established the client connection. This information is only provided if Active Directory client authentication is used.</p>
     pub username: Option<String>,
@@ -4781,7 +4791,7 @@ pub struct ClientVpnEndpoint {
     pub status: Option<ClientVpnEndpointStatus>,
     /// <p>Any tags assigned to the Client VPN endpoint.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p> <b>The transport protocol used by the Client VPN endpoint.</b> </p>
+    /// <p>The transport protocol used by the Client VPN endpoint.</p>
     pub transport_protocol: Option<String>,
     /// <p>The protocol used by the VPN session.</p>
     pub vpn_protocol: Option<String>,
@@ -4926,7 +4936,7 @@ impl ClientVpnEndpointStatusCodeDeserializer {
         Ok(obj)
     }
 }
-/// <p> <b>Information about a Client VPN endpoint route.</b> </p>
+/// <p>Information about a Client VPN endpoint route.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ClientVpnRoute {
     /// <p>The ID of the Client VPN endpoint with which the route is associated.</p>
@@ -4941,7 +4951,7 @@ pub struct ClientVpnRoute {
     pub status: Option<ClientVpnRouteStatus>,
     /// <p>The ID of the subnet through which traffic is routed.</p>
     pub target_subnet: Option<String>,
-    /// <p> <b>The route type.</b> </p>
+    /// <p>The route type.</p>
     pub type_: Option<String>,
 }
 
@@ -5459,7 +5469,7 @@ pub struct CopyFpgaImageRequest {
     pub name: Option<String>,
     /// <p>The ID of the source AFI.</p>
     pub source_fpga_image_id: String,
-    /// <p>The region that contains the source AFI.</p>
+    /// <p>The Region that contains the source AFI.</p>
     pub source_region: String,
 }
 
@@ -5522,19 +5532,19 @@ impl CopyFpgaImageResultDeserializer {
 pub struct CopyImageRequest {
     /// <p>Unique, case-sensitive identifier you provide to ensure idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub client_token: Option<String>,
-    /// <p>A description for the new AMI in the destination region.</p>
+    /// <p>A description for the new AMI in the destination Region.</p>
     pub description: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>Specifies whether the destination snapshots of the copied image should be encrypted. You can encrypt a copy of an unencrypted snapshot, but you cannot create an unencrypted copy of an encrypted snapshot. The default CMK for EBS is used unless you specify a non-default AWS Key Management Service (AWS KMS) CMK using <code>KmsKeyId</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias, in the form <code>alias/<i>ExampleAlias</i> </code> </p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the region that the snapshot is being copied to. </p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the Region that the snapshot is being copied to. </p>
     pub kms_key_id: Option<String>,
-    /// <p>The name of the new AMI in the destination region.</p>
+    /// <p>The name of the new AMI in the destination Region.</p>
     pub name: String,
     /// <p>The ID of the AMI to copy.</p>
     pub source_image_id: String,
-    /// <p>The name of the region that contains the AMI to copy.</p>
+    /// <p>The name of the Region that contains the AMI to copy.</p>
     pub source_region: String,
 }
 
@@ -5601,17 +5611,17 @@ impl CopyImageResultDeserializer {
 pub struct CopySnapshotRequest {
     /// <p>A description for the EBS snapshot.</p>
     pub description: Option<String>,
-    /// <p>The destination region to use in the <code>PresignedUrl</code> parameter of a snapshot copy operation. This parameter is only valid for specifying the destination region in a <code>PresignedUrl</code> parameter, where it is required.</p> <p>The snapshot copy is sent to the regional endpoint that you sent the HTTP request to (for example, <code>ec2.us-east-1.amazonaws.com</code>). With the AWS CLI, this is specified using the <code>--region</code> parameter or the default region in your AWS configuration file.</p>
+    /// <p>The destination Region to use in the <code>PresignedUrl</code> parameter of a snapshot copy operation. This parameter is only valid for specifying the destination Region in a <code>PresignedUrl</code> parameter, where it is required.</p> <p>The snapshot copy is sent to the regional endpoint that you sent the HTTP request to (for example, <code>ec2.us-east-1.amazonaws.com</code>). With the AWS CLI, this is specified using the <code>--region</code> parameter or the default Region in your AWS configuration file.</p>
     pub destination_region: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>Specifies whether the destination snapshot should be encrypted. You can encrypt a copy of an unencrypted snapshot, but you cannot use it to create an unencrypted copy of an encrypted snapshot. Your default CMK for EBS is used unless you specify a non-default AWS Key Management Service (AWS KMS) CMK using <code>KmsKeyId</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
     pub kms_key_id: Option<String>,
     /// <p>When you copy an encrypted source snapshot using the Amazon EC2 Query API, you must supply a pre-signed URL. This parameter is optional for unencrypted snapshots. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html">Query Requests</a>.</p> <p>The <code>PresignedUrl</code> should use the snapshot source endpoint, the <code>CopySnapshot</code> action, and include the <code>SourceRegion</code>, <code>SourceSnapshotId</code>, and <code>DestinationRegion</code> parameters. The <code>PresignedUrl</code> must be signed using AWS Signature Version 4. Because EBS snapshots are stored in Amazon S3, the signing algorithm for this parameter uses the same logic that is described in <a href="https://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html">Authenticating Requests by Using Query Parameters (AWS Signature Version 4)</a> in the <i>Amazon Simple Storage Service API Reference</i>. An invalid or improperly signed <code>PresignedUrl</code> will cause the copy operation to fail asynchronously, and the snapshot will move to an <code>error</code> state.</p>
     pub presigned_url: Option<String>,
-    /// <p>The ID of the region that contains the snapshot to be copied.</p>
+    /// <p>The ID of the Region that contains the snapshot to be copied.</p>
     pub source_region: String,
     /// <p>The ID of the EBS snapshot to copy.</p>
     pub source_snapshot_id: String,
@@ -5862,7 +5872,7 @@ pub struct CreateClientVpnEndpointRequest {
     pub authentication_options: Vec<ClientVpnAuthenticationRequest>,
     /// <p>The IPv4 address range, in CIDR notation, from which to assign client IP addresses. The address range cannot overlap with the local CIDR of the VPC in which the associated subnet is located, or the routes that you add manually. The address range cannot be changed after the Client VPN endpoint has been created. The CIDR block should be /22 or greater.</p>
     pub client_cidr_block: String,
-    /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html"> How to Ensure Idempotency</a>.</p>
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
     /// <p><p>Information about the client connection logging options.</p> <p>If you enable client connection logging, data about client connections is sent to a Cloudwatch Logs log stream. The following information is logged:</p> <ul> <li> <p>Client connection requests</p> </li> <li> <p>Client connection results (successful and unsuccessful)</p> </li> <li> <p>Reasons for unsuccessful client connection requests</p> </li> <li> <p>Client connection termination time</p> </li> </ul></p>
     pub connection_log_options: ConnectionLogOptions,
@@ -5872,7 +5882,7 @@ pub struct CreateClientVpnEndpointRequest {
     pub dns_servers: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The ARN of the server certificate. For more information, see the <a href="acm/latest/userguide/acm-overview.html">AWS Certificate Manager User Guide</a> .</p>
+    /// <p>The ARN of the server certificate. For more information, see the <a href="https://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p>
     pub server_certificate_arn: String,
     /// <p>The tags to apply to the Client VPN endpoint during creation.</p>
     pub tag_specifications: Option<Vec<TagSpecification>>,
@@ -5981,6 +5991,8 @@ impl CreateClientVpnEndpointResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateClientVpnRouteRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
     /// <p>The ID of the Client VPN endpoint to which to add the route.</p>
     pub client_vpn_endpoint_id: String,
     /// <p>A brief description of the route.</p>
@@ -6002,6 +6014,9 @@ impl CreateClientVpnRouteRequestSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.client_token {
+            params.put(&format!("{}{}", prefix, "ClientToken"), &field_value);
+        }
         params.put(
             &format!("{}{}", prefix, "ClientVpnEndpointId"),
             &obj.client_vpn_endpoint_id,
@@ -6506,7 +6521,7 @@ pub struct CreateFleetRequest {
     pub type_: Option<String>,
     /// <p>The start date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). The default is to start fulfilling the request immediately.</p>
     pub valid_from: Option<String>,
-    /// <p>The end date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). At this point, no new EC2 Fleet requests are placed or able to fulfill the request. The default end date is 7 days from the current date.</p>
+    /// <p>The end date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). At this point, no new EC2 Fleet requests are placed or able to fulfill the request. If no value is specified, the request remains until you cancel it.</p>
     pub valid_until: Option<String>,
 }
 
@@ -6632,21 +6647,21 @@ impl CreateFleetResultDeserializer {
 pub struct CreateFlowLogsRequest {
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
     pub client_token: Option<String>,
-    /// <p>The ARN for the IAM role that's used to post flow logs to a log group.</p>
+    /// <p>The ARN for the IAM role that permits Amazon EC2 to publish flow logs to a CloudWatch Logs log group in your account.</p> <p>If you specify <code>LogDestinationType</code> as <code>s3</code>, do not specify <code>DeliverLogsPermissionArn</code> or <code>LogGroupName</code>.</p>
     pub deliver_logs_permission_arn: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Specifies the destination to which the flow log data is to be published. Flow log data can be published to an CloudWatch Logs log group or an Amazon S3 bucket. The value specified for this parameter depends on the value specified for LogDestinationType.</p> <p>If LogDestinationType is not specified or <code>cloud-watch-logs</code>, specify the Amazon Resource Name (ARN) of the CloudWatch Logs log group.</p> <p>If LogDestinationType is <code>s3</code>, specify the ARN of the Amazon S3 bucket. You can also specify a subfolder in the bucket. To specify a subfolder in the bucket, use the following ARN format: <code>bucket_ARN/subfolder_name/</code>. For example, to specify a subfolder named <code>my-logs</code> in a bucket named <code>my-bucket</code>, use the following ARN: <code>arn:aws:s3:::my-bucket/my-logs/</code>. You cannot use <code>AWSLogs</code> as a subfolder name. This is a reserved term.</p>
+    /// <p>Specifies the destination to which the flow log data is to be published. Flow log data can be published to a CloudWatch Logs log group or an Amazon S3 bucket. The value specified for this parameter depends on the value specified for <code>LogDestinationType</code>.</p> <p>If LogDestinationType is not specified or <code>cloud-watch-logs</code>, specify the Amazon Resource Name (ARN) of the CloudWatch Logs log group.</p> <p>If LogDestinationType is <code>s3</code>, specify the ARN of the Amazon S3 bucket. You can also specify a subfolder in the bucket. To specify a subfolder in the bucket, use the following ARN format: <code>bucket_ARN/subfolder_name/</code>. For example, to specify a subfolder named <code>my-logs</code> in a bucket named <code>my-bucket</code>, use the following ARN: <code>arn:aws:s3:::my-bucket/my-logs/</code>. You cannot use <code>AWSLogs</code> as a subfolder name. This is a reserved term.</p>
     pub log_destination: Option<String>,
-    /// <p>Specifies the type of destination to which the flow log data is to be published. Flow log data can be published to CloudWatch Logs or Amazon S3. To publish flow log data to CloudWatch Logs, specify <code>cloud-watch-logs</code>. To publish flow log data to Amazon S3, specify <code>s3</code>.</p> <p>Default: <code>cloud-watch-logs</code> </p>
+    /// <p>Specifies the type of destination to which the flow log data is to be published. Flow log data can be published to CloudWatch Logs or Amazon S3. To publish flow log data to CloudWatch Logs, specify <code>cloud-watch-logs</code>. To publish flow log data to Amazon S3, specify <code>s3</code>.</p> <p>If you specify <code>LogDestinationType</code> as <code>s3</code>, do not specify <code>DeliverLogsPermissionArn</code> or <code>LogGroupName</code>.</p> <p>Default: <code>cloud-watch-logs</code> </p>
     pub log_destination_type: Option<String>,
-    /// <p>The name of the log group.</p>
+    /// <p>The name of a new or existing CloudWatch Logs log group where Amazon EC2 publishes your flow logs.</p> <p>If you specify <code>LogDestinationType</code> as <code>s3</code>, do not specify <code>DeliverLogsPermissionArn</code> or <code>LogGroupName</code>.</p>
     pub log_group_name: Option<String>,
-    /// <p>One or more subnet, network interface, or VPC IDs.</p> <p>Constraints: Maximum of 1000 resources</p>
+    /// <p>The ID of the subnet, network interface, or VPC for which you want to create a flow log.</p> <p>Constraints: Maximum of 1000 resources</p>
     pub resource_ids: Vec<String>,
-    /// <p>The type of resource on which to create the flow log.</p>
+    /// <p>The type of resource for which to create the flow log. For example, if you specified a VPC ID for the <code>ResourceId</code> property, specify <code>VPC</code> for this property.</p>
     pub resource_type: String,
-    /// <p>The type of traffic to log.</p>
+    /// <p>The type of traffic to log. You can log traffic that the resource accepts or rejects, or all traffic.</p>
     pub traffic_type: String,
 }
 
@@ -6811,10 +6826,9 @@ impl CreateFpgaImageResultDeserializer {
         })
     }
 }
-/// <p>Contains the parameters for CreateImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateImageRequest {
-    /// <p>Information about one or more block device mappings. This parameter cannot be used to modify the encryption status of existing volumes or snapshots. To create an AMI with encrypted snapshots, use the <a>CopyImage</a> action.</p>
+    /// <p>Tthe block device mappings. This parameter cannot be used to modify the encryption status of existing volumes or snapshots. To create an AMI with encrypted snapshots, use the <a>CopyImage</a> action.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>A description for the new image.</p>
     pub description: Option<String>,
@@ -6858,7 +6872,6 @@ impl CreateImageRequestSerializer {
     }
 }
 
-/// <p>Contains the output of CreateImage.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateImageResult {
     /// <p>The ID of the new AMI.</p>
@@ -7444,6 +7457,8 @@ pub struct CreateNetworkInterfaceRequest {
     pub dry_run: Option<bool>,
     /// <p>The IDs of one or more security groups.</p>
     pub groups: Option<Vec<String>>,
+    /// <p>Indicates the type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html"> Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p>
+    pub interface_type: Option<String>,
     /// <p>The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses. If your subnet has the <code>AssignIpv6AddressOnCreation</code> attribute set to <code>true</code>, you can specify <code>0</code> to override this setting.</p>
     pub ipv_6_address_count: Option<i64>,
     /// <p>One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet. You can't use this option if you're specifying a number of IPv6 addresses.</p>
@@ -7479,6 +7494,9 @@ impl CreateNetworkInterfaceRequestSerializer {
                 &format!("{}{}", prefix, "SecurityGroupId"),
                 field_value,
             );
+        }
+        if let Some(ref field_value) = obj.interface_type {
+            params.put(&format!("{}{}", prefix, "InterfaceType"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_address_count {
             params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
@@ -8043,9 +8061,9 @@ impl CreateSubnetResultDeserializer {
 pub struct CreateTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The IDs of one or more resources, separated by spaces.</p> <p>Constraints: Up to 1000 resource IDs. We recommend breaking up this request into smaller batches.</p>
+    /// <p>The IDs of the resources, separated by spaces.</p> <p>Constraints: Up to 1000 resource IDs. We recommend breaking up this request into smaller batches.</p>
     pub resources: Vec<String>,
-    /// <p>One or more tags. The <code>value</code> parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p>
+    /// <p>The tags. The <code>value</code> parameter is required, but if you don't want the tag to have a value, specify the parameter with no value, and we set the value to an empty string.</p>
     pub tags: Vec<Tag>,
 }
 
@@ -8147,7 +8165,7 @@ impl CreateTransitGatewayResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTransitGatewayRouteRequest {
-    /// <p>Indicates whether traffic matching this route is to be dropped.</p>
+    /// <p>Indicates whether to drop traffic that matches this route.</p>
     pub blackhole: Option<bool>,
     /// <p>The CIDR range used for destination matches. Routing decisions are based on the most specific match.</p>
     pub destination_cidr_block: String,
@@ -8407,12 +8425,12 @@ impl CreateTransitGatewayVpcAttachmentResultDeserializer {
         )
     }
 }
-/// <p>Describes the user or group to be added or removed from the permissions for a volume.</p>
+/// <p>Describes the user or group to be added or removed from the list of create volume permissions for a volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVolumePermission {
-    /// <p>The specific group that is to be added or removed from a volume's list of create volume permissions.</p>
+    /// <p>The group to be added or removed. The possible value is <code>all</code>.</p>
     pub group: Option<String>,
-    /// <p>The specific AWS account ID that is to be added or removed from a volume's list of create volume permissions.</p>
+    /// <p>The AWS account ID to be added or removed.</p>
     pub user_id: Option<String>,
 }
 
@@ -8487,12 +8505,12 @@ impl CreateVolumePermissionListSerializer {
     }
 }
 
-/// <p>Describes modifications to the permissions for a volume.</p>
+/// <p>Describes modifications to the list of create volume permissions for a volume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVolumePermissionModifications {
-    /// <p>Adds a specific AWS account ID or group to a volume's list of create volume permissions.</p>
+    /// <p>Adds the specified AWS account ID or group to the list.</p>
     pub add: Option<Vec<CreateVolumePermission>>,
-    /// <p>Removes a specific AWS account ID or group from a volume's list of create volume permissions.</p>
+    /// <p>Removes the specified AWS account ID or group from the list.</p>
     pub remove: Option<Vec<CreateVolumePermission>>,
 }
 
@@ -8525,23 +8543,23 @@ impl CreateVolumePermissionModificationsSerializer {
 /// <p>Contains the parameters for CreateVolume.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVolumeRequest {
-    /// <p>The Availability Zone in which to create the volume. Use <a>DescribeAvailabilityZones</a> to list the Availability Zones that are currently available to you.</p>
+    /// <p>The Availability Zone in which to create the volume.</p>
     pub availability_zone: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Specifies whether the volume should be encrypted. Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption. Volumes that are created from encrypted snapshots are automatically encrypted. There is no way to create an encrypted volume from an unencrypted snapshot or vice versa. If your AMI uses encrypted volumes, you can only launch it on supported instance types. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Specifies the encryption state of the volume. The default effect of setting the <code>Encrypted</code> parameter to <code>true</code> through the console, API, or CLI depends on the volume's origin (new or from a snapshot), starting encryption state, ownership, and whether <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/account-level-encryption.html">account-level encryption</a> is enabled. Each default case can be overridden by specifying a customer master key (CMK) with the <code>KmsKeyId</code> parameter in addition to setting <code>Encrypted</code> to <code>true</code>. For a complete list of possible encryption cases, see <a href="AWSEC2/latest/UserGuide/EBSEncryption.htm">Amazon EBS Encryption</a>. </p> <p>Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     pub encrypted: Option<bool>,
-    /// <p>The number of I/O operations per second (IOPS) to provision for the volume, with a maximum ratio of 50 IOPS/GiB. Range is 100 to 64,000 IOPS for volumes in most regions. Maximum IOPS of 64,000 is guaranteed only on <a href="AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>This parameter is valid only for Provisioned IOPS SSD (io1) volumes.</p>
+    /// <p>The number of I/O operations per second (IOPS) to provision for the volume, with a maximum ratio of 50 IOPS/GiB. Range is 100 to 64,000 IOPS for volumes in most Regions. Maximum IOPS of 64,000 is guaranteed only on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>This parameter is valid only for Provisioned IOPS SSD (io1) volumes.</p>
     pub iops: Option<i64>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. The action will eventually fail. </p>
     pub kms_key_id: Option<String>,
-    /// <p><p>The size of the volume, in GiBs.</p> <p>Constraints: 1-16,384 for <code>gp2</code>, 4-16,384 for <code>io1</code>, 500-16,384 for <code>st1</code>, 500-16,384 for <code>sc1</code>, and 1-1,024 for <code>standard</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you&#39;re creating the volume from a snapshot and don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of Size or SnapshotId are required.</p> </note></p>
+    /// <p><p>The size of the volume, in GiBs.</p> <p>Constraints: 1-16,384 for <code>gp2</code>, 4-16,384 for <code>io1</code>, 500-16,384 for <code>st1</code>, 500-16,384 for <code>sc1</code>, and 1-1,024 for <code>standard</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you&#39;re creating the volume from a snapshot and don&#39;t specify a volume size, the default is the snapshot size.</p> <note> <p>At least one of Size or SnapshotId is required.</p> </note></p>
     pub size: Option<i64>,
     /// <p><p>The snapshot from which to create the volume.</p> <note> <p>At least one of Size or SnapshotId are required.</p> </note></p>
     pub snapshot_id: Option<String>,
     /// <p>The tags to apply to the volume during creation.</p>
     pub tag_specifications: Option<Vec<TagSpecification>>,
-    /// <p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> <p>Defaults: If no volume type is specified, the default is <code>standard</code> in us-east-1, eu-west-1, eu-central-1, us-west-2, us-west-1, sa-east-1, ap-northeast-1, ap-northeast-2, ap-southeast-1, ap-southeast-2, ap-south-1, us-gov-west-1, and cn-north-1. In all other regions, EBS defaults to <code>gp2</code>.</p>
+    /// <p>The volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> <p>Defaults: If no volume type is specified, the default is <code>standard</code> in us-east-1, eu-west-1, eu-central-1, us-west-2, us-west-1, sa-east-1, ap-northeast-1, ap-northeast-2, ap-southeast-1, ap-southeast-2, ap-south-1, us-gov-west-1, and cn-north-1. In all other Regions, EBS defaults to <code>gp2</code>.</p>
     pub volume_type: Option<String>,
 }
 
@@ -8687,9 +8705,9 @@ pub struct CreateVpcEndpointRequest {
     pub client_token: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>(Gateway endpoint) A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format. If this parameter is not specified, we attach a default policy that allows full access to the service.</p>
+    /// <p>A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format. If this parameter is not specified, we attach a default policy that allows full access to the service.</p>
     pub policy_document: Option<String>,
-    /// <p>(Interface endpoint) Indicate whether to associate a private hosted zone with the specified VPC. The private hosted zone contains a record set for the default public DNS name for the service for the region (for example, <code>kinesis.us-east-1.amazonaws.com</code>) which resolves to the private IP addresses of the endpoint network interfaces in the VPC. This enables you to make requests to the default public DNS name for the service instead of the public DNS names that are automatically generated by the VPC endpoint service.</p> <p>To use a private hosted zone, you must set the following VPC attributes to <code>true</code>: <code>enableDnsHostnames</code> and <code>enableDnsSupport</code>. Use <a>ModifyVpcAttribute</a> to set the VPC attributes.</p> <p>Default: <code>false</code> </p>
+    /// <p>(Interface endpoint) Indicate whether to associate a private hosted zone with the specified VPC. The private hosted zone contains a record set for the default public DNS name for the service for the Region (for example, <code>kinesis.us-east-1.amazonaws.com</code>) which resolves to the private IP addresses of the endpoint network interfaces in the VPC. This enables you to make requests to the default public DNS name for the service instead of the public DNS names that are automatically generated by the VPC endpoint service.</p> <p>To use a private hosted zone, you must set the following VPC attributes to <code>true</code>: <code>enableDnsHostnames</code> and <code>enableDnsSupport</code>. Use <a>ModifyVpcAttribute</a> to set the VPC attributes.</p> <p>Default: <code>true</code> </p>
     pub private_dns_enabled: Option<bool>,
     /// <p>(Gateway endpoint) One or more route table IDs.</p>
     pub route_table_ids: Option<Vec<String>>,
@@ -8877,7 +8895,7 @@ pub struct CreateVpcPeeringConnectionRequest {
     pub dry_run: Option<bool>,
     /// <p>The AWS account ID of the owner of the accepter VPC.</p> <p>Default: Your AWS account ID</p>
     pub peer_owner_id: Option<String>,
-    /// <p>The region code for the accepter VPC, if the accepter VPC is located in a region other than the region in which you make the request.</p> <p>Default: The region in which you make the request.</p>
+    /// <p>The Region code for the accepter VPC, if the accepter VPC is located in a Region other than the Region in which you make the request.</p> <p>Default: The Region in which you make the request.</p>
     pub peer_region: Option<String>,
     /// <p>The ID of the VPC with which you are creating the VPC peering connection. You must specify this parameter in the request.</p>
     pub peer_vpc_id: Option<String>,
@@ -9016,7 +9034,7 @@ pub struct CreateVpnConnectionRequest {
     pub options: Option<VpnConnectionOptionsSpecification>,
     /// <p>The ID of the transit gateway. If you specify a transit gateway, you cannot specify a virtual private gateway.</p>
     pub transit_gateway_id: Option<String>,
-    /// <p>The type of VPN connection (<code>ipsec.1</code>).</p>
+    /// <p>The type of VPN connection (<code>ipsec.1</code> | <code>ipsec.2</code>).</p>
     pub type_: String,
     /// <p>The ID of the virtual private gateway. If you specify a virtual private gateway, you cannot specify a transit gateway.</p>
     pub vpn_gateway_id: Option<String>,
@@ -10681,9 +10699,9 @@ impl DeleteSubnetRequestSerializer {
 pub struct DeleteTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The IDs of one or more resources, separated by spaces.</p> <p>Constraints: Up to 1000 resource IDs. We recommend breaking up this request into smaller batches.</p>
+    /// <p>The IDs of the resources, separated by spaces.</p> <p>Constraints: Up to 1000 resource IDs. We recommend breaking up this request into smaller batches.</p>
     pub resources: Vec<String>,
-    /// <p>One or more tags to delete. Specify a tag key and an optional tag value to delete specific tags. If you specify a tag key without a tag value, we delete any tag with this key regardless of its value. If you specify a tag key with an empty string as the tag value, we delete the tag only if its value is an empty string.</p> <p>If you omit this parameter, we delete all user-defined tags for the specified resources. We do not delete AWS-generated tags (tags that have the <code>aws:</code> prefix).</p>
+    /// <p>The tags to delete. Specify a tag key and an optional tag value to delete specific tags. If you specify a tag key without a tag value, we delete any tag with this key regardless of its value. If you specify a tag key with an empty string as the tag value, we delete the tag only if its value is an empty string.</p> <p>If you omit this parameter, we delete all user-defined tags for the specified resources. We do not delete AWS-generated tags (tags that have the <code>aws:</code> prefix).</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -11402,7 +11420,7 @@ impl DeregisterImageRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountAttributesRequest {
-    /// <p>One or more account attribute names.</p>
+    /// <p>The account attribute names.</p>
     pub attribute_names: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11432,7 +11450,7 @@ impl DescribeAccountAttributesRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAccountAttributesResult {
-    /// <p>Information about one or more account attributes.</p>
+    /// <p>Information about the account attributes.</p>
     pub account_attributes: Option<Vec<AccountAttribute>>,
 }
 
@@ -11465,7 +11483,7 @@ impl DescribeAccountAttributesResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAddressesRequest {
-    /// <p>[EC2-VPC] One or more allocation IDs.</p> <p>Default: Describes all your Elastic IP addresses.</p>
+    /// <p>[EC2-VPC] Information about the allocation IDs.</p>
     pub allocation_ids: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -11513,7 +11531,7 @@ impl DescribeAddressesRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAddressesResult {
-    /// <p>Information about one or more Elastic IP addresses.</p>
+    /// <p>Information about the Elastic IP addresses.</p>
     pub addresses: Option<Vec<Address>>,
 }
 
@@ -11566,7 +11584,7 @@ impl DescribeAggregateIdFormatRequestSerializer {
 pub struct DescribeAggregateIdFormatResult {
     /// <p>Information about each resource's ID format.</p>
     pub statuses: Option<Vec<IdFormat>>,
-    /// <p>Indicates whether all resource types in the region are configured to use longer IDs. This value is only <code>true</code> if all users are configured to use longer IDs for all resources types in the region.</p>
+    /// <p>Indicates whether all resource types in the Region are configured to use longer IDs. This value is only <code>true</code> if all users are configured to use longer IDs for all resources types in the Region.</p>
     pub use_long_ids_aggregated: Option<bool>,
 }
 
@@ -11604,11 +11622,11 @@ impl DescribeAggregateIdFormatResultDeserializer {
 pub struct DescribeAvailabilityZonesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>message</code> - Information about the Availability Zone.</p> </li> <li> <p> <code>region-name</code> - The name of the region for the Availability Zone (for example, <code>us-east-1</code>).</p> </li> <li> <p> <code>state</code> - The state of the Availability Zone (<code>available</code> | <code>information</code> | <code>impaired</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>zone-id</code> - The ID of the Availability Zone (for example, <code>use1-az1</code>).</p> </li> <li> <p> <code>zone-name</code> - The name of the Availability Zone (for example, <code>us-east-1a</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>message</code> - Information about the Availability Zone.</p> </li> <li> <p> <code>region-name</code> - The name of the Region for the Availability Zone (for example, <code>us-east-1</code>).</p> </li> <li> <p> <code>state</code> - The state of the Availability Zone (<code>available</code> | <code>information</code> | <code>impaired</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>zone-id</code> - The ID of the Availability Zone (for example, <code>use1-az1</code>).</p> </li> <li> <p> <code>zone-name</code> - The name of the Availability Zone (for example, <code>us-east-1a</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The IDs of one or more Availability Zones.</p>
+    /// <p>The IDs of the Availability Zones.</p>
     pub zone_ids: Option<Vec<String>>,
-    /// <p>The names of one or more Availability Zones.</p>
+    /// <p>The names of the Availability Zones.</p>
     pub zone_names: Option<Vec<String>>,
 }
 
@@ -11650,7 +11668,7 @@ impl DescribeAvailabilityZonesRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeAvailabilityZonesResult {
-    /// <p>Information about one or more Availability Zones.</p>
+    /// <p>Information about the Availability Zones.</p>
     pub availability_zones: Option<Vec<AvailabilityZone>>,
 }
 
@@ -11681,14 +11699,13 @@ impl DescribeAvailabilityZonesResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DescribeBundleTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeBundleTasksRequest {
-    /// <p>One or more bundle task IDs.</p> <p>Default: Describes all your bundle tasks.</p>
+    /// <p>The bundle task IDs.</p> <p>Default: Describes all your bundle tasks.</p>
     pub bundle_ids: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>bundle-id</code> - The ID of the bundle task.</p> </li> <li> <p> <code>error-code</code> - If the task failed, the error code returned.</p> </li> <li> <p> <code>error-message</code> - If the task failed, the error message returned.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>progress</code> - The level of task completion, as a percentage (for example, 20%).</p> </li> <li> <p> <code>s3-bucket</code> - The Amazon S3 bucket to store the AMI.</p> </li> <li> <p> <code>s3-prefix</code> - The beginning of the AMI name.</p> </li> <li> <p> <code>start-time</code> - The time the task started (for example, 2013-09-15T17:15:20.000Z).</p> </li> <li> <p> <code>state</code> - The state of the task (<code>pending</code> | <code>waiting-for-shutdown</code> | <code>bundling</code> | <code>storing</code> | <code>cancelling</code> | <code>complete</code> | <code>failed</code>).</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update for the task.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>bundle-id</code> - The ID of the bundle task.</p> </li> <li> <p> <code>error-code</code> - If the task failed, the error code returned.</p> </li> <li> <p> <code>error-message</code> - If the task failed, the error message returned.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>progress</code> - The level of task completion, as a percentage (for example, 20%).</p> </li> <li> <p> <code>s3-bucket</code> - The Amazon S3 bucket to store the AMI.</p> </li> <li> <p> <code>s3-prefix</code> - The beginning of the AMI name.</p> </li> <li> <p> <code>start-time</code> - The time the task started (for example, 2013-09-15T17:15:20.000Z).</p> </li> <li> <p> <code>state</code> - The state of the task (<code>pending</code> | <code>waiting-for-shutdown</code> | <code>bundling</code> | <code>storing</code> | <code>cancelling</code> | <code>complete</code> | <code>failed</code>).</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update for the task.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
 }
 
@@ -11721,10 +11738,9 @@ impl DescribeBundleTasksRequestSerializer {
     }
 }
 
-/// <p>Contains the output of DescribeBundleTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeBundleTasksResult {
-    /// <p>Information about one or more bundle tasks.</p>
+    /// <p>Information about the bundle tasks.</p>
     pub bundle_tasks: Option<Vec<BundleTask>>,
 }
 
@@ -11914,9 +11930,9 @@ pub struct DescribeClassicLinkInstancesRequest {
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more instance IDs. Must be instances linked to a VPC through ClassicLink.</p>
     pub instance_ids: Option<Vec<String>>,
-    /// <p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000. If <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. You cannot specify this parameter and the instance IDs parameter in the same request.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next page of results.</p>
+    /// <p>The token for the next page of results.</p>
     pub next_token: Option<String>,
 }
 
@@ -12445,7 +12461,7 @@ impl DescribeConversionTaskListDeserializer {
 /// <p>Contains the parameters for DescribeConversionTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeConversionTasksRequest {
-    /// <p>One or more conversion task IDs.</p>
+    /// <p>The conversion task IDs.</p>
     pub conversion_task_ids: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -12589,6 +12605,10 @@ pub struct DescribeDhcpOptionsRequest {
     pub dry_run: Option<bool>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>dhcp-options-id</code> - The ID of a DHCP options set.</p> </li> <li> <p> <code>key</code> - The key for one of the options (for example, <code>domain-name</code>).</p> </li> <li> <p> <code>value</code> - The value for one of the options.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the DHCP options set.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
 }
 
 /// Serialize `DescribeDhcpOptionsRequest` contents to a `SignedRequest`.
@@ -12617,6 +12637,12 @@ impl DescribeDhcpOptionsRequestSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
     }
 }
 
@@ -12624,6 +12650,8 @@ impl DescribeDhcpOptionsRequestSerializer {
 pub struct DescribeDhcpOptionsResult {
     /// <p>Information about one or more DHCP options sets.</p>
     pub dhcp_options: Option<Vec<DhcpOptions>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
 }
 
 struct DescribeDhcpOptionsResultDeserializer;
@@ -12643,6 +12671,9 @@ impl DescribeDhcpOptionsResultDeserializer {
                             DhcpOptionsListDeserializer::deserialize("dhcpOptionsSet", stack)?,
                         );
                     }
+                    "nextToken" => {
+                        obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
+                    }
                     _ => skip_tree(stack),
                 }
                 Ok(())
@@ -12656,9 +12687,9 @@ pub struct DescribeEgressOnlyInternetGatewaysRequest {
     pub dry_run: Option<bool>,
     /// <p>One or more egress-only internet gateway IDs.</p>
     pub egress_only_internet_gateway_ids: Option<Vec<String>>,
-    /// <p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000. If <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next page of results.</p>
+    /// <p>The token for the next page of results.</p>
     pub next_token: Option<String>,
 }
 
@@ -12694,7 +12725,7 @@ impl DescribeEgressOnlyInternetGatewaysRequestSerializer {
 pub struct DescribeEgressOnlyInternetGatewaysResult {
     /// <p>Information about the egress-only internet gateways.</p>
     pub egress_only_internet_gateways: Option<Vec<EgressOnlyInternetGateway>>,
-    /// <p>The token to use to retrieve the next page of results.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
 }
 
@@ -12732,9 +12763,9 @@ impl DescribeEgressOnlyInternetGatewaysResultDeserializer {
 pub struct DescribeElasticGpusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more Elastic Graphics accelerator IDs.</p>
+    /// <p>The Elastic Graphics accelerator IDs.</p>
     pub elastic_gpu_ids: Option<Vec<String>>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone in which the Elastic Graphics accelerator resides.</p> </li> <li> <p> <code>elastic-gpu-health</code> - The status of the Elastic Graphics accelerator (<code>OK</code> | <code>IMPAIRED</code>).</p> </li> <li> <p> <code>elastic-gpu-state</code> - The state of the Elastic Graphics accelerator (<code>ATTACHED</code>).</p> </li> <li> <p> <code>elastic-gpu-type</code> - The type of Elastic Graphics accelerator; for example, <code>eg1.medium</code>.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance to which the Elastic Graphics accelerator is associated.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone in which the Elastic Graphics accelerator resides.</p> </li> <li> <p> <code>elastic-gpu-health</code> - The status of the Elastic Graphics accelerator (<code>OK</code> | <code>IMPAIRED</code>).</p> </li> <li> <p> <code>elastic-gpu-state</code> - The state of the Elastic Graphics accelerator (<code>ATTACHED</code>).</p> </li> <li> <p> <code>elastic-gpu-type</code> - The type of Elastic Graphics accelerator; for example, <code>eg1.medium</code>.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance to which the Elastic Graphics accelerator is associated.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000.</p>
     pub max_results: Option<i64>,
@@ -12821,7 +12852,7 @@ impl DescribeElasticGpusResultDeserializer {
 /// <p>Contains the parameters for DescribeExportTasks.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeExportTasksRequest {
-    /// <p>One or more export task IDs.</p>
+    /// <p>The export task IDs.</p>
     pub export_task_ids: Option<Vec<String>>,
 }
 
@@ -13024,7 +13055,7 @@ impl DescribeFleetHistoryResultDeserializer {
 pub struct DescribeFleetInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-type</code> - The instance type.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>instance-type</code> - The instance type.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The ID of the EC2 Fleet.</p>
     pub fleet_id: String,
@@ -13206,7 +13237,7 @@ impl DescribeFleetsInstancesSetDeserializer {
 pub struct DescribeFleetsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>activity-status</code> - The progress of the EC2 Fleet ( <code>error</code> | <code>pending-fulfillment</code> | <code>pending-termination</code> | <code>fulfilled</code>).</p> </li> <li> <p> <code>excess-capacity-termination-policy</code> - Indicates whether to terminate running instances if the target capacity is decreased below the current EC2 Fleet size (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>fleet-state</code> - The state of the EC2 Fleet (<code>submitted</code> | <code>active</code> | <code>deleted</code> | <code>failed</code> | <code>deleted-running</code> | <code>deleted-terminating</code> | <code>modifying</code>).</p> </li> <li> <p> <code>replace-unhealthy-instances</code> - Indicates whether EC2 Fleet should replace unhealthy instances (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>type</code> - The type of request (<code>instant</code> | <code>request</code> | <code>maintain</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>activity-status</code> - The progress of the EC2 Fleet ( <code>error</code> | <code>pending-fulfillment</code> | <code>pending-termination</code> | <code>fulfilled</code>).</p> </li> <li> <p> <code>excess-capacity-termination-policy</code> - Indicates whether to terminate running instances if the target capacity is decreased below the current EC2 Fleet size (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>fleet-state</code> - The state of the EC2 Fleet (<code>submitted</code> | <code>active</code> | <code>deleted</code> | <code>failed</code> | <code>deleted-running</code> | <code>deleted-terminating</code> | <code>modifying</code>).</p> </li> <li> <p> <code>replace-unhealthy-instances</code> - Indicates whether EC2 Fleet should replace unhealthy instances (<code>true</code> | <code>false</code>).</p> </li> <li> <p> <code>type</code> - The type of request (<code>instant</code> | <code>request</code> | <code>maintain</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The ID of the EC2 Fleets.</p>
     pub fleet_ids: Option<Vec<String>>,
@@ -13290,9 +13321,9 @@ pub struct DescribeFlowLogsRequest {
     pub filter: Option<Vec<Filter>>,
     /// <p>One or more flow log IDs.</p>
     pub flow_log_ids: Option<Vec<String>>,
-    /// <p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000. If <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. You cannot specify this parameter and the flow log IDs parameter in the same request.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next page of results.</p>
+    /// <p>The token for the next page of results.</p>
     pub next_token: Option<String>,
 }
 
@@ -13425,9 +13456,9 @@ impl DescribeFpgaImageAttributeResultDeserializer {
 pub struct DescribeFpgaImagesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>create-time</code> - The creation time of the AFI.</p> </li> <li> <p> <code>fpga-image-id</code> - The FPGA image identifier (AFI ID).</p> </li> <li> <p> <code>fpga-image-global-id</code> - The global FPGA image identifier (AGFI ID).</p> </li> <li> <p> <code>name</code> - The name of the AFI.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the AFI owner.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>shell-version</code> - The version of the AWS Shell that was used to create the bitstream.</p> </li> <li> <p> <code>state</code> - The state of the AFI (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>create-time</code> - The creation time of the AFI.</p> </li> <li> <p> <code>fpga-image-id</code> - The FPGA image identifier (AFI ID).</p> </li> <li> <p> <code>fpga-image-global-id</code> - The global FPGA image identifier (AGFI ID).</p> </li> <li> <p> <code>name</code> - The name of the AFI.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the AFI owner.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>shell-version</code> - The version of the AWS Shell that was used to create the bitstream.</p> </li> <li> <p> <code>state</code> - The state of the AFI (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>unavailable</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>update-time</code> - The time of the most recent update.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>One or more AFI IDs.</p>
+    /// <p>The AFI IDs.</p>
     pub fpga_image_ids: Option<Vec<String>>,
     /// <p>The maximum number of results to return in a single call.</p>
     pub max_results: Option<i64>,
@@ -13481,7 +13512,7 @@ impl DescribeFpgaImagesRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeFpgaImagesResult {
-    /// <p>Information about one or more FPGA images.</p>
+    /// <p>Information about the FPGA images.</p>
     pub fpga_images: Option<Vec<FpgaImage>>,
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -13517,7 +13548,7 @@ impl DescribeFpgaImagesResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostReservationOfferingsRequest {
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (for example, <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family of the offering (for example, <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
     /// <p>This is the maximum duration of the reservation to purchase, specified in seconds. Reservations are available in one-year and three-year terms. The number of seconds specified must be the number of seconds in a year (365x24x60x60) times one of the supported durations (1 or 3). For example, specify 94608000 for three years.</p>
     pub max_duration: Option<i64>,
@@ -13602,9 +13633,9 @@ impl DescribeHostReservationOfferingsResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostReservationsRequest {
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family (for example, <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> <li> <p> <code>state</code> - The state of the reservation (<code>payment-pending</code> | <code>payment-failed</code> | <code>active</code> | <code>retired</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>instance-family</code> - The instance family (for example, <code>m4</code>).</p> </li> <li> <p> <code>payment-option</code> - The payment option (<code>NoUpfront</code> | <code>PartialUpfront</code> | <code>AllUpfront</code>).</p> </li> <li> <p> <code>state</code> - The state of the reservation (<code>payment-pending</code> | <code>payment-failed</code> | <code>active</code> | <code>retired</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
-    /// <p>One or more host reservation IDs.</p>
+    /// <p>The host reservation IDs.</p>
     pub host_reservation_id_set: Option<Vec<String>>,
     /// <p>The maximum number of results to return for the request in a single page. The remaining results can be seen by sending another request with the returned <code>nextToken</code> value. This value can be between 5 and 500. If <code>maxResults</code> is given a larger value than 500, you receive an error.</p>
     pub max_results: Option<i64>,
@@ -13684,7 +13715,7 @@ impl DescribeHostReservationsResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeHostsRequest {
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>auto-placement</code> - Whether auto-placement is enabled or disabled (<code>on</code> | <code>off</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the host.</p> </li> <li> <p> <code>client-token</code> - The idempotency token that you provided when you allocated the host.</p> </li> <li> <p> <code>host-reservation-id</code> - The ID of the reservation assigned to this host.</p> </li> <li> <p> <code>instance-type</code> - The instance type size that the Dedicated Host is configured to support.</p> </li> <li> <p> <code>state</code> - The allocation state of the Dedicated Host (<code>available</code> | <code>under-assessment</code> | <code>permanent-failure</code> | <code>released</code> | <code>released-permanent-failure</code>).</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>auto-placement</code> - Whether auto-placement is enabled or disabled (<code>on</code> | <code>off</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the host.</p> </li> <li> <p> <code>client-token</code> - The idempotency token that you provided when you allocated the host.</p> </li> <li> <p> <code>host-reservation-id</code> - The ID of the reservation assigned to this host.</p> </li> <li> <p> <code>instance-type</code> - The instance type size that the Dedicated Host is configured to support.</p> </li> <li> <p> <code>state</code> - The allocation state of the Dedicated Host (<code>available</code> | <code>under-assessment</code> | <code>permanent-failure</code> | <code>released</code> | <code>released-permanent-failure</code>).</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
     /// <p>The IDs of the Dedicated Hosts. The IDs are used for targeted instance launches.</p>
     pub host_ids: Option<Vec<String>>,
@@ -13759,9 +13790,9 @@ impl DescribeHostsResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeIamInstanceProfileAssociationsRequest {
-    /// <p>One or more IAM instance profile associations.</p>
+    /// <p>The IAM instance profile associations.</p>
     pub association_ids: Option<Vec<String>>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>state</code> - The state of the association (<code>associating</code> | <code>associated</code> | <code>disassociating</code> | <code>disassociated</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>state</code> - The state of the association (<code>associating</code> | <code>associated</code> | <code>disassociating</code> | <code>disassociated</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     pub max_results: Option<i64>,
@@ -13807,7 +13838,7 @@ impl DescribeIamInstanceProfileAssociationsRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeIamInstanceProfileAssociationsResult {
-    /// <p>Information about one or more IAM instance profile associations.</p>
+    /// <p>Information about the IAM instance profile associations.</p>
     pub iam_instance_profile_associations: Option<Vec<IamInstanceProfileAssociation>>,
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -13973,16 +14004,15 @@ impl DescribeImageAttributeRequestSerializer {
     }
 }
 
-/// <p>Contains the parameters for DescribeImages.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImagesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>Scopes the images by users with explicit launch permissions. Specify an AWS account ID, <code>self</code> (the sender of the request), or <code>all</code> (public AMIs).</p>
     pub executable_users: Option<Vec<String>>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>block-device-mapping.encrypted</code> - A Boolean that indicates whether the EBS volume is encrypted.</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>sriov-net-support</code> - A value of <code>simple</code> indicates that enhanced networking with the Intel 82599 VF interface is enabled.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>block-device-mapping.encrypted</code> - A Boolean that indicates whether the EBS volume is encrypted.</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>sriov-net-support</code> - A value of <code>simple</code> indicates that enhanced networking with the Intel 82599 VF interface is enabled.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>One or more image IDs.</p> <p>Default: Describes all images available to you.</p>
+    /// <p>The image IDs.</p> <p>Default: Describes all images available to you.</p>
     pub image_ids: Option<Vec<String>>,
     /// <p>Filters the images by the owner. Specify an AWS account ID, <code>self</code> (owner is the sender of the request), or an AWS owner alias (valid values are <code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>). Omitting this option returns all images for which you have launch permissions, regardless of ownership.</p>
     pub owners: Option<Vec<String>>,
@@ -14031,10 +14061,9 @@ impl DescribeImagesRequestSerializer {
     }
 }
 
-/// <p>Contains the output of DescribeImages.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeImagesResult {
-    /// <p>Information about one or more images.</p>
+    /// <p>Information about the images.</p>
     pub images: Option<Vec<Image>>,
 }
 
@@ -14152,7 +14181,7 @@ impl DescribeImportImageTasksResultDeserializer {
 pub struct DescribeImportSnapshotTasksRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more filters.</p>
+    /// <p>The filters.</p>
     pub filters: Option<Vec<Filter>>,
     /// <p>A list of import snapshot task IDs.</p>
     pub import_task_ids: Option<Vec<String>>,
@@ -14267,9 +14296,9 @@ impl DescribeInstanceAttributeRequestSerializer {
 pub struct DescribeInstanceCreditSpecificationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p> <p>Constraints: Maximum 1000 explicitly specified instance IDs.</p>
+    /// <p>The instance IDs.</p> <p>Default: Describes all your instances.</p> <p>Constraints: Maximum 1000 explicitly specified instance IDs.</p>
     pub instance_ids: Option<Vec<String>>,
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000. You cannot specify this parameter and the instance IDs parameter in the same call.</p>
     pub max_results: Option<i64>,
@@ -14358,11 +14387,11 @@ impl DescribeInstanceCreditSpecificationsResultDeserializer {
 pub struct DescribeInstanceStatusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>event.code</code> - The code for the scheduled event (<code>instance-reboot</code> | <code>system-reboot</code> | <code>system-maintenance</code> | <code>instance-retirement</code> | <code>instance-stop</code>).</p> </li> <li> <p> <code>event.description</code> - A description of the event.</p> </li> <li> <p> <code>event.not-after</code> - The latest end time for the scheduled event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>event.not-before</code> - The earliest start time for the scheduled event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The code for the instance state, as a 16-bit unsigned integer. The high byte is used for internal purposes and should be ignored. The low byte is set based on the state represented. The valid values are 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-status.reachability</code> - Filters on instance status where the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> | <code>insufficient-data</code>).</p> </li> <li> <p> <code>instance-status.status</code> - The status of the instance (<code>ok</code> | <code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> | <code>not-applicable</code>).</p> </li> <li> <p> <code>system-status.reachability</code> - Filters on system status where the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> | <code>insufficient-data</code>).</p> </li> <li> <p> <code>system-status.status</code> - The system status of the instance (<code>ok</code> | <code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> | <code>not-applicable</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>event.code</code> - The code for the scheduled event (<code>instance-reboot</code> | <code>system-reboot</code> | <code>system-maintenance</code> | <code>instance-retirement</code> | <code>instance-stop</code>).</p> </li> <li> <p> <code>event.description</code> - A description of the event.</p> </li> <li> <p> <code>event.instance-event-id</code> - The ID of the event whose date and time you are modifying.</p> </li> <li> <p> <code>event.not-after</code> - The latest end time for the scheduled event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>event.not-before</code> - The earliest start time for the scheduled event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>event.not-before-deadline</code> - The deadline for starting the event (for example, <code>2014-09-15T17:15:20.000Z</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The code for the instance state, as a 16-bit unsigned integer. The high byte is used for internal purposes and should be ignored. The low byte is set based on the state represented. The valid values are 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-status.reachability</code> - Filters on instance status where the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> | <code>insufficient-data</code>).</p> </li> <li> <p> <code>instance-status.status</code> - The status of the instance (<code>ok</code> | <code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> | <code>not-applicable</code>).</p> </li> <li> <p> <code>system-status.reachability</code> - Filters on system status where the name is <code>reachability</code> (<code>passed</code> | <code>failed</code> | <code>initializing</code> | <code>insufficient-data</code>).</p> </li> <li> <p> <code>system-status.status</code> - The system status of the instance (<code>ok</code> | <code>impaired</code> | <code>initializing</code> | <code>insufficient-data</code> | <code>not-applicable</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>When <code>true</code>, includes the health status for all instances. When <code>false</code>, includes the health status for running instances only.</p> <p>Default: <code>false</code> </p>
     pub include_all_instances: Option<bool>,
-    /// <p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p> <p>Constraints: Maximum 100 explicitly specified instance IDs.</p>
+    /// <p>The instance IDs.</p> <p>Default: Describes all your instances.</p> <p>Constraints: Maximum 100 explicitly specified instance IDs.</p>
     pub instance_ids: Option<Vec<String>>,
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000. You cannot specify this parameter and the instance IDs parameter in the same call.</p>
     pub max_results: Option<i64>,
@@ -14413,7 +14442,7 @@ impl DescribeInstanceStatusRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstanceStatusResult {
-    /// <p>One or more instance status descriptions.</p>
+    /// <p>Information about the status of the instances.</p>
     pub instance_statuses: Option<Vec<InstanceStatus>>,
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
@@ -14453,9 +14482,9 @@ impl DescribeInstanceStatusResultDeserializer {
 pub struct DescribeInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>hibernation-options.configured</code> - A Boolean that indicates whether the instance is enabled for hibernation. A value of <code>true</code> means that the instance is enabled for hibernation. </p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is used for internal purposes and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>placement-partition-number</code> - The partition in which the instance is located.</p> </li> <li> <p> <code>platform</code> - The platform. Use <code>windows</code> if you have Windows instances; otherwise, leave blank.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows &quot;User Initiated [date]&quot; when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance&#39;s reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you get one reservation ID. If you launch ten instances using the same launch request, you also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot Instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources that have a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>hibernation-options.configured</code> - A Boolean that indicates whether the instance is enabled for hibernation. A value of <code>true</code> means that the instance is enabled for hibernation. </p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is used for internal purposes and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>placement-partition-number</code> - The partition in which the instance is located.</p> </li> <li> <p> <code>platform</code> - The platform. To list only Windows instances, use <code>windows</code>.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows &quot;User Initiated [date]&quot; when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance&#39;s reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you get one reservation ID. If you launch ten instances using the same launch request, you also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot Instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources that have a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p>
+    /// <p>The instance IDs.</p> <p>Default: Describes all your instances.</p>
     pub instance_ids: Option<Vec<String>>,
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000. You cannot specify this parameter and the instance IDs parameter in the same call.</p>
     pub max_results: Option<i64>,
@@ -14502,7 +14531,7 @@ impl DescribeInstancesRequestSerializer {
 pub struct DescribeInstancesResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>Zero or more reservations.</p>
+    /// <p>Information about the reservations.</p>
     pub reservations: Option<Vec<Reservation>>,
 }
 
@@ -14541,6 +14570,10 @@ pub struct DescribeInternetGatewaysRequest {
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more internet gateway IDs.</p> <p>Default: Describes all your internet gateways.</p>
     pub internet_gateway_ids: Option<Vec<String>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
 }
 
 /// Serialize `DescribeInternetGatewaysRequest` contents to a `SignedRequest`.
@@ -14569,6 +14602,12 @@ impl DescribeInternetGatewaysRequestSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
     }
 }
 
@@ -14576,6 +14615,8 @@ impl DescribeInternetGatewaysRequestSerializer {
 pub struct DescribeInternetGatewaysResult {
     /// <p>Information about one or more internet gateways.</p>
     pub internet_gateways: Option<Vec<InternetGateway>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
 }
 
 struct DescribeInternetGatewaysResultDeserializer;
@@ -14598,6 +14639,9 @@ impl DescribeInternetGatewaysResultDeserializer {
                             )?,
                         );
                     }
+                    "nextToken" => {
+                        obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
+                    }
                     _ => skip_tree(stack),
                 }
                 Ok(())
@@ -14609,9 +14653,9 @@ impl DescribeInternetGatewaysResultDeserializer {
 pub struct DescribeKeyPairsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>fingerprint</code> - The fingerprint of the key pair.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>fingerprint</code> - The fingerprint of the key pair.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>One or more key pair names.</p> <p>Default: Describes all your key pairs.</p>
+    /// <p>The key pair names.</p> <p>Default: Describes all your key pairs.</p>
     pub key_names: Option<Vec<String>>,
 }
 
@@ -14646,7 +14690,7 @@ impl DescribeKeyPairsRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeKeyPairsResult {
-    /// <p>Information about one or more key pairs.</p>
+    /// <p>Information about the key pairs.</p>
     pub key_pairs: Option<Vec<KeyPairInfo>>,
 }
 
@@ -14961,11 +15005,11 @@ impl DescribeMovingAddressesResultDeserializer {
 pub struct DescribeNatGatewaysRequest {
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>nat-gateway-id</code> - The ID of the NAT gateway.</p> </li> <li> <p> <code>state</code> - The state of the NAT gateway (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet in which the NAT gateway resides.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC in which the NAT gateway resides.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
-    /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value specified is greater than 1000, we return only 1000 items.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
     /// <p>One or more NAT gateway IDs.</p>
     pub nat_gateway_ids: Option<Vec<String>>,
-    /// <p>The token to retrieve the next page of results.</p>
+    /// <p>The token for the next page of results.</p>
     pub next_token: Option<String>,
 }
 
@@ -15042,8 +15086,12 @@ pub struct DescribeNetworkAclsRequest {
     pub dry_run: Option<bool>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>association.association-id</code> - The ID of an association ID for the ACL.</p> </li> <li> <p> <code>association.network-acl-id</code> - The ID of the network ACL involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>default</code> - Indicates whether the ACL is the default network ACL for the VPC.</p> </li> <li> <p> <code>entry.cidr</code> - The IPv4 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.icmp.code</code> - The ICMP code specified in the entry, if any.</p> </li> <li> <p> <code>entry.icmp.type</code> - The ICMP type specified in the entry, if any.</p> </li> <li> <p> <code>entry.ipv6-cidr</code> - The IPv6 CIDR range specified in the entry.</p> </li> <li> <p> <code>entry.port-range.from</code> - The start of the port range specified in the entry. </p> </li> <li> <p> <code>entry.port-range.to</code> - The end of the port range specified in the entry. </p> </li> <li> <p> <code>entry.protocol</code> - The protocol specified in the entry (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>entry.rule-action</code> - Allows or denies the matching traffic (<code>allow</code> | <code>deny</code>).</p> </li> <li> <p> <code>entry.rule-number</code> - The number of an entry (in other words, rule) in the set of ACL entries.</p> </li> <li> <p> <code>network-acl-id</code> - The ID of the network ACL.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the network ACL.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network ACL.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
     /// <p>One or more network ACL IDs.</p> <p>Default: Describes all your network ACLs.</p>
     pub network_acl_ids: Option<Vec<String>>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
 }
 
 /// Serialize `DescribeNetworkAclsRequest` contents to a `SignedRequest`.
@@ -15065,12 +15113,18 @@ impl DescribeNetworkAclsRequestSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
         if let Some(ref field_value) = obj.network_acl_ids {
             ValueStringListSerializer::serialize(
                 params,
                 &format!("{}{}", prefix, "NetworkAclId"),
                 field_value,
             );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
         }
     }
 }
@@ -15079,6 +15133,8 @@ impl DescribeNetworkAclsRequestSerializer {
 pub struct DescribeNetworkAclsResult {
     /// <p>Information about one or more network ACLs.</p>
     pub network_acls: Option<Vec<NetworkAcl>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
 }
 
 struct DescribeNetworkAclsResultDeserializer;
@@ -15097,6 +15153,9 @@ impl DescribeNetworkAclsResultDeserializer {
                         obj.network_acls.get_or_insert(vec![]).extend(
                             NetworkAclListDeserializer::deserialize("networkAclSet", stack)?,
                         );
+                    }
+                    "nextToken" => {
+                        obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -15295,7 +15354,7 @@ impl DescribeNetworkInterfacePermissionsResultDeserializer {
 pub struct DescribeNetworkInterfacesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>addresses.private-ip-address</code> - The private IPv4 addresses associated with the network interface.</p> </li> <li> <p> <code>addresses.primary</code> - Whether the private IPv4 address is the primary IP address associated with the network interface. </p> </li> <li> <p> <code>addresses.association.public-ip</code> - The association ID returned when the network interface was associated with the Elastic IP address (IPv4).</p> </li> <li> <p> <code>addresses.association.owner-id</code> - The owner ID of the addresses associated with the network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.public-dns-name</code> - The public DNS name for the network interface (IPv4).</p> </li> <li> <p> <code>attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>attachment.attach.time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Indicates whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.nat-gateway-id</code> - The ID of the NAT gateway to which the network interface is attached.</p> </li> <li> <p> <code>attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the network interface.</p> </li> <li> <p> <code>description</code> - The description of the network interface.</p> </li> <li> <p> <code>group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>ipv6-addresses.ipv6-address</code> - An IPv6 address associated with the network interface.</p> </li> <li> <p> <code>mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the network interface owner.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address or addresses of the network interface.</p> </li> <li> <p> <code>private-dns-name</code> - The private DNS name of the network interface (IPv4).</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>requester-managed</code> - Indicates whether the network interface is being managed by an AWS service (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>source-desk-check</code> - Indicates whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>status</code> - The status of the network interface. If the network interface is not attached to an instance, the status is <code>available</code>; if a network interface is attached to an instance the status is <code>in-use</code>.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network interface.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>addresses.private-ip-address</code> - The private IPv4 addresses associated with the network interface.</p> </li> <li> <p> <code>addresses.primary</code> - Whether the private IPv4 address is the primary IP address associated with the network interface. </p> </li> <li> <p> <code>addresses.association.public-ip</code> - The association ID returned when the network interface was associated with the Elastic IP address (IPv4).</p> </li> <li> <p> <code>addresses.association.owner-id</code> - The owner ID of the addresses associated with the network interface.</p> </li> <li> <p> <code>association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>association.public-dns-name</code> - The public DNS name for the network interface (IPv4).</p> </li> <li> <p> <code>attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>attachment.attach.time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Indicates whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>attachment.nat-gateway-id</code> - The ID of the NAT gateway to which the network interface is attached.</p> </li> <li> <p> <code>attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the network interface.</p> </li> <li> <p> <code>description</code> - The description of the network interface.</p> </li> <li> <p> <code>group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>ipv6-addresses.ipv6-address</code> - An IPv6 address associated with the network interface.</p> </li> <li> <p> <code>mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the network interface owner.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address or addresses of the network interface.</p> </li> <li> <p> <code>private-dns-name</code> - The private DNS name of the network interface (IPv4).</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>requester-managed</code> - Indicates whether the network interface is being managed by an AWS service (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>status</code> - The status of the network interface. If the network interface is not attached to an instance, the status is <code>available</code>; if a network interface is attached to an instance the status is <code>in-use</code>.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the network interface.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>
     pub max_results: Option<i64>,
@@ -15383,9 +15442,9 @@ impl DescribeNetworkInterfacesResultDeserializer {
 pub struct DescribePlacementGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>group-name</code> - The name of the placement group.</p> </li> <li> <p> <code>state</code> - The state of the placement group (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>strategy</code> - The strategy of the placement group (<code>cluster</code> | <code>spread</code> | <code>partition</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>group-name</code> - The name of the placement group.</p> </li> <li> <p> <code>state</code> - The state of the placement group (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>strategy</code> - The strategy of the placement group (<code>cluster</code> | <code>spread</code> | <code>partition</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>One or more placement group names.</p> <p>Default: Describes all your placement groups, or only those otherwise specified.</p>
+    /// <p>The names of the placement groups.</p> <p>Default: Describes all your placement groups, or only those otherwise specified.</p>
     pub group_names: Option<Vec<String>>,
 }
 
@@ -15420,7 +15479,7 @@ impl DescribePlacementGroupsRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePlacementGroupsResult {
-    /// <p>One or more placement groups.</p>
+    /// <p>Information about the placement groups.</p>
     pub placement_groups: Option<Vec<PlacementGroup>>,
 }
 
@@ -15457,9 +15516,9 @@ pub struct DescribePrefixListsRequest {
     pub dry_run: Option<bool>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>prefix-list-id</code>: The ID of a prefix list.</p> </li> <li> <p> <code>prefix-list-name</code>: The name of a prefix list.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value specified is greater than 1000, we return only 1000 items.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
-    /// <p>The token for the next set of items to return. (You received this token from a prior call.)</p>
+    /// <p>The token for the next page of results.</p>
     pub next_token: Option<String>,
     /// <p>One or more prefix list IDs.</p>
     pub prefix_list_ids: Option<Vec<String>>,
@@ -15502,7 +15561,7 @@ impl DescribePrefixListsRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribePrefixListsResult {
-    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
     /// <p>All available prefix lists.</p>
     pub prefix_lists: Option<Vec<PrefixList>>,
@@ -15684,9 +15743,9 @@ impl DescribePublicIpv4PoolsResultDeserializer {
 pub struct DescribeRegionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>endpoint</code> - The endpoint of the region (for example, <code>ec2.us-east-1.amazonaws.com</code>).</p> </li> <li> <p> <code>region-name</code> - The name of the region (for example, <code>us-east-1</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>endpoint</code> - The endpoint of the Region (for example, <code>ec2.us-east-1.amazonaws.com</code>).</p> </li> <li> <p> <code>region-name</code> - The name of the Region (for example, <code>us-east-1</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The names of one or more regions.</p>
+    /// <p>The names of the Regions.</p>
     pub region_names: Option<Vec<String>>,
 }
 
@@ -15721,7 +15780,7 @@ impl DescribeRegionsRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeRegionsResult {
-    /// <p>Information about one or more regions.</p>
+    /// <p>Information about the Regions.</p>
     pub regions: Option<Vec<Region>>,
 }
 
@@ -16133,9 +16192,9 @@ pub struct DescribeRouteTablesRequest {
     pub dry_run: Option<bool>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>association.route-table-association-id</code> - The ID of an association ID for the route table.</p> </li> <li> <p> <code>association.route-table-id</code> - The ID of the route table involved in the association.</p> </li> <li> <p> <code>association.subnet-id</code> - The ID of the subnet involved in the association.</p> </li> <li> <p> <code>association.main</code> - Indicates whether the route table is the main route table for the VPC (<code>true</code> | <code>false</code>). Route tables that do not have an association ID are not returned in the response.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the route table.</p> </li> <li> <p> <code>route-table-id</code> - The ID of the route table.</p> </li> <li> <p> <code>route.destination-cidr-block</code> - The IPv4 CIDR range specified in a route in the table.</p> </li> <li> <p> <code>route.destination-ipv6-cidr-block</code> - The IPv6 CIDR range specified in a route in the route table.</p> </li> <li> <p> <code>route.destination-prefix-list-id</code> - The ID (prefix) of the AWS service specified in a route in the table.</p> </li> <li> <p> <code>route.egress-only-internet-gateway-id</code> - The ID of an egress-only Internet gateway specified in a route in the route table.</p> </li> <li> <p> <code>route.gateway-id</code> - The ID of a gateway specified in a route in the table.</p> </li> <li> <p> <code>route.instance-id</code> - The ID of an instance specified in a route in the table.</p> </li> <li> <p> <code>route.nat-gateway-id</code> - The ID of a NAT gateway.</p> </li> <li> <p> <code>route.transit-gateway-id</code> - The ID of a transit gateway.</p> </li> <li> <p> <code>route.origin</code> - Describes how the route was created. <code>CreateRouteTable</code> indicates that the route was automatically created when the route table was created; <code>CreateRoute</code> indicates that the route was manually added to the route table; <code>EnableVgwRoutePropagation</code> indicates that the route was propagated by route propagation.</p> </li> <li> <p> <code>route.state</code> - The state of a route in the route table (<code>active</code> | <code>blackhole</code>). The blackhole state indicates that the route&#39;s target isn&#39;t available (for example, the specified gateway isn&#39;t attached to the VPC, the specified NAT instance has been terminated, and so on).</p> </li> <li> <p> <code>route.vpc-peering-connection-id</code> - The ID of a VPC peering connection specified in a route in the table.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>transit-gateway-id</code> - The ID of a transit gateway.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the route table.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <b>NextToken</b> value. This value can be between 5 and 100.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
-    /// <p>The token to retrieve the next page of results.</p>
+    /// <p>The token for the next page of results.</p>
     pub next_token: Option<String>,
     /// <p>One or more route table IDs.</p> <p>Default: Describes all your route tables.</p>
     pub route_table_ids: Option<Vec<String>>,
@@ -16217,7 +16276,7 @@ impl DescribeRouteTablesResultDeserializer {
 pub struct DescribeScheduledInstanceAvailabilityRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone (for example, <code>us-west-2a</code>).</p> </li> <li> <p> <code>instance-type</code> - The instance type (for example, <code>c4.large</code>).</p> </li> <li> <p> <code>network-platform</code> - The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p> </li> <li> <p> <code>platform</code> - The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone (for example, <code>us-west-2a</code>).</p> </li> <li> <p> <code>instance-type</code> - The instance type (for example, <code>c4.large</code>).</p> </li> <li> <p> <code>network-platform</code> - The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p> </li> <li> <p> <code>platform</code> - The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The time period for the first schedule to start.</p>
     pub first_slot_start_time_range: SlotDateTimeRangeRequest,
@@ -16331,13 +16390,13 @@ impl DescribeScheduledInstanceAvailabilityResultDeserializer {
 pub struct DescribeScheduledInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone (for example, <code>us-west-2a</code>).</p> </li> <li> <p> <code>instance-type</code> - The instance type (for example, <code>c4.large</code>).</p> </li> <li> <p> <code>network-platform</code> - The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p> </li> <li> <p> <code>platform</code> - The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone (for example, <code>us-west-2a</code>).</p> </li> <li> <p> <code>instance-type</code> - The instance type (for example, <code>c4.large</code>).</p> </li> <li> <p> <code>network-platform</code> - The network platform (<code>EC2-Classic</code> or <code>EC2-VPC</code>).</p> </li> <li> <p> <code>platform</code> - The platform (<code>Linux/UNIX</code> or <code>Windows</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of results to return in a single call. This value can be between 5 and 300. The default value is 100. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     pub max_results: Option<i64>,
     /// <p>The token for the next set of results.</p>
     pub next_token: Option<String>,
-    /// <p>One or more Scheduled Instance IDs.</p>
+    /// <p>The Scheduled Instance IDs.</p>
     pub scheduled_instance_ids: Option<Vec<String>>,
     /// <p>The time period for the first schedule to start.</p>
     pub slot_start_time_range: Option<SlotStartTimeRangeRequest>,
@@ -16428,7 +16487,7 @@ impl DescribeScheduledInstancesResultDeserializer {
 pub struct DescribeSecurityGroupReferencesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more security group IDs in your account.</p>
+    /// <p>The IDs of the security groups in your account.</p>
     pub group_id: Vec<String>,
 }
 
@@ -16485,11 +16544,11 @@ impl DescribeSecurityGroupReferencesResultDeserializer {
 pub struct DescribeSecurityGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters. If using multiple filters for rules, the results include security groups for which any combination of rules - not necessarily a single rule - match all filters.</p> <ul> <li> <p> <code>description</code> - The description of the security group.</p> </li> <li> <p> <code>egress.ip-permission.cidr</code> - An IPv4 CIDR block for an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.from-port</code> - For an outbound rule, the start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>egress.ip-permission.group-id</code> - The ID of a security group that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.group-name</code> - The name of a security group that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.ipv6-cidr</code> - An IPv6 CIDR block for an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service to which a security group rule allows outbound access.</p> </li> <li> <p> <code>egress.ip-permission.protocol</code> - The IP protocol for an outbound security group rule (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>egress.ip-permission.to-port</code> - For an outbound rule, the end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>egress.ip-permission.user-id</code> - The ID of an AWS account that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group. </p> </li> <li> <p> <code>group-name</code> - The name of the security group.</p> </li> <li> <p> <code>ip-permission.cidr</code> - An IPv4 CIDR block for an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.from-port</code> - For an inbound rule, the start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>ip-permission.group-id</code> - The ID of a security group that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.group-name</code> - The name of a security group that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.ipv6-cidr</code> - An IPv6 CIDR block for an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service from which a security group rule allows inbound access.</p> </li> <li> <p> <code>ip-permission.protocol</code> - The IP protocol for an inbound security group rule (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>ip-permission.to-port</code> - For an inbound rule, the end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>ip-permission.user-id</code> - The ID of an AWS account that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the owner of the security group.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC specified when the security group was created.</p> </li> </ul></p>
+    /// <p><p>The filters. If using multiple filters for rules, the results include security groups for which any combination of rules - not necessarily a single rule - match all filters.</p> <ul> <li> <p> <code>description</code> - The description of the security group.</p> </li> <li> <p> <code>egress.ip-permission.cidr</code> - An IPv4 CIDR block for an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.from-port</code> - For an outbound rule, the start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>egress.ip-permission.group-id</code> - The ID of a security group that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.group-name</code> - The name of a security group that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.ipv6-cidr</code> - An IPv6 CIDR block for an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service to which a security group rule allows outbound access.</p> </li> <li> <p> <code>egress.ip-permission.protocol</code> - The IP protocol for an outbound security group rule (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>egress.ip-permission.to-port</code> - For an outbound rule, the end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>egress.ip-permission.user-id</code> - The ID of an AWS account that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group. </p> </li> <li> <p> <code>group-name</code> - The name of the security group.</p> </li> <li> <p> <code>ip-permission.cidr</code> - An IPv4 CIDR block for an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.from-port</code> - For an inbound rule, the start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>ip-permission.group-id</code> - The ID of a security group that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.group-name</code> - The name of a security group that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.ipv6-cidr</code> - An IPv6 CIDR block for an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service from which a security group rule allows inbound access.</p> </li> <li> <p> <code>ip-permission.protocol</code> - The IP protocol for an inbound security group rule (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>ip-permission.to-port</code> - For an inbound rule, the end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>ip-permission.user-id</code> - The ID of an AWS account that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the owner of the security group.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC specified when the security group was created.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>One or more security group IDs. Required for security groups in a nondefault VPC.</p> <p>Default: Describes all your security groups.</p>
+    /// <p>The IDs of the security groups. Required for security groups in a nondefault VPC.</p> <p>Default: Describes all your security groups.</p>
     pub group_ids: Option<Vec<String>>,
-    /// <p>[EC2-Classic and default VPC only] One or more security group names. You can specify either the security group name or the security group ID. For security groups in a nondefault VPC, use the <code>group-name</code> filter to describe security groups by name.</p> <p>Default: Describes all your security groups.</p>
+    /// <p>[EC2-Classic and default VPC only] The names of the security groups. You can specify either the security group name or the security group ID. For security groups in a nondefault VPC, use the <code>group-name</code> filter to describe security groups by name.</p> <p>Default: Describes all your security groups.</p>
     pub group_names: Option<Vec<String>>,
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000. If this parameter is not specified, then all results are returned.</p>
     pub max_results: Option<i64>,
@@ -16543,7 +16602,7 @@ impl DescribeSecurityGroupsRequestSerializer {
 pub struct DescribeSecurityGroupsResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>Information about one or more security groups.</p>
+    /// <p>Information about the security groups.</p>
     pub security_groups: Option<Vec<SecurityGroup>>,
 }
 
@@ -16605,9 +16664,9 @@ impl DescribeSnapshotAttributeRequestSerializer {
 /// <p>Contains the output of DescribeSnapshotAttribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotAttributeResult {
-    /// <p>A list of permissions for creating volumes from the snapshot.</p>
+    /// <p>The users and groups that have the permissions for creating volumes from the snapshot.</p>
     pub create_volume_permissions: Option<Vec<CreateVolumePermission>>,
-    /// <p>A list of product codes.</p>
+    /// <p>The product codes.</p>
     pub product_codes: Option<Vec<ProductCode>>,
     /// <p>The ID of the EBS snapshot.</p>
     pub snapshot_id: Option<String>,
@@ -16649,22 +16708,21 @@ impl DescribeSnapshotAttributeResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DescribeSnapshots.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>description</code> - A description of the snapshot.</p> </li> <li> <p> <code>owner-alias</code> - Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>progress</code> - The progress of the snapshot, as a percentage (for example, 80%).</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot ID.</p> </li> <li> <p> <code>start-time</code> - The time stamp when the snapshot was initiated.</p> </li> <li> <p> <code>status</code> - The status of the snapshot (<code>pending</code> | <code>completed</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>volume-id</code> - The ID of the volume the snapshot is for.</p> </li> <li> <p> <code>volume-size</code> - The size of the volume, in GiB.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>description</code> - A description of the snapshot.</p> </li> <li> <p> <code>encrypted</code> - Indicates whether the snapshot is encrypted (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>owner-alias</code> - Value from an Amazon-maintained list (<code>amazon</code> | <code>self</code> | <code>all</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the snapshot.</p> </li> <li> <p> <code>progress</code> - The progress of the snapshot, as a percentage (for example, 80%).</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot ID.</p> </li> <li> <p> <code>start-time</code> - The time stamp when the snapshot was initiated.</p> </li> <li> <p> <code>status</code> - The status of the snapshot (<code>pending</code> | <code>completed</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>volume-id</code> - The ID of the volume the snapshot is for.</p> </li> <li> <p> <code>volume-size</code> - The size of the volume, in GiB.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of snapshot results returned by <code>DescribeSnapshots</code> in paginated output. When this parameter is used, <code>DescribeSnapshots</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeSnapshots</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeSnapshots</code> returns all results. You cannot specify this parameter and the snapshot IDs parameter in the same request.</p>
     pub max_results: Option<i64>,
     /// <p>The <code>NextToken</code> value returned from a previous paginated <code>DescribeSnapshots</code> request where <code>MaxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>NextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>Returns the snapshots owned by the specified owner. Multiple owners can be specified.</p>
+    /// <p>Describes the snapshots owned by these owners.</p>
     pub owner_ids: Option<Vec<String>>,
-    /// <p>One or more AWS accounts IDs that can create volumes from the snapshot.</p>
+    /// <p>The IDs of the AWS accounts that can create volumes from the snapshot.</p>
     pub restorable_by_user_ids: Option<Vec<String>>,
-    /// <p>One or more snapshot IDs.</p> <p>Default: Describes snapshots for which you have launch permissions.</p>
+    /// <p>The snapshot IDs.</p> <p>Default: Describes the snapshots for which you have create volume permissions.</p>
     pub snapshot_ids: Option<Vec<String>>,
 }
 
@@ -16717,7 +16775,6 @@ impl DescribeSnapshotsRequestSerializer {
     }
 }
 
-/// <p>Contains the output of DescribeSnapshots.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSnapshotsResult {
     /// <p>The <code>NextToken</code> value to include in a future <code>DescribeSnapshots</code> request. When the results of a <code>DescribeSnapshots</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -17354,6 +17411,10 @@ pub struct DescribeSubnetsRequest {
     pub dry_run: Option<bool>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone for the subnet. You can also use <code>availabilityZone</code> as the filter name.</p> </li> <li> <p> <code>availability-zone-id</code> - The ID of the Availability Zone for the subnet. You can also use <code>availabilityZoneId</code> as the filter name.</p> </li> <li> <p> <code>available-ip-address-count</code> - The number of IPv4 addresses in the subnet that are available.</p> </li> <li> <p> <code>cidr-block</code> - The IPv4 CIDR block of the subnet. The CIDR block you specify must exactly match the subnet&#39;s CIDR block for information to be returned for the subnet. You can also use <code>cidr</code> or <code>cidrBlock</code> as the filter names.</p> </li> <li> <p> <code>default-for-az</code> - Indicates whether this is the default subnet for the Availability Zone. You can also use <code>defaultForAz</code> as the filter name.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - An association ID for an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the subnet.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the subnet.</p> </li> <li> <p> <code>state</code> - The state of the subnet (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>subnet-arn</code> - The Amazon Resource Name (ARN) of the subnet.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC for the subnet.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
     /// <p>One or more subnet IDs.</p> <p>Default: Describes all your subnets.</p>
     pub subnet_ids: Option<Vec<String>>,
 }
@@ -17377,6 +17438,12 @@ impl DescribeSubnetsRequestSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
         if let Some(ref field_value) = obj.subnet_ids {
             SubnetIdStringListSerializer::serialize(
                 params,
@@ -17389,6 +17456,8 @@ impl DescribeSubnetsRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeSubnetsResult {
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
     /// <p>Information about one or more subnets.</p>
     pub subnets: Option<Vec<Subnet>>,
 }
@@ -17402,6 +17471,9 @@ impl DescribeSubnetsResultDeserializer {
     ) -> Result<DescribeSubnetsResult, XmlParseError> {
         deserialize_elements::<_, DescribeSubnetsResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "nextToken" => {
+                    obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
+                }
                 "subnetSet" => {
                     obj.subnets
                         .get_or_insert(vec![])
@@ -17417,7 +17489,7 @@ impl DescribeSubnetsResultDeserializer {
 pub struct DescribeTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>key</code> - The tag key.</p> </li> <li> <p> <code>resource-id</code> - The ID of the resource.</p> </li> <li> <p> <code>resource-type</code> - The resource type (<code>customer-gateway</code> | <code>dedicated-host</code> | <code>dhcp-options</code> | <code>elastic-ip</code> | <code>fleet</code> | <code>fpga-image</code> | <code>image</code> | <code>instance</code> | <code>internet-gateway</code> | <code>launch-template</code> | <code>natgateway</code> | <code>network-acl</code> | <code>network-interface</code> | <code>reserved-instances</code> | <code>route-table</code> | <code>security-group</code> | <code>snapshot</code> | <code>spot-instances-request</code> | <code>subnet</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of the tag. For example, specify &quot;tag:Owner&quot; for the filter name and &quot;TeamA&quot; for the filter value to find resources with the tag &quot;Owner=TeamA&quot;.</p> </li> <li> <p> <code>value</code> - The tag value.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>key</code> - The tag key.</p> </li> <li> <p> <code>resource-id</code> - The ID of the resource.</p> </li> <li> <p> <code>resource-type</code> - The resource type (<code>customer-gateway</code> | <code>dedicated-host</code> | <code>dhcp-options</code> | <code>elastic-ip</code> | <code>fleet</code> | <code>fpga-image</code> | <code>image</code> | <code>instance</code> | <code>host-reservation</code> | <code>internet-gateway</code> | <code>launch-template</code> | <code>natgateway</code> | <code>network-acl</code> | <code>network-interface</code> | <code>reserved-instances</code> | <code>route-table</code> | <code>security-group</code> | <code>snapshot</code> | <code>spot-instances-request</code> | <code>subnet</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of the tag. For example, specify &quot;tag:Owner&quot; for the filter name and &quot;TeamA&quot; for the filter value to find resources with the tag &quot;Owner=TeamA&quot;.</p> </li> <li> <p> <code>value</code> - The tag value.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of results to return in a single call. This value can be between 5 and 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     pub max_results: Option<i64>,
@@ -17908,18 +17980,17 @@ impl DescribeVolumeAttributeResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DescribeVolumeStatus.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumeStatusRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>action.code</code> - The action code for the event (for example, <code>enable-volume-io</code>).</p> </li> <li> <p> <code>action.description</code> - A description of the action.</p> </li> <li> <p> <code>action.event-id</code> - The event ID associated with the action.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>event.description</code> - A description of the event.</p> </li> <li> <p> <code>event.event-id</code> - The event ID.</p> </li> <li> <p> <code>event.event-type</code> - The event type (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>; for <code>io-performance</code>: <code>io-performance:degraded</code> | <code>io-performance:severely-degraded</code> | <code>io-performance:stalled</code>).</p> </li> <li> <p> <code>event.not-after</code> - The latest end time for the event.</p> </li> <li> <p> <code>event.not-before</code> - The earliest start time for the event.</p> </li> <li> <p> <code>volume-status.details-name</code> - The cause for <code>volume-status.status</code> (<code>io-enabled</code> | <code>io-performance</code>).</p> </li> <li> <p> <code>volume-status.details-status</code> - The status of <code>volume-status.details-name</code> (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>; for <code>io-performance</code>: <code>normal</code> | <code>degraded</code> | <code>severely-degraded</code> | <code>stalled</code>).</p> </li> <li> <p> <code>volume-status.status</code> - The status of the volume (<code>ok</code> | <code>impaired</code> | <code>warning</code> | <code>insufficient-data</code>).</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>action.code</code> - The action code for the event (for example, <code>enable-volume-io</code>).</p> </li> <li> <p> <code>action.description</code> - A description of the action.</p> </li> <li> <p> <code>action.event-id</code> - The event ID associated with the action.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>event.description</code> - A description of the event.</p> </li> <li> <p> <code>event.event-id</code> - The event ID.</p> </li> <li> <p> <code>event.event-type</code> - The event type (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>; for <code>io-performance</code>: <code>io-performance:degraded</code> | <code>io-performance:severely-degraded</code> | <code>io-performance:stalled</code>).</p> </li> <li> <p> <code>event.not-after</code> - The latest end time for the event.</p> </li> <li> <p> <code>event.not-before</code> - The earliest start time for the event.</p> </li> <li> <p> <code>volume-status.details-name</code> - The cause for <code>volume-status.status</code> (<code>io-enabled</code> | <code>io-performance</code>).</p> </li> <li> <p> <code>volume-status.details-status</code> - The status of <code>volume-status.details-name</code> (for <code>io-enabled</code>: <code>passed</code> | <code>failed</code>; for <code>io-performance</code>: <code>normal</code> | <code>degraded</code> | <code>severely-degraded</code> | <code>stalled</code>).</p> </li> <li> <p> <code>volume-status.status</code> - The status of the volume (<code>ok</code> | <code>impaired</code> | <code>warning</code> | <code>insufficient-data</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of volume results returned by <code>DescribeVolumeStatus</code> in paginated output. When this parameter is used, the request only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned. If this parameter is not used, then <code>DescribeVolumeStatus</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>
     pub max_results: Option<i64>,
     /// <p>The <code>NextToken</code> value to include in a future <code>DescribeVolumeStatus</code> request. When the results of the request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>One or more volume IDs.</p> <p>Default: Describes all your volumes.</p>
+    /// <p>The IDs of the volumes.</p> <p>Default: Describes all your volumes.</p>
     pub volume_ids: Option<Vec<String>>,
 }
 
@@ -17958,12 +18029,11 @@ impl DescribeVolumeStatusRequestSerializer {
     }
 }
 
-/// <p>Contains the output of DescribeVolumeStatus.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumeStatusResult {
     /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>A list of volumes.</p>
+    /// <p>Information about the status of the volumes.</p>
     pub volume_statuses: Option<Vec<VolumeStatusItem>>,
 }
 
@@ -17998,13 +18068,13 @@ impl DescribeVolumeStatusResultDeserializer {
 pub struct DescribeVolumesModificationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more filters. Supported filters: <code>volume-id</code>, <code>modification-state</code>, <code>target-size</code>, <code>target-iops</code>, <code>target-volume-type</code>, <code>original-size</code>, <code>original-iops</code>, <code>original-volume-type</code>, <code>start-time</code>. </p>
+    /// <p>The filters. Supported filters: <code>volume-id</code>, <code>modification-state</code>, <code>target-size</code>, <code>target-iops</code>, <code>target-volume-type</code>, <code>original-size</code>, <code>original-iops</code>, <code>original-volume-type</code>, <code>start-time</code>. </p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of results (up to a limit of 500) to be returned in a paginated request.</p>
     pub max_results: Option<i64>,
     /// <p>The <code>nextToken</code> value returned by a previous paginated request.</p>
     pub next_token: Option<String>,
-    /// <p>One or more volume IDs for which in-progress modifications will be described.</p>
+    /// <p>The IDs of the volumes for which in-progress modifications will be described.</p>
     pub volume_ids: Option<Vec<String>>,
 }
 
@@ -18047,7 +18117,7 @@ impl DescribeVolumesModificationsRequestSerializer {
 pub struct DescribeVolumesModificationsResult {
     /// <p>Token for pagination, null if there are no more results </p>
     pub next_token: Option<String>,
-    /// <p>A list of returned <a>VolumeModification</a> objects.</p>
+    /// <p>Information about the volume modifications.</p>
     pub volumes_modifications: Option<Vec<VolumeModification>>,
 }
 
@@ -18081,18 +18151,17 @@ impl DescribeVolumesModificationsResultDeserializer {
         )
     }
 }
-/// <p>Contains the parameters for DescribeVolumes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>attachment.attach-time</code> - The time stamp when the attachment initiated.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Whether the volume is deleted on instance termination.</p> </li> <li> <p> <code>attachment.device</code> - The device name specified in the block device mapping (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance the volume is attached to.</p> </li> <li> <p> <code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code> | <code>detaching</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone in which the volume was created.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the volume was created.</p> </li> <li> <p> <code>encrypted</code> - The encryption status of the volume.</p> </li> <li> <p> <code>size</code> - The size of the volume, in GiB.</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot from which the volume was created.</p> </li> <li> <p> <code>status</code> - The status of the volume (<code>creating</code> | <code>available</code> | <code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>volume-id</code> - The volume ID.</p> </li> <li> <p> <code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>attachment.attach-time</code> - The time stamp when the attachment initiated.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Whether the volume is deleted on instance termination.</p> </li> <li> <p> <code>attachment.device</code> - The device name specified in the block device mapping (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance the volume is attached to.</p> </li> <li> <p> <code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code> | <code>detaching</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone in which the volume was created.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the volume was created.</p> </li> <li> <p> <code>encrypted</code> - Indicates whether the volume is encrypted (<code>true</code> | <code>false</code>)</p> </li> <li> <p> <code>size</code> - The size of the volume, in GiB.</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot from which the volume was created.</p> </li> <li> <p> <code>status</code> - The status of the volume (<code>creating</code> | <code>available</code> | <code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>volume-id</code> - The volume ID.</p> </li> <li> <p> <code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of volume results returned by <code>DescribeVolumes</code> in paginated output. When this parameter is used, <code>DescribeVolumes</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeVolumes</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 500; if <code>MaxResults</code> is given a value larger than 500, only 500 results are returned. If this parameter is not used, then <code>DescribeVolumes</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>
     pub max_results: Option<i64>,
     /// <p>The <code>NextToken</code> value returned from a previous paginated <code>DescribeVolumes</code> request where <code>MaxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>NextToken</code> value. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>One or more volume IDs.</p>
+    /// <p>The volume IDs.</p>
     pub volume_ids: Option<Vec<String>>,
 }
 
@@ -18131,7 +18200,6 @@ impl DescribeVolumesRequestSerializer {
     }
 }
 
-/// <p>Contains the output of DescribeVolumes.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVolumesResult {
     /// <p>The <code>NextToken</code> value to include in a future <code>DescribeVolumes</code> request. When the results of a <code>DescribeVolumes</code> request exceed <code>MaxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
@@ -18238,9 +18306,9 @@ impl DescribeVpcAttributeResultDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcClassicLinkDnsSupportRequest {
-    /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
-    /// <p>The token for the next set of items to return. (You received this token from a prior call.)</p>
+    /// <p>The token for the next page of results.</p>
     pub next_token: Option<String>,
     /// <p>One or more VPC IDs.</p>
     pub vpc_ids: Option<Vec<String>>,
@@ -18273,7 +18341,7 @@ impl DescribeVpcClassicLinkDnsSupportRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcClassicLinkDnsSupportResult {
-    /// <p>The token to use when requesting the next set of items.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
     /// <p>Information about the ClassicLink DNS support status of the VPCs.</p>
     pub vpcs: Option<Vec<ClassicLinkDnsSupport>>,
@@ -18548,7 +18616,7 @@ impl DescribeVpcEndpointConnectionsResultDeserializer {
 pub struct DescribeVpcEndpointServiceConfigurationsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code> - The name of the service.</p> </li> <li> <p> <code>service-id</code> - The ID of the service.</p> </li> <li> <p> <code>service-state</code> - The state of the service (<code>Pending</code> | <code>Available</code> | <code>Deleting</code> | <code>Deleted</code> | <code>Failed</code>). </p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code> - The name of the service.</p> </li> <li> <p> <code>service-id</code> - The ID of the service.</p> </li> <li> <p> <code>service-state</code> - The state of the service (<code>Pending</code> | <code>Available</code> | <code>Deleting</code> | <code>Deleted</code> | <code>Failed</code>). </p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned.</p>
     pub max_results: Option<i64>,
@@ -18725,7 +18793,7 @@ impl DescribeVpcEndpointServicePermissionsResultDeserializer {
 pub struct DescribeVpcEndpointServicesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the service.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the service.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>
     pub max_results: Option<i64>,
@@ -18818,7 +18886,7 @@ impl DescribeVpcEndpointServicesResultDeserializer {
 pub struct DescribeVpcEndpointsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the service.</p> </li> <li> <p> <code>vpc-id</code>: The ID of the VPC in which the endpoint resides.</p> </li> <li> <p> <code>vpc-endpoint-id</code>: The ID of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code>: The state of the endpoint. (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>)</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the service.</p> </li> <li> <p> <code>vpc-id</code>: The ID of the VPC in which the endpoint resides.</p> </li> <li> <p> <code>vpc-endpoint-id</code>: The ID of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code>: The state of the endpoint. (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>)</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>
     pub max_results: Option<i64>,
@@ -18905,9 +18973,9 @@ pub struct DescribeVpcPeeringConnectionsRequest {
     pub dry_run: Option<bool>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>accepter-vpc-info.cidr-block</code> - The IPv4 CIDR block of the accepter VPC.</p> </li> <li> <p> <code>accepter-vpc-info.owner-id</code> - The AWS account ID of the owner of the accepter VPC.</p> </li> <li> <p> <code>accepter-vpc-info.vpc-id</code> - The ID of the accepter VPC.</p> </li> <li> <p> <code>expiration-time</code> - The expiration date and time for the VPC peering connection.</p> </li> <li> <p> <code>requester-vpc-info.cidr-block</code> - The IPv4 CIDR block of the requester&#39;s VPC.</p> </li> <li> <p> <code>requester-vpc-info.owner-id</code> - The AWS account ID of the owner of the requester VPC.</p> </li> <li> <p> <code>requester-vpc-info.vpc-id</code> - The ID of the requester VPC.</p> </li> <li> <p> <code>status-code</code> - The status of the VPC peering connection (<code>pending-acceptance</code> | <code>failed</code> | <code>expired</code> | <code>provisioning</code> | <code>active</code> | <code>deleting</code> | <code>deleted</code> | <code>rejected</code>).</p> </li> <li> <p> <code>status-message</code> - A message that provides more information about the status of the VPC peering connection, if applicable.</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-peering-connection-id</code> - The ID of the VPC peering connection.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum number of results to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
     pub max_results: Option<i64>,
-    /// <p>The token to request the next page of results. (You received this token from a prior call.)</p>
+    /// <p>The token for the next page of results.</p>
     pub next_token: Option<String>,
     /// <p>One or more VPC peering connection IDs.</p> <p>Default: Describes all your VPC peering connections.</p>
     pub vpc_peering_connection_ids: Option<Vec<String>>,
@@ -18992,6 +19060,10 @@ pub struct DescribeVpcsRequest {
     pub dry_run: Option<bool>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>cidr</code> - The primary IPv4 CIDR block of the VPC. The CIDR block you specify must exactly match the VPC&#39;s CIDR block for information to be returned for the VPC. Must contain the slash followed by one or two digits (for example, <code>/28</code>).</p> </li> <li> <p> <code>cidr-block-association.cidr-block</code> - An IPv4 CIDR block associated with the VPC.</p> </li> <li> <p> <code>cidr-block-association.association-id</code> - The association ID for an IPv4 CIDR block associated with the VPC.</p> </li> <li> <p> <code>cidr-block-association.state</code> - The state of an IPv4 CIDR block associated with the VPC.</p> </li> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - The association ID for an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>isDefault</code> - Indicates whether the VPC is the default VPC.</p> </li> <li> <p> <code>owner-id</code> - The ID of the AWS account that owns the VPC.</p> </li> <li> <p> <code>state</code> - The state of the VPC (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>tag</code>:&lt;key&gt; - The key/value combination of a tag assigned to the resource. Use the tag key in the filter name and the tag value as the filter value. For example, to find all resources that have a tag with the key <code>Owner</code> and the value <code>TeamA</code>, specify <code>tag:Owner</code> for the filter name and <code>TeamA</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. Use this filter to find all resources assigned a tag with a specific key, regardless of the tag value.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return with a single call. To retrieve the remaining results, make another call with the returned <code>nextToken</code> value.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next page of results.</p>
+    pub next_token: Option<String>,
     /// <p>One or more VPC IDs.</p> <p>Default: Describes all your VPCs.</p>
     pub vpc_ids: Option<Vec<String>>,
 }
@@ -19015,6 +19087,12 @@ impl DescribeVpcsRequestSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
         if let Some(ref field_value) = obj.vpc_ids {
             VpcIdStringListSerializer::serialize(
                 params,
@@ -19027,6 +19105,8 @@ impl DescribeVpcsRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeVpcsResult {
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
     /// <p>Information about one or more VPCs.</p>
     pub vpcs: Option<Vec<Vpc>>,
 }
@@ -19040,6 +19120,9 @@ impl DescribeVpcsResultDeserializer {
     ) -> Result<DescribeVpcsResult, XmlParseError> {
         deserialize_elements::<_, DescribeVpcsResult, _>(tag_name, stack, |name, stack, obj| {
             match name {
+                "nextToken" => {
+                    obj.next_token = Some(StringDeserializer::deserialize("nextToken", stack)?);
+                }
                 "vpcSet" => {
                     obj.vpcs
                         .get_or_insert(vec![])
@@ -19588,6 +19671,58 @@ impl DirectoryServiceAuthenticationRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableEbsEncryptionByDefaultRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>. </p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `DisableEbsEncryptionByDefaultRequest` contents to a `SignedRequest`.
+struct DisableEbsEncryptionByDefaultRequestSerializer;
+impl DisableEbsEncryptionByDefaultRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DisableEbsEncryptionByDefaultRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DisableEbsEncryptionByDefaultResult {
+    /// <p>Account-level encryption status after performing the action.</p>
+    pub ebs_encryption_by_default: Option<bool>,
+}
+
+struct DisableEbsEncryptionByDefaultResultDeserializer;
+impl DisableEbsEncryptionByDefaultResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DisableEbsEncryptionByDefaultResult, XmlParseError> {
+        deserialize_elements::<_, DisableEbsEncryptionByDefaultResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ebsEncryptionByDefault" => {
+                        obj.ebs_encryption_by_default = Some(BooleanDeserializer::deserialize(
+                            "ebsEncryptionByDefault",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DisableTransitGatewayRouteTablePropagationRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -20454,17 +20589,17 @@ impl DoubleDeserializer {
 pub struct EbsBlockDevice {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
-    /// <p>Indicates whether the EBS volume is encrypted. Encrypted volumes can only be attached to instances that support Amazon EBS encryption. </p> <p>If you are creating a volume from a snapshot, you cannot specify an encryption value. This is because only blank volumes can be encrypted on creation. If you are creating a snapshot from an existing EBS volume, you cannot specify an encryption value that differs from that of the EBS volume. We recommend that you omit the encryption value from the block device mappings when creating an image from an instance.</p>
+    /// <p>Indicates whether the encryption state of an EBS volume is changed while being restored from a backing snapshot. The default effect of setting the <code>Encrypted</code> parameter to <code>true</code> through the console, API, or CLI depends on the volume's origin (new or from a snapshot), starting encryption state, ownership, and whether <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/account-level-encryption.html">account-level encryption</a> is enabled. Each default case can be overridden by specifying a customer master key (CMK) with the <code>KmsKeyId</code> parameter in addition to setting <code>Encrypted</code> to <code>true</code>. For a complete list of possible encryption cases, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-parameters">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>In no case can you remove encryption from an encrypted volume.</p> <p>Encrypted volumes can only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
     pub encrypted: Option<bool>,
-    /// <p>The number of I/O operations per second (IOPS) that the volume supports. For <code>io1</code>, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code>, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraints: Range is 100-16,000 IOPS for <code>gp2</code> volumes and 100 to 64,000IOPS for <code>io1</code> volumes in most Regions. Maximum <code>io1</code>IOPS of 64,000 is guaranteed only on <a href="AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
+    /// <p>The number of I/O operations per second (IOPS) that the volume supports. For <code>io1</code> volumes, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code> volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraints: Range is 100-16,000 IOPS for <code>gp2</code> volumes and 100 to 64,000IOPS for <code>io1</code> volumes in most Regions. Maximum <code>io1</code> IOPS of 64,000 is guaranteed only on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
     pub iops: Option<i64>,
     /// <p>Identifier (key ID, key alias, ID ARN, or alias ARN) for a user-managed CMK under which the EBS volume is encrypted.</p> <p>This parameter is only supported on <code>BlockDeviceMapping</code> objects called by <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a>, <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotFleet.html">RequestSpotFleet</a>, and <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html">RequestSpotInstances</a>.</p>
     pub kms_key_id: Option<String>,
     /// <p>The ID of the snapshot.</p>
     pub snapshot_id: Option<String>,
-    /// <p>The size of the volume, in GiB.</p> <p>Constraints: 1-16384 for General Purpose SSD (<code>gp2</code>), 4-16384 for Provisioned IOPS SSD (<code>io1</code>), 500-16384 for Throughput Optimized HDD (<code>st1</code>), 500-16384 for Cold HDD (<code>sc1</code>), and 1-1024 for Magnetic (<code>standard</code>) volumes. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>
+    /// <p>The size of the volume, in GiB.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p> <p>Constraints: 1-16384 for General Purpose SSD (<code>gp2</code>), 4-16384 for Provisioned IOPS SSD (<code>io1</code>), 500-16384 for Throughput Optimized HDD (<code>st1</code>), 500-16384 for Cold HDD (<code>sc1</code>), and 1-1024 for Magnetic (<code>standard</code>) volumes. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p>
     pub volume_size: Option<i64>,
-    /// <p>The volume type: <code>gp2</code>, <code>io1</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code>.</p> <p>Default: <code>standard</code> </p>
+    /// <p>The volume type. If you set the type to <code>io1</code>, you must also set the <b>Iops</b> property.</p> <p>Default: <code>standard</code> </p>
     pub volume_type: Option<String>,
 }
 
@@ -21010,7 +21145,7 @@ impl ElasticGpusDeserializer {
 /// <p> Describes an elastic inference accelerator. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ElasticInferenceAccelerator {
-    /// <p> The type of elastic inference accelerator. The possible values are eia1.small, eia1.medium, and eia1.large. </p>
+    /// <p> The type of elastic inference accelerator. The possible values are <code>eia1.small</code>, <code>eia1.medium</code>, and <code>eia1.large</code>. </p>
     pub type_: String,
 }
 
@@ -21119,6 +21254,58 @@ impl ElasticInferenceAcceleratorsSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableEbsEncryptionByDefaultRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>. </p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `EnableEbsEncryptionByDefaultRequest` contents to a `SignedRequest`.
+struct EnableEbsEncryptionByDefaultRequestSerializer;
+impl EnableEbsEncryptionByDefaultRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &EnableEbsEncryptionByDefaultRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EnableEbsEncryptionByDefaultResult {
+    /// <p>Account-level encryption status after performing the action.</p>
+    pub ebs_encryption_by_default: Option<bool>,
+}
+
+struct EnableEbsEncryptionByDefaultResultDeserializer;
+impl EnableEbsEncryptionByDefaultResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EnableEbsEncryptionByDefaultResult, XmlParseError> {
+        deserialize_elements::<_, EnableEbsEncryptionByDefaultResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ebsEncryptionByDefault" => {
+                        obj.ebs_encryption_by_default = Some(BooleanDeserializer::deserialize(
+                            "ebsEncryptionByDefault",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableTransitGatewayRouteTablePropagationRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -21189,9 +21376,9 @@ impl EnableTransitGatewayRouteTablePropagationResultDeserializer {
 /// <p>Contains the parameters for EnableVgwRoutePropagation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnableVgwRoutePropagationRequest {
-    /// <p>The ID of the virtual private gateway.</p>
+    /// <p>The ID of the virtual private gateway that is attached to a VPC. The virtual private gateway must be attached to the same VPC that the routing tables are associated with. </p>
     pub gateway_id: String,
-    /// <p>The ID of the route table.</p>
+    /// <p>The ID of the route table. The routing table must be associated with the same VPC that the virtual private gateway is attached to. </p>
     pub route_table_id: String,
 }
 
@@ -21383,12 +21570,12 @@ impl EventCodeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a Spot Fleet event.</p>
+/// <p>Describes an EC2 Fleet or Spot Fleet event.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EventInformation {
     /// <p>The description of the event.</p>
     pub event_description: Option<String>,
-    /// <p><p>The event.</p> <p>The following are the <code>error</code> events:</p> <ul> <li> <p> <code>iamFleetRoleInvalid</code> - The Spot Fleet did not have the required permissions either to launch or terminate an instance.</p> </li> <li> <p> <code>launchSpecTemporarilyBlacklisted</code> - The configuration is not valid and several attempts to launch instances have failed. For more information, see the description of the event.</p> </li> <li> <p> <code>spotFleetRequestConfigurationInvalid</code> - The configuration is not valid. For more information, see the description of the event.</p> </li> <li> <p> <code>spotInstanceCountLimitExceeded</code> - You&#39;ve reached the limit on the number of Spot Instances that you can launch.</p> </li> </ul> <p>The following are the <code>fleetRequestChange</code> events:</p> <ul> <li> <p> <code>active</code> - The Spot Fleet has been validated and Amazon EC2 is attempting to maintain the target number of running Spot Instances.</p> </li> <li> <p> <code>cancelled</code> - The Spot Fleet is canceled and has no running Spot Instances. The Spot Fleet will be deleted two days after its instances were terminated.</p> </li> <li> <p> <code>cancelled<em>running</code> - The Spot Fleet is canceled and does not launch additional Spot Instances. Existing Spot Instances continue to run until they are interrupted or terminated.</p> </li> <li> <p> <code>cancelled</em>terminating</code> - The Spot Fleet is canceled and its Spot Instances are terminating.</p> </li> <li> <p> <code>expired</code> - The Spot Fleet request has expired. A subsequent event indicates that the instances were terminated, if the request was created with <code>TerminateInstancesWithExpiration</code> set.</p> </li> <li> <p> <code>modify<em>in</em>progress</code> - A request to modify the Spot Fleet request was accepted and is in progress.</p> </li> <li> <p> <code>modify<em>successful</code> - The Spot Fleet request was modified.</p> </li> <li> <p> <code>price</em>update</code> - The price for a launch configuration was adjusted because it was too high. This change is permanent.</p> </li> <li> <p> <code>submitted</code> - The Spot Fleet request is being evaluated and Amazon EC2 is preparing to launch the target number of Spot Instances.</p> </li> </ul> <p>The following are the <code>instanceChange</code> events:</p> <ul> <li> <p> <code>launched</code> - A request was fulfilled and a new instance was launched.</p> </li> <li> <p> <code>terminated</code> - An instance was terminated by the user.</p> </li> </ul> <p>The following are the <code>Information</code> events:</p> <ul> <li> <p> <code>launchSpecUnusable</code> - The price in a launch specification is not valid because it is below the Spot price or the Spot price is above the On-Demand price.</p> </li> <li> <p> <code>fleetProgressHalted</code> - The price in every launch specification is not valid. A launch specification might become valid if the Spot price changes.</p> </li> </ul></p>
+    /// <p><p>The event.</p> <p>The following are the <code>error</code> events:</p> <ul> <li> <p> <code>iamFleetRoleInvalid</code> - The EC2 Fleet or Spot Fleet did not have the required permissions either to launch or terminate an instance.</p> </li> <li> <p> <code>spotFleetRequestConfigurationInvalid</code> - The configuration is not valid. For more information, see the description of the event.</p> </li> <li> <p> <code>spotInstanceCountLimitExceeded</code> - You&#39;ve reached the limit on the number of Spot Instances that you can launch.</p> </li> </ul> <p>The following are the <code>fleetRequestChange</code> events:</p> <ul> <li> <p> <code>active</code> - The EC2 Fleet or Spot Fleet request has been validated and Amazon EC2 is attempting to maintain the target number of running Spot Instances.</p> </li> <li> <p> <code>cancelled</code> - The EC2 Fleet or Spot Fleet request is canceled and has no running Spot Instances. The EC2 Fleet or Spot Fleet will be deleted two days after its instances were terminated.</p> </li> <li> <p> <code>cancelled<em>running</code> - The EC2 Fleet or Spot Fleet request is canceled and does not launch additional Spot Instances. Existing Spot Instances continue to run until they are interrupted or terminated.</p> </li> <li> <p> <code>cancelled</em>terminating</code> - The EC2 Fleet or Spot Fleet request is canceled and its Spot Instances are terminating.</p> </li> <li> <p> <code>expired</code> - The EC2 Fleet or Spot Fleet request has expired. A subsequent event indicates that the instances were terminated, if the request was created with <code>TerminateInstancesWithExpiration</code> set.</p> </li> <li> <p> <code>modify<em>in</em>progress</code> - A request to modify the EC2 Fleet or Spot Fleet request was accepted and is in progress.</p> </li> <li> <p> <code>modify<em>successful</code> - The EC2 Fleet or Spot Fleet request was modified.</p> </li> <li> <p> <code>price</em>update</code> - The price for a launch configuration was adjusted because it was too high. This change is permanent.</p> </li> <li> <p> <code>submitted</code> - The EC2 Fleet or Spot Fleet request is being evaluated and Amazon EC2 is preparing to launch the target number of Spot Instances.</p> </li> </ul> <p>The following are the <code>instanceChange</code> events:</p> <ul> <li> <p> <code>launched</code> - A request was fulfilled and a new instance was launched.</p> </li> <li> <p> <code>terminated</code> - An instance was terminated by the user.</p> </li> </ul> <p>The following are the <code>Information</code> events:</p> <ul> <li> <p> <code>launchSpecTemporarilyBlacklisted</code> - The configuration is not valid and several attempts to launch instances have failed. For more information, see the description of the event.</p> </li> <li> <p> <code>launchSpecUnusable</code> - The price in a launch specification is not valid because it is below the Spot price or the Spot price is above the On-Demand price.</p> </li> <li> <p> <code>fleetProgressHalted</code> - The price in every launch specification is not valid. A launch specification might become valid if the Spot price changes.</p> </li> </ul></p>
     pub event_sub_type: Option<String>,
     /// <p>The ID of the instance. This information is available only for <code>instanceChange</code> events.</p>
     pub instance_id: Option<String>,
@@ -21859,7 +22046,7 @@ impl ExportTransitGatewayRoutesResultDeserializer {
 pub struct Filter {
     /// <p>The name of the filter. Filter names are case-sensitive.</p>
     pub name: Option<String>,
-    /// <p>One or more filter values. Filter values are case-sensitive.</p>
+    /// <p>The filter values. Filter values are case-sensitive.</p>
     pub values: Option<Vec<String>>,
 }
 
@@ -22675,6 +22862,8 @@ impl FlowLogSetDeserializer {
 pub struct FpgaImage {
     /// <p>The date and time the AFI was created.</p>
     pub create_time: Option<String>,
+    /// <p>Indicates whether data retention support is enabled for the AFI.</p>
+    pub data_retention_support: Option<bool>,
     /// <p>The description of the AFI.</p>
     pub description: Option<String>,
     /// <p>The global FPGA image identifier (AGFI ID).</p>
@@ -22714,6 +22903,12 @@ impl FpgaImageDeserializer {
             match name {
                 "createTime" => {
                     obj.create_time = Some(DateTimeDeserializer::deserialize("createTime", stack)?);
+                }
+                "dataRetentionSupport" => {
+                    obj.data_retention_support = Some(BooleanDeserializer::deserialize(
+                        "dataRetentionSupport",
+                        stack,
+                    )?);
                 }
                 "description" => {
                     obj.description = Some(StringDeserializer::deserialize("description", stack)?);
@@ -22774,11 +22969,11 @@ pub struct FpgaImageAttribute {
     pub description: Option<String>,
     /// <p>The ID of the AFI.</p>
     pub fpga_image_id: Option<String>,
-    /// <p>One or more load permissions.</p>
+    /// <p>The load permissions.</p>
     pub load_permissions: Option<Vec<LoadPermission>>,
     /// <p>The name of the AFI.</p>
     pub name: Option<String>,
-    /// <p>One or more product codes.</p>
+    /// <p>The product codes.</p>
     pub product_codes: Option<Vec<ProductCode>>,
 }
 
@@ -23022,6 +23217,107 @@ impl GetConsoleScreenshotResultDeserializer {
                     "instanceId" => {
                         obj.instance_id =
                             Some(StringDeserializer::deserialize("instanceId", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetEbsDefaultKmsKeyIdRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `GetEbsDefaultKmsKeyIdRequest` contents to a `SignedRequest`.
+struct GetEbsDefaultKmsKeyIdRequestSerializer;
+impl GetEbsDefaultKmsKeyIdRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetEbsDefaultKmsKeyIdRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetEbsDefaultKmsKeyIdResult {
+    /// <p>The full ARN of the default CMK that your account uses to encrypt an EBS volume when no CMK is specified in the API call that creates the volume.</p>
+    pub kms_key_id: Option<String>,
+}
+
+struct GetEbsDefaultKmsKeyIdResultDeserializer;
+impl GetEbsDefaultKmsKeyIdResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetEbsDefaultKmsKeyIdResult, XmlParseError> {
+        deserialize_elements::<_, GetEbsDefaultKmsKeyIdResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "kmsKeyId" => {
+                        obj.kms_key_id = Some(StringDeserializer::deserialize("kmsKeyId", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetEbsEncryptionByDefaultRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `GetEbsEncryptionByDefaultRequest` contents to a `SignedRequest`.
+struct GetEbsEncryptionByDefaultRequestSerializer;
+impl GetEbsEncryptionByDefaultRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetEbsEncryptionByDefaultRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetEbsEncryptionByDefaultResult {
+    /// <p>Indicates whether default encryption for EBS volumes is enabled or disabled.</p>
+    pub ebs_encryption_by_default: Option<bool>,
+}
+
+struct GetEbsEncryptionByDefaultResultDeserializer;
+impl GetEbsEncryptionByDefaultResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetEbsEncryptionByDefaultResult, XmlParseError> {
+        deserialize_elements::<_, GetEbsEncryptionByDefaultResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "ebsEncryptionByDefault" => {
+                        obj.ebs_encryption_by_default = Some(BooleanDeserializer::deserialize(
+                            "ebsEncryptionByDefault",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -24243,6 +24539,8 @@ pub struct HostReservation {
     pub start: Option<String>,
     /// <p>The state of the reservation.</p>
     pub state: Option<String>,
+    /// <p>Any tags assigned to the Dedicated Host Reservation.</p>
+    pub tags: Option<Vec<Tag>>,
     /// <p>The upfront price of the reservation.</p>
     pub upfront_price: Option<String>,
 }
@@ -24301,6 +24599,11 @@ impl HostReservationDeserializer {
                 }
                 "state" => {
                     obj.state = Some(ReservationStateDeserializer::deserialize("state", stack)?);
+                }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
                 }
                 "upfrontPrice" => {
                     obj.upfront_price =
@@ -24805,7 +25108,7 @@ impl ImageDeserializer {
 /// <p>Describes an image attribute.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImageAttribute {
-    /// <p>One or more block device mapping entries.</p>
+    /// <p>The block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>A description for the AMI.</p>
     pub description: Option<AttributeValue>,
@@ -24813,9 +25116,9 @@ pub struct ImageAttribute {
     pub image_id: Option<String>,
     /// <p>The kernel ID.</p>
     pub kernel_id: Option<AttributeValue>,
-    /// <p>One or more launch permissions.</p>
+    /// <p>The launch permissions.</p>
     pub launch_permissions: Option<Vec<LaunchPermission>>,
-    /// <p>One or more product codes.</p>
+    /// <p>The product codes.</p>
     pub product_codes: Option<Vec<ProductCode>>,
     /// <p>The RAM disk ID.</p>
     pub ramdisk_id: Option<AttributeValue>,
@@ -24998,7 +25301,7 @@ impl ImageTypeValuesDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ImportClientVpnClientCertificateRevocationListRequest {
-    /// <p>The client certificate revocation list file. For more information, see <a href="vpn/latest/clientvpn-admin/cvpn-working-certificates.html#cvpn-working-certificates-generate">Generate a Client Certificate Revocation List</a> in the <i>AWS Client VPN Admin Guide</i>.</p>
+    /// <p>The client certificate revocation list file. For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/clientvpn-admin/cvpn-working-certificates.html#cvpn-working-certificates-generate">Generate a Client Certificate Revocation List</a> in the <i>AWS Client VPN Administrator Guide</i>.</p>
     pub certificate_revocation_list: String,
     /// <p>The ID of the Client VPN endpoint to which the client certificate revocation list applies.</p>
     pub client_vpn_endpoint_id: String,
@@ -25080,7 +25383,7 @@ pub struct ImportImageRequest {
     pub encrypted: Option<bool>,
     /// <p>The target hypervisor platform.</p> <p>Valid values: <code>xen</code> </p>
     pub hypervisor: Option<String>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted AMI. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias, in the form <code>alias/<i>ExampleAlias</i> </code> </p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the region that the AMI is being copied to. </p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted AMI. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the Region that the AMI is being copied to.</p>
     pub kms_key_id: Option<String>,
     /// <p>The license type to be used for the Amazon Machine Image (AMI) after importing.</p> <p> <b>Note:</b> You may only use BYOL if you have existing licenses with rights to use these licenses in a third party cloud like AWS. For more information, see <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html#prerequisites-image">Prerequisites</a> in the VM Import/Export User Guide.</p> <p>Valid values include:</p> <ul> <li> <p> <code>Auto</code> - Detects the source-system operating system (OS) and applies the appropriate license.</p> </li> <li> <p> <code>AWS</code> - Replaces the source-system license with an AWS license, if appropriate.</p> </li> <li> <p> <code>BYOL</code> - Retains the source-system license, if appropriate.</p> </li> </ul> <p>Default value: <code>Auto</code> </p>
     pub license_type: Option<String>,
@@ -25350,9 +25653,9 @@ pub struct ImportInstanceLaunchSpecification {
     pub additional_info: Option<String>,
     /// <p>The architecture of the instance.</p>
     pub architecture: Option<String>,
-    /// <p>One or more security group IDs.</p>
+    /// <p>The security group IDs.</p>
     pub group_ids: Option<Vec<String>>,
-    /// <p>One or more security group names.</p>
+    /// <p>The security group names.</p>
     pub group_names: Option<Vec<String>>,
     /// <p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>
     pub instance_initiated_shutdown_behavior: Option<String>,
@@ -25519,7 +25822,7 @@ pub struct ImportInstanceTaskDetails {
     pub instance_id: Option<String>,
     /// <p>The instance operating system.</p>
     pub platform: Option<String>,
-    /// <p>One or more volumes.</p>
+    /// <p>The volumes.</p>
     pub volumes: Option<Vec<ImportInstanceVolumeDetailItem>>,
 }
 
@@ -25722,7 +26025,7 @@ pub struct ImportSnapshotRequest {
     pub dry_run: Option<bool>,
     /// <p>Specifies whether the destination snapshot of the imported image should be encrypted. The default CMK for EBS is used unless you specify a non-default AWS Key Management Service (AWS KMS) CMK using <code>KmsKeyId</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html">Amazon EBS Encryption</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted snapshot. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias, in the form <code>alias/<i>ExampleAlias</i> </code> </p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the region that the snapshot is being copied to. </p>
+    /// <p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use when creating the encrypted snapshot. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>.</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>.</p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul> <p>AWS parses <code>KmsKeyId</code> asynchronously, meaning that the action you call may appear to complete even though you provided an invalid identifier. This action will eventually report failure. </p> <p>The specified CMK must exist in the Region that the snapshot is being copied to.</p>
     pub kms_key_id: Option<String>,
     /// <p>The name of the role to use when not using the default role, 'vmimport'.</p>
     pub role_name: Option<String>,
@@ -26052,7 +26355,7 @@ pub struct Instance {
     pub licenses: Option<Vec<LicenseConfiguration>>,
     /// <p>The monitoring for the instance.</p>
     pub monitoring: Option<Monitoring>,
-    /// <p>[EC2-VPC] One or more network interfaces for the instance.</p>
+    /// <p>[EC2-VPC] The network interfaces for the instance.</p>
     pub network_interfaces: Option<Vec<InstanceNetworkInterface>>,
     /// <p>The location where the instance launched, if applicable.</p>
     pub placement: Option<Placement>,
@@ -26074,7 +26377,7 @@ pub struct Instance {
     pub root_device_name: Option<String>,
     /// <p>The root device type used by the AMI. The AMI can use an EBS volume or an instance store volume.</p>
     pub root_device_type: Option<String>,
-    /// <p>One or more security groups for the instance.</p>
+    /// <p>The security groups for the instance.</p>
     pub security_groups: Option<Vec<GroupIdentifier>>,
     /// <p>Specifies whether to enable an instance launched in a VPC to perform NAT. This controls whether source/destination checking is enabled on the instance. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform NAT. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     pub source_dest_check: Option<bool>,
@@ -26755,6 +27058,20 @@ impl InstanceCreditSpecificationRequestSerializer {
     }
 }
 
+struct InstanceEventIdDeserializer;
+impl InstanceEventIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes an instance to export.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceExportDetails {
@@ -27129,6 +27446,8 @@ pub struct InstanceNetworkInterface {
     pub description: Option<String>,
     /// <p>One or more security groups.</p>
     pub groups: Option<Vec<GroupIdentifier>>,
+    /// <p>Describes the type of network interface.</p> <p>Valid values: <code>interface</code> | <code>efa</code> </p>
+    pub interface_type: Option<String>,
     /// <p>One or more IPv6 addresses associated with the network interface.</p>
     pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     /// <p>The MAC address.</p>
@@ -27188,6 +27507,10 @@ impl InstanceNetworkInterfaceDeserializer {
                         obj.groups.get_or_insert(vec![]).extend(
                             GroupIdentifierListDeserializer::deserialize("groupSet", stack)?,
                         );
+                    }
+                    "interfaceType" => {
+                        obj.interface_type =
+                            Some(StringDeserializer::deserialize("interfaceType", stack)?);
                     }
                     "ipv6AddressesSet" => {
                         obj.ipv_6_addresses.get_or_insert(vec![]).extend(
@@ -27373,21 +27696,23 @@ pub struct InstanceNetworkInterfaceSpecification {
     pub delete_on_termination: Option<bool>,
     /// <p>The description of the network interface. Applies only if creating a network interface when launching an instance.</p>
     pub description: Option<String>,
-    /// <p>The index of the device on the instance for the network interface attachment. If you are specifying a network interface in a <a>RunInstances</a> request, you must provide the device index.</p>
+    /// <p>The position of the network interface in the attachment order. A primary network interface has a device index of 0.</p> <p>If you specify a network interface when launching an instance, you must specify the device index.</p>
     pub device_index: Option<i64>,
     /// <p>The IDs of the security groups for the network interface. Applies only if creating a network interface when launching an instance.</p>
     pub groups: Option<Vec<String>>,
+    /// <p>The type of network interface. To create an Elastic Fabric Adapter (EFA), specify <code>efa</code>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/efa.html">Elastic Fabric Adapter</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>If you are not creating an EFA, specify <code>interface</code> or omit this parameter.</p> <p>Valide values: <code>interface</code> | <code>efa</code> </p>
+    pub interface_type: Option<String>,
     /// <p>A number of IPv6 addresses to assign to the network interface. Amazon EC2 chooses the IPv6 addresses from the range of the subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p>
     pub ipv_6_address_count: Option<i64>,
     /// <p>One or more IPv6 addresses to assign to the network interface. You cannot specify this option and the option to assign a number of IPv6 addresses in the same request. You cannot specify this option if you've specified a minimum number of instances to launch.</p>
     pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     /// <p>The ID of the network interface.</p>
     pub network_interface_id: Option<String>,
-    /// <p>The private IPv4 address of the network interface. Applies only if creating a network interface when launching an instance. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>
+    /// <p>The private IPv4 address of the network interface. Applies only if creating a network interface when launching an instance. You cannot specify this option if you're launching more than one instance in a <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a> request.</p>
     pub private_ip_address: Option<String>,
-    /// <p>One or more private IPv4 addresses to assign to the network interface. Only one private IPv4 address can be designated as primary. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>
+    /// <p>One or more private IPv4 addresses to assign to the network interface. Only one private IPv4 address can be designated as primary. You cannot specify this option if you're launching more than one instance in a <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a> request.</p>
     pub private_ip_addresses: Option<Vec<PrivateIpAddressSpecification>>,
-    /// <p>The number of secondary private IPv4 addresses. You can't specify this option and specify more than one private IP address using the private IP addresses option. You cannot specify this option if you're launching more than one instance in a <a>RunInstances</a> request.</p>
+    /// <p>The number of secondary private IPv4 addresses. You can't specify this option and specify more than one private IP address using the private IP addresses option. You cannot specify this option if you're launching more than one instance in a <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a> request.</p>
     pub secondary_private_ip_address_count: Option<i64>,
     /// <p>The ID of the subnet associated with the network string. Applies only if creating a network interface when launching an instance.</p>
     pub subnet_id: Option<String>,
@@ -27432,6 +27757,10 @@ impl InstanceNetworkInterfaceSpecificationDeserializer {
                                 stack,
                             )?,
                         );
+                    }
+                    "InterfaceType" => {
+                        obj.interface_type =
+                            Some(StringDeserializer::deserialize("InterfaceType", stack)?);
                     }
                     "ipv6AddressCount" => {
                         obj.ipv_6_address_count =
@@ -27514,6 +27843,9 @@ impl InstanceNetworkInterfaceSpecificationSerializer {
                 &format!("{}{}", prefix, "SecurityGroupId"),
                 field_value,
             );
+        }
+        if let Some(ref field_value) = obj.interface_type {
+            params.put(&format!("{}{}", prefix, "InterfaceType"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_address_count {
             params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
@@ -27658,7 +27990,7 @@ impl InstancePrivateIpAddressListDeserializer {
 /// <p>Describes the current state of an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InstanceState {
-    /// <p><p>The low byte represents the state. The high byte is used for internal purposes and should be ignored.</p> <ul> <li> <p> <code>0</code> : <code>pending</code> </p> </li> <li> <p> <code>16</code> : <code>running</code> </p> </li> <li> <p> <code>32</code> : <code>shutting-down</code> </p> </li> <li> <p> <code>48</code> : <code>terminated</code> </p> </li> <li> <p> <code>64</code> : <code>stopping</code> </p> </li> <li> <p> <code>80</code> : <code>stopped</code> </p> </li> </ul></p>
+    /// <p>The state of the instance as a 16-bit unsigned integer. </p> <p>The high byte is all of the bits between 2^8 and (2^16)-1, which equals decimal values between 256 and 65,535. These numerical values are used for internal purposes and should be ignored.</p> <p>The low byte is all of the bits between 2^0 and (2^8)-1, which equals decimal values between 0 and 255. </p> <p>The valid values for instance-state-code will all be in the range of the low byte and they are:</p> <ul> <li> <p> <code>0</code> : <code>pending</code> </p> </li> <li> <p> <code>16</code> : <code>running</code> </p> </li> <li> <p> <code>32</code> : <code>shutting-down</code> </p> </li> <li> <p> <code>48</code> : <code>terminated</code> </p> </li> <li> <p> <code>64</code> : <code>stopping</code> </p> </li> <li> <p> <code>80</code> : <code>stopped</code> </p> </li> </ul> <p>You can ignore the high byte value by zeroing out all of the bits above 2^8 or 256 in decimal.</p>
     pub code: Option<i64>,
     /// <p>The current state of the instance.</p>
     pub name: Option<String>,
@@ -27881,10 +28213,14 @@ pub struct InstanceStatusEvent {
     pub code: Option<String>,
     /// <p>A description of the event.</p> <p>After a scheduled event is completed, it can still be described for up to a week. If the event has been completed, this description starts with the following text: [Completed].</p>
     pub description: Option<String>,
+    /// <p>The ID of the event.</p>
+    pub instance_event_id: Option<String>,
     /// <p>The latest scheduled end time for the event.</p>
     pub not_after: Option<String>,
     /// <p>The earliest scheduled start time for the event.</p>
     pub not_before: Option<String>,
+    /// <p>The deadline for starting the event.</p>
+    pub not_before_deadline: Option<String>,
 }
 
 struct InstanceStatusEventDeserializer;
@@ -27902,11 +28238,23 @@ impl InstanceStatusEventDeserializer {
                 "description" => {
                     obj.description = Some(StringDeserializer::deserialize("description", stack)?);
                 }
+                "instanceEventId" => {
+                    obj.instance_event_id = Some(InstanceEventIdDeserializer::deserialize(
+                        "instanceEventId",
+                        stack,
+                    )?);
+                }
                 "notAfter" => {
                     obj.not_after = Some(DateTimeDeserializer::deserialize("notAfter", stack)?);
                 }
                 "notBefore" => {
                     obj.not_before = Some(DateTimeDeserializer::deserialize("notBefore", stack)?);
+                }
+                "notBeforeDeadline" => {
+                    obj.not_before_deadline = Some(DateTimeDeserializer::deserialize(
+                        "notBeforeDeadline",
+                        stack,
+                    )?);
                 }
                 _ => skip_tree(stack),
             }
@@ -28158,17 +28506,17 @@ impl InternetGatewayListDeserializer {
 pub struct IpPermission {
     /// <p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of <code>-1</code> indicates all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
     pub from_port: Option<i64>,
-    /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>). </p> <p>[EC2-VPC only] Use <code>-1</code> to specify all protocols. When authorizing security group rules, specifying <code>-1</code> or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>58</code> (ICMPv6) allows traffic on all ports, regardless of any port range you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For <code>58</code> (ICMPv6), you can optionally specify a port range; if you don't, traffic for all types and codes is allowed when authorizing rules. </p>
+    /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>, <code>icmpv6</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>).</p> <p>[VPC only] Use <code>-1</code> to specify all protocols. When authorizing security group rules, specifying <code>-1</code> or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>icmpv6</code> allows traffic on all ports, regardless of any port range you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For <code>icmpv6</code>, the port range is optional; if you omit the port range, traffic for all types and codes is allowed.</p>
     pub ip_protocol: Option<String>,
-    /// <p>One or more IPv4 ranges.</p>
+    /// <p>The IPv4 ranges.</p>
     pub ip_ranges: Option<Vec<IpRange>>,
-    /// <p>[EC2-VPC only] One or more IPv6 ranges.</p>
+    /// <p>[VPC only] The IPv6 ranges.</p>
     pub ipv_6_ranges: Option<Vec<Ipv6Range>>,
-    /// <p>[EC2-VPC only] One or more prefix list IDs for an AWS service. With <a>AuthorizeSecurityGroupEgress</a>, this is the AWS service that you want to access through a VPC endpoint from instances associated with the security group.</p>
+    /// <p>[VPC only] The prefix list IDs for an AWS service. With outbound rules, this is the AWS service to access through a VPC endpoint from instances associated with the security group.</p>
     pub prefix_list_ids: Option<Vec<PrefixListId>>,
-    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of <code>-1</code> indicates all ICMP/ICMPv6 codes for the specified ICMP type. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
+    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of <code>-1</code> indicates all ICMP/ICMPv6 codes. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
     pub to_port: Option<i64>,
-    /// <p>One or more security group and AWS account ID pairs.</p>
+    /// <p>The security group and AWS account ID pairs.</p>
     pub user_id_group_pairs: Option<Vec<UserIdGroupPair>>,
 }
 
@@ -29452,7 +29800,7 @@ pub struct LaunchTemplateEbsBlockDeviceRequest {
     pub delete_on_termination: Option<bool>,
     /// <p>Indicates whether the EBS volume is encrypted. Encrypted volumes can only be attached to instances that support Amazon EBS encryption. If you are creating a volume from a snapshot, you can't specify an encryption value.</p>
     pub encrypted: Option<bool>,
-    /// <p>The number of I/O operations per second (IOPS) that the volume supports. For io1, this represents the number of IOPS that are provisioned for the volume. For gp2, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see Amazon EBS Volume Types in the Amazon Elastic Compute Cloud User Guide.</p> <p>Condition: This parameter is required for requests to create io1 volumes; it is not used in requests to create gp2, st1, sc1, or standard volumes.</p>
+    /// <p>The number of I/O operations per second (IOPS) that the volume supports. For io1, this represents the number of IOPS that are provisioned for the volume. For gp2, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Condition: This parameter is required for requests to create io1 volumes; it is not used in requests to create gp2, st1, sc1, or standard volumes.</p>
     pub iops: Option<i64>,
     /// <p>The ARN of the AWS Key Management Service (AWS KMS) CMK used for encryption.</p>
     pub kms_key_id: Option<String>,
@@ -29803,6 +30151,8 @@ pub struct LaunchTemplateInstanceNetworkInterfaceSpecification {
     pub device_index: Option<i64>,
     /// <p>The IDs of one or more security groups.</p>
     pub groups: Option<Vec<String>>,
+    /// <p>The type of network interface.</p>
+    pub interface_type: Option<String>,
     /// <p>The number of IPv6 addresses for the network interface.</p>
     pub ipv_6_address_count: Option<i64>,
     /// <p>The IPv6 addresses for the network interface.</p>
@@ -29855,6 +30205,10 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer {
                         obj.groups.get_or_insert(vec![]).extend(
                             GroupIdStringListDeserializer::deserialize("groupSet", stack)?,
                         );
+                    }
+                    "interfaceType" => {
+                        obj.interface_type =
+                            Some(StringDeserializer::deserialize("interfaceType", stack)?);
                     }
                     "ipv6AddressCount" => {
                         obj.ipv_6_address_count =
@@ -29937,6 +30291,8 @@ pub struct LaunchTemplateInstanceNetworkInterfaceSpecificationRequest {
     pub device_index: Option<i64>,
     /// <p>The IDs of one or more security groups.</p>
     pub groups: Option<Vec<String>>,
+    /// <p>The type of networking interface.</p>
+    pub interface_type: Option<String>,
     /// <p>The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses.</p>
     pub ipv_6_address_count: Option<i64>,
     /// <p>One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet. You can't use this option if you're specifying a number of IPv6 addresses.</p>
@@ -29990,6 +30346,9 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationRequestSerializer {
                 &format!("{}{}", prefix, "SecurityGroupId"),
                 field_value,
             );
+        }
+        if let Some(ref field_value) = obj.interface_type {
+            params.put(&format!("{}{}", prefix, "InterfaceType"), &field_value);
         }
         if let Some(ref field_value) = obj.ipv_6_address_count {
             params.put(&format!("{}{}", prefix, "Ipv6AddressCount"), &field_value);
@@ -30603,7 +30962,7 @@ impl LaunchTemplateTagSpecificationListDeserializer {
 /// <p>The tags specification for the launch template.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LaunchTemplateTagSpecificationRequest {
-    /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>. To tag a resource after it has been created, see <a>CreateTags</a>.</p>
+    /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>. To tag a resource after it has been created, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html">CreateTags</a>.</p>
     pub resource_type: Option<String>,
     /// <p>The tags to apply to the resource.</p>
     pub tags: Option<Vec<Tag>>,
@@ -31124,6 +31483,20 @@ impl MarketTypeDeserializer {
         Ok(obj)
     }
 }
+struct MillisecondDateTimeDeserializer;
+impl MillisecondDateTimeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyCapacityReservationRequest {
     /// <p>The ID of the Capacity Reservation.</p>
@@ -31281,6 +31654,58 @@ impl ModifyClientVpnEndpointResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyEbsDefaultKmsKeyIdRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>An identifier for the AWS Key Management Service (AWS KMS) customer master key (CMK) to use to encrypt the volume. This parameter is only required if you want to use a non-default CMK; if this parameter is not specified, the default CMK for EBS is used. If a <code>KmsKeyId</code> is specified, the <code>Encrypted</code> flag must also be set. </p> <p>The CMK identifier may be provided in any of the following formats: </p> <ul> <li> <p>Key ID</p> </li> <li> <p>Key alias</p> </li> <li> <p>ARN using key ID. The ID ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>key</code> namespace, and then the CMK ID. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:key/<i>abcd1234-a123-456a-a12b-a123b4cd56ef</i>. </p> </li> <li> <p>ARN using key alias. The alias ARN contains the <code>arn:aws:kms</code> namespace, followed by the Region of the CMK, the AWS account ID of the CMK owner, the <code>alias</code> namespace, and then the CMK alias. For example, arn:aws:kms:<i>us-east-1</i>:<i>012345678910</i>:alias/<i>ExampleAlias</i>. </p> </li> </ul></p>
+    pub kms_key_id: String,
+}
+
+/// Serialize `ModifyEbsDefaultKmsKeyIdRequest` contents to a `SignedRequest`.
+struct ModifyEbsDefaultKmsKeyIdRequestSerializer;
+impl ModifyEbsDefaultKmsKeyIdRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyEbsDefaultKmsKeyIdRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "KmsKeyId"), &obj.kms_key_id);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyEbsDefaultKmsKeyIdResult {
+    /// <p>The full ARN of the default CMK that your account uses to encrypt an EBS volume when no CMK is specified in the API call that creates the volume.</p>
+    pub kms_key_id: Option<String>,
+}
+
+struct ModifyEbsDefaultKmsKeyIdResultDeserializer;
+impl ModifyEbsDefaultKmsKeyIdResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyEbsDefaultKmsKeyIdResult, XmlParseError> {
+        deserialize_elements::<_, ModifyEbsDefaultKmsKeyIdResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "kmsKeyId" => {
+                        obj.kms_key_id = Some(StringDeserializer::deserialize("kmsKeyId", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyFleetRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -31359,11 +31784,11 @@ pub struct ModifyFpgaImageAttributeRequest {
     pub name: Option<String>,
     /// <p>The operation type.</p>
     pub operation_type: Option<String>,
-    /// <p>One or more product codes. After you add a product code to an AFI, it can't be removed. This parameter is valid only when modifying the <code>productCodes</code> attribute.</p>
+    /// <p>The product codes. After you add a product code to an AFI, it can't be removed. This parameter is valid only when modifying the <code>productCodes</code> attribute.</p>
     pub product_codes: Option<Vec<String>>,
-    /// <p>One or more user groups. This parameter is valid only when modifying the <code>loadPermission</code> attribute.</p>
+    /// <p>The user groups. This parameter is valid only when modifying the <code>loadPermission</code> attribute.</p>
     pub user_groups: Option<Vec<String>>,
-    /// <p>One or more AWS account IDs. This parameter is valid only when modifying the <code>loadPermission</code> attribute.</p>
+    /// <p>The AWS account IDs. This parameter is valid only when modifying the <code>loadPermission</code> attribute.</p>
     pub user_ids: Option<Vec<String>>,
 }
 
@@ -31579,11 +32004,11 @@ pub struct ModifyImageAttributeRequest {
     pub launch_permission: Option<LaunchPermissionModifications>,
     /// <p>The operation type. This parameter can be used only when the <code>Attribute</code> parameter is <code>launchPermission</code>.</p>
     pub operation_type: Option<String>,
-    /// <p>One or more DevPay product codes. After you add a product code to an AMI, it can't be removed.</p>
+    /// <p>The DevPay product codes. After you add a product code to an AMI, it can't be removed.</p>
     pub product_codes: Option<Vec<String>>,
-    /// <p>One or more user groups. This parameter can be used only when the <code>Attribute</code> parameter is <code>launchPermission</code>.</p>
+    /// <p>The user groups. This parameter can be used only when the <code>Attribute</code> parameter is <code>launchPermission</code>.</p>
     pub user_groups: Option<Vec<String>>,
-    /// <p>One or more AWS account IDs. This parameter can be used only when the <code>Attribute</code> parameter is <code>launchPermission</code>.</p>
+    /// <p>The AWS account IDs. This parameter can be used only when the <code>Attribute</code> parameter is <code>launchPermission</code>.</p>
     pub user_ids: Option<Vec<String>>,
     /// <p>The value of the attribute being modified. This parameter can be used only when the <code>Attribute</code> parameter is <code>description</code> or <code>productCodes</code>.</p>
     pub value: Option<String>,
@@ -31923,6 +32348,68 @@ impl ModifyInstanceCreditSpecificationResultDeserializer {
                         obj.unsuccessful_instance_credit_specifications
                                 .get_or_insert(vec![])
                                 .extend(UnsuccessfulInstanceCreditSpecificationSetDeserializer::deserialize("unsuccessfulInstanceCreditSpecificationSet", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyInstanceEventStartTimeRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the event whose date and time you are modifying.</p>
+    pub instance_event_id: String,
+    /// <p>The ID of the instance with the scheduled event.</p>
+    pub instance_id: String,
+    /// <p>The new date and time when the event will take place.</p>
+    pub not_before: String,
+}
+
+/// Serialize `ModifyInstanceEventStartTimeRequest` contents to a `SignedRequest`.
+struct ModifyInstanceEventStartTimeRequestSerializer;
+impl ModifyInstanceEventStartTimeRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyInstanceEventStartTimeRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "InstanceEventId"),
+            &obj.instance_event_id,
+        );
+        params.put(&format!("{}{}", prefix, "InstanceId"), &obj.instance_id);
+        params.put(&format!("{}{}", prefix, "NotBefore"), &obj.not_before);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyInstanceEventStartTimeResult {
+    pub event: Option<InstanceStatusEvent>,
+}
+
+struct ModifyInstanceEventStartTimeResultDeserializer;
+impl ModifyInstanceEventStartTimeResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyInstanceEventStartTimeResult, XmlParseError> {
+        deserialize_elements::<_, ModifyInstanceEventStartTimeResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "event" => {
+                        obj.event = Some(InstanceStatusEventDeserializer::deserialize(
+                            "event", stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 }
@@ -32339,7 +32826,7 @@ impl ModifySpotFleetRequestResponseDeserializer {
 pub struct ModifySubnetAttributeRequest {
     /// <p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned an IPv6 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives an IPv6 address). </p> <p>If you enable the IPv6 addressing feature for your subnet, your network interface or instance only receives an IPv6 address if it's created using version <code>2016-11-15</code> or later of the Amazon EC2 API.</p>
     pub assign_ipv_6_address_on_creation: Option<AttributeBooleanValue>,
-    /// <p>Specify <code>true</code> to indicate that network interfaces created in the specified subnet should be assigned a public IPv4 address. This includes a network interface that's created when launching an instance into the subnet (the instance therefore receives a public IPv4 address).</p>
+    /// <p>Specify <code>true</code> to indicate that ENIs attached to instances created in the specified subnet should be assigned a public IPv4 address.</p>
     pub map_public_ip_on_launch: Option<AttributeBooleanValue>,
     /// <p>The ID of the subnet.</p>
     pub subnet_id: String,
@@ -32713,7 +33200,7 @@ pub struct ModifyVpcEndpointRequest {
     pub add_subnet_ids: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>(Gateway endpoint) A policy document to attach to the endpoint. The policy must be in valid JSON format.</p>
+    /// <p>A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format. If this parameter is not specified, we attach a default policy that allows full access to the service.</p>
     pub policy_document: Option<String>,
     /// <p>(Interface endpoint) Indicate whether a private hosted zone is associated with the VPC.</p>
     pub private_dns_enabled: Option<bool>,
@@ -33121,10 +33608,77 @@ impl ModifyVpcTenancyResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyVpnConnectionRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the transit gateway.</p>
+    pub transit_gateway_id: Option<String>,
+    /// <p>The ID of the VPN connection.</p>
+    pub vpn_connection_id: String,
+    /// <p>The ID of the virtual private gateway at the AWS side of the VPN connection.</p>
+    pub vpn_gateway_id: Option<String>,
+}
+
+/// Serialize `ModifyVpnConnectionRequest` contents to a `SignedRequest`.
+struct ModifyVpnConnectionRequestSerializer;
+impl ModifyVpnConnectionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyVpnConnectionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+        if let Some(ref field_value) = obj.transit_gateway_id {
+            params.put(&format!("{}{}", prefix, "TransitGatewayId"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "VpnConnectionId"),
+            &obj.vpn_connection_id,
+        );
+        if let Some(ref field_value) = obj.vpn_gateway_id {
+            params.put(&format!("{}{}", prefix, "VpnGatewayId"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyVpnConnectionResult {
+    pub vpn_connection: Option<VpnConnection>,
+}
+
+struct ModifyVpnConnectionResultDeserializer;
+impl ModifyVpnConnectionResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyVpnConnectionResult, XmlParseError> {
+        deserialize_elements::<_, ModifyVpnConnectionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "vpnConnection" => {
+                        obj.vpn_connection = Some(VpnConnectionDeserializer::deserialize(
+                            "vpnConnection",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct MonitorInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more instance IDs.</p>
+    /// <p>The IDs of the instances.</p>
     pub instance_ids: Vec<String>,
 }
 
@@ -33744,7 +34298,7 @@ pub struct NetworkInterface {
     pub description: Option<String>,
     /// <p>Any security groups for the network interface.</p>
     pub groups: Option<Vec<GroupIdentifier>>,
-    /// <p>The type of interface.</p>
+    /// <p>The type of network interface.</p>
     pub interface_type: Option<String>,
     /// <p>The IPv6 addresses associated with the network interface.</p>
     pub ipv_6_addresses: Option<Vec<NetworkInterfaceIpv6Address>>,
@@ -34755,7 +35309,7 @@ impl PermissionGroupDeserializer {
 pub struct Placement {
     /// <p>The affinity setting for the instance on the Dedicated Host. This parameter is not supported for the <a>ImportInstance</a> command.</p>
     pub affinity: Option<String>,
-    /// <p>The Availability Zone of the instance.</p>
+    /// <p>The Availability Zone of the instance.</p> <p>If not specified, an Availability Zone will be automatically chosen for you based on the load balancing criteria for the Region.</p>
     pub availability_zone: Option<String>,
     /// <p>The name of the placement group the instance is in.</p>
     pub group_name: Option<String>,
@@ -35640,7 +36194,7 @@ impl PropagatingVgwListDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ProvisionByoipCidrRequest {
-    /// <p>The public IPv4 address range, in CIDR notation. The most specific prefix that you can specify is /24. The address range cannot overlap with another address range that you've brought to this or another region.</p>
+    /// <p>The public IPv4 address range, in CIDR notation. The most specific prefix that you can specify is /24. The address range cannot overlap with another address range that you've brought to this or another Region.</p>
     pub cidr: String,
     /// <p>A signed document that proves that you are authorized to bring the specified IP address range to Amazon using BYOIP.</p>
     pub cidr_authorization_context: Option<CidrAuthorizationContext>,
@@ -36189,7 +36743,7 @@ pub struct PurchaseScheduledInstancesRequest {
     pub client_token: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more purchase requests.</p>
+    /// <p>The purchase requests.</p>
     pub purchase_requests: Vec<PurchaseRequest>,
 }
 
@@ -36314,7 +36868,7 @@ impl ReasonCodesListSerializer {
 pub struct RebootInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more instance IDs.</p>
+    /// <p>The instance IDs.</p>
     pub instance_ids: Vec<String>,
 }
 
@@ -36402,12 +36956,12 @@ impl RecurringChargesListDeserializer {
         })
     }
 }
-/// <p>Describes a region.</p>
+/// <p>Describes a Region.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Region {
-    /// <p>The region service endpoint.</p>
+    /// <p>The Region service endpoint.</p>
     pub endpoint: Option<String>,
-    /// <p>The name of the region.</p>
+    /// <p>The name of the Region.</p>
     pub region_name: Option<String>,
 }
 
@@ -36468,7 +37022,7 @@ pub struct RegisterImageRequest {
     pub architecture: Option<String>,
     /// <p>The billing product codes. Your account must be authorized to specify billing product codes. Otherwise, you can use the AWS Marketplace to bill for the use of an AMI.</p>
     pub billing_products: Option<Vec<String>>,
-    /// <p>One or more block device mapping entries.</p>
+    /// <p>The block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>A description for your AMI.</p>
     pub description: Option<String>,
@@ -37260,9 +37814,9 @@ pub struct ReportInstanceStatusRequest {
     pub dry_run: Option<bool>,
     /// <p>The time at which the reported instance health state ended.</p>
     pub end_time: Option<String>,
-    /// <p>One or more instances.</p>
+    /// <p>The instances.</p>
     pub instances: Vec<String>,
-    /// <p><p>One or more reason codes that describe the health state of your instance.</p> <ul> <li> <p> <code>instance-stuck-in-state</code>: My instance is stuck in a state.</p> </li> <li> <p> <code>unresponsive</code>: My instance is unresponsive.</p> </li> <li> <p> <code>not-accepting-credentials</code>: My instance is not accepting my credentials.</p> </li> <li> <p> <code>password-not-available</code>: A password is not available for my instance.</p> </li> <li> <p> <code>performance-network</code>: My instance is experiencing performance problems that I believe are network related.</p> </li> <li> <p> <code>performance-instance-store</code>: My instance is experiencing performance problems that I believe are related to the instance stores.</p> </li> <li> <p> <code>performance-ebs-volume</code>: My instance is experiencing performance problems that I believe are related to an EBS volume.</p> </li> <li> <p> <code>performance-other</code>: My instance is experiencing performance problems.</p> </li> <li> <p> <code>other</code>: [explain using the description parameter]</p> </li> </ul></p>
+    /// <p><p>The reason codes that describe the health state of your instance.</p> <ul> <li> <p> <code>instance-stuck-in-state</code>: My instance is stuck in a state.</p> </li> <li> <p> <code>unresponsive</code>: My instance is unresponsive.</p> </li> <li> <p> <code>not-accepting-credentials</code>: My instance is not accepting my credentials.</p> </li> <li> <p> <code>password-not-available</code>: A password is not available for my instance.</p> </li> <li> <p> <code>performance-network</code>: My instance is experiencing performance problems that I believe are network related.</p> </li> <li> <p> <code>performance-instance-store</code>: My instance is experiencing performance problems that I believe are related to the instance stores.</p> </li> <li> <p> <code>performance-ebs-volume</code>: My instance is experiencing performance problems that I believe are related to an EBS volume.</p> </li> <li> <p> <code>performance-other</code>: My instance is experiencing performance problems.</p> </li> <li> <p> <code>other</code>: [explain using the description parameter]</p> </li> </ul></p>
     pub reason_codes: Vec<String>,
     /// <p>The time at which the reported instance health state began.</p>
     pub start_time: Option<String>,
@@ -37339,7 +37893,7 @@ pub struct RequestLaunchTemplateData {
     pub cpu_options: Option<LaunchTemplateCpuOptionsRequest>,
     /// <p>The credit option for CPU usage of the instance. Valid for T2 or T3 instances only.</p>
     pub credit_specification: Option<CreditSpecificationRequest>,
-    /// <p>If set to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API. To change this attribute to <code>false</code> after launch, use <a>ModifyInstanceAttribute</a>.</p>
+    /// <p>If you set this parameter to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute after launch, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceAttribute.html">ModifyInstanceAttribute</a>. Alternatively, if you set <code>InstanceInitiatedShutdownBehavior</code> to <code>terminate</code>, you can terminate the instance by running the shutdown command from the instance.</p>
     pub disable_api_termination: Option<bool>,
     /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal Amazon EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p>
     pub ebs_optimized: Option<bool>,
@@ -37351,7 +37905,7 @@ pub struct RequestLaunchTemplateData {
     pub hibernation_options: Option<LaunchTemplateHibernationOptionsRequest>,
     /// <p>The IAM instance profile.</p>
     pub iam_instance_profile: Option<LaunchTemplateIamInstanceProfileSpecificationRequest>,
-    /// <p>The ID of the AMI, which you can get by using <a>DescribeImages</a>.</p>
+    /// <p>The ID of the AMI.</p>
     pub image_id: Option<String>,
     /// <p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p> <p>Default: <code>stop</code> </p>
     pub instance_initiated_shutdown_behavior: Option<String>,
@@ -37361,23 +37915,23 @@ pub struct RequestLaunchTemplateData {
     pub instance_type: Option<String>,
     /// <p><p>The ID of the kernel.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html">User Provided Kernels</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important></p>
     pub kernel_id: Option<String>,
-    /// <p><p>The name of the key pair. You can create a key pair using <a>CreateKeyPair</a> or <a>ImportKeyPair</a>.</p> <important> <p>If you do not specify a key pair, you can&#39;t connect to the instance unless you choose an AMI that is configured to allow users another way to log in.</p> </important></p>
+    /// <p><p>The name of the key pair. You can create a key pair using <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateKeyPair.html">CreateKeyPair</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ImportKeyPair.html">ImportKeyPair</a>.</p> <important> <p>If you do not specify a key pair, you can&#39;t connect to the instance unless you choose an AMI that is configured to allow users another way to log in.</p> </important></p>
     pub key_name: Option<String>,
     /// <p>The license configurations.</p>
     pub license_specifications: Option<Vec<LaunchTemplateLicenseConfigurationRequest>>,
     /// <p>The monitoring for the instance.</p>
     pub monitoring: Option<LaunchTemplatesMonitoringRequest>,
-    /// <p>One or more network interfaces.</p>
+    /// <p>One or more network interfaces. If you specify a network interface, you must specify any security groups as part of the network interface.</p>
     pub network_interfaces: Option<Vec<LaunchTemplateInstanceNetworkInterfaceSpecificationRequest>>,
     /// <p>The placement for the instance.</p>
     pub placement: Option<LaunchTemplatePlacementRequest>,
     /// <p><p>The ID of the RAM disk.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html">User Provided Kernels</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important></p>
     pub ram_disk_id: Option<String>,
-    /// <p>One or more security group IDs. You can create a security group using <a>CreateSecurityGroup</a>. You cannot specify both a security group ID and security name in the same request.</p>
+    /// <p>One or more security group IDs. You can create a security group using <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateSecurityGroup.html">CreateSecurityGroup</a>. You cannot specify both a security group ID and security name in the same request.</p>
     pub security_group_ids: Option<Vec<String>>,
     /// <p>[EC2-Classic, default VPC] One or more security group names. For a nondefault VPC, you must use security group IDs instead. You cannot specify both a security group ID and security name in the same request.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The tags to apply to the resources during launch. You can only tag instances and volumes on launch. The specified tags are applied to all instances or volumes that are created during launch. To tag a resource after it has been created, see <a>CreateTags</a>.</p>
+    /// <p>The tags to apply to the resources during launch. You can only tag instances and volumes on launch. The specified tags are applied to all instances or volumes that are created during launch. To tag a resource after it has been created, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html">CreateTags</a>.</p>
     pub tag_specifications: Option<Vec<LaunchTemplateTagSpecificationRequest>>,
     /// <p>The Base64-encoded user data to make available to the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data">Adding User Data</a> (Windows).</p>
     pub user_data: Option<String>,
@@ -37758,7 +38312,7 @@ pub struct RequestSpotLaunchSpecification {
     pub security_groups: Option<Vec<String>>,
     /// <p>The ID of the subnet in which to launch the instance.</p>
     pub subnet_id: Option<String>,
-    /// <p>The Base64-encoded user data for the instance.</p>
+    /// <p>The Base64-encoded user data for the instance. User data is limited to 16 KB.</p>
     pub user_data: Option<String>,
 }
 
@@ -37853,9 +38407,9 @@ impl RequestSpotLaunchSpecificationSerializer {
 /// <p>Describes a reservation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Reservation {
-    /// <p>[EC2-Classic only] One or more security groups.</p>
+    /// <p>[EC2-Classic only] The security groups.</p>
     pub groups: Option<Vec<GroupIdentifier>>,
-    /// <p>One or more instances.</p>
+    /// <p>The instances.</p>
     pub instances: Option<Vec<Instance>>,
     /// <p>The ID of the AWS account that owns the reservation.</p>
     pub owner_id: Option<String>,
@@ -38232,7 +38786,7 @@ pub struct ReservedInstancesConfiguration {
     pub instance_type: Option<String>,
     /// <p>The network platform of the modified Reserved Instances, which is either EC2-Classic or EC2-VPC.</p>
     pub platform: Option<String>,
-    /// <p>Whether the Reserved Instance is applied to instances in a region or instances in a specific Availability Zone.</p>
+    /// <p>Whether the Reserved Instance is applied to instances in a Region or instances in a specific Availability Zone.</p>
     pub scope: Option<String>,
 }
 
@@ -38688,7 +39242,7 @@ pub struct ReservedInstancesOffering {
     pub recurring_charges: Option<Vec<RecurringCharge>>,
     /// <p>The ID of the Reserved Instance offering. This is the offering ID used in <a>GetReservedInstancesExchangeQuote</a> to confirm that an exchange can be made.</p>
     pub reserved_instances_offering_id: Option<String>,
-    /// <p>Whether the Reserved Instance is applied to instances in a region or an Availability Zone.</p>
+    /// <p>Whether the Reserved Instance is applied to instances in a Region or an Availability Zone.</p>
     pub scope: Option<String>,
     /// <p>The usage price of the Reserved Instance, per hour.</p>
     pub usage_price: Option<f32>,
@@ -38838,6 +39392,55 @@ impl ReservedIntancesIdsDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResetEbsDefaultKmsKeyIdRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `ResetEbsDefaultKmsKeyIdRequest` contents to a `SignedRequest`.
+struct ResetEbsDefaultKmsKeyIdRequestSerializer;
+impl ResetEbsDefaultKmsKeyIdRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ResetEbsDefaultKmsKeyIdRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResetEbsDefaultKmsKeyIdResult {
+    /// <p>The full ARN of the default CMK that your account uses to encrypt an EBS volume when no CMK is specified in the API call that creates the volume.</p>
+    pub kms_key_id: Option<String>,
+}
+
+struct ResetEbsDefaultKmsKeyIdResultDeserializer;
+impl ResetEbsDefaultKmsKeyIdResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResetEbsDefaultKmsKeyIdResult, XmlParseError> {
+        deserialize_elements::<_, ResetEbsDefaultKmsKeyIdResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "kmsKeyId" => {
+                        obj.kms_key_id = Some(StringDeserializer::deserialize("kmsKeyId", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -39486,7 +40089,7 @@ pub struct RevokeSecurityGroupEgressRequest {
     pub from_port: Option<i64>,
     /// <p>The ID of the security group.</p>
     pub group_id: String,
-    /// <p>One or more sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.</p>
+    /// <p>The sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
     /// <p>Not supported. Use a set of IP permissions to specify the protocol name or number.</p>
     pub ip_protocol: Option<String>,
@@ -39557,7 +40160,7 @@ pub struct RevokeSecurityGroupIngressRequest {
     pub group_id: Option<String>,
     /// <p>[EC2-Classic, default VPC] The name of the security group. You must specify either the security group ID or the security group name in the request.</p>
     pub group_name: Option<String>,
-    /// <p>One or more sets of IP permissions. You can't specify a source security group and a CIDR IP address range in the same set of permissions.</p>
+    /// <p>The sets of IP permissions. You can't specify a source security group and a CIDR IP address range in the same set of permissions.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
     /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>). Use <code>-1</code> to specify all.</p>
     pub ip_protocol: Option<String>,
@@ -39980,7 +40583,7 @@ impl RunInstancesMonitoringEnabledSerializer {
 pub struct RunInstancesRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
-    /// <p>One or more block device mapping entries. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
+    /// <p>The block device mapping entries. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>Information about the Capacity Reservation targeting option. If you do not specify this parameter, the instance's Capacity Reservation preference defaults to <code>open</code>, which enables it to run in any open Capacity Reservation that has matching attributes (instance type, platform, Availability Zone).</p>
     pub capacity_reservation_specification: Option<CapacityReservationSpecification>,
@@ -39988,23 +40591,23 @@ pub struct RunInstancesRequest {
     pub client_token: Option<String>,
     /// <p>The CPU options for the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html">Optimizing CPU Options</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub cpu_options: Option<CpuOptionsRequest>,
-    /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>. To change this attribute after launch, use <a>ModifyInstanceCreditSpecification</a>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>standard</code> (T2 instances) or <code>unlimited</code> (T3 instances)</p>
+    /// <p>The credit option for CPU usage of the T2 or T3 instance. Valid values are <code>standard</code> and <code>unlimited</code>. To change this attribute after launch, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceCreditSpecification.html"> ModifyInstanceCreditSpecification</a>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>standard</code> (T2 instances) or <code>unlimited</code> (T3 instances)</p>
     pub credit_specification: Option<CreditSpecificationRequest>,
-    /// <p>If you set this parameter to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute to <code>false</code> after launch, use <a>ModifyInstanceAttribute</a>. Alternatively, if you set <code>InstanceInitiatedShutdownBehavior</code> to <code>terminate</code>, you can terminate the instance by running the shutdown command from the instance.</p> <p>Default: <code>false</code> </p>
+    /// <p>If you set this parameter to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute after launch, use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceAttribute.html">ModifyInstanceAttribute</a>. Alternatively, if you set <code>InstanceInitiatedShutdownBehavior</code> to <code>terminate</code>, you can terminate the instance by running the shutdown command from the instance.</p> <p>Default: <code>false</code> </p>
     pub disable_api_termination: Option<bool>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal Amazon EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>
     pub ebs_optimized: Option<bool>,
-    /// <p>An elastic GPU to associate with the instance.</p>
+    /// <p>An elastic GPU to associate with the instance. An Elastic GPU is a GPU resource that you can attach to your Windows instance to accelerate the graphics performance of your applications. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/elastic-graphics.html"> Amazon EC2 Elastic GPUs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub elastic_gpu_specification: Option<Vec<ElasticGpuSpecification>>,
-    /// <p> An elastic inference accelerator. </p>
+    /// <p>An elastic inference accelerator to associate with the instance. Elastic inference accelerators are a resource you can attach to your Amazon EC2 instances to accelerate your Deep Learning (DL) inference workloads.</p>
     pub elastic_inference_accelerators: Option<Vec<ElasticInferenceAccelerator>>,
     /// <p>Indicates whether an instance is enabled for hibernation. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub hibernation_options: Option<HibernationOptionsRequest>,
     /// <p>The IAM instance profile.</p>
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
-    /// <p>The ID of the AMI, which you can get by calling <a>DescribeImages</a>. An AMI is required to launch an instance and must be specified here or in a launch template.</p>
+    /// <p>The ID of the AMI. An AMI ID is required to launch an instance and must be specified here or in a launch template.</p>
     pub image_id: Option<String>,
     /// <p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p> <p>Default: <code>stop</code> </p>
     pub instance_initiated_shutdown_behavior: Option<String>,
@@ -40012,13 +40615,13 @@ pub struct RunInstancesRequest {
     pub instance_market_options: Option<InstanceMarketOptionsRequest>,
     /// <p>The instance type. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>m1.small</code> </p>
     pub instance_type: Option<String>,
-    /// <p>[EC2-VPC] A number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
+    /// <p>[EC2-VPC] The number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
     pub ipv_6_address_count: Option<i64>,
-    /// <p>[EC2-VPC] Specify one or more IPv6 addresses from the range of the subnet to associate with the primary network interface. You cannot specify this option and the option to assign a number of IPv6 addresses in the same request. You cannot specify this option if you've specified a minimum number of instances to launch.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
+    /// <p>[EC2-VPC] The IPv6 addresses from the range of the subnet to associate with the primary network interface. You cannot specify this option and the option to assign a number of IPv6 addresses in the same request. You cannot specify this option if you've specified a minimum number of instances to launch.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
     pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
     /// <p><p>The ID of the kernel.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html"> PV-GRUB</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important></p>
     pub kernel_id: Option<String>,
-    /// <p><p>The name of the key pair. You can create a key pair using <a>CreateKeyPair</a> or <a>ImportKeyPair</a>.</p> <important> <p>If you do not specify a key pair, you can&#39;t connect to the instance unless you choose an AMI that is configured to allow users another way to log in.</p> </important></p>
+    /// <p><p>The name of the key pair. You can create a key pair using <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateKeyPair.html">CreateKeyPair</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ImportKeyPair.html">ImportKeyPair</a>.</p> <important> <p>If you do not specify a key pair, you can&#39;t connect to the instance unless you choose an AMI that is configured to allow users another way to log in.</p> </important></p>
     pub key_name: Option<String>,
     /// <p>The launch template to use to launch the instances. Any parameters that you specify in <a>RunInstances</a> override the same parameters in the launch template. You can specify either the name or ID of a launch template, but not both.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
@@ -40028,25 +40631,25 @@ pub struct RunInstancesRequest {
     pub max_count: i64,
     /// <p>The minimum number of instances to launch. If you specify a minimum that is more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches no instances.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href="http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2">How many instances can I run in Amazon EC2</a> in the Amazon EC2 General FAQ.</p>
     pub min_count: i64,
-    /// <p>The monitoring for the instance.</p>
+    /// <p>Specifies whether detailed monitoring is enabled for the instance.</p>
     pub monitoring: Option<RunInstancesMonitoringEnabled>,
-    /// <p>One or more network interfaces.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
+    /// <p>The network interfaces to associate with the instance. If you specify a network interface, you must specify any security groups as part of the network interface.</p>
     pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     /// <p>The placement for the instance.</p>
     pub placement: Option<Placement>,
     /// <p>[EC2-VPC] The primary IPv4 address. You must specify a value from the IPv4 address range of the subnet.</p> <p>Only one private IP address can be designated as primary. You can't specify this option if you've specified the option to designate a private IP address as the primary IP address in a network interface specification. You cannot specify this option if you're launching more than one instance in the request.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
     pub private_ip_address: Option<String>,
-    /// <p><p>The ID of the RAM disk.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html"> PV-GRUB</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important></p>
+    /// <p><p>The ID of the RAM disk to select. Some kernels require additional drivers at launch. Check the kernel requirements for information about whether you need to specify a RAM disk. To find kernel requirements, go to the AWS Resource Center and search for the kernel ID.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html"> PV-GRUB</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important></p>
     pub ramdisk_id: Option<String>,
-    /// <p>One or more security group IDs. You can create a security group using <a>CreateSecurityGroup</a>.</p> <p>Default: Amazon EC2 uses the default security group.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
+    /// <p>The IDs of the security groups. You can create a security group using <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateSecurityGroup.html">CreateSecurityGroup</a>.</p> <p>If you specify a network interface, you must specify any security groups as part of the network interface.</p>
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>[EC2-Classic, default VPC] One or more security group names. For a nondefault VPC, you must use security group IDs instead.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p> <p>Default: Amazon EC2 uses the default security group.</p>
+    /// <p>[EC2-Classic, default VPC] The names of the security groups. For a nondefault VPC, you must use security group IDs instead.</p> <p>If you specify a network interface, you must specify any security groups as part of the network interface.</p> <p>Default: Amazon EC2 uses the default security group.</p>
     pub security_groups: Option<Vec<String>>,
     /// <p>[EC2-VPC] The ID of the subnet to launch the instance into.</p> <p>You cannot specify this option and the network interfaces option in the same request.</p>
     pub subnet_id: Option<String>,
-    /// <p>The tags to apply to the resources during launch. You can only tag instances and volumes on launch. The specified tags are applied to all instances or volumes that are created during launch. To tag a resource after it has been created, see <a>CreateTags</a>.</p>
+    /// <p>The tags to apply to the resources during launch. You can only tag instances and volumes on launch. The specified tags are applied to all instances or volumes that are created during launch. To tag a resource after it has been created, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html">CreateTags</a>.</p>
     pub tag_specifications: Option<Vec<TagSpecification>>,
-    /// <p>The user data to make available to the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data">Adding User Data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text.</p>
+    /// <p>The user data to make available to the instance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data">Adding User Data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text. User data is limited to 16 KB.</p>
     pub user_data: Option<String>,
 }
 
@@ -40951,7 +41554,7 @@ impl ScheduledInstancesIpv6AddressListSerializer {
 /// <p>Describes the launch specification for a Scheduled Instance.</p> <p>If you are launching the Scheduled Instance in EC2-VPC, you must specify the ID of the subnet. You can specify the subnet using either <code>SubnetId</code> or <code>NetworkInterface</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduledInstancesLaunchSpecification {
-    /// <p>One or more block device mapping entries.</p>
+    /// <p>The block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<ScheduledInstancesBlockDeviceMapping>>,
     /// <p>Indicates whether the instances are optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>
     pub ebs_optimized: Option<bool>,
@@ -40967,13 +41570,13 @@ pub struct ScheduledInstancesLaunchSpecification {
     pub key_name: Option<String>,
     /// <p>Enable or disable monitoring for the instances.</p>
     pub monitoring: Option<ScheduledInstancesMonitoring>,
-    /// <p>One or more network interfaces.</p>
+    /// <p>The network interfaces.</p>
     pub network_interfaces: Option<Vec<ScheduledInstancesNetworkInterface>>,
     /// <p>The placement information.</p>
     pub placement: Option<ScheduledInstancesPlacement>,
     /// <p>The ID of the RAM disk.</p>
     pub ramdisk_id: Option<String>,
-    /// <p>The IDs of one or more security groups.</p>
+    /// <p>The IDs of the security groups.</p>
     pub security_group_ids: Option<Vec<String>>,
     /// <p>The ID of the subnet in which to launch the instances.</p>
     pub subnet_id: Option<String>,
@@ -41090,11 +41693,11 @@ pub struct ScheduledInstancesNetworkInterface {
     pub description: Option<String>,
     /// <p>The index of the device for the network interface attachment.</p>
     pub device_index: Option<i64>,
-    /// <p>The IDs of one or more security groups.</p>
+    /// <p>The IDs of the security groups.</p>
     pub groups: Option<Vec<String>>,
     /// <p>The number of IPv6 addresses to assign to the network interface. The IPv6 addresses are automatically selected from the subnet range.</p>
     pub ipv_6_address_count: Option<i64>,
-    /// <p>One or more specific IPv6 addresses from the subnet range.</p>
+    /// <p>The specific IPv6 addresses from the subnet range.</p>
     pub ipv_6_addresses: Option<Vec<ScheduledInstancesIpv6Address>>,
     /// <p>The ID of the network interface.</p>
     pub network_interface_id: Option<String>,
@@ -41349,15 +41952,15 @@ pub struct SecurityGroup {
     pub group_id: Option<String>,
     /// <p>The name of the security group.</p>
     pub group_name: Option<String>,
-    /// <p>One or more inbound rules associated with the security group.</p>
+    /// <p>The inbound rules associated with the security group.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
-    /// <p>[EC2-VPC] One or more outbound rules associated with the security group.</p>
+    /// <p>[VPC only] The outbound rules associated with the security group.</p>
     pub ip_permissions_egress: Option<Vec<IpPermission>>,
     /// <p>The AWS account ID of the owner of the security group.</p>
     pub owner_id: Option<String>,
     /// <p>Any tags assigned to the security group.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p>[EC2-VPC] The ID of the VPC for the security group.</p>
+    /// <p>[VPC only] The ID of the VPC for the security group.</p>
     pub vpc_id: Option<String>,
 }
 
@@ -41566,6 +42169,8 @@ pub struct ServiceConfiguration {
     pub availability_zones: Option<Vec<String>>,
     /// <p>The DNS names for the service.</p>
     pub base_endpoint_dns_names: Option<Vec<String>>,
+    /// <p>Indicates whether the service manages it's VPC endpoints. Management of the service VPC endpoints using the VPC endpoint API is restricted.</p>
+    pub manages_vpc_endpoints: Option<bool>,
     /// <p>The Amazon Resource Names (ARNs) of the Network Load Balancers for the service.</p>
     pub network_load_balancer_arns: Option<Vec<String>>,
     /// <p>The private DNS name for the service.</p>
@@ -41578,6 +42183,8 @@ pub struct ServiceConfiguration {
     pub service_state: Option<String>,
     /// <p>The type of service.</p>
     pub service_type: Option<Vec<ServiceTypeDetail>>,
+    /// <p>Any tags assigned to the service.</p>
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct ServiceConfigurationDeserializer;
@@ -41604,6 +42211,12 @@ impl ServiceConfigurationDeserializer {
                     obj.base_endpoint_dns_names.get_or_insert(vec![]).extend(
                         ValueStringListDeserializer::deserialize("baseEndpointDnsNameSet", stack)?,
                     );
+                }
+                "managesVpcEndpoints" => {
+                    obj.manages_vpc_endpoints = Some(BooleanDeserializer::deserialize(
+                        "managesVpcEndpoints",
+                        stack,
+                    )?);
                 }
                 "networkLoadBalancerArnSet" => {
                     obj.network_load_balancer_arns.get_or_insert(vec![]).extend(
@@ -41633,6 +42246,11 @@ impl ServiceConfigurationDeserializer {
                     obj.service_type.get_or_insert(vec![]).extend(
                         ServiceTypeDetailSetDeserializer::deserialize("serviceType", stack)?,
                     );
+                }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
                 }
                 _ => skip_tree(stack),
             }
@@ -41668,14 +42286,20 @@ pub struct ServiceDetail {
     pub availability_zones: Option<Vec<String>>,
     /// <p>The DNS names for the service.</p>
     pub base_endpoint_dns_names: Option<Vec<String>>,
+    /// <p>Indicates whether the service manages it's VPC endpoints. Management of the service VPC endpoints using the VPC endpoint API is restricted.</p>
+    pub manages_vpc_endpoints: Option<bool>,
     /// <p>The AWS account ID of the service owner.</p>
     pub owner: Option<String>,
     /// <p>The private DNS name for the service.</p>
     pub private_dns_name: Option<String>,
+    /// <p>The ID of the endpoint service.</p>
+    pub service_id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the service.</p>
     pub service_name: Option<String>,
     /// <p>The type of service.</p>
     pub service_type: Option<Vec<ServiceTypeDetail>>,
+    /// <p>Any tags assigned to the service.</p>
+    pub tags: Option<Vec<Tag>>,
     /// <p>Indicates whether the service supports endpoint policies.</p>
     pub vpc_endpoint_policy_supported: Option<bool>,
 }
@@ -41705,12 +42329,21 @@ impl ServiceDetailDeserializer {
                         ValueStringListDeserializer::deserialize("baseEndpointDnsNameSet", stack)?,
                     );
                 }
+                "managesVpcEndpoints" => {
+                    obj.manages_vpc_endpoints = Some(BooleanDeserializer::deserialize(
+                        "managesVpcEndpoints",
+                        stack,
+                    )?);
+                }
                 "owner" => {
                     obj.owner = Some(StringDeserializer::deserialize("owner", stack)?);
                 }
                 "privateDnsName" => {
                     obj.private_dns_name =
                         Some(StringDeserializer::deserialize("privateDnsName", stack)?);
+                }
+                "serviceId" => {
+                    obj.service_id = Some(StringDeserializer::deserialize("serviceId", stack)?);
                 }
                 "serviceName" => {
                     obj.service_name = Some(StringDeserializer::deserialize("serviceName", stack)?);
@@ -41719,6 +42352,11 @@ impl ServiceDetailDeserializer {
                     obj.service_type.get_or_insert(vec![]).extend(
                         ServiceTypeDetailSetDeserializer::deserialize("serviceType", stack)?,
                     );
+                }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
                 }
                 "vpcEndpointPolicySupported" => {
                     obj.vpc_endpoint_policy_supported = Some(BooleanDeserializer::deserialize(
@@ -41895,7 +42533,7 @@ pub struct Snapshot {
     pub encrypted: Option<bool>,
     /// <p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the parent volume.</p>
     pub kms_key_id: Option<String>,
-    /// <p> Value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console. </p>
+    /// <p> Value from an Amazon-maintained list (<code>amazon</code> | <code>self</code> | <code>all</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console. </p>
     pub owner_alias: Option<String>,
     /// <p>The AWS account ID of the EBS snapshot owner.</p>
     pub owner_id: Option<String>,
@@ -42302,12 +42940,12 @@ impl SpotDatafeedSubscriptionDeserializer {
         )
     }
 }
-/// <p>Describes the launch specification for one or more Spot Instances.</p>
+/// <p>Describes the launch specification for one or more Spot Instances. If you include On-Demand capacity in your fleet request, you can't use <code>SpotFleetLaunchSpecification</code>; you must use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_LaunchTemplateConfig.html">LaunchTemplateConfig</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SpotFleetLaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
-    /// <p>One or more block device mapping entries. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
+    /// <p>One or more block devices that are mapped to the Spot instances. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>Indicates whether the instances are optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>
     pub ebs_optimized: Option<bool>,
@@ -42327,7 +42965,7 @@ pub struct SpotFleetLaunchSpecification {
     pub network_interfaces: Option<Vec<InstanceNetworkInterfaceSpecification>>,
     /// <p>The placement information.</p>
     pub placement: Option<SpotPlacement>,
-    /// <p>The ID of the RAM disk.</p>
+    /// <p>The ID of the RAM disk. Some kernels require additional drivers at launch. Check the kernel requirements for information about whether you need to specify a RAM disk. To find kernel requirements, refer to the AWS Resource Center and search for the kernel ID.</p>
     pub ramdisk_id: Option<String>,
     /// <p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>
     pub security_groups: Option<Vec<GroupIdentifier>>,
@@ -42337,9 +42975,9 @@ pub struct SpotFleetLaunchSpecification {
     pub subnet_id: Option<String>,
     /// <p>The tags to apply during creation.</p>
     pub tag_specifications: Option<Vec<SpotFleetTagSpecification>>,
-    /// <p>The Base64-encoded user data to make available to the instances.</p>
+    /// <p>The Base64-encoded user data that instances use when starting up.</p>
     pub user_data: Option<String>,
-    /// <p>The number of units provided by the specified instance type. These are the same units that you chose to set the target capacity in terms (instances or a performance characteristic such as vCPUs, memory, or I/O).</p> <p>If the target capacity divided by this value is not a whole number, we round the number of instances to the next whole number. If this value is not specified, the default is 1.</p>
+    /// <p>The number of units provided by the specified instance type. These are the same units that you chose to set the target capacity in terms of instances, or a performance characteristic such as vCPUs, memory, or I/O.</p> <p>If the target capacity divided by this value is not a whole number, Amazon EC2 rounds the number of instances to the next whole number. If this value is not specified, the default is 1.</p>
     pub weighted_capacity: Option<f64>,
 }
 
@@ -42648,19 +43286,19 @@ pub struct SpotFleetRequestConfigData {
     pub allocation_strategy: Option<String>,
     /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of your listings. This helps to avoid duplicate listings. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
-    /// <p>Indicates whether running Spot Instances should be terminated if the target capacity of the Spot Fleet request is decreased below the current size of the Spot Fleet.</p>
+    /// <p>Indicates whether running Spot Instances should be terminated if you decrease the target capacity of the Spot Fleet request below the current size of the Spot Fleet.</p>
     pub excess_capacity_termination_policy: Option<String>,
     /// <p>The number of units fulfilled by this request compared to the set target capacity. You cannot set this value.</p>
     pub fulfilled_capacity: Option<f64>,
-    /// <p>Grants the Spot Fleet permission to terminate Spot Instances on your behalf when you cancel its Spot Fleet request using <a>CancelSpotFleetRequests</a> or when the Spot Fleet request expires, if you set <code>terminateInstancesWithExpiration</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that grants the Spot Fleet the permission to request, launch, terminate, and tag instances on your behalf. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html#spot-fleet-prerequisites">Spot Fleet Prerequisites</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>. Spot Fleet can terminate Spot Instances on your behalf when you cancel its Spot Fleet request using <a>CancelSpotFleetRequests</a> or when the Spot Fleet request expires, if you set <code>TerminateInstancesWithExpiration</code>.</p>
     pub iam_fleet_role: String,
     /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
     pub instance_interruption_behavior: Option<String>,
     /// <p>The number of Spot pools across which to allocate your target Spot capacity. Valid only when Spot <b>AllocationStrategy</b> is set to <code>lowest-price</code>. Spot Fleet selects the cheapest Spot pools and evenly allocates your target Spot capacity across the number of Spot pools that you specify.</p>
     pub instance_pools_to_use_count: Option<i64>,
-    /// <p>The launch specifications for the Spot Fleet request.</p>
+    /// <p>The launch specifications for the Spot Fleet request. If you specify <code>LaunchSpecifications</code>, you can't specify <code>LaunchTemplateConfigs</code>. If you include On-Demand capacity in your request, you must use <code>LaunchTemplateConfigs</code>.</p>
     pub launch_specifications: Option<Vec<SpotFleetLaunchSpecification>>,
-    /// <p>The launch template and overrides.</p>
+    /// <p>The launch template and overrides. If you specify <code>LaunchTemplateConfigs</code>, you can't specify <code>LaunchSpecifications</code>. If you include On-Demand capacity in your request, you must use <code>LaunchTemplateConfigs</code>.</p>
     pub launch_template_configs: Option<Vec<LaunchTemplateConfig>>,
     /// <p>One or more Classic Load Balancers and target groups to attach to the Spot Fleet request. Spot Fleet registers the running Spot Instances with the specified Classic Load Balancers and target groups.</p> <p>With Network Load Balancers, Spot Fleet cannot register instances that have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1.</p>
     pub load_balancers_config: Option<LoadBalancersConfig>,
@@ -42674,15 +43312,15 @@ pub struct SpotFleetRequestConfigData {
     pub replace_unhealthy_instances: Option<bool>,
     /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. The default is the On-Demand price.</p>
     pub spot_price: Option<String>,
-    /// <p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p>
+    /// <p>The number of units to request for the Spot Fleet. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p>
     pub target_capacity: i64,
-    /// <p>Indicates whether running Spot Instances should be terminated when the Spot Fleet request expires.</p>
+    /// <p>Indicates whether running Spot Instances are terminated when the Spot Fleet request expires.</p>
     pub terminate_instances_with_expiration: Option<bool>,
     /// <p>The type of request. Indicates whether the Spot Fleet only requests the target capacity or also attempts to maintain it. When this value is <code>request</code>, the Spot Fleet only places the required requests. It does not attempt to replenish Spot Instances if capacity is diminished, nor does it submit requests in alternative Spot pools if capacity is not available. When this value is <code>maintain</code>, the Spot Fleet maintains the target capacity. The Spot Fleet places the required requests to meet capacity and automatically replenishes any interrupted instances. Default: <code>maintain</code>. <code>instant</code> is listed but is not used by Spot Fleet.</p>
     pub type_: Option<String>,
-    /// <p>The start date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). The default is to start fulfilling the request immediately.</p>
+    /// <p>The start date and time of the request, in UTC format (<i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). By default, Amazon EC2 starts fulfilling the request immediately.</p>
     pub valid_from: Option<String>,
-    /// <p>The end date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). At this point, no new Spot Instance requests are placed or able to fulfill the request. The default end date is 7 days from the current date.</p>
+    /// <p>The end date and time of the request, in UTC format (<i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). After the end date and time, no new Spot Instance requests are placed or able to fulfill the request. If no value is specified, the Spot Fleet request remains until you cancel it.</p>
     pub valid_until: Option<String>,
 }
 
@@ -43626,13 +44264,13 @@ pub struct StaleIpPermission {
     pub from_port: Option<i64>,
     /// <p>The IP protocol name (for <code>tcp</code>, <code>udp</code>, and <code>icmp</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers)</a>.</p>
     pub ip_protocol: Option<String>,
-    /// <p>One or more IP ranges. Not applicable for stale security group rules.</p>
+    /// <p>The IP ranges. Not applicable for stale security group rules.</p>
     pub ip_ranges: Option<Vec<String>>,
-    /// <p>One or more prefix list IDs for an AWS service. Not applicable for stale security group rules.</p>
+    /// <p>The prefix list IDs for an AWS service. Not applicable for stale security group rules.</p>
     pub prefix_list_ids: Option<Vec<String>>,
     /// <p>The end of the port range for the TCP and UDP protocols, or an ICMP type number. A value of <code>-1</code> indicates all ICMP types. </p>
     pub to_port: Option<i64>,
-    /// <p>One or more security group pairs. Returns the ID of the referenced security group and VPC, and the ID and status of the VPC peering connection.</p>
+    /// <p>The security group pairs. Returns the ID of the referenced security group and VPC, and the ID and status of the VPC peering connection.</p>
     pub user_id_group_pairs: Option<Vec<UserIdGroupPair>>,
 }
 
@@ -43772,7 +44410,7 @@ pub struct StartInstancesRequest {
     pub additional_info: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more instance IDs.</p>
+    /// <p>The IDs of the instances.</p>
     pub instance_ids: Vec<String>,
 }
 
@@ -43801,7 +44439,7 @@ impl StartInstancesRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct StartInstancesResult {
-    /// <p>Information about one or more started instances.</p>
+    /// <p>Information about the started instances.</p>
     pub starting_instances: Option<Vec<InstanceStateChange>>,
 }
 
@@ -43919,7 +44557,7 @@ pub struct StopInstancesRequest {
     pub force: Option<bool>,
     /// <p>Hibernates the instance if the instance was enabled for hibernation at launch. If the instance cannot hibernate successfully, a normal shutdown occurs. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html">Hibernate Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p> Default: <code>false</code> </p>
     pub hibernate: Option<bool>,
-    /// <p>One or more instance IDs.</p>
+    /// <p>The IDs of the instances.</p>
     pub instance_ids: Vec<String>,
 }
 
@@ -43951,7 +44589,7 @@ impl StopInstancesRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct StopInstancesResult {
-    /// <p>Information about one or more stopped instances.</p>
+    /// <p>Information about the stopped instances.</p>
     pub stopping_instances: Option<Vec<InstanceStateChange>>,
 }
 
@@ -45159,7 +45797,7 @@ impl TerminateConnectionStatusSetDeserializer {
 pub struct TerminateInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more instance IDs.</p> <p>Constraints: Up to 1000 instance IDs. We recommend breaking up this request into smaller batches.</p>
+    /// <p>The IDs of the instances.</p> <p>Constraints: Up to 1000 instance IDs. We recommend breaking up this request into smaller batches.</p>
     pub instance_ids: Vec<String>,
 }
 
@@ -45185,7 +45823,7 @@ impl TerminateInstancesRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TerminateInstancesResult {
-    /// <p>Information about one or more terminated instances.</p>
+    /// <p>Information about the terminated instances.</p>
     pub terminating_instances: Option<Vec<InstanceStateChange>>,
 }
 
@@ -46597,7 +47235,7 @@ impl UnassignPrivateIpAddressesRequestSerializer {
 pub struct UnmonitorInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more instance IDs.</p>
+    /// <p>The IDs of the instances.</p>
     pub instance_ids: Vec<String>,
 }
 
@@ -47385,7 +48023,7 @@ pub struct Volume {
     pub create_time: Option<String>,
     /// <p>Indicates whether the volume will be encrypted.</p>
     pub encrypted: Option<bool>,
-    /// <p>The number of I/O operations per second (IOPS) that the volume supports. For Provisioned IOPS SSD volumes, this represents the number of IOPS that are provisioned for the volume. For General Purpose SSD volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraints: Range is 100-16,000 IOPS for <code>gp2</code> volumes and 100 to 64,000IOPS for <code>io1</code> volumes in most regions. Maximum <code>io1</code>IOPS of 64,000 is guaranteed only on <a href="AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
+    /// <p>The number of I/O operations per second (IOPS) that the volume supports. For Provisioned IOPS SSD volumes, this represents the number of IOPS that are provisioned for the volume. For General Purpose SSD volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraints: Range is 100-16,000 IOPS for <code>gp2</code> volumes and 100 to 64,000IOPS for <code>io1</code> volumes, in most Regions. The maximum IOPS for <code>io1</code> of 64,000 is guaranteed only on <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Nitro-based instances</a>. Other instance families guarantee performance up to 32,000 IOPS.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
     pub iops: Option<i64>,
     /// <p>The full ARN of the AWS Key Management Service (AWS KMS) customer master key (CMK) that was used to protect the volume encryption key for the volume.</p>
     pub kms_key_id: Option<String>,
@@ -48368,6 +49006,8 @@ pub struct VpcEndpoint {
     pub policy_document: Option<String>,
     /// <p>(Interface endpoint) Indicates whether the VPC is associated with a private hosted zone.</p>
     pub private_dns_enabled: Option<bool>,
+    /// <p>Indicates whether the VPC endpoint is being managed by its service.</p>
+    pub requester_managed: Option<bool>,
     /// <p>(Gateway endpoint) One or more route tables associated with the endpoint.</p>
     pub route_table_ids: Option<Vec<String>>,
     /// <p>The name of the service to which the endpoint is associated.</p>
@@ -48376,6 +49016,8 @@ pub struct VpcEndpoint {
     pub state: Option<String>,
     /// <p>(Interface endpoint) One or more subnets in which the endpoint is located.</p>
     pub subnet_ids: Option<Vec<String>>,
+    /// <p>Any tags assigned to the VPC endpoint.</p>
+    pub tags: Option<Vec<Tag>>,
     /// <p>The ID of the VPC endpoint.</p>
     pub vpc_endpoint_id: Option<String>,
     /// <p>The type of endpoint.</p>
@@ -48394,7 +49036,7 @@ impl VpcEndpointDeserializer {
         deserialize_elements::<_, VpcEndpoint, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "creationTimestamp" => {
-                    obj.creation_timestamp = Some(DateTimeDeserializer::deserialize(
+                    obj.creation_timestamp = Some(MillisecondDateTimeDeserializer::deserialize(
                         "creationTimestamp",
                         stack,
                     )?);
@@ -48424,6 +49066,10 @@ impl VpcEndpointDeserializer {
                         stack,
                     )?);
                 }
+                "requesterManaged" => {
+                    obj.requester_managed =
+                        Some(BooleanDeserializer::deserialize("requesterManaged", stack)?);
+                }
                 "routeTableIdSet" => {
                     obj.route_table_ids.get_or_insert(vec![]).extend(
                         ValueStringListDeserializer::deserialize("routeTableIdSet", stack)?,
@@ -48439,6 +49085,11 @@ impl VpcEndpointDeserializer {
                     obj.subnet_ids.get_or_insert(vec![]).extend(
                         ValueStringListDeserializer::deserialize("subnetIdSet", stack)?,
                     );
+                }
+                "tagSet" => {
+                    obj.tags
+                        .get_or_insert(vec![])
+                        .extend(TagListDeserializer::deserialize("tagSet", stack)?);
                 }
                 "vpcEndpointId" => {
                     obj.vpc_endpoint_id =
@@ -48484,7 +49135,7 @@ impl VpcEndpointConnectionDeserializer {
         deserialize_elements::<_, VpcEndpointConnection, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "creationTimestamp" => {
-                    obj.creation_timestamp = Some(DateTimeDeserializer::deserialize(
+                    obj.creation_timestamp = Some(MillisecondDateTimeDeserializer::deserialize(
                         "creationTimestamp",
                         stack,
                     )?);
@@ -48854,7 +49505,7 @@ pub struct VpcPeeringConnectionVpcInfo {
     pub owner_id: Option<String>,
     /// <p>Information about the VPC peering connection options for the accepter or requester VPC.</p>
     pub peering_options: Option<VpcPeeringConnectionOptionsDescription>,
-    /// <p>The region in which the VPC is located.</p>
+    /// <p>The Region in which the VPC is located.</p>
     pub region: Option<String>,
     /// <p>The ID of the VPC.</p>
     pub vpc_id: Option<String>,
@@ -58023,6 +58674,46 @@ impl Error for DetachVpnGatewayError {
         match *self {}
     }
 }
+/// Errors returned by DisableEbsEncryptionByDefault
+#[derive(Debug, PartialEq)]
+pub enum DisableEbsEncryptionByDefaultError {}
+
+impl DisableEbsEncryptionByDefaultError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisableEbsEncryptionByDefaultError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DisableEbsEncryptionByDefaultError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisableEbsEncryptionByDefaultError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by DisableTransitGatewayRouteTablePropagation
 #[derive(Debug, PartialEq)]
 pub enum DisableTransitGatewayRouteTablePropagationError {}
@@ -58455,6 +59146,46 @@ impl Error for DisassociateVpcCidrBlockError {
         match *self {}
     }
 }
+/// Errors returned by EnableEbsEncryptionByDefault
+#[derive(Debug, PartialEq)]
+pub enum EnableEbsEncryptionByDefaultError {}
+
+impl EnableEbsEncryptionByDefaultError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<EnableEbsEncryptionByDefaultError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for EnableEbsEncryptionByDefaultError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for EnableEbsEncryptionByDefaultError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by EnableTransitGatewayRouteTablePropagation
 #[derive(Debug, PartialEq)]
 pub enum EnableTransitGatewayRouteTablePropagationError {}
@@ -58841,6 +59572,82 @@ impl fmt::Display for GetConsoleScreenshotError {
     }
 }
 impl Error for GetConsoleScreenshotError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by GetEbsDefaultKmsKeyId
+#[derive(Debug, PartialEq)]
+pub enum GetEbsDefaultKmsKeyIdError {}
+
+impl GetEbsDefaultKmsKeyIdError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEbsDefaultKmsKeyIdError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetEbsDefaultKmsKeyIdError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetEbsDefaultKmsKeyIdError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by GetEbsEncryptionByDefault
+#[derive(Debug, PartialEq)]
+pub enum GetEbsEncryptionByDefaultError {}
+
+impl GetEbsEncryptionByDefaultError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetEbsEncryptionByDefaultError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetEbsEncryptionByDefaultError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetEbsEncryptionByDefaultError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -59427,6 +60234,44 @@ impl Error for ModifyClientVpnEndpointError {
         match *self {}
     }
 }
+/// Errors returned by ModifyEbsDefaultKmsKeyId
+#[derive(Debug, PartialEq)]
+pub enum ModifyEbsDefaultKmsKeyIdError {}
+
+impl ModifyEbsDefaultKmsKeyIdError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEbsDefaultKmsKeyIdError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyEbsDefaultKmsKeyIdError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyEbsDefaultKmsKeyIdError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by ModifyFleet
 #[derive(Debug, PartialEq)]
 pub enum ModifyFleetError {}
@@ -59769,6 +60614,46 @@ impl fmt::Display for ModifyInstanceCreditSpecificationError {
     }
 }
 impl Error for ModifyInstanceCreditSpecificationError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ModifyInstanceEventStartTime
+#[derive(Debug, PartialEq)]
+pub enum ModifyInstanceEventStartTimeError {}
+
+impl ModifyInstanceEventStartTimeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ModifyInstanceEventStartTimeError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyInstanceEventStartTimeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyInstanceEventStartTimeError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -60427,6 +61312,44 @@ impl fmt::Display for ModifyVpcTenancyError {
     }
 }
 impl Error for ModifyVpcTenancyError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ModifyVpnConnection
+#[derive(Debug, PartialEq)]
+pub enum ModifyVpnConnectionError {}
+
+impl ModifyVpnConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyVpnConnectionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyVpnConnectionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyVpnConnectionError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -61281,6 +62204,44 @@ impl fmt::Display for RequestSpotInstancesError {
     }
 }
 impl Error for RequestSpotInstancesError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ResetEbsDefaultKmsKeyId
+#[derive(Debug, PartialEq)]
+pub enum ResetEbsDefaultKmsKeyIdError {}
+
+impl ResetEbsDefaultKmsKeyIdError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ResetEbsDefaultKmsKeyIdError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("Response", stack)?;
+        start_element("Errors", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ResetEbsDefaultKmsKeyIdError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ResetEbsDefaultKmsKeyIdError {
     fn description(&self) -> &str {
         match *self {}
     }
@@ -62158,7 +63119,7 @@ pub trait Ec2 {
         input: AcceptVpcEndpointConnectionsRequest,
     ) -> RusotoFuture<AcceptVpcEndpointConnectionsResult, AcceptVpcEndpointConnectionsError>;
 
-    /// <p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p> <p>For an inter-region VPC peering connection request, you must accept the VPC peering connection in the region of the accepter VPC.</p>
+    /// <p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p> <p>For an inter-Region VPC peering connection request, you must accept the VPC peering connection in the Region of the accepter VPC.</p>
     fn accept_vpc_peering_connection(
         &self,
         input: AcceptVpcPeeringConnectionRequest,
@@ -62170,7 +63131,7 @@ pub trait Ec2 {
         input: AdvertiseByoipCidrRequest,
     ) -> RusotoFuture<AdvertiseByoipCidrResult, AdvertiseByoipCidrError>;
 
-    /// <p>Allocates an Elastic IP address to your AWS account. After you allocate the Elastic IP address you can associate it with an instance or network interface. After you release an Elastic IP address, it is released to the IP address pool and can be allocated to a different AWS account.</p> <p>You can allocate an Elastic IP address from an address pool owned by AWS or from an address pool created from a public IPv4 address range that you have brought to AWS for use with your AWS resources using bring your own IP addresses (BYOIP). For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-VPC] If you release an Elastic IP address, you might be able to recover it. You cannot recover an Elastic IP address that you released after it is allocated to another AWS account. You cannot recover an Elastic IP address for EC2-Classic. To attempt to recover an Elastic IP address that you released, specify it in this operation.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. By default, you can allocate 5 Elastic IP addresses for EC2-Classic per region and 5 Elastic IP addresses for EC2-VPC per region.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Allocates an Elastic IP address to your AWS account. After you allocate the Elastic IP address you can associate it with an instance or network interface. After you release an Elastic IP address, it is released to the IP address pool and can be allocated to a different AWS account.</p> <p>You can allocate an Elastic IP address from an address pool owned by AWS or from an address pool created from a public IPv4 address range that you have brought to AWS for use with your AWS resources using bring your own IP addresses (BYOIP). For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-VPC] If you release an Elastic IP address, you might be able to recover it. You cannot recover an Elastic IP address that you released after it is allocated to another AWS account. You cannot recover an Elastic IP address for EC2-Classic. To attempt to recover an Elastic IP address that you released, specify it in this operation.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. By default, you can allocate 5 Elastic IP addresses for EC2-Classic per Region and 5 Elastic IP addresses for EC2-VPC per Region.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn allocate_address(
         &self,
         input: AllocateAddressRequest,
@@ -62287,13 +63248,13 @@ pub trait Ec2 {
         input: AuthorizeClientVpnIngressRequest,
     ) -> RusotoFuture<AuthorizeClientVpnIngressResult, AuthorizeClientVpnIngressError>;
 
-    /// <p>[EC2-VPC only] Adds one or more egress rules to a security group for use with a VPC. Specifically, this action permits instances to send traffic to one or more destination IPv4 or IPv6 CIDR address ranges, or to one or more destination security groups for the same VPC. This action doesn't apply to security groups for use in EC2-Classic. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. For more information about security group limits, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>Each rule consists of the protocol (for example, TCP), plus either a CIDR range or a source group. For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes. You can optionally specify a description for the rule.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p>
+    /// <p>[VPC only] Adds the specified egress rules to a security group for use with a VPC.</p> <p>An outbound rule permits instances to send traffic to the specified destination IPv4 or IPv6 CIDR address ranges, or to the specified destination security groups for the same VPC.</p> <p>You specify a protocol for each rule (for example, TCP). For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn authorize_security_group_egress(
         &self,
         input: AuthorizeSecurityGroupEgressRequest,
     ) -> RusotoFuture<(), AuthorizeSecurityGroupEgressError>;
 
-    /// <p>Adds one or more ingress rules to a security group.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>[EC2-Classic] This action gives one or more IPv4 CIDR address ranges permission to access a security group in your account, or gives one or more security groups (called the <i>source groups</i>) permission to access a security group for your account. A source group can be for your own AWS account, or another. You can have up to 100 rules per group.</p> <p>[EC2-VPC] This action gives one or more IPv4 or IPv6 CIDR address ranges permission to access a security group in your VPC, or gives one or more other security groups (called the <i>source groups</i>) permission to access a security group for your VPC. The security groups must all be for the same VPC or a peer VPC in a VPC peering connection. For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>You can optionally specify a description for the security group rule.</p>
+    /// <p>Adds the specified ingress rules to a security group.</p> <p>An inbound rule permits instances to receive traffic from the specified destination IPv4 or IPv6 CIDR address ranges, or from the specified destination security groups.</p> <p>You specify a protocol for each rule (for example, TCP). For TCP and UDP, you must also specify the destination port or port range. For ICMP/ICMPv6, you must also specify the ICMP/ICMPv6 type and code. You can use -1 to mean all types or all codes.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn authorize_security_group_ingress(
         &self,
         input: AuthorizeSecurityGroupIngressRequest,
@@ -62359,16 +63320,16 @@ pub trait Ec2 {
         input: ConfirmProductInstanceRequest,
     ) -> RusotoFuture<ConfirmProductInstanceResult, ConfirmProductInstanceError>;
 
-    /// <p>Copies the specified Amazon FPGA Image (AFI) to the current region.</p>
+    /// <p>Copies the specified Amazon FPGA Image (AFI) to the current Region.</p>
     fn copy_fpga_image(
         &self,
         input: CopyFpgaImageRequest,
     ) -> RusotoFuture<CopyFpgaImageResult, CopyFpgaImageError>;
 
-    /// <p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>Copies of encrypted backing snapshots for the AMI are encrypted. Copies of unencrypted backing snapshots remain unencrypted, unless you set <code>Encrypted</code> during the copy operation. You cannot create an unencrypted copy of an encrypted backing snapshot.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Initiates the copy of an AMI from the specified source Region to the current Region. You specify the destination Region by using its endpoint when making the request.</p> <p>Copies of encrypted backing snapshots for the AMI are encrypted. Copies of unencrypted backing snapshots remain unencrypted, unless you set <code>Encrypted</code> during the copy operation. You cannot create an unencrypted copy of an encrypted backing snapshot.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn copy_image(&self, input: CopyImageRequest) -> RusotoFuture<CopyImageResult, CopyImageError>;
 
-    /// <p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same region or from one region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter.</p> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> <p>Snapshots created by copying another snapshot have an arbitrary volume ID that should not be used for any purpose.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same Region or from one Region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter.</p> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> <p>Snapshots created by copying another snapshot have an arbitrary volume ID that should not be used for any purpose.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn copy_snapshot(
         &self,
         input: CopySnapshotRequest,
@@ -62392,7 +63353,7 @@ pub trait Ec2 {
         input: CreateClientVpnRouteRequest,
     ) -> RusotoFuture<CreateClientVpnRouteResult, CreateClientVpnRouteError>;
 
-    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
+    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
     fn create_customer_gateway(
         &self,
         input: CreateCustomerGatewayRequest,
@@ -62410,7 +63371,7 @@ pub trait Ec2 {
         input: CreateDefaultVpcRequest,
     ) -> RusotoFuture<CreateDefaultVpcResult, CreateDefaultVpcError>;
 
-    /// <p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. ITo have your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. ITo have your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another Region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_dhcp_options(
         &self,
         input: CreateDhcpOptionsRequest,
@@ -62434,7 +63395,7 @@ pub trait Ec2 {
         input: CreateFlowLogsRequest,
     ) -> RusotoFuture<CreateFlowLogsResult, CreateFlowLogsError>;
 
-    /// <p>Creates an Amazon FPGA Image (AFI) from the specified design checkpoint (DCP).</p> <p>The create operation is asynchronous. To verify that the AFI is ready for use, check the output logs.</p> <p>An AFI contains the FPGA bitstream that is ready to download to an FPGA. You can securely deploy an AFI on one or more FPGA-accelerated instances. For more information, see the <a href="https://github.com/aws/aws-fpga/">AWS FPGA Hardware Development Kit</a>.</p>
+    /// <p>Creates an Amazon FPGA Image (AFI) from the specified design checkpoint (DCP).</p> <p>The create operation is asynchronous. To verify that the AFI is ready for use, check the output logs.</p> <p>An AFI contains the FPGA bitstream that is ready to download to an FPGA. You can securely deploy an AFI on multiple FPGA-accelerated instances. For more information, see the <a href="https://github.com/aws/aws-fpga/">AWS FPGA Hardware Development Kit</a>.</p>
     fn create_fpga_image(
         &self,
         input: CreateFpgaImageRequest,
@@ -62458,7 +63419,7 @@ pub trait Ec2 {
         input: CreateInternetGatewayRequest,
     ) -> RusotoFuture<CreateInternetGatewayResult, CreateInternetGatewayError>;
 
-    /// <p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#1 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per region.</p> <p>The key pair returned to you is available only in the region in which you create it. If you prefer, you can create your own key pair using a third-party tool and upload it to any region using <a>ImportKeyPair</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#1 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per Region.</p> <p>The key pair returned to you is available only in the Region in which you create it. If you prefer, you can create your own key pair using a third-party tool and upload it to any Region using <a>ImportKeyPair</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_key_pair(
         &self,
         input: CreateKeyPairRequest,
@@ -62512,7 +63473,7 @@ pub trait Ec2 {
         input: CreatePlacementGroupRequest,
     ) -> RusotoFuture<(), CreatePlacementGroupError>;
 
-    /// <p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <note> <p>Only Standard Reserved Instances with a capacity reservation can be sold in the Reserved Instance Marketplace. Convertible Reserved Instances and Standard Reserved Instances with a regional benefit cannot be sold.</p> </note> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <note> <p>Only Standard Reserved Instances can be sold in the Reserved Instance Marketplace. Convertible Reserved Instances cannot be sold.</p> </note> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_reserved_instances_listing(
         &self,
         input: CreateReservedInstancesListingRequest,
@@ -62530,7 +63491,7 @@ pub trait Ec2 {
         input: CreateRouteTableRequest,
     ) -> RusotoFuture<CreateRouteTableResult, CreateRouteTableError>;
 
-    /// <p>Creates a security group.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>EC2-Classic: You can have up to 500 security groups.</p> <p>EC2-VPC: You can create up to 500 security groups per VPC.</p> </important> <p>When you create a security group, you specify a friendly name of your choice. You can have a security group for use in EC2-Classic with the same name as a security group for use in a VPC. However, you can't have two security groups for use in EC2-Classic with the same name or two security groups for use in a VPC with the same name.</p> <p>You have a default security group for use in EC2-Classic and a default security group for use in your VPC. If you don't specify a security group when you launch an instance, the instance is launched into the appropriate default security group. A default security group includes a default rule that grants instances unrestricted network access to each other.</p> <p>You can add or remove rules from your security groups using <a>AuthorizeSecurityGroupIngress</a>, <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupIngress</a>, and <a>RevokeSecurityGroupEgress</a>.</p>
+    /// <p>Creates a security group.</p> <p>A security group acts as a virtual firewall for your instance to control inbound and outbound traffic. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>When you create a security group, you specify a friendly name of your choice. You can have a security group for use in EC2-Classic with the same name as a security group for use in a VPC. However, you can't have two security groups for use in EC2-Classic with the same name or two security groups for use in a VPC with the same name.</p> <p>You have a default security group for use in EC2-Classic and a default security group for use in your VPC. If you don't specify a security group when you launch an instance, the instance is launched into the appropriate default security group. A default security group includes a default rule that grants instances unrestricted network access to each other.</p> <p>You can add or remove rules from your security groups using <a>AuthorizeSecurityGroupIngress</a>, <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupIngress</a>, and <a>RevokeSecurityGroupEgress</a>.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn create_security_group(
         &self,
         input: CreateSecurityGroupRequest,
@@ -62554,7 +63515,7 @@ pub trait Ec2 {
         input: CreateSubnetRequest,
     ) -> RusotoFuture<CreateSubnetResult, CreateSubnetError>;
 
-    /// <p>Adds or overwrites one or more tags for the specified Amazon EC2 resource or resources. Each resource can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique per resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about creating IAM policies that control users' access to resources based on tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-iam-actions-resources.html">Supported Resource-Level Permissions for Amazon EC2 API Actions</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Adds or overwrites the specified tags for the specified Amazon EC2 resource or resources. Each resource can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique per resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about creating IAM policies that control users' access to resources based on tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-iam-actions-resources.html">Supported Resource-Level Permissions for Amazon EC2 API Actions</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
 
     /// <p>Creates a transit gateway.</p> <p>You can use a transit gateway to interconnect your virtual private clouds (VPC) and on-premises networks. After the transit gateway enters the <code>available</code> state, you can attach your VPCs and VPN connections to the transit gateway.</p> <p>To attach your VPCs, use <a>CreateTransitGatewayVpcAttachment</a>.</p> <p>To attach a VPN connection, use <a>CreateCustomerGateway</a> to create a customer gateway and specify the ID of the customer gateway and the ID of the transit gateway in a call to <a>CreateVpnConnection</a>.</p> <p>When you create a transit gateway, we create a default transit gateway route table and use it as the default association route table and the default propagation route table. You can use <a>CreateTransitGatewayRouteTable</a> to create additional transit gateway route tables. If you disable automatic route propagation, we do not create a default transit gateway route table. You can use <a>EnableTransitGatewayRouteTablePropagation</a> to propagate routes from a resource attachment to a transit gateway route table. If you disable automatic associations, you can use <a>AssociateTransitGatewayRouteTable</a> to associate a resource attachment with a transit gateway route table.</p>
@@ -62617,7 +63578,7 @@ pub trait Ec2 {
         input: CreateVpcPeeringConnectionRequest,
     ) -> RusotoFuture<CreateVpcPeeringConnectionResult, CreateVpcPeeringConnectionError>;
 
-    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The only supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
+    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The supported connection types are <code>ipsec.1</code> and <code>ipsec.2</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
     fn create_vpn_connection(
         &self,
         input: CreateVpnConnectionRequest,
@@ -62869,25 +63830,25 @@ pub trait Ec2 {
         input: DescribeAccountAttributesRequest,
     ) -> RusotoFuture<DescribeAccountAttributesResult, DescribeAccountAttributesError>;
 
-    /// <p>Describes one or more of your Elastic IP addresses.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified Elastic IP addresses or all of your Elastic IP addresses.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_addresses(
         &self,
         input: DescribeAddressesRequest,
     ) -> RusotoFuture<DescribeAddressesResult, DescribeAddressesError>;
 
-    /// <p>Describes the longer ID format settings for all resource types in a specific region. This request is useful for performing a quick audit to determine whether a specific region is fully opted in for longer IDs (17-character IDs).</p> <p>This request only returns information about resource types that support longer IDs.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p>
+    /// <p>Describes the longer ID format settings for all resource types in a specific Region. This request is useful for performing a quick audit to determine whether a specific Region is fully opted in for longer IDs (17-character IDs).</p> <p>This request only returns information about resource types that support longer IDs.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p>
     fn describe_aggregate_id_format(
         &self,
         input: DescribeAggregateIdFormatRequest,
     ) -> RusotoFuture<DescribeAggregateIdFormatResult, DescribeAggregateIdFormatError>;
 
-    /// <p>Describes one or more of the Availability Zones that are available to you. The results include zones only for the region you're currently using. If there is an event impacting an Availability Zone, you can use this request to view the state and any provided message for that Availability Zone.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html">Regions and Availability Zones</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the Availability Zones that are available to you. The results include zones only for the Region you're currently using. If there is an event impacting an Availability Zone, you can use this request to view the state and any provided message for that Availability Zone.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html">Regions and Availability Zones</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_availability_zones(
         &self,
         input: DescribeAvailabilityZonesRequest,
     ) -> RusotoFuture<DescribeAvailabilityZonesResult, DescribeAvailabilityZonesError>;
 
-    /// <p><p>Describes one or more of your bundling tasks.</p> <note> <p>Completed bundle tasks are listed for only a limited time. If your bundle task is no longer in the list, you can still register an AMI from it. Just use <code>RegisterImage</code> with the Amazon S3 bucket name and image manifest name you provided to the bundle task.</p> </note></p>
+    /// <p><p>Describes the specified bundle tasks or all of your bundle tasks.</p> <note> <p>Completed bundle tasks are listed for only a limited time. If your bundle task is no longer in the list, you can still register an AMI from it. Just use <code>RegisterImage</code> with the Amazon S3 bucket name and image manifest name you provided to the bundle task.</p> </note></p>
     fn describe_bundle_tasks(
         &self,
         input: DescribeBundleTasksRequest,
@@ -62944,7 +63905,7 @@ pub trait Ec2 {
         input: DescribeClientVpnTargetNetworksRequest,
     ) -> RusotoFuture<DescribeClientVpnTargetNetworksResult, DescribeClientVpnTargetNetworksError>;
 
-    /// <p>Describes one or more of your conversion tasks. For more information, see the <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/">VM Import/Export User Guide</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html">VM Import Manifest</a>.</p>
+    /// <p>Describes the specified conversion tasks or all your conversion tasks. For more information, see the <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/">VM Import/Export User Guide</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html">VM Import Manifest</a>.</p>
     fn describe_conversion_tasks(
         &self,
         input: DescribeConversionTasksRequest,
@@ -62977,7 +63938,7 @@ pub trait Ec2 {
         input: DescribeElasticGpusRequest,
     ) -> RusotoFuture<DescribeElasticGpusResult, DescribeElasticGpusError>;
 
-    /// <p>Describes one or more of your export tasks.</p>
+    /// <p>Describes the specified export tasks or all your export tasks.</p>
     fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
@@ -62995,7 +63956,7 @@ pub trait Ec2 {
         input: DescribeFleetInstancesRequest,
     ) -> RusotoFuture<DescribeFleetInstancesResult, DescribeFleetInstancesError>;
 
-    /// <p>Describes one or more of your EC2 Fleets.</p>
+    /// <p>Describes the specified EC2 Fleets or all your EC2 Fleets.</p>
     fn describe_fleets(
         &self,
         input: DescribeFleetsRequest,
@@ -63013,7 +63974,7 @@ pub trait Ec2 {
         input: DescribeFpgaImageAttributeRequest,
     ) -> RusotoFuture<DescribeFpgaImageAttributeResult, DescribeFpgaImageAttributeError>;
 
-    /// <p>Describes one or more available Amazon FPGA Images (AFIs). These include public AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for which you have load permissions.</p>
+    /// <p>Describes the Amazon FPGA Images (AFIs) available to you. These include public AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for which you have load permissions.</p>
     fn describe_fpga_images(
         &self,
         input: DescribeFpgaImagesRequest,
@@ -63031,7 +63992,7 @@ pub trait Ec2 {
         input: DescribeHostReservationsRequest,
     ) -> RusotoFuture<DescribeHostReservationsResult, DescribeHostReservationsError>;
 
-    /// <p>Describes one or more of your Dedicated Hosts.</p> <p>The results describe only the Dedicated Hosts in the Region you're currently using. All listed instances consume capacity on your Dedicated Host. Dedicated Hosts that have recently been released are listed with the state <code>released</code>.</p>
+    /// <p>Describes the specified Dedicated Hosts or all your Dedicated Hosts.</p> <p>The results describe only the Dedicated Hosts in the Region you're currently using. All listed instances consume capacity on your Dedicated Host. Dedicated Hosts that have recently been released are listed with the state <code>released</code>.</p>
     fn describe_hosts(
         &self,
         input: DescribeHostsRequest,
@@ -63046,7 +64007,7 @@ pub trait Ec2 {
         DescribeIamInstanceProfileAssociationsError,
     >;
 
-    /// <p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Describes the ID format settings for your resources on a per-Region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn describe_id_format(
         &self,
         input: DescribeIdFormatRequest,
@@ -63064,7 +64025,7 @@ pub trait Ec2 {
         input: DescribeImageAttributeRequest,
     ) -> RusotoFuture<ImageAttribute, DescribeImageAttributeError>;
 
-    /// <p><p>Describes one or more of the images (AMIs, AKIs, and ARIs) available to you. Images available to you include public images, private images that you own, and private images owned by other AWS accounts but for which you have explicit launch permissions.</p> <note> <p>Deregistered images are included in the returned results for an unspecified interval after deregistration.</p> </note></p>
+    /// <p>Describes the specified images (AMIs, AKIs, and ARIs) available to you or all of the images available to you.</p> <p>The images available to you include public images, private images that you own, and private images owned by other AWS accounts for which you have explicit launch permissions.</p> <p>Recently deregistered images appear in the returned results for a short interval and then return empty results. After all instances that reference a deregistered AMI are terminated, specifying the ID of the image results in an error indicating that the AMI ID cannot be found.</p>
     fn describe_images(
         &self,
         input: DescribeImagesRequest,
@@ -63088,7 +64049,7 @@ pub trait Ec2 {
         input: DescribeInstanceAttributeRequest,
     ) -> RusotoFuture<InstanceAttribute, DescribeInstanceAttributeError>;
 
-    /// <p>Describes the credit option for CPU usage of one or more of your T2 or T3 instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns T2 and T3 instances with the <code>unlimited</code> credit option, as well as instances that were previously configured as T2 or T3 with the <code>unlimited</code> credit option. For example, if you resize a T2 instance, while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2 returns the M4 instance.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a T2 or T3 instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the credit option for CPU usage of the specified T2 or T3 instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns T2 and T3 instances with the <code>unlimited</code> credit option, as well as instances that were previously configured as T2 or T3 with the <code>unlimited</code> credit option. For example, if you resize a T2 instance, while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2 returns the M4 instance.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a T2 or T3 instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_instance_credit_specifications(
         &self,
         input: DescribeInstanceCreditSpecificationsRequest,
@@ -63097,13 +64058,13 @@ pub trait Ec2 {
         DescribeInstanceCreditSpecificationsError,
     >;
 
-    /// <p><p>Describes the status of one or more instances. By default, only running instances are described, unless you specifically indicate to return the status of all instances.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html">Status Checks for Your Instances</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul></p>
+    /// <p><p>Describes the status of the specified instances or all of your instances. By default, only running instances are described, unless you specifically indicate to return the status of all instances.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html">Status Checks for Your Instances</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul></p>
     fn describe_instance_status(
         &self,
         input: DescribeInstanceStatusRequest,
     ) -> RusotoFuture<DescribeInstanceStatusResult, DescribeInstanceStatusError>;
 
-    /// <p>Describes one or more of your instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
+    /// <p>Describes the specified instances or all of your instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
     fn describe_instances(
         &self,
         input: DescribeInstancesRequest,
@@ -63115,7 +64076,7 @@ pub trait Ec2 {
         input: DescribeInternetGatewaysRequest,
     ) -> RusotoFuture<DescribeInternetGatewaysResult, DescribeInternetGatewaysError>;
 
-    /// <p>Describes one or more of your key pairs.</p> <p>For more information about key pairs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified key pairs or all of your key pairs.</p> <p>For more information about key pairs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_key_pairs(
         &self,
         input: DescribeKeyPairsRequest,
@@ -63172,7 +64133,7 @@ pub trait Ec2 {
         input: DescribeNetworkInterfacesRequest,
     ) -> RusotoFuture<DescribeNetworkInterfacesResult, DescribeNetworkInterfacesError>;
 
-    /// <p>Describes one or more of your placement groups. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified placement groups or all of your placement groups. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_placement_groups(
         &self,
         input: DescribePlacementGroupsRequest,
@@ -63196,7 +64157,7 @@ pub trait Ec2 {
         input: DescribePublicIpv4PoolsRequest,
     ) -> RusotoFuture<DescribePublicIpv4PoolsResult, DescribePublicIpv4PoolsError>;
 
-    /// <p>Describes one or more regions that are currently available to you.</p> <p>For a list of the regions supported by Amazon EC2, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region">Regions and Endpoints</a>.</p>
+    /// <p>Describes the Regions that are currently available to you. The API returns a list of all the Regions, including Regions that are disabled for your account. For information about enabling Regions for your account, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-account-payment.html#manage-account-payment-enable-disable-regions">Enabling and Disabling Regions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>For a list of the Regions supported by Amazon EC2, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region"> Regions and Endpoints</a>.</p>
     fn describe_regions(
         &self,
         input: DescribeRegionsRequest,
@@ -63247,19 +64208,19 @@ pub trait Ec2 {
         DescribeScheduledInstanceAvailabilityError,
     >;
 
-    /// <p>Describes one or more of your Scheduled Instances.</p>
+    /// <p>Describes the specified Scheduled Instances or all your Scheduled Instances.</p>
     fn describe_scheduled_instances(
         &self,
         input: DescribeScheduledInstancesRequest,
     ) -> RusotoFuture<DescribeScheduledInstancesResult, DescribeScheduledInstancesError>;
 
-    /// <p>[EC2-VPC only] Describes the VPCs on the other side of a VPC peering connection that are referencing the security groups you've specified in this request.</p>
+    /// <p>[VPC only] Describes the VPCs on the other side of a VPC peering connection that are referencing the security groups you've specified in this request.</p>
     fn describe_security_group_references(
         &self,
         input: DescribeSecurityGroupReferencesRequest,
     ) -> RusotoFuture<DescribeSecurityGroupReferencesResult, DescribeSecurityGroupReferencesError>;
 
-    /// <p>Describes one or more of your security groups.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes the specified security groups or all of your security groups.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_security_groups(
         &self,
         input: DescribeSecurityGroupsRequest,
@@ -63271,7 +64232,7 @@ pub trait Ec2 {
         input: DescribeSnapshotAttributeRequest,
     ) -> RusotoFuture<DescribeSnapshotAttributeResult, DescribeSnapshotAttributeError>;
 
-    /// <p>Describes one or more of the EBS snapshots available to you. Available snapshots include public snapshots available for any AWS account to launch, private snapshots that you own, and private snapshots owned by another AWS account but for which you've been given explicit create volume permissions.</p> <p>The create volume permissions fall into the following categories:</p> <ul> <li> <p> <i>public</i>: The owner of the snapshot granted create volume permissions for the snapshot to the <code>all</code> group. All AWS accounts have create volume permissions for these snapshots.</p> </li> <li> <p> <i>explicit</i>: The owner of the snapshot granted create volume permissions to a specific AWS account.</p> </li> <li> <p> <i>implicit</i>: An AWS account has implicit create volume permissions for all snapshots it owns.</p> </li> </ul> <p>The list of snapshots returned can be modified by specifying snapshot IDs, snapshot owners, or AWS accounts with create volume permissions. If no options are specified, Amazon EC2 returns all snapshots for which you have create volume permissions.</p> <p>If you specify one or more snapshot IDs, only snapshots that have the specified IDs are returned. If you specify an invalid snapshot ID, an error is returned. If you specify a snapshot ID for which you do not have access, it is not included in the returned results.</p> <p>If you specify one or more snapshot owners using the <code>OwnerIds</code> option, only snapshots from the specified owners and for which you have access are returned. The results can include the AWS account IDs of the specified owners, <code>amazon</code> for snapshots owned by Amazon, or <code>self</code> for snapshots that you own.</p> <p>If you specify a list of restorable users, only snapshots with create snapshot permissions for those users are returned. You can specify AWS account IDs (if you own the snapshots), <code>self</code> for snapshots for which you own or have explicit permissions, or <code>all</code> for public snapshots.</p> <p>If you are describing a long list of snapshots, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeSnapshots</code> request to retrieve the remaining results.</p> <p>For more information about EBS snapshots, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified EBS snapshots available to you or all of the EBS snapshots available to you.</p> <p>The snapshots available to you include public snapshots, private snapshots that you own, and private snapshots owned by other AWS accounts for which you have explicit create volume permissions.</p> <p>The create volume permissions fall into the following categories:</p> <ul> <li> <p> <i>public</i>: The owner of the snapshot granted create volume permissions for the snapshot to the <code>all</code> group. All AWS accounts have create volume permissions for these snapshots.</p> </li> <li> <p> <i>explicit</i>: The owner of the snapshot granted create volume permissions to a specific AWS account.</p> </li> <li> <p> <i>implicit</i>: An AWS account has implicit create volume permissions for all snapshots it owns.</p> </li> </ul> <p>The list of snapshots returned can be modified by specifying snapshot IDs, snapshot owners, or AWS accounts with create volume permissions. If no options are specified, Amazon EC2 returns all snapshots for which you have create volume permissions.</p> <p>If you specify one or more snapshot IDs, only snapshots that have the specified IDs are returned. If you specify an invalid snapshot ID, an error is returned. If you specify a snapshot ID for which you do not have access, it is not included in the returned results.</p> <p>If you specify one or more snapshot owners using the <code>OwnerIds</code> option, only snapshots from the specified owners and for which you have access are returned. The results can include the AWS account IDs of the specified owners, <code>amazon</code> for snapshots owned by Amazon, or <code>self</code> for snapshots that you own.</p> <p>If you specify a list of restorable users, only snapshots with create snapshot permissions for those users are returned. You can specify AWS account IDs (if you own the snapshots), <code>self</code> for snapshots for which you own or have explicit permissions, or <code>all</code> for public snapshots.</p> <p>If you are describing a long list of snapshots, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeSnapshots</code> request to retrieve the remaining results.</p> <p>For more information about EBS snapshots, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_snapshots(
         &self,
         input: DescribeSnapshotsRequest,
@@ -63313,7 +64274,7 @@ pub trait Ec2 {
         input: DescribeSpotPriceHistoryRequest,
     ) -> RusotoFuture<DescribeSpotPriceHistoryResult, DescribeSpotPriceHistoryError>;
 
-    /// <p>[EC2-VPC only] Describes the stale security group rules for security groups in a specified VPC. Rules are stale when they reference a deleted security group in a peer VPC, or a security group in a peer VPC for which the VPC peering connection has been deleted.</p>
+    /// <p>[VPC only] Describes the stale security group rules for security groups in a specified VPC. Rules are stale when they reference a deleted security group in a peer VPC, or a security group in a peer VPC for which the VPC peering connection has been deleted.</p>
     fn describe_stale_security_groups(
         &self,
         input: DescribeStaleSecurityGroupsRequest,
@@ -63325,7 +64286,7 @@ pub trait Ec2 {
         input: DescribeSubnetsRequest,
     ) -> RusotoFuture<DescribeSubnetsResult, DescribeSubnetsError>;
 
-    /// <p>Describes one or more of the tags for your EC2 resources.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified tags for your EC2 resources.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -63370,7 +64331,7 @@ pub trait Ec2 {
         input: DescribeVolumeStatusRequest,
     ) -> RusotoFuture<DescribeVolumeStatusResult, DescribeVolumeStatusError>;
 
-    /// <p>Describes the specified EBS volumes.</p> <p>If you are describing a long list of volumes, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeVolumes</code> request to retrieve the remaining results.</p> <p>For more information about EBS volumes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html">Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified EBS volumes or all of your EBS volumes.</p> <p>If you are describing a long list of volumes, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeVolumes</code> request to retrieve the remaining results.</p> <p>For more information about EBS volumes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html">Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_volumes(
         &self,
         input: DescribeVolumesRequest,
@@ -63499,6 +64460,12 @@ pub trait Ec2 {
         input: DetachVpnGatewayRequest,
     ) -> RusotoFuture<(), DetachVpnGatewayError>;
 
+    /// <p>Disables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Call this API if you have enabled default encryption using <a>EnableEbsEncryptionByDefault</a> and want to disable default EBS encryption. Once default EBS encryption is disabled, you can still create an encrypted volume by setting <i>encrypted</i> to <i>true</i> in the API call that creates the volume. </p> <p>Disabling default EBS encryption will not change the encryption status of any of your existing volumes.</p>
+    fn disable_ebs_encryption_by_default(
+        &self,
+        input: DisableEbsEncryptionByDefaultRequest,
+    ) -> RusotoFuture<DisableEbsEncryptionByDefaultResult, DisableEbsEncryptionByDefaultError>;
+
     /// <p>Disables the specified resource attachment from propagating routes to the specified propagation route table.</p>
     fn disable_transit_gateway_route_table_propagation(
         &self,
@@ -63574,6 +64541,12 @@ pub trait Ec2 {
         input: DisassociateVpcCidrBlockRequest,
     ) -> RusotoFuture<DisassociateVpcCidrBlockResult, DisassociateVpcCidrBlockError>;
 
+    /// <p>Enables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Once encryption is enabled with this action, EBS volumes that are created in your account will always be encrypted even if encryption is not specified at launch. This setting overrides the <i>encrypted</i> setting to <i>true</i> in all API calls that create EBS volumes in your account. A volume will be encrypted even if you specify <i>encryption</i> to be <i>false</i> in the API call that creates the volume.</p> <p>If you do not specify a customer master key (CMK) in the API call that creates the EBS volume, then the volume is encrypted to your AWS account's default CMK.</p> <p>You can specify a default CMK of your choice using <a>ModifyEbsDefaultKmsKeyId</a>.</p> <p>Enabling default encryption for EBS volumes has no effect on existing unencrypted volumes in your account. Encrypting the data in these requires manual action. You can either create an encrypted snapshot of an unencrypted volume, or encrypt a copy of an unencrypted snapshot. Any volume restored from an encrypted snapshot is also encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a>.</p> <p>Once EBS encryption by default is enabled, you can no longer launch older-generation instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    fn enable_ebs_encryption_by_default(
+        &self,
+        input: EnableEbsEncryptionByDefaultRequest,
+    ) -> RusotoFuture<EnableEbsEncryptionByDefaultResult, EnableEbsEncryptionByDefaultError>;
+
     /// <p>Enables the specified attachment to propagate routes to the specified propagation route table.</p>
     fn enable_transit_gateway_route_table_propagation(
         &self,
@@ -63642,6 +64615,18 @@ pub trait Ec2 {
         &self,
         input: GetConsoleScreenshotRequest,
     ) -> RusotoFuture<GetConsoleScreenshotResult, GetConsoleScreenshotError>;
+
+    /// <p>Describes the default customer master key (CMK) that your account uses to encrypt EBS volumes if you don’t specify a CMK in the API call. You can change this default using <a>ModifyEbsDefaultKmsKeyId</a>.</p>
+    fn get_ebs_default_kms_key_id(
+        &self,
+        input: GetEbsDefaultKmsKeyIdRequest,
+    ) -> RusotoFuture<GetEbsDefaultKmsKeyIdResult, GetEbsDefaultKmsKeyIdError>;
+
+    /// <p>Describes whether default EBS encryption is enabled for your account in the current region.</p>
+    fn get_ebs_encryption_by_default(
+        &self,
+        input: GetEbsEncryptionByDefaultRequest,
+    ) -> RusotoFuture<GetEbsEncryptionByDefaultResult, GetEbsEncryptionByDefaultError>;
 
     /// <p>Preview a reservation purchase with configurations that match those of your Dedicated Host. You must have active Dedicated Hosts in your account before you purchase a reservation.</p> <p>This is a preview of the <a>PurchaseHostReservation</a> action and does not result in the offering being purchased.</p>
     fn get_host_reservation_purchase_preview(
@@ -63745,6 +64730,12 @@ pub trait Ec2 {
         input: ModifyClientVpnEndpointRequest,
     ) -> RusotoFuture<ModifyClientVpnEndpointResult, ModifyClientVpnEndpointError>;
 
+    /// <p>Changes the default customer master key (CMK) that your account uses to encrypt EBS volumes if you don’t specify a CMK in the API call.</p> <p>Your account has an AWS-managed default CMK that is used for encrypting an EBS volume when no CMK is specified in the API call that creates the volume. By calling this API, you can specify a customer-managed CMK to use in place of the AWS-managed default CMK.</p> <p>Note: Deleting or disabling the custom CMK that you have specified to act as your default CMK will result in instance-launch failures.</p>
+    fn modify_ebs_default_kms_key_id(
+        &self,
+        input: ModifyEbsDefaultKmsKeyIdRequest,
+    ) -> RusotoFuture<ModifyEbsDefaultKmsKeyIdResult, ModifyEbsDefaultKmsKeyIdError>;
+
     /// <p>Modifies the specified EC2 Fleet.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p>
     fn modify_fleet(
         &self,
@@ -63763,7 +64754,7 @@ pub trait Ec2 {
         input: ModifyHostsRequest,
     ) -> RusotoFuture<ModifyHostsResult, ModifyHostsError>;
 
-    /// <p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created.</p> <p>This request can only be used to modify longer ID settings for resource types that are within the opt-in period. Resources currently in their opt-in period include: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Modifies the ID format for the specified resource on a per-Region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created.</p> <p>This request can only be used to modify longer ID settings for resource types that are within the opt-in period. Resources currently in their opt-in period include: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn modify_id_format(
         &self,
         input: ModifyIdFormatRequest,
@@ -63802,6 +64793,12 @@ pub trait Ec2 {
         input: ModifyInstanceCreditSpecificationRequest,
     ) -> RusotoFuture<ModifyInstanceCreditSpecificationResult, ModifyInstanceCreditSpecificationError>;
 
+    /// <p>Modifies the start time for a scheduled Amazon EC2 instance event.</p>
+    fn modify_instance_event_start_time(
+        &self,
+        input: ModifyInstanceEventStartTimeRequest,
+    ) -> RusotoFuture<ModifyInstanceEventStartTimeResult, ModifyInstanceEventStartTimeError>;
+
     /// <p>Modifies the placement attributes for a specified instance. You can do the following:</p> <ul> <li> <p>Modify the affinity between an instance and a <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Host</a>. When affinity is set to <code>host</code> and the instance is not associated with a specific Dedicated Host, the next time the instance is launched, it is automatically associated with the host on which it lands. If the instance is restarted or rebooted, this relationship persists.</p> </li> <li> <p>Change the Dedicated Host with which an instance is associated.</p> </li> <li> <p>Change the instance tenancy of an instance from <code>host</code> to <code>dedicated</code>, or from <code>dedicated</code> to <code>host</code>.</p> </li> <li> <p>Move an instance to or from a <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">placement group</a>.</p> </li> </ul> <p>At least one attribute for affinity, host ID, tenancy, or placement group name must be specified in the request. Affinity and tenancy can be modified in the same request.</p> <p>To modify the host ID, tenancy, placement group, or partition for an instance, the instance must be in the <code>stopped</code> state.</p>
     fn modify_instance_placement(
         &self,
@@ -63814,7 +64811,7 @@ pub trait Ec2 {
         input: ModifyLaunchTemplateRequest,
     ) -> RusotoFuture<ModifyLaunchTemplateResult, ModifyLaunchTemplateError>;
 
-    /// <p>Modifies the specified network interface attribute. You can specify only one attribute at a time.</p>
+    /// <p>Modifies the specified network interface attribute. You can specify only one attribute at a time. You can use this action to attach and detach security groups from an existing EC2 instance.</p>
     fn modify_network_interface_attribute(
         &self,
         input: ModifyNetworkInterfaceAttributeRequest,
@@ -63832,7 +64829,7 @@ pub trait Ec2 {
         input: ModifySnapshotAttributeRequest,
     ) -> RusotoFuture<(), ModifySnapshotAttributeError>;
 
-    /// <p>Modifies the specified Spot Fleet request.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
+    /// <p>Modifies the specified Spot Fleet request.</p> <p>You can only modify a Spot Fleet request of type <code>maintain</code>.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_spot_fleet_request(
         &self,
         input: ModifySpotFleetRequestRequest,
@@ -63901,7 +64898,7 @@ pub trait Ec2 {
         ModifyVpcEndpointServicePermissionsError,
     >;
 
-    /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable the ability to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in the same AWS account, you can enable DNS resolution for queries from the local VPC. This ensures that queries from the local VPC resolve to private IP addresses in the peer VPC. This option is not available if the peered VPCs are in different AWS accounts or different regions. For peered VPCs in different AWS accounts, each AWS account owner must initiate a separate request to modify the peering connection options. For inter-region peering connections, you must use the region for the requester VPC to modify the requester VPC peering options and the region for the accepter VPC to modify the accepter VPC peering options. To verify which VPCs are the accepter and the requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
+    /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable the ability to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in the same AWS account, you can enable DNS resolution for queries from the local VPC. This ensures that queries from the local VPC resolve to private IP addresses in the peer VPC. This option is not available if the peered VPCs are in different AWS accounts or different Regions. For peered VPCs in different AWS accounts, each AWS account owner must initiate a separate request to modify the peering connection options. For inter-region peering connections, you must use the Region for the requester VPC to modify the requester VPC peering options and the Region for the accepter VPC to modify the accepter VPC peering options. To verify which VPCs are the accepter and the requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
     fn modify_vpc_peering_connection_options(
         &self,
         input: ModifyVpcPeeringConnectionOptionsRequest,
@@ -63912,6 +64909,12 @@ pub trait Ec2 {
         &self,
         input: ModifyVpcTenancyRequest,
     ) -> RusotoFuture<ModifyVpcTenancyResult, ModifyVpcTenancyError>;
+
+    /// <p>Modifies the target gateway of a AWS Site-to-Site VPN connection. The following migration options are available:</p> <ul> <li> <p>An existing virtual private gateway to a new virtual private gateway</p> </li> <li> <p>An existing virtual private gateway to a transit gateway</p> </li> <li> <p>An existing transit gateway to a new transit gateway</p> </li> <li> <p>An existing transit gateway to a virtual private gateway</p> </li> </ul> <p>Before you perform the migration to the new gateway, you must configure the new gateway. Use <a>CreateVpnGateway</a> to create a virtual private gateway, or <a>CreateTransitGateway</a> to create a transit gateway.</p> <p>This step is required when you migrate from a virtual private gateway with static routes to a transit gateway. </p> <p>You must delete the static routes before you migrate to the new gateway.</p> <p>Keep a copy of the static route before you delete it. You will need to add back these routes to the transit gateway after the VPN connection migration is complete.</p> <p>After you migrate to the new gateway, you might need to modify your VPC route table. Use <a>CreateRoute</a> and <a>DeleteRoute</a> to make the changes described in <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/modify-vpn-target.html#step-update-routing">VPN Gateway Target Modification Required VPC Route Table Updates</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <p> When the new gateway is a transit gateway, modify the transit gateway route table to allow traffic between the VPC and the AWS Site-to-Site VPN connection. Use <a>CreateTransitGatewayRoute</a> to add the routes.</p> <p> If you deleted VPN static routes, you must add the static routes to the transit gateway route table.</p> <p>After you perform this operation, the AWS VPN endpoint's IP addresses on the AWS side and the tunnel options remain intact. Your s2slong; connection will be temporarily unavailable for approximately 10 minutes while we provision the new endpoints </p>
+    fn modify_vpn_connection(
+        &self,
+        input: ModifyVpnConnectionRequest,
+    ) -> RusotoFuture<ModifyVpnConnectionResult, ModifyVpnConnectionError>;
 
     /// <p>Enables detailed monitoring for a running instance. Otherwise, basic monitoring is enabled. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html">Monitoring Your Instances and Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>To disable detailed monitoring, see .</p>
     fn monitor_instances(
@@ -63943,13 +64946,13 @@ pub trait Ec2 {
         input: PurchaseReservedInstancesOfferingRequest,
     ) -> RusotoFuture<PurchaseReservedInstancesOfferingResult, PurchaseReservedInstancesOfferingError>;
 
-    /// <p>Purchases one or more Scheduled Instances with the specified schedule.</p> <p>Scheduled Instances enable you to purchase Amazon EC2 compute capacity by the hour for a one-year term. Before you can purchase a Scheduled Instance, you must call <a>DescribeScheduledInstanceAvailability</a> to check for available schedules and obtain a purchase token. After you purchase a Scheduled Instance, you must call <a>RunScheduledInstances</a> during each scheduled time period.</p> <p>After you purchase a Scheduled Instance, you can't cancel, modify, or resell your purchase.</p>
+    /// <p>Purchases the Scheduled Instances with the specified schedule.</p> <p>Scheduled Instances enable you to purchase Amazon EC2 compute capacity by the hour for a one-year term. Before you can purchase a Scheduled Instance, you must call <a>DescribeScheduledInstanceAvailability</a> to check for available schedules and obtain a purchase token. After you purchase a Scheduled Instance, you must call <a>RunScheduledInstances</a> during each scheduled time period.</p> <p>After you purchase a Scheduled Instance, you can't cancel, modify, or resell your purchase.</p>
     fn purchase_scheduled_instances(
         &self,
         input: PurchaseScheduledInstancesRequest,
     ) -> RusotoFuture<PurchaseScheduledInstancesResult, PurchaseScheduledInstancesError>;
 
-    /// <p>Requests a reboot of one or more instances. This operation is asynchronous; it only queues a request to reboot the specified instances. The operation succeeds if the instances are valid and belong to you. Requests to reboot terminated instances are ignored.</p> <p>If an instance does not cleanly shut down within four minutes, Amazon EC2 performs a hard reboot.</p> <p>For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html">Getting Console Output and Rebooting Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Requests a reboot of the specified instances. This operation is asynchronous; it only queues a request to reboot the specified instances. The operation succeeds if the instances are valid and belong to you. Requests to reboot terminated instances are ignored.</p> <p>If an instance does not cleanly shut down within four minutes, Amazon EC2 performs a hard reboot.</p> <p>For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html">Getting Console Output and Rebooting Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn reboot_instances(
         &self,
         input: RebootInstancesRequest,
@@ -64045,6 +65048,12 @@ pub trait Ec2 {
         input: RequestSpotInstancesRequest,
     ) -> RusotoFuture<RequestSpotInstancesResult, RequestSpotInstancesError>;
 
+    /// <p>Resets the account's default customer master key (CMK) to the account's AWS-managed default CMK. This default CMK is used to encrypt EBS volumes when you have enabled EBS encryption by default without specifying a CMK in the API call. If you have not enabled encryption by default, then this CMK is used when you set the <code>Encrypted</code> parameter to true without specifying a custom CMK in the API call.</p> <p>Call this API if you have modified the default CMK that is used for encrypting your EBS volume using <a>ModifyEbsDefaultKmsKeyId</a> and you want to reset it to the AWS-managed default CMK. After resetting, you can continue to provide a CMK of your choice in the API call that creates the volume. However, if no CMK is specified, your account will encrypt the volume to the AWS-managed default CMK.</p>
+    fn reset_ebs_default_kms_key_id(
+        &self,
+        input: ResetEbsDefaultKmsKeyIdRequest,
+    ) -> RusotoFuture<ResetEbsDefaultKmsKeyIdResult, ResetEbsDefaultKmsKeyIdError>;
+
     /// <p>Resets the specified attribute of the specified Amazon FPGA Image (AFI) to its default value. You can only reset the load permission attribute.</p>
     fn reset_fpga_image_attribute(
         &self,
@@ -64087,13 +65096,13 @@ pub trait Ec2 {
         input: RevokeClientVpnIngressRequest,
     ) -> RusotoFuture<RevokeClientVpnIngressResult, RevokeClientVpnIngressError>;
 
-    /// <p>[EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
+    /// <p>[VPC only] Removes the specified egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
     fn revoke_security_group_egress(
         &self,
         input: RevokeSecurityGroupEgressRequest,
     ) -> RusotoFuture<(), RevokeSecurityGroupEgressError>;
 
-    /// <p>Removes one or more ingress rules from a security group. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <note> <p>[EC2-Classic security groups only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
+    /// <p>Removes the specified ingress rules from a security group. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <note> <p>[EC2-Classic only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
     fn revoke_security_group_ingress(
         &self,
         input: RevokeSecurityGroupIngressRequest,
@@ -64135,7 +65144,7 @@ pub trait Ec2 {
         input: TerminateClientVpnConnectionsRequest,
     ) -> RusotoFuture<TerminateClientVpnConnectionsResult, TerminateClientVpnConnectionsError>;
 
-    /// <p>Shuts down one or more instances. This operation is idempotent; if you terminate an instance more than once, each call succeeds. </p> <p>If you specify multiple instances and the request fails (for example, because of a single incorrect instance ID), none of the instances are terminated.</p> <p>Terminated instances remain visible after termination (for approximately one hour).</p> <p>By default, Amazon EC2 deletes all EBS volumes that were attached when the instance launched. Volumes attached after instance launch continue running.</p> <p>You can stop, start, and terminate EBS-backed instances. You can only terminate instance store-backed instances. What happens to an instance differs if you stop it or terminate it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, any attached EBS volumes with the <code>DeleteOnTermination</code> block device mapping parameter set to <code>true</code> are automatically deleted. For more information about the differences between stopping and terminating instances, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesShuttingDown.html">Troubleshooting Terminating Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Shuts down the specified instances. This operation is idempotent; if you terminate an instance more than once, each call succeeds. </p> <p>If you specify multiple instances and the request fails (for example, because of a single incorrect instance ID), none of the instances are terminated.</p> <p>Terminated instances remain visible after termination (for approximately one hour).</p> <p>By default, Amazon EC2 deletes all EBS volumes that were attached when the instance launched. Volumes attached after instance launch continue running.</p> <p>You can stop, start, and terminate EBS-backed instances. You can only terminate instance store-backed instances. What happens to an instance differs if you stop it or terminate it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, any attached EBS volumes with the <code>DeleteOnTermination</code> block device mapping parameter set to <code>true</code> are automatically deleted. For more information about the differences between stopping and terminating instances, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesShuttingDown.html">Troubleshooting Terminating Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn terminate_instances(
         &self,
         input: TerminateInstancesRequest,
@@ -64159,7 +65168,7 @@ pub trait Ec2 {
         input: UnmonitorInstancesRequest,
     ) -> RusotoFuture<UnmonitorInstancesResult, UnmonitorInstancesError>;
 
-    /// <p>[EC2-VPC only] Updates the description of an egress (outbound) security group rule. You can replace an existing description, or add a description to a rule that did not have one previously.</p> <p>You specify the description as part of the IP permissions structure. You can remove a description for a security group rule by omitting the description parameter in the request.</p>
+    /// <p>[VPC only] Updates the description of an egress (outbound) security group rule. You can replace an existing description, or add a description to a rule that did not have one previously.</p> <p>You specify the description as part of the IP permissions structure. You can remove a description for a security group rule by omitting the description parameter in the request.</p>
     fn update_security_group_rule_descriptions_egress(
         &self,
         input: UpdateSecurityGroupRuleDescriptionsEgressRequest,
@@ -64363,7 +65372,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p> <p>For an inter-region VPC peering connection request, you must accept the VPC peering connection in the region of the accepter VPC.</p>
+    /// <p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p> <p>For an inter-Region VPC peering connection request, you must accept the VPC peering connection in the Region of the accepter VPC.</p>
     fn accept_vpc_peering_connection(
         &self,
         input: AcceptVpcPeeringConnectionRequest,
@@ -64456,7 +65465,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Allocates an Elastic IP address to your AWS account. After you allocate the Elastic IP address you can associate it with an instance or network interface. After you release an Elastic IP address, it is released to the IP address pool and can be allocated to a different AWS account.</p> <p>You can allocate an Elastic IP address from an address pool owned by AWS or from an address pool created from a public IPv4 address range that you have brought to AWS for use with your AWS resources using bring your own IP addresses (BYOIP). For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-VPC] If you release an Elastic IP address, you might be able to recover it. You cannot recover an Elastic IP address that you released after it is allocated to another AWS account. You cannot recover an Elastic IP address for EC2-Classic. To attempt to recover an Elastic IP address that you released, specify it in this operation.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. By default, you can allocate 5 Elastic IP addresses for EC2-Classic per region and 5 Elastic IP addresses for EC2-VPC per region.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Allocates an Elastic IP address to your AWS account. After you allocate the Elastic IP address you can associate it with an instance or network interface. After you release an Elastic IP address, it is released to the IP address pool and can be allocated to a different AWS account.</p> <p>You can allocate an Elastic IP address from an address pool owned by AWS or from an address pool created from a public IPv4 address range that you have brought to AWS for use with your AWS resources using bring your own IP addresses (BYOIP). For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-byoip.html">Bring Your Own IP Addresses (BYOIP)</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>[EC2-VPC] If you release an Elastic IP address, you might be able to recover it. You cannot recover an Elastic IP address that you released after it is allocated to another AWS account. You cannot recover an Elastic IP address for EC2-Classic. To attempt to recover an Elastic IP address that you released, specify it in this operation.</p> <p>An Elastic IP address is for use either in the EC2-Classic platform or in a VPC. By default, you can allocate 5 Elastic IP addresses for EC2-Classic per Region and 5 Elastic IP addresses for EC2-VPC per Region.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn allocate_address(
         &self,
         input: AllocateAddressRequest,
@@ -65284,7 +66293,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>[EC2-VPC only] Adds one or more egress rules to a security group for use with a VPC. Specifically, this action permits instances to send traffic to one or more destination IPv4 or IPv6 CIDR address ranges, or to one or more destination security groups for the same VPC. This action doesn't apply to security groups for use in EC2-Classic. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. For more information about security group limits, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>Each rule consists of the protocol (for example, TCP), plus either a CIDR range or a source group. For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes. You can optionally specify a description for the rule.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p>
+    /// <p>[VPC only] Adds the specified egress rules to a security group for use with a VPC.</p> <p>An outbound rule permits instances to send traffic to the specified destination IPv4 or IPv6 CIDR address ranges, or to the specified destination security groups for the same VPC.</p> <p>You specify a protocol for each rule (for example, TCP). For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn authorize_security_group_egress(
         &self,
         input: AuthorizeSecurityGroupEgressRequest,
@@ -65309,7 +66318,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Adds one or more ingress rules to a security group.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>[EC2-Classic] This action gives one or more IPv4 CIDR address ranges permission to access a security group in your account, or gives one or more security groups (called the <i>source groups</i>) permission to access a security group for your account. A source group can be for your own AWS account, or another. You can have up to 100 rules per group.</p> <p>[EC2-VPC] This action gives one or more IPv4 or IPv6 CIDR address ranges permission to access a security group in your VPC, or gives one or more other security groups (called the <i>source groups</i>) permission to access a security group for your VPC. The security groups must all be for the same VPC or a peer VPC in a VPC peering connection. For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>You can optionally specify a description for the security group rule.</p>
+    /// <p>Adds the specified ingress rules to a security group.</p> <p>An inbound rule permits instances to receive traffic from the specified destination IPv4 or IPv6 CIDR address ranges, or from the specified destination security groups.</p> <p>You specify a protocol for each rule (for example, TCP). For TCP and UDP, you must also specify the destination port or port range. For ICMP/ICMPv6, you must also specify the ICMP/ICMPv6 type and code. You can use -1 to mean all types or all codes.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn authorize_security_group_ingress(
         &self,
         input: AuthorizeSecurityGroupIngressRequest,
@@ -65759,7 +66768,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Copies the specified Amazon FPGA Image (AFI) to the current region.</p>
+    /// <p>Copies the specified Amazon FPGA Image (AFI) to the current Region.</p>
     fn copy_fpga_image(
         &self,
         input: CopyFpgaImageRequest,
@@ -65805,7 +66814,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>Copies of encrypted backing snapshots for the AMI are encrypted. Copies of unencrypted backing snapshots remain unencrypted, unless you set <code>Encrypted</code> during the copy operation. You cannot create an unencrypted copy of an encrypted backing snapshot.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Initiates the copy of an AMI from the specified source Region to the current Region. You specify the destination Region by using its endpoint when making the request.</p> <p>Copies of encrypted backing snapshots for the AMI are encrypted. Copies of unencrypted backing snapshots remain unencrypted, unless you set <code>Encrypted</code> during the copy operation. You cannot create an unencrypted copy of an encrypted backing snapshot.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn copy_image(&self, input: CopyImageRequest) -> RusotoFuture<CopyImageResult, CopyImageError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -65848,7 +66857,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same region or from one region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter.</p> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> <p>Snapshots created by copying another snapshot have an arbitrary volume ID that should not be used for any purpose.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Copies a point-in-time snapshot of an EBS volume and stores it in Amazon S3. You can copy the snapshot within the same Region or from one Region to another. You can use the snapshot to create EBS volumes or Amazon Machine Images (AMIs). The snapshot is copied to the regional endpoint that you send the HTTP request to.</p> <p>Copies of encrypted EBS snapshots remain encrypted. Copies of unencrypted snapshots remain unencrypted, unless the <code>Encrypted</code> flag is specified during the snapshot copy operation. By default, encrypted snapshot copies use the default AWS Key Management Service (AWS KMS) customer master key (CMK); however, you can specify a non-default CMK with the <code>KmsKeyId</code> parameter.</p> <p>To copy an encrypted snapshot that has been shared from another account, you must have permissions for the CMK used to encrypt the snapshot.</p> <p>Snapshots created by copying another snapshot have an arbitrary volume ID that should not be used for any purpose.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html">Copying an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn copy_snapshot(
         &self,
         input: CopySnapshotRequest,
@@ -66031,7 +67040,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
+    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> Region, and 9059, which is reserved in the <code>eu-west-1</code> Region.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
     fn create_customer_gateway(
         &self,
         input: CreateCustomerGatewayRequest,
@@ -66171,7 +67180,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. ITo have your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a set of DHCP options for your VPC. After creating the set, you must associate it with the VPC, causing all existing and new instances that you launch in the VPC to use this set of DHCP options. The following are the individual DHCP options you can specify. For more information about the options, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> <ul> <li> <p> <code>domain-name-servers</code> - The IP addresses of up to four domain name servers, or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS. If specifying more than one domain name server, specify the IP addresses in a single parameter, separated by commas. ITo have your instance to receive a custom DNS hostname as specified in <code>domain-name</code>, you must set <code>domain-name-servers</code> to a custom DNS server.</p> </li> <li> <p> <code>domain-name</code> - If you're using AmazonProvidedDNS in <code>us-east-1</code>, specify <code>ec2.internal</code>. If you're using AmazonProvidedDNS in another Region, specify <code>region.compute.internal</code> (for example, <code>ap-northeast-1.compute.internal</code>). Otherwise, specify a domain name (for example, <code>MyCompany.com</code>). This value is used to complete unqualified DNS hostnames. <b>Important</b>: Some Linux operating systems accept multiple domain names separated by spaces. However, Windows and other Linux operating systems treat the value as a single domain, which results in unexpected behavior. If your DHCP options set is associated with a VPC that has instances with multiple operating systems, specify only one domain name.</p> </li> <li> <p> <code>ntp-servers</code> - The IP addresses of up to four Network Time Protocol (NTP) servers.</p> </li> <li> <p> <code>netbios-name-servers</code> - The IP addresses of up to four NetBIOS name servers.</p> </li> <li> <p> <code>netbios-node-type</code> - The NetBIOS node type (1, 2, 4, or 8). We recommend that you specify 2 (broadcast and multicast are not currently supported). For more information about these node types, see <a href="http://www.ietf.org/rfc/rfc2132.txt">RFC 2132</a>.</p> </li> </ul> <p>Your VPC automatically starts out with a set of DHCP options that includes only a DNS server that we provide (AmazonProvidedDNS). If you create a set of options, and if your VPC has an internet gateway, make sure to set the <code>domain-name-servers</code> option either to <code>AmazonProvidedDNS</code> or to a domain name server of your choice. For more information, see <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_dhcp_options(
         &self,
         input: CreateDhcpOptionsRequest,
@@ -66361,7 +67370,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates an Amazon FPGA Image (AFI) from the specified design checkpoint (DCP).</p> <p>The create operation is asynchronous. To verify that the AFI is ready for use, check the output logs.</p> <p>An AFI contains the FPGA bitstream that is ready to download to an FPGA. You can securely deploy an AFI on one or more FPGA-accelerated instances. For more information, see the <a href="https://github.com/aws/aws-fpga/">AWS FPGA Hardware Development Kit</a>.</p>
+    /// <p>Creates an Amazon FPGA Image (AFI) from the specified design checkpoint (DCP).</p> <p>The create operation is asynchronous. To verify that the AFI is ready for use, check the output logs.</p> <p>An AFI contains the FPGA bitstream that is ready to download to an FPGA. You can securely deploy an AFI on multiple FPGA-accelerated instances. For more information, see the <a href="https://github.com/aws/aws-fpga/">AWS FPGA Hardware Development Kit</a>.</p>
     fn create_fpga_image(
         &self,
         input: CreateFpgaImageRequest,
@@ -66545,7 +67554,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#1 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per region.</p> <p>The key pair returned to you is available only in the region in which you create it. If you prefer, you can create your own key pair using a third-party tool and upload it to any region using <a>ImportKeyPair</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#1 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per Region.</p> <p>The key pair returned to you is available only in the Region in which you create it. If you prefer, you can create your own key pair using a third-party tool and upload it to any Region using <a>ImportKeyPair</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_key_pair(
         &self,
         input: CreateKeyPairRequest,
@@ -66923,7 +67932,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <note> <p>Only Standard Reserved Instances with a capacity reservation can be sold in the Reserved Instance Marketplace. Convertible Reserved Instances and Standard Reserved Instances with a regional benefit cannot be sold.</p> </note> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a listing for Amazon EC2 Standard Reserved Instances to be sold in the Reserved Instance Marketplace. You can submit one Standard Reserved Instance listing at a time. To get a list of your Standard Reserved Instances, you can use the <a>DescribeReservedInstances</a> operation.</p> <note> <p>Only Standard Reserved Instances can be sold in the Reserved Instance Marketplace. Convertible Reserved Instances cannot be sold.</p> </note> <p>The Reserved Instance Marketplace matches sellers who want to resell Standard Reserved Instance capacity that they no longer need with buyers who want to purchase additional capacity. Reserved Instances bought and sold through the Reserved Instance Marketplace work like any other Reserved Instances.</p> <p>To sell your Standard Reserved Instances, you must first register as a seller in the Reserved Instance Marketplace. After completing the registration process, you can create a Reserved Instance Marketplace listing of some or all of your Standard Reserved Instances, and specify the upfront price to receive for them. Your Standard Reserved Instance listings then become available for purchase. To view the details of your Standard Reserved Instance listing, you can use the <a>DescribeReservedInstancesListings</a> operation.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html">Reserved Instance Marketplace</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_reserved_instances_listing(
         &self,
         input: CreateReservedInstancesListingRequest,
@@ -67063,7 +68072,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a security group.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>EC2-Classic: You can have up to 500 security groups.</p> <p>EC2-VPC: You can create up to 500 security groups per VPC.</p> </important> <p>When you create a security group, you specify a friendly name of your choice. You can have a security group for use in EC2-Classic with the same name as a security group for use in a VPC. However, you can't have two security groups for use in EC2-Classic with the same name or two security groups for use in a VPC with the same name.</p> <p>You have a default security group for use in EC2-Classic and a default security group for use in your VPC. If you don't specify a security group when you launch an instance, the instance is launched into the appropriate default security group. A default security group includes a default rule that grants instances unrestricted network access to each other.</p> <p>You can add or remove rules from your security groups using <a>AuthorizeSecurityGroupIngress</a>, <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupIngress</a>, and <a>RevokeSecurityGroupEgress</a>.</p>
+    /// <p>Creates a security group.</p> <p>A security group acts as a virtual firewall for your instance to control inbound and outbound traffic. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>When you create a security group, you specify a friendly name of your choice. You can have a security group for use in EC2-Classic with the same name as a security group for use in a VPC. However, you can't have two security groups for use in EC2-Classic with the same name or two security groups for use in a VPC with the same name.</p> <p>You have a default security group for use in EC2-Classic and a default security group for use in your VPC. If you don't specify a security group when you launch an instance, the instance is launched into the appropriate default security group. A default security group includes a default rule that grants instances unrestricted network access to each other.</p> <p>You can add or remove rules from your security groups using <a>AuthorizeSecurityGroupIngress</a>, <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupIngress</a>, and <a>RevokeSecurityGroupEgress</a>.</p> <p>For more information about VPC security group limits, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html">Amazon VPC Limits</a>.</p>
     fn create_security_group(
         &self,
         input: CreateSecurityGroupRequest,
@@ -67247,7 +68256,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Adds or overwrites one or more tags for the specified Amazon EC2 resource or resources. Each resource can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique per resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about creating IAM policies that control users' access to resources based on tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-iam-actions-resources.html">Supported Resource-Level Permissions for Amazon EC2 API Actions</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Adds or overwrites the specified tags for the specified Amazon EC2 resource or resources. Each resource can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique per resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about creating IAM policies that control users' access to resources based on tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-iam-actions-resources.html">Supported Resource-Level Permissions for Amazon EC2 API Actions</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -67741,7 +68750,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The only supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
+    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The supported connection types are <code>ipsec.1</code> and <code>ipsec.2</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/VPC_VPN.html">AWS Site-to-Site VPN</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p>
     fn create_vpn_connection(
         &self,
         input: CreateVpnConnectionRequest,
@@ -69354,7 +70363,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your Elastic IP addresses.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified Elastic IP addresses or all of your Elastic IP addresses.</p> <p>An Elastic IP address is for use in either the EC2-Classic platform or in a VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html">Elastic IP Addresses</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_addresses(
         &self,
         input: DescribeAddressesRequest,
@@ -69402,7 +70411,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the longer ID format settings for all resource types in a specific region. This request is useful for performing a quick audit to determine whether a specific region is fully opted in for longer IDs (17-character IDs).</p> <p>This request only returns information about resource types that support longer IDs.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p>
+    /// <p>Describes the longer ID format settings for all resource types in a specific Region. This request is useful for performing a quick audit to determine whether a specific Region is fully opted in for longer IDs (17-character IDs).</p> <p>This request only returns information about resource types that support longer IDs.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p>
     fn describe_aggregate_id_format(
         &self,
         input: DescribeAggregateIdFormatRequest,
@@ -69447,7 +70456,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of the Availability Zones that are available to you. The results include zones only for the region you're currently using. If there is an event impacting an Availability Zone, you can use this request to view the state and any provided message for that Availability Zone.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html">Regions and Availability Zones</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the Availability Zones that are available to you. The results include zones only for the Region you're currently using. If there is an event impacting an Availability Zone, you can use this request to view the state and any provided message for that Availability Zone.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html">Regions and Availability Zones</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_availability_zones(
         &self,
         input: DescribeAvailabilityZonesRequest,
@@ -69492,7 +70501,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p><p>Describes one or more of your bundling tasks.</p> <note> <p>Completed bundle tasks are listed for only a limited time. If your bundle task is no longer in the list, you can still register an AMI from it. Just use <code>RegisterImage</code> with the Amazon S3 bucket name and image manifest name you provided to the bundle task.</p> </note></p>
+    /// <p><p>Describes the specified bundle tasks or all of your bundle tasks.</p> <note> <p>Completed bundle tasks are listed for only a limited time. If your bundle task is no longer in the list, you can still register an AMI from it. Just use <code>RegisterImage</code> with the Amazon S3 bucket name and image manifest name you provided to the bundle task.</p> </note></p>
     fn describe_bundle_tasks(
         &self,
         input: DescribeBundleTasksRequest,
@@ -69910,7 +70919,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your conversion tasks. For more information, see the <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/">VM Import/Export User Guide</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html">VM Import Manifest</a>.</p>
+    /// <p>Describes the specified conversion tasks or all your conversion tasks. For more information, see the <a href="https://docs.aws.amazon.com/vm-import/latest/userguide/">VM Import/Export User Guide</a>.</p> <p>For information about the import manifest referenced by this API action, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/manifest.html">VM Import Manifest</a>.</p>
     fn describe_conversion_tasks(
         &self,
         input: DescribeConversionTasksRequest,
@@ -70144,7 +71153,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your export tasks.</p>
+    /// <p>Describes the specified export tasks or all your export tasks.</p>
     fn describe_export_tasks(
         &self,
         input: DescribeExportTasksRequest,
@@ -70283,7 +71292,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your EC2 Fleets.</p>
+    /// <p>Describes the specified EC2 Fleets or all your EC2 Fleets.</p>
     fn describe_fleets(
         &self,
         input: DescribeFleetsRequest,
@@ -70424,7 +71433,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more available Amazon FPGA Images (AFIs). These include public AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for which you have load permissions.</p>
+    /// <p>Describes the Amazon FPGA Images (AFIs) available to you. These include public AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for which you have load permissions.</p>
     fn describe_fpga_images(
         &self,
         input: DescribeFpgaImagesRequest,
@@ -70565,7 +71574,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your Dedicated Hosts.</p> <p>The results describe only the Dedicated Hosts in the Region you're currently using. All listed instances consume capacity on your Dedicated Host. Dedicated Hosts that have recently been released are listed with the state <code>released</code>.</p>
+    /// <p>Describes the specified Dedicated Hosts or all your Dedicated Hosts.</p> <p>The results describe only the Dedicated Hosts in the Region you're currently using. All listed instances consume capacity on your Dedicated Host. Dedicated Hosts that have recently been released are listed with the state <code>released</code>.</p>
     fn describe_hosts(
         &self,
         input: DescribeHostsRequest,
@@ -70661,7 +71670,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the ID format settings for your resources on a per-region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Describes the ID format settings for your resources on a per-Region basis, for example, to view which resource types are enabled for longer IDs. This request only returns information about resource types whose ID formats can be modified; it does not return information about other resource types.</p> <p>The following resource types support longer IDs: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>instance</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>reservation</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>snapshot</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>volume</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>. </p> <p>These settings apply to the IAM user who makes the request; they do not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user, unless they explicitly override the settings by running the <a>ModifyIdFormat</a> command. Resources created with longer IDs are visible to all IAM users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn describe_id_format(
         &self,
         input: DescribeIdFormatRequest,
@@ -70796,7 +71805,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p><p>Describes one or more of the images (AMIs, AKIs, and ARIs) available to you. Images available to you include public images, private images that you own, and private images owned by other AWS accounts but for which you have explicit launch permissions.</p> <note> <p>Deregistered images are included in the returned results for an unspecified interval after deregistration.</p> </note></p>
+    /// <p>Describes the specified images (AMIs, AKIs, and ARIs) available to you or all of the images available to you.</p> <p>The images available to you include public images, private images that you own, and private images owned by other AWS accounts for which you have explicit launch permissions.</p> <p>Recently deregistered images appear in the returned results for a short interval and then return empty results. After all instances that reference a deregistered AMI are terminated, specifying the ID of the image results in an error indicating that the AMI ID cannot be found.</p>
     fn describe_images(
         &self,
         input: DescribeImagesRequest,
@@ -70977,7 +71986,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the credit option for CPU usage of one or more of your T2 or T3 instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns T2 and T3 instances with the <code>unlimited</code> credit option, as well as instances that were previously configured as T2 or T3 with the <code>unlimited</code> credit option. For example, if you resize a T2 instance, while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2 returns the M4 instance.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a T2 or T3 instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the credit option for CPU usage of the specified T2 or T3 instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns T2 and T3 instances with the <code>unlimited</code> credit option, as well as instances that were previously configured as T2 or T3 with the <code>unlimited</code> credit option. For example, if you resize a T2 instance, while it is configured as <code>unlimited</code>, to an M4 instance, Amazon EC2 returns the M4 instance.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a T2 or T3 instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html">Burstable Performance Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_instance_credit_specifications(
         &self,
         input: DescribeInstanceCreditSpecificationsRequest,
@@ -71027,7 +72036,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p><p>Describes the status of one or more instances. By default, only running instances are described, unless you specifically indicate to return the status of all instances.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html">Status Checks for Your Instances</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul></p>
+    /// <p><p>Describes the status of the specified instances or all of your instances. By default, only running instances are described, unless you specifically indicate to return the status of all instances.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html">Status Checks for Your Instances</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul></p>
     fn describe_instance_status(
         &self,
         input: DescribeInstanceStatusRequest,
@@ -71072,7 +72081,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
+    /// <p>Describes the specified instances or all of your instances.</p> <p>If you specify one or more instance IDs, Amazon EC2 returns information for those instances. If you do not specify instance IDs, Amazon EC2 returns information for all relevant instances. If you specify an instance ID that is not valid, an error is returned. If you specify an instance that you do not own, it is not included in the returned results.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If you describe instances in the rare case where an Availability Zone is experiencing a service disruption and you specify instance IDs that are in the affected zone, or do not specify any instance IDs at all, the call fails. If you describe instances and specify only instance IDs that are in an unaffected zone, the call works normally.</p>
     fn describe_instances(
         &self,
         input: DescribeInstancesRequest,
@@ -71165,7 +72174,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your key pairs.</p> <p>For more information about key pairs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified key pairs or all of your key pairs.</p> <p>For more information about key pairs, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_key_pairs(
         &self,
         input: DescribeKeyPairsRequest,
@@ -71586,7 +72595,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your placement groups. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified placement groups or all of your placement groups. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_placement_groups(
         &self,
         input: DescribePlacementGroupsRequest,
@@ -71768,7 +72777,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more regions that are currently available to you.</p> <p>For a list of the regions supported by Amazon EC2, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region">Regions and Endpoints</a>.</p>
+    /// <p>Describes the Regions that are currently available to you. The API returns a list of all the Regions, including Regions that are disabled for your account. For information about enabling Regions for your account, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-account-payment.html#manage-account-payment-enable-disable-regions">Enabling and Disabling Regions</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p> <p>For a list of the Regions supported by Amazon EC2, see <a href="https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region"> Regions and Endpoints</a>.</p>
     fn describe_regions(
         &self,
         input: DescribeRegionsRequest,
@@ -72106,7 +73115,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your Scheduled Instances.</p>
+    /// <p>Describes the specified Scheduled Instances or all your Scheduled Instances.</p>
     fn describe_scheduled_instances(
         &self,
         input: DescribeScheduledInstancesRequest,
@@ -72151,7 +73160,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>[EC2-VPC only] Describes the VPCs on the other side of a VPC peering connection that are referencing the security groups you've specified in this request.</p>
+    /// <p>[VPC only] Describes the VPCs on the other side of a VPC peering connection that are referencing the security groups you've specified in this request.</p>
     fn describe_security_group_references(
         &self,
         input: DescribeSecurityGroupReferencesRequest,
@@ -72199,7 +73208,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of your security groups.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes the specified security groups or all of your security groups.</p> <p>A security group is for use with instances either in the EC2-Classic platform or in a specific VPC. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Amazon EC2 Security Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i> and <a href="https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_security_groups(
         &self,
         input: DescribeSecurityGroupsRequest,
@@ -72289,7 +73298,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of the EBS snapshots available to you. Available snapshots include public snapshots available for any AWS account to launch, private snapshots that you own, and private snapshots owned by another AWS account but for which you've been given explicit create volume permissions.</p> <p>The create volume permissions fall into the following categories:</p> <ul> <li> <p> <i>public</i>: The owner of the snapshot granted create volume permissions for the snapshot to the <code>all</code> group. All AWS accounts have create volume permissions for these snapshots.</p> </li> <li> <p> <i>explicit</i>: The owner of the snapshot granted create volume permissions to a specific AWS account.</p> </li> <li> <p> <i>implicit</i>: An AWS account has implicit create volume permissions for all snapshots it owns.</p> </li> </ul> <p>The list of snapshots returned can be modified by specifying snapshot IDs, snapshot owners, or AWS accounts with create volume permissions. If no options are specified, Amazon EC2 returns all snapshots for which you have create volume permissions.</p> <p>If you specify one or more snapshot IDs, only snapshots that have the specified IDs are returned. If you specify an invalid snapshot ID, an error is returned. If you specify a snapshot ID for which you do not have access, it is not included in the returned results.</p> <p>If you specify one or more snapshot owners using the <code>OwnerIds</code> option, only snapshots from the specified owners and for which you have access are returned. The results can include the AWS account IDs of the specified owners, <code>amazon</code> for snapshots owned by Amazon, or <code>self</code> for snapshots that you own.</p> <p>If you specify a list of restorable users, only snapshots with create snapshot permissions for those users are returned. You can specify AWS account IDs (if you own the snapshots), <code>self</code> for snapshots for which you own or have explicit permissions, or <code>all</code> for public snapshots.</p> <p>If you are describing a long list of snapshots, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeSnapshots</code> request to retrieve the remaining results.</p> <p>For more information about EBS snapshots, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified EBS snapshots available to you or all of the EBS snapshots available to you.</p> <p>The snapshots available to you include public snapshots, private snapshots that you own, and private snapshots owned by other AWS accounts for which you have explicit create volume permissions.</p> <p>The create volume permissions fall into the following categories:</p> <ul> <li> <p> <i>public</i>: The owner of the snapshot granted create volume permissions for the snapshot to the <code>all</code> group. All AWS accounts have create volume permissions for these snapshots.</p> </li> <li> <p> <i>explicit</i>: The owner of the snapshot granted create volume permissions to a specific AWS account.</p> </li> <li> <p> <i>implicit</i>: An AWS account has implicit create volume permissions for all snapshots it owns.</p> </li> </ul> <p>The list of snapshots returned can be modified by specifying snapshot IDs, snapshot owners, or AWS accounts with create volume permissions. If no options are specified, Amazon EC2 returns all snapshots for which you have create volume permissions.</p> <p>If you specify one or more snapshot IDs, only snapshots that have the specified IDs are returned. If you specify an invalid snapshot ID, an error is returned. If you specify a snapshot ID for which you do not have access, it is not included in the returned results.</p> <p>If you specify one or more snapshot owners using the <code>OwnerIds</code> option, only snapshots from the specified owners and for which you have access are returned. The results can include the AWS account IDs of the specified owners, <code>amazon</code> for snapshots owned by Amazon, or <code>self</code> for snapshots that you own.</p> <p>If you specify a list of restorable users, only snapshots with create snapshot permissions for those users are returned. You can specify AWS account IDs (if you own the snapshots), <code>self</code> for snapshots for which you own or have explicit permissions, or <code>all</code> for public snapshots.</p> <p>If you are describing a long list of snapshots, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeSnapshots</code> request to retrieve the remaining results.</p> <p>For more information about EBS snapshots, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_snapshots(
         &self,
         input: DescribeSnapshotsRequest,
@@ -72613,7 +73622,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>[EC2-VPC only] Describes the stale security group rules for security groups in a specified VPC. Rules are stale when they reference a deleted security group in a peer VPC, or a security group in a peer VPC for which the VPC peering connection has been deleted.</p>
+    /// <p>[VPC only] Describes the stale security group rules for security groups in a specified VPC. Rules are stale when they reference a deleted security group in a peer VPC, or a security group in a peer VPC for which the VPC peering connection has been deleted.</p>
     fn describe_stale_security_groups(
         &self,
         input: DescribeStaleSecurityGroupsRequest,
@@ -72706,7 +73715,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes one or more of the tags for your EC2 resources.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified tags for your EC2 resources.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -73035,7 +74044,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Describes the specified EBS volumes.</p> <p>If you are describing a long list of volumes, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeVolumes</code> request to retrieve the remaining results.</p> <p>For more information about EBS volumes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html">Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the specified EBS volumes or all of your EBS volumes.</p> <p>If you are describing a long list of volumes, you can paginate the output to make the list more manageable. The <code>MaxResults</code> parameter sets the maximum number of results returned in a single page. If the list of results exceeds your <code>MaxResults</code> value, then that number of results is returned along with a <code>NextToken</code> value that can be passed to a subsequent <code>DescribeVolumes</code> request to retrieve the remaining results.</p> <p>For more information about EBS volumes, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html">Amazon EBS Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_volumes(
         &self,
         input: DescribeVolumesRequest,
@@ -73916,6 +74925,51 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Disables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Call this API if you have enabled default encryption using <a>EnableEbsEncryptionByDefault</a> and want to disable default EBS encryption. Once default EBS encryption is disabled, you can still create an encrypted volume by setting <i>encrypted</i> to <i>true</i> in the API call that creates the volume. </p> <p>Disabling default EBS encryption will not change the encryption status of any of your existing volumes.</p>
+    fn disable_ebs_encryption_by_default(
+        &self,
+        input: DisableEbsEncryptionByDefaultRequest,
+    ) -> RusotoFuture<DisableEbsEncryptionByDefaultResult, DisableEbsEncryptionByDefaultError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DisableEbsEncryptionByDefault");
+        params.put("Version", "2016-11-15");
+        DisableEbsEncryptionByDefaultRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisableEbsEncryptionByDefaultError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DisableEbsEncryptionByDefaultResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = DisableEbsEncryptionByDefaultResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Disables the specified resource attachment from propagating routes to the specified propagation route table.</p>
     fn disable_transit_gateway_route_table_propagation(
         &self,
@@ -74375,6 +75429,51 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Enables default encryption for EBS volumes that are created in your account in the current region.</p> <p>Once encryption is enabled with this action, EBS volumes that are created in your account will always be encrypted even if encryption is not specified at launch. This setting overrides the <i>encrypted</i> setting to <i>true</i> in all API calls that create EBS volumes in your account. A volume will be encrypted even if you specify <i>encryption</i> to be <i>false</i> in the API call that creates the volume.</p> <p>If you do not specify a customer master key (CMK) in the API call that creates the EBS volume, then the volume is encrypted to your AWS account's default CMK.</p> <p>You can specify a default CMK of your choice using <a>ModifyEbsDefaultKmsKeyId</a>.</p> <p>Enabling default encryption for EBS volumes has no effect on existing unencrypted volumes in your account. Encrypting the data in these requires manual action. You can either create an encrypted snapshot of an unencrypted volume, or encrypt a copy of an unencrypted snapshot. Any volume restored from an encrypted snapshot is also encrypted. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html">Amazon EBS Snapshots</a>.</p> <p>Once EBS encryption by default is enabled, you can no longer launch older-generation instance types that do not support encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>.</p>
+    fn enable_ebs_encryption_by_default(
+        &self,
+        input: EnableEbsEncryptionByDefaultRequest,
+    ) -> RusotoFuture<EnableEbsEncryptionByDefaultResult, EnableEbsEncryptionByDefaultError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "EnableEbsEncryptionByDefault");
+        params.put("Version", "2016-11-15");
+        EnableEbsEncryptionByDefaultRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(EnableEbsEncryptionByDefaultError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = EnableEbsEncryptionByDefaultResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = EnableEbsEncryptionByDefaultResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Enables the specified attachment to propagate routes to the specified propagation route table.</p>
     fn enable_transit_gateway_route_table_propagation(
         &self,
@@ -74803,6 +75902,96 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = GetConsoleScreenshotResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Describes the default customer master key (CMK) that your account uses to encrypt EBS volumes if you don’t specify a CMK in the API call. You can change this default using <a>ModifyEbsDefaultKmsKeyId</a>.</p>
+    fn get_ebs_default_kms_key_id(
+        &self,
+        input: GetEbsDefaultKmsKeyIdRequest,
+    ) -> RusotoFuture<GetEbsDefaultKmsKeyIdResult, GetEbsDefaultKmsKeyIdError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetEbsDefaultKmsKeyId");
+        params.put("Version", "2016-11-15");
+        GetEbsDefaultKmsKeyIdRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetEbsDefaultKmsKeyIdError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetEbsDefaultKmsKeyIdResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetEbsDefaultKmsKeyIdResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Describes whether default EBS encryption is enabled for your account in the current region.</p>
+    fn get_ebs_encryption_by_default(
+        &self,
+        input: GetEbsEncryptionByDefaultRequest,
+    ) -> RusotoFuture<GetEbsEncryptionByDefaultResult, GetEbsEncryptionByDefaultError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetEbsEncryptionByDefault");
+        params.put("Version", "2016-11-15");
+        GetEbsEncryptionByDefaultRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetEbsEncryptionByDefaultError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetEbsEncryptionByDefaultResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetEbsEncryptionByDefaultResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -75540,6 +76729,51 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Changes the default customer master key (CMK) that your account uses to encrypt EBS volumes if you don’t specify a CMK in the API call.</p> <p>Your account has an AWS-managed default CMK that is used for encrypting an EBS volume when no CMK is specified in the API call that creates the volume. By calling this API, you can specify a customer-managed CMK to use in place of the AWS-managed default CMK.</p> <p>Note: Deleting or disabling the custom CMK that you have specified to act as your default CMK will result in instance-launch failures.</p>
+    fn modify_ebs_default_kms_key_id(
+        &self,
+        input: ModifyEbsDefaultKmsKeyIdRequest,
+    ) -> RusotoFuture<ModifyEbsDefaultKmsKeyIdResult, ModifyEbsDefaultKmsKeyIdError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyEbsDefaultKmsKeyId");
+        params.put("Version", "2016-11-15");
+        ModifyEbsDefaultKmsKeyIdRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyEbsDefaultKmsKeyIdError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyEbsDefaultKmsKeyIdResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyEbsDefaultKmsKeyIdResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Modifies the specified EC2 Fleet.</p> <p>While the EC2 Fleet is being modified, it is in the <code>modifying</code> state.</p>
     fn modify_fleet(
         &self,
@@ -75677,7 +76911,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the ID format for the specified resource on a per-region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created.</p> <p>This request can only be used to modify longer ID settings for resource types that are within the opt-in period. Resources currently in their opt-in period include: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
+    /// <p>Modifies the ID format for the specified resource on a per-Region basis. You can specify that resources should receive longer IDs (17-character IDs) when they are created.</p> <p>This request can only be used to modify longer ID settings for resource types that are within the opt-in period. Resources currently in their opt-in period include: <code>bundle</code> | <code>conversion-task</code> | <code>customer-gateway</code> | <code>dhcp-options</code> | <code>elastic-ip-allocation</code> | <code>elastic-ip-association</code> | <code>export-task</code> | <code>flow-log</code> | <code>image</code> | <code>import-task</code> | <code>internet-gateway</code> | <code>network-acl</code> | <code>network-acl-association</code> | <code>network-interface</code> | <code>network-interface-attachment</code> | <code>prefix-list</code> | <code>route-table</code> | <code>route-table-association</code> | <code>security-group</code> | <code>subnet</code> | <code>subnet-cidr-block-association</code> | <code>vpc</code> | <code>vpc-cidr-block-association</code> | <code>vpc-endpoint</code> | <code>vpc-peering-connection</code> | <code>vpn-connection</code> | <code>vpn-gateway</code>.</p> <p>This setting applies to the IAM user who makes the request; it does not apply to the entire AWS account. By default, an IAM user defaults to the same settings as the root user. If you're using this action as the root user, then these settings apply to the entire account, unless an IAM user explicitly overrides these settings for themselves. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html">Resource IDs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Resources created with longer IDs are visible to all IAM roles and users, regardless of these settings and provided that they have permission to use the relevant <code>Describe</code> command for the resource type.</p>
     fn modify_id_format(
         &self,
         input: ModifyIdFormatRequest,
@@ -75883,6 +77117,51 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Modifies the start time for a scheduled Amazon EC2 instance event.</p>
+    fn modify_instance_event_start_time(
+        &self,
+        input: ModifyInstanceEventStartTimeRequest,
+    ) -> RusotoFuture<ModifyInstanceEventStartTimeResult, ModifyInstanceEventStartTimeError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyInstanceEventStartTime");
+        params.put("Version", "2016-11-15");
+        ModifyInstanceEventStartTimeRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyInstanceEventStartTimeError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyInstanceEventStartTimeResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyInstanceEventStartTimeResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Modifies the placement attributes for a specified instance. You can do the following:</p> <ul> <li> <p>Modify the affinity between an instance and a <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html">Dedicated Host</a>. When affinity is set to <code>host</code> and the instance is not associated with a specific Dedicated Host, the next time the instance is launched, it is automatically associated with the host on which it lands. If the instance is restarted or rebooted, this relationship persists.</p> </li> <li> <p>Change the Dedicated Host with which an instance is associated.</p> </li> <li> <p>Change the instance tenancy of an instance from <code>host</code> to <code>dedicated</code>, or from <code>dedicated</code> to <code>host</code>.</p> </li> <li> <p>Move an instance to or from a <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">placement group</a>.</p> </li> </ul> <p>At least one attribute for affinity, host ID, tenancy, or placement group name must be specified in the request. Affinity and tenancy can be modified in the same request.</p> <p>To modify the host ID, tenancy, placement group, or partition for an instance, the instance must be in the <code>stopped</code> state.</p>
     fn modify_instance_placement(
         &self,
@@ -75975,7 +77254,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the specified network interface attribute. You can specify only one attribute at a time.</p>
+    /// <p>Modifies the specified network interface attribute. You can specify only one attribute at a time. You can use this action to attach and detach security groups from an existing EC2 instance.</p>
     fn modify_network_interface_attribute(
         &self,
         input: ModifyNetworkInterfaceAttributeRequest,
@@ -76072,7 +77351,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the specified Spot Fleet request.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
+    /// <p>Modifies the specified Spot Fleet request.</p> <p>You can only modify a Spot Fleet request of type <code>maintain</code>.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_spot_fleet_request(
         &self,
         input: ModifySpotFleetRequestRequest,
@@ -76492,7 +77771,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable the ability to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in the same AWS account, you can enable DNS resolution for queries from the local VPC. This ensures that queries from the local VPC resolve to private IP addresses in the peer VPC. This option is not available if the peered VPCs are in different AWS accounts or different regions. For peered VPCs in different AWS accounts, each AWS account owner must initiate a separate request to modify the peering connection options. For inter-region peering connections, you must use the region for the requester VPC to modify the requester VPC peering options and the region for the accepter VPC to modify the accepter VPC peering options. To verify which VPCs are the accepter and the requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
+    /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable the ability to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in the same AWS account, you can enable DNS resolution for queries from the local VPC. This ensures that queries from the local VPC resolve to private IP addresses in the peer VPC. This option is not available if the peered VPCs are in different AWS accounts or different Regions. For peered VPCs in different AWS accounts, each AWS account owner must initiate a separate request to modify the peering connection options. For inter-region peering connections, you must use the Region for the requester VPC to modify the requester VPC peering options and the Region for the accepter VPC to modify the accepter VPC peering options. To verify which VPCs are the accepter and the requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
     fn modify_vpc_peering_connection_options(
         &self,
         input: ModifyVpcPeeringConnectionOptionsRequest,
@@ -76578,6 +77857,53 @@ impl Ec2 for Ec2Client {
                     let _start_document = stack.next();
                     let actual_tag_name = peek_at_name(&mut stack)?;
                     result = ModifyVpcTenancyResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modifies the target gateway of a AWS Site-to-Site VPN connection. The following migration options are available:</p> <ul> <li> <p>An existing virtual private gateway to a new virtual private gateway</p> </li> <li> <p>An existing virtual private gateway to a transit gateway</p> </li> <li> <p>An existing transit gateway to a new transit gateway</p> </li> <li> <p>An existing transit gateway to a virtual private gateway</p> </li> </ul> <p>Before you perform the migration to the new gateway, you must configure the new gateway. Use <a>CreateVpnGateway</a> to create a virtual private gateway, or <a>CreateTransitGateway</a> to create a transit gateway.</p> <p>This step is required when you migrate from a virtual private gateway with static routes to a transit gateway. </p> <p>You must delete the static routes before you migrate to the new gateway.</p> <p>Keep a copy of the static route before you delete it. You will need to add back these routes to the transit gateway after the VPN connection migration is complete.</p> <p>After you migrate to the new gateway, you might need to modify your VPC route table. Use <a>CreateRoute</a> and <a>DeleteRoute</a> to make the changes described in <a href="https://docs.aws.amazon.com/vpn/latest/s2svpn/modify-vpn-target.html#step-update-routing">VPN Gateway Target Modification Required VPC Route Table Updates</a> in the <i>AWS Site-to-Site VPN User Guide</i>.</p> <p> When the new gateway is a transit gateway, modify the transit gateway route table to allow traffic between the VPC and the AWS Site-to-Site VPN connection. Use <a>CreateTransitGatewayRoute</a> to add the routes.</p> <p> If you deleted VPN static routes, you must add the static routes to the transit gateway route table.</p> <p>After you perform this operation, the AWS VPN endpoint's IP addresses on the AWS side and the tunnel options remain intact. Your s2slong; connection will be temporarily unavailable for approximately 10 minutes while we provision the new endpoints </p>
+    fn modify_vpn_connection(
+        &self,
+        input: ModifyVpnConnectionRequest,
+    ) -> RusotoFuture<ModifyVpnConnectionResult, ModifyVpnConnectionError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyVpnConnection");
+        params.put("Version", "2016-11-15");
+        ModifyVpnConnectionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ModifyVpnConnectionError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyVpnConnectionResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ModifyVpnConnectionResultDeserializer::deserialize(
                         &actual_tag_name,
                         &mut stack,
                     )?;
@@ -76825,7 +78151,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Purchases one or more Scheduled Instances with the specified schedule.</p> <p>Scheduled Instances enable you to purchase Amazon EC2 compute capacity by the hour for a one-year term. Before you can purchase a Scheduled Instance, you must call <a>DescribeScheduledInstanceAvailability</a> to check for available schedules and obtain a purchase token. After you purchase a Scheduled Instance, you must call <a>RunScheduledInstances</a> during each scheduled time period.</p> <p>After you purchase a Scheduled Instance, you can't cancel, modify, or resell your purchase.</p>
+    /// <p>Purchases the Scheduled Instances with the specified schedule.</p> <p>Scheduled Instances enable you to purchase Amazon EC2 compute capacity by the hour for a one-year term. Before you can purchase a Scheduled Instance, you must call <a>DescribeScheduledInstanceAvailability</a> to check for available schedules and obtain a purchase token. After you purchase a Scheduled Instance, you must call <a>RunScheduledInstances</a> during each scheduled time period.</p> <p>After you purchase a Scheduled Instance, you can't cancel, modify, or resell your purchase.</p>
     fn purchase_scheduled_instances(
         &self,
         input: PurchaseScheduledInstancesRequest,
@@ -76870,7 +78196,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Requests a reboot of one or more instances. This operation is asynchronous; it only queues a request to reboot the specified instances. The operation succeeds if the instances are valid and belong to you. Requests to reboot terminated instances are ignored.</p> <p>If an instance does not cleanly shut down within four minutes, Amazon EC2 performs a hard reboot.</p> <p>For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html">Getting Console Output and Rebooting Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Requests a reboot of the specified instances. This operation is asynchronous; it only queues a request to reboot the specified instances. The operation succeeds if the instances are valid and belong to you. Requests to reboot terminated instances are ignored.</p> <p>If an instance does not cleanly shut down within four minutes, Amazon EC2 performs a hard reboot.</p> <p>For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html">Getting Console Output and Rebooting Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn reboot_instances(
         &self,
         input: RebootInstancesRequest,
@@ -77513,6 +78839,51 @@ impl Ec2 for Ec2Client {
         })
     }
 
+    /// <p>Resets the account's default customer master key (CMK) to the account's AWS-managed default CMK. This default CMK is used to encrypt EBS volumes when you have enabled EBS encryption by default without specifying a CMK in the API call. If you have not enabled encryption by default, then this CMK is used when you set the <code>Encrypted</code> parameter to true without specifying a custom CMK in the API call.</p> <p>Call this API if you have modified the default CMK that is used for encrypting your EBS volume using <a>ModifyEbsDefaultKmsKeyId</a> and you want to reset it to the AWS-managed default CMK. After resetting, you can continue to provide a CMK of your choice in the API call that creates the volume. However, if no CMK is specified, your account will encrypt the volume to the AWS-managed default CMK.</p>
+    fn reset_ebs_default_kms_key_id(
+        &self,
+        input: ResetEbsDefaultKmsKeyIdRequest,
+    ) -> RusotoFuture<ResetEbsDefaultKmsKeyIdResult, ResetEbsDefaultKmsKeyIdError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ResetEbsDefaultKmsKeyId");
+        params.put("Version", "2016-11-15");
+        ResetEbsDefaultKmsKeyIdRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ResetEbsDefaultKmsKeyIdError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ResetEbsDefaultKmsKeyIdResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_ref(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = ResetEbsDefaultKmsKeyIdResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
     /// <p>Resets the specified attribute of the specified Amazon FPGA Image (AFI) to its default value. You can only reset the load permission attribute.</p>
     fn reset_fpga_image_attribute(
         &self,
@@ -77750,7 +79121,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>[EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
+    /// <p>[VPC only] Removes the specified egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
     fn revoke_security_group_egress(
         &self,
         input: RevokeSecurityGroupEgressRequest,
@@ -77775,7 +79146,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Removes one or more ingress rules from a security group. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <note> <p>[EC2-Classic security groups only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
+    /// <p>Removes the specified ingress rules from a security group. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <note> <p>[EC2-Classic only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
     fn revoke_security_group_ingress(
         &self,
         input: RevokeSecurityGroupIngressRequest,
@@ -78074,7 +79445,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>Shuts down one or more instances. This operation is idempotent; if you terminate an instance more than once, each call succeeds. </p> <p>If you specify multiple instances and the request fails (for example, because of a single incorrect instance ID), none of the instances are terminated.</p> <p>Terminated instances remain visible after termination (for approximately one hour).</p> <p>By default, Amazon EC2 deletes all EBS volumes that were attached when the instance launched. Volumes attached after instance launch continue running.</p> <p>You can stop, start, and terminate EBS-backed instances. You can only terminate instance store-backed instances. What happens to an instance differs if you stop it or terminate it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, any attached EBS volumes with the <code>DeleteOnTermination</code> block device mapping parameter set to <code>true</code> are automatically deleted. For more information about the differences between stopping and terminating instances, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesShuttingDown.html">Troubleshooting Terminating Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Shuts down the specified instances. This operation is idempotent; if you terminate an instance more than once, each call succeeds. </p> <p>If you specify multiple instances and the request fails (for example, because of a single incorrect instance ID), none of the instances are terminated.</p> <p>Terminated instances remain visible after termination (for approximately one hour).</p> <p>By default, Amazon EC2 deletes all EBS volumes that were attached when the instance launched. Volumes attached after instance launch continue running.</p> <p>You can stop, start, and terminate EBS-backed instances. You can only terminate instance store-backed instances. What happens to an instance differs if you stop it or terminate it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, any attached EBS volumes with the <code>DeleteOnTermination</code> block device mapping parameter set to <code>true</code> are automatically deleted. For more information about the differences between stopping and terminating instances, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For more information about troubleshooting, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesShuttingDown.html">Troubleshooting Terminating Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn terminate_instances(
         &self,
         input: TerminateInstancesRequest,
@@ -78240,7 +79611,7 @@ impl Ec2 for Ec2Client {
         })
     }
 
-    /// <p>[EC2-VPC only] Updates the description of an egress (outbound) security group rule. You can replace an existing description, or add a description to a rule that did not have one previously.</p> <p>You specify the description as part of the IP permissions structure. You can remove a description for a security group rule by omitting the description parameter in the request.</p>
+    /// <p>[VPC only] Updates the description of an egress (outbound) security group rule. You can replace an existing description, or add a description to a rule that did not have one previously.</p> <p>You specify the description as part of the IP permissions structure. You can remove a description for a security group rule by omitting the description parameter in the request.</p>
     fn update_security_group_rule_descriptions_egress(
         &self,
         input: UpdateSecurityGroupRuleDescriptionsEgressRequest,

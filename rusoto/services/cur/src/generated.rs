@@ -24,7 +24,7 @@ use rusoto_core::{Client, RusotoError, RusotoFuture};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-/// <p>Request of DeleteReportDefinition</p>
+/// <p>Deletes the specified report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteReportDefinitionRequest {
     #[serde(rename = "ReportName")]
@@ -32,7 +32,7 @@ pub struct DeleteReportDefinitionRequest {
     pub report_name: Option<String>,
 }
 
-/// <p>Response of DeleteReportDefinition</p>
+/// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteReportDefinitionResponse {
@@ -41,7 +41,7 @@ pub struct DeleteReportDefinitionResponse {
     pub response_message: Option<String>,
 }
 
-/// <p>Request of DescribeReportDefinitions</p>
+/// <p>Requests a list of AWS Cost and Usage reports owned by the account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeReportDefinitionsRequest {
     #[serde(rename = "MaxResults")]
@@ -52,44 +52,56 @@ pub struct DescribeReportDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-/// <p>Response of DescribeReportDefinitions</p>
+/// <p>If the action is successful, the service sends back an HTTP 200 response.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>A list of AWS Cost and Usage reports owned by the account.</p>
     #[serde(rename = "ReportDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
-/// <p>Request of PutReportDefinition</p>
+/// <p>Creates a Cost and Usage Report.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutReportDefinitionRequest {
+    /// <p>Represents the output of the PutReportDefinition operation. The content consists of the detailed metadata and data file information. </p>
     #[serde(rename = "ReportDefinition")]
     pub report_definition: ReportDefinition,
 }
 
-/// <p>Response of PutReportDefinition</p>
+/// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PutReportDefinitionResponse {}
 
-/// <p>The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition.</p>
+/// <p>The definition of AWS Cost and Usage Report. You can specify the report name, time unit, report format, compression format, S3 bucket, additional artifacts, and schema elements in the definition. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ReportDefinition {
+    /// <p>A list of manifests that you want Amazon Web Services to create for this report.</p>
     #[serde(rename = "AdditionalArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_artifacts: Option<Vec<String>>,
+    /// <p>A list of strings that indicate additional content that Amazon Web Services includes in the report, such as individual resource IDs. </p>
     #[serde(rename = "AdditionalSchemaElements")]
     pub additional_schema_elements: Vec<String>,
     #[serde(rename = "Compression")]
     pub compression: String,
     #[serde(rename = "Format")]
     pub format: String,
+    /// <p>Whether you want Amazon Web Services to update your reports after they have been finalized if Amazon Web Services detects charges related to previous months. These charges can include refunds, credits, or support fees.</p>
+    #[serde(rename = "RefreshClosedReports")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_closed_reports: Option<bool>,
     #[serde(rename = "ReportName")]
     pub report_name: String,
+    /// <p>Whether you want Amazon Web Services to overwrite the previous version of each report or to deliver the report in addition to the previous versions.</p>
+    #[serde(rename = "ReportVersioning")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_versioning: Option<String>,
     #[serde(rename = "S3Bucket")]
     pub s3_bucket: String,
     #[serde(rename = "S3Prefix")]
@@ -103,7 +115,7 @@ pub struct ReportDefinition {
 /// Errors returned by DeleteReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteReportDefinitionError {
-    /// <p>This exception is thrown on a known dependency failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
 }
 
@@ -138,7 +150,7 @@ impl Error for DeleteReportDefinitionError {
 /// Errors returned by DescribeReportDefinitions
 #[derive(Debug, PartialEq)]
 pub enum DescribeReportDefinitionsError {
-    /// <p>This exception is thrown on a known dependency failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
 }
 
@@ -173,11 +185,11 @@ impl Error for DescribeReportDefinitionsError {
 /// Errors returned by PutReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum PutReportDefinitionError {
-    /// <p>This exception is thrown when putting a report preference with a name that already exists.</p>
+    /// <p>A report with the specified name already exists in the account. Specify a different report name.</p>
     DuplicateReportName(String),
-    /// <p>This exception is thrown on a known dependency failure.</p>
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
     InternalError(String),
-    /// <p>This exception is thrown when the number of report preference reaches max limit. The max number is 5.</p>
+    /// <p>This account already has five reports defined. To define a new report, you must delete an existing report.</p>
     ReportLimitReached(String),
 }
 
@@ -221,19 +233,19 @@ impl Error for PutReportDefinitionError {
 }
 /// Trait representing the capabilities of the AWS Cost and Usage Report Service API. AWS Cost and Usage Report Service clients implement this trait.
 pub trait CostAndUsageReport {
-    /// <p>Delete a specified report definition</p>
+    /// <p>Deletes the specified report.</p>
     fn delete_report_definition(
         &self,
         input: DeleteReportDefinitionRequest,
     ) -> RusotoFuture<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
 
-    /// <p>Describe a list of report definitions owned by the account</p>
+    /// <p>Lists the AWS Cost and Usage reports available to this account.</p>
     fn describe_report_definitions(
         &self,
         input: DescribeReportDefinitionsRequest,
     ) -> RusotoFuture<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
 
-    /// <p>Create a new report definition</p>
+    /// <p>Creates a new report using the description that you provide.</p>
     fn put_report_definition(
         &self,
         input: PutReportDefinitionRequest,
@@ -276,7 +288,7 @@ impl CostAndUsageReportClient {
 }
 
 impl CostAndUsageReport for CostAndUsageReportClient {
-    /// <p>Delete a specified report definition</p>
+    /// <p>Deletes the specified report.</p>
     fn delete_report_definition(
         &self,
         input: DeleteReportDefinitionRequest,
@@ -307,7 +319,7 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         })
     }
 
-    /// <p>Describe a list of report definitions owned by the account</p>
+    /// <p>Lists the AWS Cost and Usage reports available to this account.</p>
     fn describe_report_definitions(
         &self,
         input: DescribeReportDefinitionsRequest,
@@ -336,7 +348,7 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         })
     }
 
-    /// <p>Create a new report definition</p>
+    /// <p>Creates a new report using the description that you provide.</p>
     fn put_report_definition(
         &self,
         input: PutReportDefinitionRequest,

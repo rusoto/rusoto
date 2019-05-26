@@ -114,7 +114,7 @@ pub struct BulkDeploymentResult {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The current status of the group deployment: &#39;&#39;Pending&#39;&#39;, &#39;&#39;InProgress&#39;&#39;, &#39;&#39;Success&#39;&#39;, or &#39;&#39;Failure&#39;&#39;.</p>
+    /// <p>The current status of the group deployment: &#39;&#39;InProgress&#39;&#39;, &#39;&#39;Building&#39;&#39;, &#39;&#39;Success&#39;&#39;, or &#39;&#39;Failure&#39;&#39;.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -227,6 +227,10 @@ pub struct CreateConnectorDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -313,6 +317,10 @@ pub struct CreateCoreDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -394,7 +402,7 @@ pub struct CreateDeploymentRequest {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The type of deployment. When used in &#39;&#39;CreateDeployment&#39;&#39;, only &#39;&#39;NewDeployment&#39;&#39; and &#39;&#39;Redeployment&#39;&#39; are valid.</p>
+    /// <p>The type of deployment. When used for &#39;&#39;CreateDeployment&#39;&#39;, only &#39;&#39;NewDeployment&#39;&#39; and &#39;&#39;Redeployment&#39;&#39; are valid.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
@@ -434,6 +442,10 @@ pub struct CreateDeviceDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -519,6 +531,10 @@ pub struct CreateFunctionDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -561,7 +577,7 @@ pub struct CreateFunctionDefinitionVersionRequest {
     #[serde(rename = "AmznClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    /// <p>Default configuration that will apply to all Lambda functions in this function definition version</p>
+    /// <p>The default configuration that applies to all Lambda functions in this function definition version. Individual Lambda functions can override these settings.</p>
     #[serde(rename = "DefaultConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_config: Option<FunctionDefaultConfig>,
@@ -629,6 +645,10 @@ pub struct CreateGroupRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -738,6 +758,10 @@ pub struct CreateLoggerDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -823,6 +847,10 @@ pub struct CreateResourceDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -947,6 +975,10 @@ pub struct CreateSubscriptionDefinitionRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1050,6 +1082,10 @@ pub struct DefinitionInformation {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1313,7 +1349,7 @@ pub struct FunctionConfigurationEnvironment {
     pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Default configuration that will apply to all Lambda functions in the group.</p>
+/// <p>The default configuration that applies to all Lambda functions in the group. Individual Lambda functions can override these settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionDefaultConfig {
     #[serde(rename = "Execution")]
@@ -1321,18 +1357,21 @@ pub struct FunctionDefaultConfig {
     pub execution: Option<FunctionDefaultExecutionConfig>,
 }
 
-/// <p>Configuration that defines the default containerization used for when running Lambda functions in the group. Individual Lambda functions can be override this setting.</p>
+/// <p>Configuration information that specifies how a Lambda function runs. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionDefaultExecutionConfig {
     #[serde(rename = "IsolationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub isolation_mode: Option<String>,
+    #[serde(rename = "RunAs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_as: Option<FunctionRunAsConfig>,
 }
 
 /// <p>Information about a function definition version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionDefinitionVersion {
-    /// <p>Default configuration that will apply to all Lambda functions in this function definition version</p>
+    /// <p>The default configuration that applies to all Lambda functions in this function definition version. Individual Lambda functions can override these settings.</p>
     #[serde(rename = "DefaultConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_config: Option<FunctionDefaultConfig>,
@@ -1342,7 +1381,7 @@ pub struct FunctionDefinitionVersion {
     pub functions: Option<Vec<Function>>,
 }
 
-/// <p>Configuration information that specifies how the Lambda function runs. </p>
+/// <p>Configuration information that specifies how a Lambda function runs. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionExecutionConfig {
     #[serde(rename = "IsolationMode")]
@@ -1353,14 +1392,14 @@ pub struct FunctionExecutionConfig {
     pub run_as: Option<FunctionRunAsConfig>,
 }
 
-/// <p>Specifies the user and/or group whose permissions are used when running the Lambda function. You can specify one or both values to override the default values (ggc<em>user/ggc</em>group). We recommend that you avoid running as root unless absolutely necessary to minimize the risk of unintended changes or malicious attacks. To run as root, you must set IsolationMode to NoContainer and you must update config.json in greengrass-root/config to set allowFunctionsToRunAsRoot to yes.</p>
+/// <p>Specifies the user and group whose permissions are used when running the Lambda function. You can specify one or both values to override the default values. We recommend that you avoid running as root unless absolutely necessary to minimize the risk of unintended changes or malicious attacks. To run as root, you must set &#39;&#39;IsolationMode&#39;&#39; to &#39;&#39;NoContainer&#39;&#39; and update config.json in &#39;&#39;greengrass-root/config&#39;&#39; to set &#39;&#39;allowFunctionsToRunAsRoot&#39;&#39; to &#39;&#39;yes&#39;&#39;.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionRunAsConfig {
-    /// <p>The Group ID whose permissions are used to run a Lambda function.</p>
+    /// <p>The group ID whose permissions are used to run a Lambda function.</p>
     #[serde(rename = "Gid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gid: Option<i64>,
-    /// <p>The User ID whose permissions are used to run a Lambda function.</p>
+    /// <p>The user ID whose permissions are used to run a Lambda function.</p>
     #[serde(rename = "Uid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uid: Option<i64>,
@@ -1425,6 +1464,10 @@ pub struct GetBulkDeploymentStatusResponse {
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1485,6 +1528,10 @@ pub struct GetConnectorDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1568,6 +1615,10 @@ pub struct GetCoreDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1622,7 +1673,7 @@ pub struct GetDeploymentStatusRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDeploymentStatusResponse {
-    /// <p>The status of the deployment: &#39;&#39;Pending&#39;&#39;, &#39;&#39;InProgress&#39;&#39;, &#39;&#39;Success&#39;&#39;, or &#39;&#39;Failure&#39;&#39;.</p>
+    /// <p>The status of the deployment: &#39;&#39;InProgress&#39;&#39;, &#39;&#39;Building&#39;&#39;, &#39;&#39;Success&#39;&#39;, or &#39;&#39;Failure&#39;&#39;.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -1682,6 +1733,10 @@ pub struct GetDeviceDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1765,6 +1820,10 @@ pub struct GetFunctionDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1899,6 +1958,10 @@ pub struct GetGroupResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1974,6 +2037,10 @@ pub struct GetLoggerDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2053,6 +2120,10 @@ pub struct GetResourceDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2144,6 +2215,10 @@ pub struct GetSubscriptionDefinitionResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The tags for the definition.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2824,6 +2899,22 @@ pub struct ListSubscriptionDefinitionsResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A map of the key-value pairs for the resource tag.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>A list of versions.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListVersionsResponse {
@@ -3044,6 +3135,10 @@ pub struct StartBulkDeploymentRequest {
     #[serde(rename = "InputFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_file_uri: Option<String>,
+    /// <p>Tag(s) to add to the new resource</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3081,7 +3176,7 @@ pub struct Subscription {
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
-    /// <p>The subject of the message.</p>
+    /// <p>The MQTT topic used to route the message.</p>
     #[serde(rename = "Subject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject: Option<String>,
@@ -3098,6 +3193,26 @@ pub struct SubscriptionDefinitionVersion {
     #[serde(rename = "Subscriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscriptions: Option<Vec<Subscription>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>A map of the key-value pairs for the resource tag.</p>
+    #[serde(rename = "tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>A list of the keys to remove from the resource tags.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
 }
 
 /// <p>Connectivity information.</p>
@@ -5881,6 +5996,39 @@ impl Error for ListSubscriptionDefinitionsError {
         match *self {}
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::BadRequest(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ResetDeployments
 #[derive(Debug, PartialEq)]
 pub enum ResetDeploymentsError {
@@ -5977,6 +6125,72 @@ impl Error for StopBulkDeploymentError {
     fn description(&self) -> &str {
         match *self {
             StopBulkDeploymentError::BadRequest(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::BadRequest(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::BadRequest(ref cause) => cause,
         }
     }
 }
@@ -6789,6 +7003,12 @@ pub trait GreenGrass {
         input: ListSubscriptionDefinitionsRequest,
     ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
 
+    /// <p>Retrieves the tags for a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
     /// <p>Resets a group&#39;s deployments.</p>
     fn reset_deployments(
         &self,
@@ -6806,6 +7026,12 @@ pub trait GreenGrass {
         &self,
         input: StopBulkDeploymentRequest,
     ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError>;
+
+    /// <p>Add tags to a resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+
+    /// <p>Remove tags with specified keys from a resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
     fn update_connectivity_info(
@@ -9417,6 +9643,34 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
+    /// <p>Retrieves the tags for a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Resets a group&#39;s deployments.</p>
     fn reset_deployments(
         &self,
@@ -9518,6 +9772,65 @@ impl GreenGrass for GreenGrassClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StopBulkDeploymentError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Add tags to a resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Remove tags with specified keys from a resource.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })

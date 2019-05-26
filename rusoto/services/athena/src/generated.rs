@@ -155,6 +155,10 @@ pub struct CreateWorkGroupInput {
     /// <p>The workgroup name.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>One or more tags, separated by commas, that you want to attach to the workgroup as you create it.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -345,6 +349,34 @@ pub struct ListQueryExecutionsOutput {
     #[serde(rename = "QueryExecutionIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_ids: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceInput {
+    /// <p>The maximum number of results to be returned per request that lists the tags for the workgroup resource.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no additional results for this request, where the request lists the tags for the workgroup resource with the specified ARN.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Lists the tags for the workgroup resource with the specified ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceOutput {
+    /// <p>A token to be used by the next request if this request is truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of tags associated with this workgroup.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -593,6 +625,33 @@ pub struct StopQueryExecutionInput {
 #[cfg_attr(test, derive(Serialize))]
 pub struct StopQueryExecutionOutput {}
 
+/// <p>A tag that you can add to a resource. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize workgroups in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. The maximum tag key length is 128 Unicode characters in UTF-8. The maximum tag value length is 256 Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>A tag key. The tag key length is from 1 to 128 Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys are case-sensitive and must be unique per resource. </p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>A tag value. The tag value length is from 0 to 256 Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag values are case-sensitive. </p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceInput {
+    /// <p>Requests that one or more tags are added to the resource (such as a workgroup) for the specified ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>One or more tags, separated by commas, to be added to the resource, such as a workgroup.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceOutput {}
+
 /// <p>Information about a named query ID that could not be processed.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -628,6 +687,20 @@ pub struct UnprocessedQueryExecutionId {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_id: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceInput {
+    /// <p>Removes one or more tags from the workgroup resource for the specified ARN.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>Removes the tags associated with one or more tag keys from the workgroup resource.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateWorkGroupInput {
@@ -1217,6 +1290,53 @@ impl Error for ListQueryExecutionsError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>A resource, such as a workgroup, was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InternalServer(ref cause) => cause,
+            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListWorkGroups
 #[derive(Debug, PartialEq)]
 pub enum ListWorkGroupsError {
@@ -1340,6 +1460,96 @@ impl Error for StopQueryExecutionError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>A resource, such as a workgroup, was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(TagResourceError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InternalServer(ref cause) => cause,
+            TagResourceError::InvalidRequest(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>A resource, such as a workgroup, was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InternalServer(ref cause) => cause,
+            UntagResourceError::InvalidRequest(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkGroupError {
@@ -1435,7 +1645,7 @@ pub trait Athena {
         input: GetQueryResultsInput,
     ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError>;
 
-    /// <p>Returns information about the workgroup with the speficied name.</p>
+    /// <p>Returns information about the workgroup with the specified name.</p>
     fn get_work_group(
         &self,
         input: GetWorkGroupInput,
@@ -1452,6 +1662,12 @@ pub trait Athena {
         &self,
         input: ListQueryExecutionsInput,
     ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError>;
+
+    /// <p>Lists the tags associated with this workgroup.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
 
     /// <p>Lists available workgroups for the account.</p>
     fn list_work_groups(
@@ -1470,6 +1686,18 @@ pub trait Athena {
         &self,
         input: StopQueryExecutionInput,
     ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError>;
+
+    /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+
+    /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
 
     /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
     fn update_work_group(
@@ -1774,7 +2002,7 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Returns information about the workgroup with the speficied name.</p>
+    /// <p>Returns information about the workgroup with the specified name.</p>
     fn get_work_group(
         &self,
         input: GetWorkGroupInput,
@@ -1854,6 +2082,34 @@ impl Athena for AthenaClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(ListQueryExecutionsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Lists the tags associated with this workgroup.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
                     }),
                 )
             }
@@ -1941,6 +2197,64 @@ impl Athena for AthenaClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StopQueryExecutionError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Adds one or more tags to the resource, such as a workgroup. A tag is a label that you assign to an AWS Athena resource (a workgroup). Each tag consists of a key and an optional value, both of which you define. Tags enable you to categorize resources (workgroups) in Athena, for example, by purpose, owner, or environment. Use a consistent set of tag keys to make it easier to search and filter workgroups in your account. For best practices, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS Tagging Strategies</a>. The key length is from 1 (minimum) to 128 (maximum) Unicode characters in UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode characters in UTF-8. You can use letters and numbers representable in UTF-8, and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be unique per resource. If you specify more than one, separate them by commas.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes one or more tags from the workgroup resource. Takes as an input a list of TagKey Strings separated by commas, and removes their tags at the same time.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })
