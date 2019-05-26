@@ -15,6 +15,17 @@ use rusoto_sts::{Sts, StsClient};
 use rusoto_sts::{StsAssumeRoleSessionCredentialsProvider, StsSessionCredentialsProvider};
 
 #[test]
+fn caching_provider() {
+    let sts_creds_provider = StsSessionCredentialsProvider::new(StsClient::new(Region::UsEast1), None, None);
+    let cached_sts_creds_provider = sts_creds_provider.to_auto_refresh_credentials().expect("Conversion should work.");
+
+    match cached_sts_creds_provider.credentials().wait() {
+        Err(e) => panic!("sts credentials provider error: {:?}", e),
+        Ok(r) => println!("sts credentials provider result: {:?}", r),
+    }
+}
+
+#[test]
 fn main() {
     let sts = StsClient::new(Region::UsEast1);
 

@@ -4,7 +4,7 @@ use futures::{Async, Future, Poll};
 
 use rusoto_core;
 
-use rusoto_core::credential::AwsCredentials;
+use rusoto_core::credential::{AutoRefreshingProvider, AwsCredentials};
 use rusoto_core::{CredentialsError, ProvideAwsCredentials, RusotoFuture};
 use crate::{
     AssumeRoleError, AssumeRoleRequest, AssumeRoleResponse, AssumeRoleWithSAMLError,
@@ -194,6 +194,12 @@ impl StsSessionCredentialsProvider {
         StsSessionCredentialsProviderFuture {
             inner: self.sts_client.get_session_token(request),
         }
+    }
+
+    /// Convert the credential provider to one that caches the result instead of
+    /// making a call every time credentials are needed.
+    pub fn to_auto_refresh_credentials(self) -> Result<AutoRefreshingProvider<StsSessionCredentialsProvider>, CredentialsError> {
+        AutoRefreshingProvider::new(self)
     }
 }
 
