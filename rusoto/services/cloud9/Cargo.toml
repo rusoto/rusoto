@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Cloud9 @ 2017-09-23"
-documentation = "https://rusoto.github.io/rusoto/rusoto_cloud9/index.html"
+documentation = "https://docs.rs/rusoto_cloud9"
 keywords = ["AWS", "Amazon", "cloud9"]
 license = "MIT"
 name = "rusoto_cloud9"

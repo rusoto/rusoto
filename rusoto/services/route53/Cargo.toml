@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon Route 53 @ 2013-04-01"
-documentation = "https://rusoto.github.io/rusoto/rusoto_route53/index.html"
+documentation = "https://docs.rs/rusoto_route53"
 keywords = ["AWS", "Amazon", "route53"]
 license = "MIT"
 name = "rusoto_route53"

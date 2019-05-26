@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Auto Scaling Plans @ 2018-01-06"
-documentation = "https://rusoto.github.io/rusoto/rusoto_autoscaling_plans/index.html"
+documentation = "https://docs.rs/rusoto_autoscaling_plans"
 keywords = ["AWS", "Amazon", "autoscaling-plans"]
 license = "MIT"
 name = "rusoto_autoscaling_plans"

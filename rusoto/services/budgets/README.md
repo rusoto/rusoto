@@ -36,7 +36,7 @@ Rusoto is distributed under the terms of the MIT license.
 
 See [LICENSE][license] for details.
 
-[api-documentation]: https://rusoto.github.io/rusoto/rusoto/ "API documentation"
+[api-documentation]: https://docs.rs/rusoto_budgets "API documentation"
 [license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
 [contributing]: https://github.com/rusoto/rusoto/blob/master/CONTRIBUTING.md "Contributing Guide"
 [rusoto-help]: https://www.rusoto.org/help.html "Getting help with Rusoto"

@@ -62,7 +62,7 @@ Current implementation is not using the cached token returned by the AssumeRole 
 
 This will affect the performance as well as the billing of AWS.
 
-- https://rusoto.github.io/rusoto/rusoto_credential/index.html
+- https://docs.rs/rusoto_credential
 - https://crates.io/crates/rusoto_credential
 ```
 let provider = StsAssumeRoleSessionCredentialsProvider::new(

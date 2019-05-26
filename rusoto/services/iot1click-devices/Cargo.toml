@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS IoT 1-Click Devices Service @ 2018-05-14"
-documentation = "https://rusoto.github.io/rusoto/rusoto_iot1click_devices/index.html"
+documentation = "https://docs.rs/rusoto_iot1click_devices"
 keywords = ["AWS", "Amazon", "iot1click-devices"]
 license = "MIT"
 name = "rusoto_iot1click_devices"

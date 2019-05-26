@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - AWS Key Management Service @ 2014-11-01"
-documentation = "https://rusoto.github.io/rusoto/rusoto_kms/index.html"
+documentation = "https://docs.rs/rusoto_kms"
 keywords = ["AWS", "Amazon", "kms"]
 license = "MIT"
 name = "rusoto_kms"

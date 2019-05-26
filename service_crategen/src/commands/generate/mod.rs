@@ -131,7 +131,7 @@ pub fn generate_services(
                     "Nikita Pekin <contact@nikitapek.in>".into()
                 ]),
                 description: Some(format!("AWS SDK for Rust - {} @ {}", service.full_name(), service.api_version())),
-                documentation: Some(format!("https://rusoto.github.io/rusoto/{}/index.html", crate_name)),
+                documentation: Some(format!("https://docs.rs/{}", crate_name)),
                 keywords: Some(vec!["AWS".into(), "Amazon".into(), name_for_keyword]),
                 license: Some("MIT".into()),
                 name: crate_name.clone(),
@@ -196,7 +196,7 @@ Rusoto is distributed under the terms of the MIT license.
 
 See [LICENSE][license] for details.
 
-[api-documentation]: https://rusoto.github.io/rusoto/rusoto/ "API documentation"
+[api-documentation]: https://docs.rs/{crate_name} "API documentation"
 [license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
 [contributing]: https://github.com/rusoto/rusoto/blob/master/CONTRIBUTING.md "Contributing Guide"
 [rusoto-help]: https://www.rusoto.org/help.html "Getting help with Rusoto"

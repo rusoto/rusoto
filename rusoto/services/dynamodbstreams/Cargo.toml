@@ -1,7 +1,7 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
 description = "AWS SDK for Rust - Amazon DynamoDB Streams @ 2012-08-10"
-documentation = "https://rusoto.github.io/rusoto/rusoto_dynamodbstreams/index.html"
+documentation = "https://docs.rs/rusoto_dynamodbstreams"
 keywords = ["AWS", "Amazon", "dynamodbstreams"]
 license = "MIT"
 name = "rusoto_dynamodbstreams"

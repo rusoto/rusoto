@@ -11,7 +11,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            <a href="https://rusoto.github.io/rusoto/" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+            <a href="https://docs.rs/rusoto_core" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
             <a href="https://crates.io/crates/rusoto_core" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
             <a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
         </td>
@@ -52,7 +52,7 @@ Breaking changes and migration details are documented at [https://rusoto.org/mig
 Rusoto has a crate for each AWS service, containing Rust types for that service's API.
 A full list of these services can be found [here][supported-aws-services].
 All other public types are reexported to the crate root.
-Consult the rustdoc documentation for full details by running `cargo doc` or visiting the online [documentation](https://rusoto.github.io/rusoto/rusoto/index.html) for the latest crates.io release.
+Consult the rustdoc documentation for full details by running `cargo doc` or visiting the online [documentation](https://docs.rs/rusoto_core) for the latest crates.io release.
 
 A simple example of using Rusoto's DynamoDB API to list the names of all tables in a database:
 
@@ -118,12 +118,9 @@ See [CONTRIBUTING][contribution].
 
 ## Supported OSs and Rust versions
 
-Linux, OSX and Windows are supported and tested via TravisCI and Appveyor.
+Linux, OSX and Windows are supported and tested via Azure Pipelines and Appveyor.
 
-Rust stable is supported.  Older versions of Rust are supported and tested via TravisCI.  The minimum Rust version is
-incremented when it becomes inconvenient to support older versions.  The current minimum version of Rust supported can
-be found in [.travis.yml][travis].  If a version number is not specified in the `rust` section, only the named versions
-listed are supported.  This should be stable, beta and nightly.
+Rust stable, beta and nightly are supported.
 
 ## License
 
@@ -131,7 +128,7 @@ Rusoto is distributed under the terms of the MIT license.
 
 See [LICENSE][license] for details.
 
-[api-documentation]: https://rusoto.github.io/rusoto/rusoto/ "API documentation"
+[api-documentation]: https://docs.rs/rusoto_core "API documentation"
 [license]: https://github.com/rusoto/rusoto/blob/master/LICENSE "MIT License"
 [rusoto-help]: https://www.rusoto.org/help.html "Getting help with Rusoto"
 [rusoto-overview]: https://www.rusoto.org/ "Rusoto overview"
@@ -139,4 +136,3 @@ See [LICENSE][license] for details.
 [aws-credentials]: https://github.com/rusoto/rusoto/blob/master/AWS-CREDENTIALS.md "AWS Credentials"
 [releasing]: https://github.com/rusoto/rusoto/blob/master/RELEASING.md "Releasing Rusoto"
 [contribution]: https://github.com/rusoto/rusoto/blob/master/CONTRIBUTING.md "Contributing to Rusoto"
-[travis]: https://github.com/rusoto/rusoto/blob/master/.travis.yml "Building Rusoto"
