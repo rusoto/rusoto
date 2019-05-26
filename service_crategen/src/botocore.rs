@@ -320,8 +320,15 @@ impl<'a> Operation {
         &self
             .input
             .as_ref()
-            .expect("Operation input undefined")
+            .expect(&format!("Operation input undefined for {}", self.name))
             .shape
+    }
+
+    pub fn input_shape_or(&'a self, default: &'a str) -> &'a str {
+        match self.input.as_ref() {
+            Some(i) => &i.shape,
+            None => default,
+        }
     }
 
     pub fn output_shape_or(&'a self, default: &'a str) -> &'a str {

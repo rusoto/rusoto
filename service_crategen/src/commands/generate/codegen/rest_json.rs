@@ -14,11 +14,14 @@ pub struct RestJsonGenerator;
 impl GenerateProtocol for RestJsonGenerator {
     fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
-            let input_type = operation.input_shape();
+            let input_type = match &operation.input {
+                Some(_) => operation.input_shape(),
+                None => "", // ?
+            };
             let output_type = operation.output_shape_or("()");
 
             // Retrieve the `Shape` for the input for this operation.
-            let input_shape = &service.get_shape(input_type).unwrap();
+            let input_shape = &service.get_shape(input_type);
 
             writeln!(
                 writer,
@@ -38,11 +41,11 @@ impl GenerateProtocol for RestJsonGenerator {
 
     fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
-            let input_type = operation.input_shape();
+            let input_type = operation.input_shape_or("()");
             let output_type = operation.output_shape_or("()");
 
             // Retrieve the `Shape` for the input for this operation.
-            let input_shape = &service.get_shape(input_type).unwrap();
+            let input_shape = &service.get_shape(input_type);
 
             let (request_uri, _) =
                 rest_request_generator::parse_query_string(&operation.http.request_uri);
@@ -176,34 +179,43 @@ fn generate_endpoint_modification(service: &Service<'_>) -> Option<String> {
 
 // IoT defines a lot of empty (and therefore unnecessary) request shapes
 // don't clutter method signatures with them
-fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
-    if shape.members.is_some() && !shape.members.as_ref().unwrap().is_empty() {
-        format!(
-            "fn {method_name}(&self, input: {input_type})",
-            method_name = operation.name.to_snake_case(),
-            input_type = operation.input_shape()
-        )
-    } else {
-        format!(
+fn generate_method_signature(operation: &Operation, shape: &Option<&Shape>) -> String {
+    match shape {
+        Some(s) => {
+            if s.members.is_some() && !s.members.as_ref().unwrap().is_empty() {
+                format!(
+                    "fn {method_name}(&self, input: {input_type})",
+                    method_name = operation.name.to_snake_case(),
+                    input_type = operation.input_shape()
+                )
+            } else {
+                format!(
+                    "fn {method_name}(&self)",
+                    method_name = operation.name.to_snake_case()
+                )
+            }
+        }
+        None => format!(
             "fn {method_name}(&self)",
             method_name = operation.name.to_snake_case()
-        )
+        ),
     }
 }
 
 // Figure out what, if anything, should be sent as the body of the http request
-fn generate_payload(service: &Service<'_>, input_shape: &Shape) -> Option<String> {
-    let declare_payload = match input_shape.payload {
+fn generate_payload(service: &Service<'_>, input_shape: &Option<&Shape>) -> Option<String> {
+    let i = input_shape.as_ref()?;
+    let declare_payload = match i.payload {
         // if the input shape explicitly specifies a payload field, use that
         Some(ref payload_member_name) => {
-            Some(declared_payload(input_shape, payload_member_name, service))
+            Some(declared_payload(i, payload_member_name, service))
         }
 
         // otherwise see if the input_shape itself should be serialized as the payload
         None => {
             // only use the input_shape if it has non-query, non-header members
             // (i.e., location unspecified)
-            if input_shape
+            if i
                 .members
                 .as_ref()
                 .unwrap()
@@ -262,6 +274,7 @@ fn service_has_query_parameters(service: &Service<'_>) -> bool {
     service
         .operations()
         .iter()
+        .filter(|operation| operation.1.input.is_some())
         .map(|(_, operation)| operation.input_shape())
         .map(|input_type| service.get_shape(input_type).unwrap())
         .any(|input_shape| input_shape.has_query_parameters())
