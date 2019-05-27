@@ -149,12 +149,15 @@ jobs:
         set PATH=%PATH%;%USERPROFILE%\.cargo\bin
         echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
       displayName: 'Install Rust'
-    - script: RUST_VERSION=beta make unit_test
+    - script: make unit_test
       displayName: 'Run unit tests'
-    - script: RUST_VERSION=beta make rustls_unit_test
+      env: { RUST_VERSION: beta }
+    - script: make rustls_unit_test
       displayName: 'Run unit tests with rustls'
-    - script: RUST_VERSION=beta make check_integration_test
+      env: { RUST_VERSION: beta }
+    - script: make check_integration_test
       displayName: 'Cargo check integration tests'
+      env: { RUST_VERSION: beta }
 
 - job: 'unit_and_integration_tests_windows_nightly'
   displayName: 'Unit and integration tests on Windows (nightly channel)'
@@ -168,15 +171,18 @@ jobs:
         set PATH=%PATH%;%USERPROFILE%\.cargo\bin
         echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
       displayName: 'Install Rust'
-    - script: RUST_VERSION=nightly make unit_test
+    - script: make unit_test
       displayName: 'Run unit tests'
       continueOnError: true
-    - script: RUST_VERSION=nightly make rustls_unit_test
+      env: { RUST_VERSION: nightly }
+    - script: make rustls_unit_test
       displayName: 'Run unit tests with rustls'
       continueOnError: true
-    - script: RUST_VERSION=nightly make check_integration_test
+      env: { RUST_VERSION: nightly }
+    - script: make check_integration_test
       displayName: 'Cargo check integration tests'
       continueOnError: true
+      env: { RUST_VERSION: nightly }
 
 - job: 'crate_gen_linux'
   displayName: 'Crate generation on Linux'
