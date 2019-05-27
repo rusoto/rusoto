@@ -526,7 +526,12 @@ fn generate_struct_fields<P: GenerateProtocol>(
                 lines.push(format!("pub {}: Box<Option<{}>>,", name, rs_type))
             }
         } else {
-            if shape.required(member_name) {
+            // In the official documentation the fields revision_change_id and created are required
+            // but when looking at the responses from aws those are not always set.
+            // See https://github.com/rusoto/rusoto/issues/1419 for more information
+            if service.name() == "CodePipeline" && shape_name == "ActionRevision" && name == "revision_change_id" || name == "created" {
+                lines.push(format!("pub {}: Option<{}>,", name, rs_type))
+            } else if shape.required(member_name) {
                 lines.push(format!("pub {}: {},", name, rs_type))
             } else if name == "type" {
                 lines.push(format!("pub aws_{}: Option<{}>,", name,rs_type))
