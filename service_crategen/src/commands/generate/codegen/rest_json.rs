@@ -181,20 +181,17 @@ fn generate_endpoint_modification(service: &Service<'_>) -> Option<String> {
 // don't clutter method signatures with them
 fn generate_method_signature(operation: &Operation, shape: &Option<&Shape>) -> String {
     match shape {
-        Some(s) => {
-            if s.members.is_some() && !s.members.as_ref().unwrap().is_empty() {
-                format!(
-                    "fn {method_name}(&self, input: {input_type})",
-                    method_name = operation.name.to_snake_case(),
-                    input_type = operation.input_shape()
-                )
-            } else {
-                format!(
-                    "fn {method_name}(&self)",
-                    method_name = operation.name.to_snake_case()
-                )
-            }
-        }
+        Some(s) => match s.members {
+            Some(ref members) if !members.is_empty() => format!(
+                "fn {method_name}(&self, input: {input_type})",
+                method_name = operation.name.to_snake_case(),
+                input_type = operation.input_shape()
+            ),
+            _ => format!(
+                "fn {method_name}(&self)",
+                method_name = operation.name.to_snake_case()
+            ),
+        },
         None => format!(
             "fn {method_name}(&self)",
             method_name = operation.name.to_snake_case()
@@ -207,16 +204,13 @@ fn generate_payload(service: &Service<'_>, input_shape: &Option<&Shape>) -> Opti
     let i = input_shape.as_ref()?;
     let declare_payload = match i.payload {
         // if the input shape explicitly specifies a payload field, use that
-        Some(ref payload_member_name) => {
-            Some(declared_payload(i, payload_member_name, service))
-        }
+        Some(ref payload_member_name) => Some(declared_payload(i, payload_member_name, service)),
 
         // otherwise see if the input_shape itself should be serialized as the payload
         None => {
             // only use the input_shape if it has non-query, non-header members
             // (i.e., location unspecified)
-            if i
-                .members
+            if i.members
                 .as_ref()
                 .unwrap()
                 .iter()
