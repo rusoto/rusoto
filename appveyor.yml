@@ -27,13 +27,9 @@ install:
 build: off
 test_script:
   - cargo update
-  - cargo test --all --lib -v
-  - cargo test --all --lib -v --no-default-features --features=rustls
-  - cd integration_tests
-  - cargo check --tests --features "all"
-  - cd ..
-  - cd skeptical
-  - cargo test
+  - make unit_test
+  - make rustls_unit_test
+  - make check_integration_test
 
 branches:
   only:

@@ -28,6 +28,8 @@ jobs:
     vmImage: 'Ubuntu-16.04'
 
   steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
@@ -46,6 +48,8 @@ jobs:
     vmImage: 'Ubuntu-16.04'
 
   steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
@@ -67,6 +71,8 @@ jobs:
     vmImage: 'macos-10.13'
 
   steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
@@ -85,6 +91,8 @@ jobs:
     vmImage: 'macos-10.13'
 
   steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain beta
@@ -103,6 +111,8 @@ jobs:
     vmImage: 'macos-10.13'
 
   steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
@@ -124,6 +134,8 @@ jobs:
     vmImage: 'Ubuntu-16.04'
 
   steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
@@ -142,6 +154,8 @@ jobs:
     vmImage: 'macos-10.13'
 
   steps:
+    - checkout: self
+      fetchDepth: 5
     - script: |
         set -e
         curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
@@ -153,3 +167,40 @@ jobs:
       displayName: 'Fetch botocore sources'
     - script: make generate
       displayName: 'Generate crates from botocore'
+
+- job: 'crate_gen_windows'
+  displayName: 'Crate generation on Windows'
+  pool:
+    vmImage: 'vs2017-win2016'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
+    - script: |
+        curl -sSf -o rustup-init.exe https://win.rustup.rs
+        rustup-init.exe -y --default-toolchain stable
+        set PATH=%PATH%;%USERPROFILE%\.cargo\bin
+        echo "##vso[task.setvariable variable=PATH;]%PATH%;%USERPROFILE%\.cargo\bin"
+      displayName: 'Install Rust'
+    - script: rustup component add --toolchain stable rustfmt
+      displayName: 'Install rustfmt'
+    - script: git submodule update --init --recursive
+      displayName: 'Fetch botocore sources'
+    - script: make generate
+      displayName: 'Generate crates from botocore'
+
+- job: 'skeptic_linux'
+  displayName: 'Skeptic tests on Linux'
+  pool:
+    vmImage: 'Ubuntu-16.04'
+
+  steps:
+    - checkout: self
+      fetchDepth: 5
+    - script: |
+        set -e
+        curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+        echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
+      displayName: 'Install Rust'
+    - script: make skeptical
+      displayName: 'Run skeptic tests'
