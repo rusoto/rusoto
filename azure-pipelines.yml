@@ -132,9 +132,9 @@ jobs:
       displayName: 'Install Rust'
     - script: make unit_test
       displayName: 'Run unit tests'
-    - script: make rustls_unit_test
+    - script: make clean rustls_unit_test
       displayName: 'Run unit tests with rustls'
-    - script: make check_integration_test
+    - script: make clean check_integration_test
       displayName: 'Cargo check integration tests'
 
 - job: 'unit_and_integration_tests_windows_beta'
@@ -152,10 +152,10 @@ jobs:
     - script: make unit_test
       displayName: 'Run unit tests'
       env: { RUST_VERSION: beta }
-    - script: make rustls_unit_test
+    - script: make clean rustls_unit_test
       displayName: 'Run unit tests with rustls'
       env: { RUST_VERSION: beta }
-    - script: make check_integration_test
+    - script: make clean check_integration_test
       displayName: 'Cargo check integration tests'
       env: { RUST_VERSION: beta }
 
@@ -175,11 +175,11 @@ jobs:
       displayName: 'Run unit tests'
       continueOnError: true
       env: { RUST_VERSION: nightly }
-    - script: make rustls_unit_test
+    - script: make clean rustls_unit_test
       displayName: 'Run unit tests with rustls'
       continueOnError: true
       env: { RUST_VERSION: nightly }
-    - script: make check_integration_test
+    - script: make clean check_integration_test
       displayName: 'Cargo check integration tests'
       continueOnError: true
       env: { RUST_VERSION: nightly }
