@@ -1,13 +1,9 @@
-extern crate env_logger;
-extern crate stopwatch;
-
 use std::collections::BTreeMap;
 use std::fs::{self, OpenOptions};
 use std::io::{BufWriter, Read, Write};
 use std::path::Path;
 use std::process::Command;
 
-use self::stopwatch::Stopwatch;
 use rayon::prelude::*;
 use toml;
 
@@ -63,7 +59,6 @@ pub fn generate_services(
     out_dir: &Path,
     service_to_generate: &Option<&Vec<&str>>,
 ) {
-    let _ = env_logger::try_init();
     if !out_dir.exists() {
         fs::create_dir(out_dir).expect("Unable to create output directory");
     }
@@ -73,7 +68,6 @@ pub fn generate_services(
             return;
         }
 
-        let sw = Stopwatch::start_new();
         let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
             Ok(sd) => Service::new(service_config, sd),
             Err(_) => panic!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name),
@@ -288,11 +282,9 @@ pub use crate::custom::*;
                     .open(&custom_mod_file_path)
                     .expect("Unable to write mod.rs");
             }
-            debug!("Service generation of {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
 
         {
-            let sw = Stopwatch::start_new();
             let src_dir = crate_dir.join("src");
             let gen_file_path = src_dir.join("generated.rs");
 
@@ -305,11 +297,9 @@ pub use crate::custom::*;
             if !status.success() {
                 panic!("rustfmt failed");
             }
-            debug!("Rustfmt of {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
 
         {
-            let sw = Stopwatch::start_new();
             let test_resources_dir = crate_dir.join("test_resources");
 
             if !test_resources_dir.exists() {
@@ -347,7 +337,6 @@ pub use crate::custom::*;
                     fs::copy(resource.full_path, test_error_resources_dir.join(&resource.file_name)).expect("Failed to copy test resource file");
                 }
             }
-            debug!("Service test generation from botocore for {} took {}ms", service.full_name(), sw.elapsed_ms());
         }
     });
 }
