@@ -2451,7 +2451,7 @@ impl XRayClient {
     pub fn new(region: region::Region) -> XRayClient {
         XRayClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2468,7 +2468,7 @@ impl XRayClient {
     {
         XRayClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

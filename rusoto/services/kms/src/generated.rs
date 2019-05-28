@@ -4049,7 +4049,7 @@ impl KmsClient {
     pub fn new(region: region::Region) -> KmsClient {
         KmsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -4066,7 +4066,7 @@ impl KmsClient {
     {
         KmsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

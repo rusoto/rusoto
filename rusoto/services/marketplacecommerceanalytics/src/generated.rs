@@ -198,7 +198,7 @@ impl MarketplaceCommerceAnalyticsClient {
     pub fn new(region: region::Region) -> MarketplaceCommerceAnalyticsClient {
         MarketplaceCommerceAnalyticsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -215,7 +215,7 @@ impl MarketplaceCommerceAnalyticsClient {
     {
         MarketplaceCommerceAnalyticsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -95,7 +95,7 @@ pub struct AddSourceIdentifierToSubscriptionResult {
 struct AddSourceIdentifierToSubscriptionResultDeserializer;
 impl AddSourceIdentifierToSubscriptionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AddSourceIdentifierToSubscriptionResult, XmlParseError> {
@@ -142,10 +142,7 @@ impl AddTagsToResourceMessageSerializer {
 struct ApplyMethodDeserializer;
 impl ApplyMethodDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -189,7 +186,7 @@ pub struct ApplyPendingMaintenanceActionResult {
 struct ApplyPendingMaintenanceActionResultDeserializer;
 impl ApplyPendingMaintenanceActionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ApplyPendingMaintenanceActionResult, XmlParseError> {
@@ -215,7 +212,7 @@ impl ApplyPendingMaintenanceActionResultDeserializer {
 struct AttributeValueListDeserializer;
 impl AttributeValueListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -251,7 +248,7 @@ pub struct AvailabilityZone {
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityZone, XmlParseError> {
@@ -269,7 +266,7 @@ impl AvailabilityZoneDeserializer {
 struct AvailabilityZoneListDeserializer;
 impl AvailabilityZoneListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AvailabilityZone>, XmlParseError> {
@@ -289,7 +286,7 @@ impl AvailabilityZoneListDeserializer {
 struct AvailabilityZonesDeserializer;
 impl AvailabilityZonesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -318,10 +315,7 @@ impl AvailabilityZonesSerializer {
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -332,10 +326,7 @@ impl BooleanDeserializer {
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -355,7 +346,7 @@ pub struct CharacterSet {
 struct CharacterSetDeserializer;
 impl CharacterSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CharacterSet, XmlParseError> {
@@ -459,7 +450,7 @@ pub struct CopyDBClusterParameterGroupResult {
 struct CopyDBClusterParameterGroupResultDeserializer;
 impl CopyDBClusterParameterGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBClusterParameterGroupResult, XmlParseError> {
@@ -538,7 +529,7 @@ pub struct CopyDBClusterSnapshotResult {
 struct CopyDBClusterSnapshotResultDeserializer;
 impl CopyDBClusterSnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBClusterSnapshotResult, XmlParseError> {
@@ -607,7 +598,7 @@ pub struct CopyDBParameterGroupResult {
 struct CopyDBParameterGroupResultDeserializer;
 impl CopyDBParameterGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyDBParameterGroupResult, XmlParseError> {
@@ -824,7 +815,7 @@ pub struct CreateDBClusterParameterGroupResult {
 struct CreateDBClusterParameterGroupResultDeserializer;
 impl CreateDBClusterParameterGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterParameterGroupResult, XmlParseError> {
@@ -855,7 +846,7 @@ pub struct CreateDBClusterResult {
 struct CreateDBClusterResultDeserializer;
 impl CreateDBClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterResult, XmlParseError> {
@@ -911,7 +902,7 @@ pub struct CreateDBClusterSnapshotResult {
 struct CreateDBClusterSnapshotResultDeserializer;
 impl CreateDBClusterSnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBClusterSnapshotResult, XmlParseError> {
@@ -1205,7 +1196,7 @@ pub struct CreateDBInstanceResult {
 struct CreateDBInstanceResultDeserializer;
 impl CreateDBInstanceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBInstanceResult, XmlParseError> {
@@ -1265,7 +1256,7 @@ pub struct CreateDBParameterGroupResult {
 struct CreateDBParameterGroupResultDeserializer;
 impl CreateDBParameterGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBParameterGroupResult, XmlParseError> {
@@ -1335,7 +1326,7 @@ pub struct CreateDBSubnetGroupResult {
 struct CreateDBSubnetGroupResultDeserializer;
 impl CreateDBSubnetGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDBSubnetGroupResult, XmlParseError> {
@@ -1423,7 +1414,7 @@ pub struct CreateEventSubscriptionResult {
 struct CreateEventSubscriptionResultDeserializer;
 impl CreateEventSubscriptionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateEventSubscriptionResult, XmlParseError> {
@@ -1523,7 +1514,7 @@ pub struct DBCluster {
 struct DBClusterDeserializer;
 impl DBClusterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBCluster, XmlParseError> {
@@ -1710,7 +1701,7 @@ impl DBClusterDeserializer {
 struct DBClusterListDeserializer;
 impl DBClusterListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBCluster>, XmlParseError> {
@@ -1740,7 +1731,7 @@ pub struct DBClusterMember {
 struct DBClusterMemberDeserializer;
 impl DBClusterMemberDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterMember, XmlParseError> {
@@ -1777,7 +1768,7 @@ impl DBClusterMemberDeserializer {
 struct DBClusterMemberListDeserializer;
 impl DBClusterMemberListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterMember>, XmlParseError> {
@@ -1805,7 +1796,7 @@ pub struct DBClusterMessage {
 struct DBClusterMessageDeserializer;
 impl DBClusterMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterMessage, XmlParseError> {
@@ -1828,7 +1819,7 @@ impl DBClusterMessageDeserializer {
 struct DBClusterOptionGroupMembershipsDeserializer;
 impl DBClusterOptionGroupMembershipsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterOptionGroupStatus>, XmlParseError> {
@@ -1857,7 +1848,7 @@ pub struct DBClusterOptionGroupStatus {
 struct DBClusterOptionGroupStatusDeserializer;
 impl DBClusterOptionGroupStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterOptionGroupStatus, XmlParseError> {
@@ -1898,7 +1889,7 @@ pub struct DBClusterParameterGroup {
 struct DBClusterParameterGroupDeserializer;
 impl DBClusterParameterGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroup, XmlParseError> {
@@ -1946,7 +1937,7 @@ pub struct DBClusterParameterGroupDetails {
 struct DBClusterParameterGroupDetailsDeserializer;
 impl DBClusterParameterGroupDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupDetails, XmlParseError> {
@@ -1973,7 +1964,7 @@ impl DBClusterParameterGroupDetailsDeserializer {
 struct DBClusterParameterGroupListDeserializer;
 impl DBClusterParameterGroupListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterParameterGroup>, XmlParseError> {
@@ -1999,7 +1990,7 @@ pub struct DBClusterParameterGroupNameMessage {
 struct DBClusterParameterGroupNameMessageDeserializer;
 impl DBClusterParameterGroupNameMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupNameMessage, XmlParseError> {
@@ -2031,7 +2022,7 @@ pub struct DBClusterParameterGroupsMessage {
 struct DBClusterParameterGroupsMessageDeserializer;
 impl DBClusterParameterGroupsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterParameterGroupsMessage, XmlParseError> {
@@ -2070,7 +2061,7 @@ pub struct DBClusterRole {
 struct DBClusterRoleDeserializer;
 impl DBClusterRoleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterRole, XmlParseError> {
@@ -2091,7 +2082,7 @@ impl DBClusterRoleDeserializer {
 struct DBClusterRolesDeserializer;
 impl DBClusterRolesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterRole>, XmlParseError> {
@@ -2156,7 +2147,7 @@ pub struct DBClusterSnapshot {
 struct DBClusterSnapshotDeserializer;
 impl DBClusterSnapshotDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshot, XmlParseError> {
@@ -2269,7 +2260,7 @@ pub struct DBClusterSnapshotAttribute {
 struct DBClusterSnapshotAttributeDeserializer;
 impl DBClusterSnapshotAttributeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotAttribute, XmlParseError> {
@@ -2297,7 +2288,7 @@ impl DBClusterSnapshotAttributeDeserializer {
 struct DBClusterSnapshotAttributeListDeserializer;
 impl DBClusterSnapshotAttributeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterSnapshotAttribute>, XmlParseError> {
@@ -2326,7 +2317,7 @@ pub struct DBClusterSnapshotAttributesResult {
 struct DBClusterSnapshotAttributesResultDeserializer;
 impl DBClusterSnapshotAttributesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotAttributesResult, XmlParseError> {
@@ -2359,7 +2350,7 @@ impl DBClusterSnapshotAttributesResultDeserializer {
 struct DBClusterSnapshotListDeserializer;
 impl DBClusterSnapshotListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBClusterSnapshot>, XmlParseError> {
@@ -2387,7 +2378,7 @@ pub struct DBClusterSnapshotMessage {
 struct DBClusterSnapshotMessageDeserializer;
 impl DBClusterSnapshotMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBClusterSnapshotMessage, XmlParseError> {
@@ -2446,7 +2437,7 @@ pub struct DBEngineVersion {
 struct DBEngineVersionDeserializer;
 impl DBEngineVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBEngineVersion, XmlParseError> {
@@ -2534,7 +2525,7 @@ impl DBEngineVersionDeserializer {
 struct DBEngineVersionListDeserializer;
 impl DBEngineVersionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBEngineVersion>, XmlParseError> {
@@ -2562,7 +2553,7 @@ pub struct DBEngineVersionMessage {
 struct DBEngineVersionMessageDeserializer;
 impl DBEngineVersionMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBEngineVersionMessage, XmlParseError> {
@@ -2692,7 +2683,7 @@ pub struct DBInstance {
 struct DBInstanceDeserializer;
 impl DBInstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstance, XmlParseError> {
@@ -2979,7 +2970,7 @@ impl DBInstanceDeserializer {
 struct DBInstanceListDeserializer;
 impl DBInstanceListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBInstance>, XmlParseError> {
@@ -3004,7 +2995,7 @@ pub struct DBInstanceMessage {
 struct DBInstanceMessageDeserializer;
 impl DBInstanceMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceMessage, XmlParseError> {
@@ -3040,7 +3031,7 @@ pub struct DBInstanceStatusInfo {
 struct DBInstanceStatusInfoDeserializer;
 impl DBInstanceStatusInfoDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBInstanceStatusInfo, XmlParseError> {
@@ -3067,7 +3058,7 @@ impl DBInstanceStatusInfoDeserializer {
 struct DBInstanceStatusInfoListDeserializer;
 impl DBInstanceStatusInfoListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBInstanceStatusInfo>, XmlParseError> {
@@ -3100,7 +3091,7 @@ pub struct DBParameterGroup {
 struct DBParameterGroupDeserializer;
 impl DBParameterGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroup, XmlParseError> {
@@ -3144,7 +3135,7 @@ pub struct DBParameterGroupDetails {
 struct DBParameterGroupDetailsDeserializer;
 impl DBParameterGroupDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupDetails, XmlParseError> {
@@ -3171,7 +3162,7 @@ impl DBParameterGroupDetailsDeserializer {
 struct DBParameterGroupListDeserializer;
 impl DBParameterGroupListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBParameterGroup>, XmlParseError> {
@@ -3197,7 +3188,7 @@ pub struct DBParameterGroupNameMessage {
 struct DBParameterGroupNameMessageDeserializer;
 impl DBParameterGroupNameMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupNameMessage, XmlParseError> {
@@ -3231,7 +3222,7 @@ pub struct DBParameterGroupStatus {
 struct DBParameterGroupStatusDeserializer;
 impl DBParameterGroupStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupStatus, XmlParseError> {
@@ -3258,7 +3249,7 @@ impl DBParameterGroupStatusDeserializer {
 struct DBParameterGroupStatusListDeserializer;
 impl DBParameterGroupStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBParameterGroupStatus>, XmlParseError> {
@@ -3286,7 +3277,7 @@ pub struct DBParameterGroupsMessage {
 struct DBParameterGroupsMessageDeserializer;
 impl DBParameterGroupsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBParameterGroupsMessage, XmlParseError> {
@@ -3325,7 +3316,7 @@ pub struct DBSecurityGroupMembership {
 struct DBSecurityGroupMembershipDeserializer;
 impl DBSecurityGroupMembershipDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSecurityGroupMembership, XmlParseError> {
@@ -3353,7 +3344,7 @@ impl DBSecurityGroupMembershipDeserializer {
 struct DBSecurityGroupMembershipListDeserializer;
 impl DBSecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBSecurityGroupMembership>, XmlParseError> {
@@ -3402,7 +3393,7 @@ pub struct DBSubnetGroup {
 struct DBSubnetGroupDeserializer;
 impl DBSubnetGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSubnetGroup, XmlParseError> {
@@ -3451,7 +3442,7 @@ pub struct DBSubnetGroupMessage {
 struct DBSubnetGroupMessageDeserializer;
 impl DBSubnetGroupMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DBSubnetGroupMessage, XmlParseError> {
@@ -3474,7 +3465,7 @@ impl DBSubnetGroupMessageDeserializer {
 struct DBSubnetGroupsDeserializer;
 impl DBSubnetGroupsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DBSubnetGroup>, XmlParseError> {
@@ -3556,7 +3547,7 @@ pub struct DeleteDBClusterResult {
 struct DeleteDBClusterResultDeserializer;
 impl DeleteDBClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBClusterResult, XmlParseError> {
@@ -3601,7 +3592,7 @@ pub struct DeleteDBClusterSnapshotResult {
 struct DeleteDBClusterSnapshotResultDeserializer;
 impl DeleteDBClusterSnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBClusterSnapshotResult, XmlParseError> {
@@ -3666,7 +3657,7 @@ pub struct DeleteDBInstanceResult {
 struct DeleteDBInstanceResultDeserializer;
 impl DeleteDBInstanceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDBInstanceResult, XmlParseError> {
@@ -3756,7 +3747,7 @@ pub struct DeleteEventSubscriptionResult {
 struct DeleteEventSubscriptionResultDeserializer;
 impl DeleteEventSubscriptionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteEventSubscriptionResult, XmlParseError> {
@@ -3901,7 +3892,7 @@ pub struct DescribeDBClusterSnapshotAttributesResult {
 struct DescribeDBClusterSnapshotAttributesResultDeserializer;
 impl DescribeDBClusterSnapshotAttributesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDBClusterSnapshotAttributesResult, XmlParseError> {
@@ -4332,7 +4323,7 @@ pub struct DescribeEngineDefaultClusterParametersResult {
 struct DescribeEngineDefaultClusterParametersResultDeserializer;
 impl DescribeEngineDefaultClusterParametersResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEngineDefaultClusterParametersResult, XmlParseError> {
@@ -4403,7 +4394,7 @@ pub struct DescribeEngineDefaultParametersResult {
 struct DescribeEngineDefaultParametersResultDeserializer;
 impl DescribeEngineDefaultParametersResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEngineDefaultParametersResult, XmlParseError> {
@@ -4696,7 +4687,7 @@ pub struct DescribeValidDBInstanceModificationsResult {
 struct DescribeValidDBInstanceModificationsResultDeserializer;
 impl DescribeValidDBInstanceModificationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeValidDBInstanceModificationsResult, XmlParseError> {
@@ -4736,7 +4727,7 @@ pub struct DomainMembership {
 struct DomainMembershipDeserializer;
 impl DomainMembershipDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainMembership, XmlParseError> {
@@ -4764,7 +4755,7 @@ impl DomainMembershipDeserializer {
 struct DomainMembershipListDeserializer;
 impl DomainMembershipListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DomainMembership>, XmlParseError> {
@@ -4784,10 +4775,7 @@ impl DomainMembershipListDeserializer {
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -4798,10 +4786,7 @@ impl DoubleDeserializer {
 struct DoubleOptionalDeserializer;
 impl DoubleOptionalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -4821,7 +4806,7 @@ pub struct DoubleRange {
 struct DoubleRangeDeserializer;
 impl DoubleRangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DoubleRange, XmlParseError> {
@@ -4842,7 +4827,7 @@ impl DoubleRangeDeserializer {
 struct DoubleRangeListDeserializer;
 impl DoubleRangeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DoubleRange>, XmlParseError> {
@@ -4870,7 +4855,7 @@ pub struct Endpoint {
 struct EndpointDeserializer;
 impl EndpointDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Endpoint, XmlParseError> {
@@ -4906,7 +4891,7 @@ pub struct EngineDefaults {
 struct EngineDefaultsDeserializer;
 impl EngineDefaultsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EngineDefaults, XmlParseError> {
@@ -4952,10 +4937,7 @@ pub struct Event {
 struct EventDeserializer;
 impl EventDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Event, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
         deserialize_elements::<_, Event, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Date" => {
@@ -4989,7 +4971,7 @@ impl EventDeserializer {
 struct EventCategoriesListDeserializer;
 impl EventCategoriesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -5027,7 +5009,7 @@ pub struct EventCategoriesMap {
 struct EventCategoriesMapDeserializer;
 impl EventCategoriesMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventCategoriesMap, XmlParseError> {
@@ -5050,7 +5032,7 @@ impl EventCategoriesMapDeserializer {
 struct EventCategoriesMapListDeserializer;
 impl EventCategoriesMapListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EventCategoriesMap>, XmlParseError> {
@@ -5076,7 +5058,7 @@ pub struct EventCategoriesMessage {
 struct EventCategoriesMessageDeserializer;
 impl EventCategoriesMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventCategoriesMessage, XmlParseError> {
@@ -5099,7 +5081,7 @@ impl EventCategoriesMessageDeserializer {
 struct EventListDeserializer;
 impl EventListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Event>, XmlParseError> {
@@ -5141,7 +5123,7 @@ pub struct EventSubscription {
 struct EventSubscriptionDeserializer;
 impl EventSubscriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventSubscription, XmlParseError> {
@@ -5201,7 +5183,7 @@ impl EventSubscriptionDeserializer {
 struct EventSubscriptionsListDeserializer;
 impl EventSubscriptionsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EventSubscription>, XmlParseError> {
@@ -5229,7 +5211,7 @@ pub struct EventSubscriptionsMessage {
 struct EventSubscriptionsMessageDeserializer;
 impl EventSubscriptionsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventSubscriptionsMessage, XmlParseError> {
@@ -5267,7 +5249,7 @@ pub struct EventsMessage {
 struct EventsMessageDeserializer;
 impl EventsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventsMessage, XmlParseError> {
@@ -5327,7 +5309,7 @@ pub struct FailoverDBClusterResult {
 struct FailoverDBClusterResultDeserializer;
 impl FailoverDBClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FailoverDBClusterResult, XmlParseError> {
@@ -5399,10 +5381,7 @@ impl FilterValueListSerializer {
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -5413,10 +5392,7 @@ impl IntegerDeserializer {
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -5467,7 +5443,7 @@ impl ListTagsForResourceMessageSerializer {
 struct LogTypeListDeserializer;
 impl LogTypeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -5634,7 +5610,7 @@ pub struct ModifyDBClusterResult {
 struct ModifyDBClusterResultDeserializer;
 impl ModifyDBClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBClusterResult, XmlParseError> {
@@ -5703,7 +5679,7 @@ pub struct ModifyDBClusterSnapshotAttributeResult {
 struct ModifyDBClusterSnapshotAttributeResultDeserializer;
 impl ModifyDBClusterSnapshotAttributeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBClusterSnapshotAttributeResult, XmlParseError> {
@@ -5975,7 +5951,7 @@ pub struct ModifyDBInstanceResult {
 struct ModifyDBInstanceResultDeserializer;
 impl ModifyDBInstanceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBInstanceResult, XmlParseError> {
@@ -6065,7 +6041,7 @@ pub struct ModifyDBSubnetGroupResult {
 struct ModifyDBSubnetGroupResultDeserializer;
 impl ModifyDBSubnetGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyDBSubnetGroupResult, XmlParseError> {
@@ -6141,7 +6117,7 @@ pub struct ModifyEventSubscriptionResult {
 struct ModifyEventSubscriptionResultDeserializer;
 impl ModifyEventSubscriptionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyEventSubscriptionResult, XmlParseError> {
@@ -6175,7 +6151,7 @@ pub struct OptionGroupMembership {
 struct OptionGroupMembershipDeserializer;
 impl OptionGroupMembershipDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionGroupMembership, XmlParseError> {
@@ -6197,7 +6173,7 @@ impl OptionGroupMembershipDeserializer {
 struct OptionGroupMembershipListDeserializer;
 impl OptionGroupMembershipListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OptionGroupMembership>, XmlParseError> {
@@ -6262,7 +6238,7 @@ pub struct OrderableDBInstanceOption {
 struct OrderableDBInstanceOptionDeserializer;
 impl OrderableDBInstanceOptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OrderableDBInstanceOption, XmlParseError> {
@@ -6388,7 +6364,7 @@ impl OrderableDBInstanceOptionDeserializer {
 struct OrderableDBInstanceOptionsListDeserializer;
 impl OrderableDBInstanceOptionsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OrderableDBInstanceOption>, XmlParseError> {
@@ -6416,7 +6392,7 @@ pub struct OrderableDBInstanceOptionsMessage {
 struct OrderableDBInstanceOptionsMessageDeserializer;
 impl OrderableDBInstanceOptionsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OrderableDBInstanceOptionsMessage, XmlParseError> {
@@ -6471,7 +6447,7 @@ pub struct Parameter {
 struct ParameterDeserializer;
 impl ParameterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Parameter, XmlParseError> {
@@ -6570,7 +6546,7 @@ impl ParameterSerializer {
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Parameter>, XmlParseError> {
@@ -6608,7 +6584,7 @@ pub struct PendingCloudwatchLogsExports {
 struct PendingCloudwatchLogsExportsDeserializer;
 impl PendingCloudwatchLogsExportsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingCloudwatchLogsExports, XmlParseError> {
@@ -6654,7 +6630,7 @@ pub struct PendingMaintenanceAction {
 struct PendingMaintenanceActionDeserializer;
 impl PendingMaintenanceActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingMaintenanceAction, XmlParseError> {
@@ -6698,7 +6674,7 @@ impl PendingMaintenanceActionDeserializer {
 struct PendingMaintenanceActionDetailsDeserializer;
 impl PendingMaintenanceActionDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PendingMaintenanceAction>, XmlParseError> {
@@ -6718,7 +6694,7 @@ impl PendingMaintenanceActionDetailsDeserializer {
 struct PendingMaintenanceActionsDeserializer;
 impl PendingMaintenanceActionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourcePendingMaintenanceActions>, XmlParseError> {
@@ -6746,7 +6722,7 @@ pub struct PendingMaintenanceActionsMessage {
 struct PendingMaintenanceActionsMessageDeserializer;
 impl PendingMaintenanceActionsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingMaintenanceActionsMessage, XmlParseError> {
@@ -6809,7 +6785,7 @@ pub struct PendingModifiedValues {
 struct PendingModifiedValuesDeserializer;
 impl PendingModifiedValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingModifiedValues, XmlParseError> {
@@ -6917,7 +6893,7 @@ pub struct PromoteReadReplicaDBClusterResult {
 struct PromoteReadReplicaDBClusterResultDeserializer;
 impl PromoteReadReplicaDBClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PromoteReadReplicaDBClusterResult, XmlParseError> {
@@ -6951,10 +6927,7 @@ pub struct Range {
 struct RangeDeserializer;
 impl RangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Range, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Range, XmlParseError> {
         deserialize_elements::<_, Range, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "From" => {
@@ -6975,7 +6948,7 @@ impl RangeDeserializer {
 struct RangeListDeserializer;
 impl RangeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Range>, XmlParseError> {
@@ -6992,7 +6965,7 @@ impl RangeListDeserializer {
 struct ReadReplicaDBClusterIdentifierListDeserializer;
 impl ReadReplicaDBClusterIdentifierListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -7012,7 +6985,7 @@ impl ReadReplicaDBClusterIdentifierListDeserializer {
 struct ReadReplicaDBInstanceIdentifierListDeserializer;
 impl ReadReplicaDBInstanceIdentifierListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -7032,7 +7005,7 @@ impl ReadReplicaDBInstanceIdentifierListDeserializer {
 struct ReadReplicaIdentifierListDeserializer;
 impl ReadReplicaIdentifierListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -7084,7 +7057,7 @@ pub struct RebootDBInstanceResult {
 struct RebootDBInstanceResultDeserializer;
 impl RebootDBInstanceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RebootDBInstanceResult, XmlParseError> {
@@ -7165,7 +7138,7 @@ pub struct RemoveSourceIdentifierFromSubscriptionResult {
 struct RemoveSourceIdentifierFromSubscriptionResultDeserializer;
 impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RemoveSourceIdentifierFromSubscriptionResult, XmlParseError> {
@@ -7293,7 +7266,7 @@ pub struct ResourcePendingMaintenanceActions {
 struct ResourcePendingMaintenanceActionsDeserializer;
 impl ResourcePendingMaintenanceActionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourcePendingMaintenanceActions, XmlParseError> {
@@ -7431,7 +7404,7 @@ pub struct RestoreDBClusterFromSnapshotResult {
 struct RestoreDBClusterFromSnapshotResultDeserializer;
 impl RestoreDBClusterFromSnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBClusterFromSnapshotResult, XmlParseError> {
@@ -7555,7 +7528,7 @@ pub struct RestoreDBClusterToPointInTimeResult {
 struct RestoreDBClusterToPointInTimeResultDeserializer;
 impl RestoreDBClusterToPointInTimeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreDBClusterToPointInTimeResult, XmlParseError> {
@@ -7578,7 +7551,7 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
 struct SourceIdsListDeserializer;
 impl SourceIdsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -7607,10 +7580,7 @@ impl SourceIdsListSerializer {
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7621,10 +7591,7 @@ impl SourceTypeDeserializer {
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7646,10 +7613,7 @@ pub struct Subnet {
 struct SubnetDeserializer;
 impl SubnetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Subnet, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Subnet, XmlParseError> {
         deserialize_elements::<_, Subnet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SubnetAvailabilityZone" => {
@@ -7687,7 +7651,7 @@ impl SubnetIdentifierListSerializer {
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Subnet>, XmlParseError> {
@@ -7704,7 +7668,7 @@ impl SubnetListDeserializer {
 struct SupportedCharacterSetsListDeserializer;
 impl SupportedCharacterSetsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CharacterSet>, XmlParseError> {
@@ -7724,7 +7688,7 @@ impl SupportedCharacterSetsListDeserializer {
 struct SupportedTimezonesListDeserializer;
 impl SupportedTimezonesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Timezone>, XmlParseError> {
@@ -7741,10 +7705,7 @@ impl SupportedTimezonesListDeserializer {
 struct TStampDeserializer;
 impl TStampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7764,10 +7725,7 @@ pub struct Tag {
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tag, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -7804,7 +7762,7 @@ impl TagSerializer {
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
@@ -7839,7 +7797,7 @@ pub struct TagListMessage {
 struct TagListMessageDeserializer;
 impl TagListMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagListMessage, XmlParseError> {
@@ -7866,7 +7824,7 @@ pub struct Timezone {
 struct TimezoneDeserializer;
 impl TimezoneDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Timezone, XmlParseError> {
@@ -7900,7 +7858,7 @@ pub struct UpgradeTarget {
 struct UpgradeTargetDeserializer;
 impl UpgradeTargetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpgradeTarget, XmlParseError> {
@@ -7942,7 +7900,7 @@ pub struct ValidDBInstanceModificationsMessage {
 struct ValidDBInstanceModificationsMessageDeserializer;
 impl ValidDBInstanceModificationsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ValidDBInstanceModificationsMessage, XmlParseError> {
@@ -7979,7 +7937,7 @@ pub struct ValidStorageOptions {
 struct ValidStorageOptionsDeserializer;
 impl ValidStorageOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ValidStorageOptions, XmlParseError> {
@@ -8012,7 +7970,7 @@ impl ValidStorageOptionsDeserializer {
 struct ValidStorageOptionsListDeserializer;
 impl ValidStorageOptionsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ValidStorageOptions>, XmlParseError> {
@@ -8032,7 +7990,7 @@ impl ValidStorageOptionsListDeserializer {
 struct ValidUpgradeTargetListDeserializer;
 impl ValidUpgradeTargetListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UpgradeTarget>, XmlParseError> {
@@ -8073,7 +8031,7 @@ pub struct VpcSecurityGroupMembership {
 struct VpcSecurityGroupMembershipDeserializer;
 impl VpcSecurityGroupMembershipDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcSecurityGroupMembership, XmlParseError> {
@@ -8101,7 +8059,7 @@ impl VpcSecurityGroupMembershipDeserializer {
 struct VpcSecurityGroupMembershipListDeserializer;
 impl VpcSecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcSecurityGroupMembership>, XmlParseError> {
@@ -8141,30 +8099,28 @@ impl AddRoleToDBClusterError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            AddRoleToDBClusterError::DBClusterNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            AddRoleToDBClusterError::DBClusterNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBClusterRoleAlreadyExists" => {
                         return RusotoError::Service(
-                            AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(String::from(
+                            AddRoleToDBClusterError::DBClusterRoleAlreadyExistsFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBClusterRoleQuotaExceeded" => {
                         return RusotoError::Service(
-                            AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(String::from(
+                            AddRoleToDBClusterError::DBClusterRoleQuotaExceededFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            AddRoleToDBClusterError::InvalidDBClusterStateFault(String::from(
+                            AddRoleToDBClusterError::InvalidDBClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -8219,14 +8175,14 @@ impl AddSourceIdentifierToSubscriptionError {
                     "SourceNotFound" => {
                         return RusotoError::Service(
                             AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8279,23 +8235,17 @@ impl AddTagsToResourceError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            AddTagsToResourceError::DBClusterNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            AddTagsToResourceError::DBClusterNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
-                            AddTagsToResourceError::DBInstanceNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            AddTagsToResourceError::DBInstanceNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
-                            AddTagsToResourceError::DBSnapshotNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            AddTagsToResourceError::DBSnapshotNotFoundFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -8347,7 +8297,7 @@ impl ApplyPendingMaintenanceActionError {
                     "ResourceNotFoundFault" => {
                         return RusotoError::Service(
                             ApplyPendingMaintenanceActionError::ResourceNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8402,21 +8352,21 @@ impl CopyDBClusterParameterGroupError {
                     "DBParameterGroupAlreadyExists" => {
                         return RusotoError::Service(
                             CopyDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CopyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CopyDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8481,43 +8431,43 @@ impl CopyDBClusterSnapshotError {
                     "DBClusterSnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(
                             CopyDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             CopyDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             CopyDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            CopyDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(
+                            CopyDBClusterSnapshotError::InvalidDBClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
-                            CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(String::from(
+                            CopyDBClusterSnapshotError::KMSKeyNotAccessibleFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
-                            CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
+                            CopyDBClusterSnapshotError::SnapshotQuotaExceededFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -8574,21 +8524,21 @@ impl CopyDBParameterGroupError {
                     "DBParameterGroupAlreadyExists" => {
                         return RusotoError::Service(
                             CopyDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
-                            CopyDBParameterGroupError::DBParameterGroupNotFoundFault(String::from(
+                            CopyDBParameterGroupError::DBParameterGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CopyDBParameterGroupError::DBParameterGroupQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8666,101 +8616,85 @@ impl CreateDBClusterError {
                 match &parsed_error.code[..] {
                     "DBClusterAlreadyExistsFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::DBClusterAlreadyExistsFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBClusterError::DBClusterAlreadyExistsFault(parsed_error.message),
                         )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(CreateDBClusterError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DBClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CreateDBClusterError::DBClusterParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBClusterQuotaExceededFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::DBClusterQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBClusterError::DBClusterQuotaExceededFault(parsed_error.message),
                         )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(CreateDBClusterError::DBInstanceNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(String::from(
+                            CreateDBClusterError::DBSubnetGroupDoesNotCoverEnoughAZs(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::DBSubnetGroupNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBClusterError::DBSubnetGroupNotFoundFault(parsed_error.message),
                         )
                     }
                     "InsufficientStorageClusterCapacity" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InsufficientStorageClusterCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::InvalidDBClusterStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
                         )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::InvalidDBInstanceStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
                         )
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
+                            CreateDBClusterError::InvalidDBSubnetGroupStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateDBClusterError::InvalidSubnet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::InvalidVPCNetworkStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBClusterError::InvalidVPCNetworkStateFault(parsed_error.message),
                         )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::KMSKeyNotAccessibleFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBClusterError::KMSKeyNotAccessibleFault(parsed_error.message),
                         )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
-                            CreateDBClusterError::StorageQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBClusterError::StorageQuotaExceededFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -8826,14 +8760,14 @@ impl CreateDBClusterParameterGroupError {
                     "DBParameterGroupAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDBClusterParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBClusterParameterGroupError::DBParameterGroupQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8894,37 +8828,37 @@ impl CreateDBClusterSnapshotError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterSnapshotError::DBClusterNotFoundFault(String::from(
+                            CreateDBClusterSnapshotError::DBClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBClusterSnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(
                             CreateDBClusterSnapshotError::DBClusterSnapshotAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(String::from(
+                            CreateDBClusterSnapshotError::InvalidDBClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
-                            CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(String::from(
+                            CreateDBClusterSnapshotError::SnapshotQuotaExceededFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9009,122 +8943,108 @@ impl CreateDBInstanceError {
                 match &parsed_error.code[..] {
                     "AuthorizationNotFound" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::AuthorizationNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBInstanceError::AuthorizationNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(CreateDBInstanceError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DBInstanceAlreadyExists" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
+                            CreateDBInstanceError::DBInstanceAlreadyExistsFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::DBParameterGroupNotFoundFault(String::from(
+                            CreateDBInstanceError::DBParameterGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
+                            CreateDBInstanceError::DBSecurityGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::DBSubnetGroupNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBInstanceError::DBSubnetGroupNotFoundFault(parsed_error.message),
                         )
                     }
                     "DomainNotFoundFault" => {
                         return RusotoError::Service(CreateDBInstanceError::DomainNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InstanceQuotaExceeded" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::InstanceQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBInstanceError::InstanceQuotaExceededFault(parsed_error.message),
                         )
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::InsufficientDBInstanceCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::InvalidDBClusterStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBInstanceError::InvalidDBClusterStateFault(parsed_error.message),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateDBInstanceError::InvalidSubnet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::InvalidVPCNetworkStateFault(String::from(
+                            CreateDBInstanceError::InvalidVPCNetworkStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::KMSKeyNotAccessibleFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBInstanceError::KMSKeyNotAccessibleFault(parsed_error.message),
                         )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::OptionGroupNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBInstanceError::OptionGroupNotFoundFault(parsed_error.message),
                         )
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
                         return RusotoError::Service(
                             CreateDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::StorageQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDBInstanceError::StorageQuotaExceededFault(parsed_error.message),
                         )
                     }
                     "StorageTypeNotSupported" => {
                         return RusotoError::Service(
-                            CreateDBInstanceError::StorageTypeNotSupportedFault(String::from(
+                            CreateDBInstanceError::StorageTypeNotSupportedFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9191,14 +9111,14 @@ impl CreateDBParameterGroupError {
                     "DBParameterGroupAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDBParameterGroupError::DBParameterGroupAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBParameterGroupError::DBParameterGroupQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9256,34 +9176,34 @@ impl CreateDBSubnetGroupError {
                     "DBSubnetGroupAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDBSubnetGroupError::DBSubnetGroupAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             CreateDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSubnetGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateDBSubnetGroupError::DBSubnetGroupQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSubnetQuotaExceededFault" => {
                         return RusotoError::Service(
-                            CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
+                            CreateDBSubnetGroupError::DBSubnetQuotaExceededFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateDBSubnetGroupError::InvalidSubnet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9347,49 +9267,47 @@ impl CreateEventSubscriptionError {
                     "EventSubscriptionQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SNSInvalidTopic" => {
                         return RusotoError::Service(
-                            CreateEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                            CreateEventSubscriptionError::SNSInvalidTopicFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SNSNoAuthorization" => {
                         return RusotoError::Service(
-                            CreateEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                            CreateEventSubscriptionError::SNSNoAuthorizationFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SNSTopicArnNotFound" => {
                         return RusotoError::Service(
-                            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
+                            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SourceNotFound" => {
                         return RusotoError::Service(
-                            CreateEventSubscriptionError::SourceNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateEventSubscriptionError::SourceNotFoundFault(parsed_error.message),
                         )
                     }
                     "SubscriptionAlreadyExist" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SubscriptionCategoryNotFound" => {
                         return RusotoError::Service(
                             CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9451,35 +9369,31 @@ impl DeleteDBClusterError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(DeleteDBClusterError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DBClusterSnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterError::DBClusterSnapshotAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
-                            DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(String::from(
+                            DeleteDBClusterError::InvalidDBClusterSnapshotStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            DeleteDBClusterError::InvalidDBClusterStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
                         )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
-                            DeleteDBClusterError::SnapshotQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteDBClusterError::SnapshotQuotaExceededFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -9535,14 +9449,14 @@ impl DeleteDBClusterParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             DeleteDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             DeleteDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9596,14 +9510,14 @@ impl DeleteDBClusterSnapshotError {
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterSnapshotError::DBClusterSnapshotNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             DeleteDBClusterSnapshotError::InvalidDBClusterSnapshotStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9660,37 +9574,31 @@ impl DeleteDBInstanceError {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
-                            DeleteDBInstanceError::DBInstanceNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBSnapshotAlreadyExists" => {
                         return RusotoError::Service(
-                            DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(String::from(
+                            DeleteDBInstanceError::DBSnapshotAlreadyExistsFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            DeleteDBInstanceError::InvalidDBClusterStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteDBInstanceError::InvalidDBClusterStateFault(parsed_error.message),
                         )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
-                            DeleteDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                            DeleteDBInstanceError::InvalidDBInstanceStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SnapshotQuotaExceeded" => {
                         return RusotoError::Service(
-                            DeleteDBInstanceError::SnapshotQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteDBInstanceError::SnapshotQuotaExceededFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -9744,14 +9652,14 @@ impl DeleteDBParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             DeleteDBParameterGroupError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             DeleteDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9804,23 +9712,23 @@ impl DeleteDBSubnetGroupError {
                 match &parsed_error.code[..] {
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
+                            DeleteDBSubnetGroupError::DBSubnetGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return RusotoError::Service(
-                            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(String::from(
+                            DeleteDBSubnetGroupError::InvalidDBSubnetGroupStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBSubnetStateFault" => {
                         return RusotoError::Service(
-                            DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(String::from(
+                            DeleteDBSubnetGroupError::InvalidDBSubnetStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9872,15 +9780,15 @@ impl DeleteEventSubscriptionError {
                     "InvalidEventSubscriptionState" => {
                         return RusotoError::Service(
                             DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
-                            DeleteEventSubscriptionError::SubscriptionNotFoundFault(String::from(
+                            DeleteEventSubscriptionError::SubscriptionNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9931,7 +9839,7 @@ impl DescribeDBClusterParameterGroupsError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             DescribeDBClusterParameterGroupsError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9984,7 +9892,7 @@ impl DescribeDBClusterParametersError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             DescribeDBClusterParametersError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10034,7 +9942,7 @@ impl DescribeDBClusterSnapshotAttributesError {
                 match &parsed_error.code[..] {
                     "DBClusterSnapshotNotFoundFault" => return RusotoError::Service(
                         DescribeDBClusterSnapshotAttributesError::DBClusterSnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     _ => {}
@@ -10086,7 +9994,7 @@ impl DescribeDBClusterSnapshotsError {
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             DescribeDBClusterSnapshotsError::DBClusterSnapshotNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10134,9 +10042,7 @@ impl DescribeDBClustersError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            DescribeDBClustersError::DBClusterNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeDBClustersError::DBClusterNotFoundFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -10220,9 +10126,7 @@ impl DescribeDBInstancesError {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
-                            DescribeDBInstancesError::DBInstanceNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeDBInstancesError::DBInstanceNotFoundFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -10270,7 +10174,7 @@ impl DescribeDBParameterGroupsError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             DescribeDBParameterGroupsError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10318,9 +10222,9 @@ impl DescribeDBParametersError {
                 match &parsed_error.code[..] {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
-                            DescribeDBParametersError::DBParameterGroupNotFoundFault(String::from(
+                            DescribeDBParametersError::DBParameterGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -10367,9 +10271,9 @@ impl DescribeDBSubnetGroupsError {
                 match &parsed_error.code[..] {
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(String::from(
+                            DescribeDBSubnetGroupsError::DBSubnetGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -10534,7 +10438,7 @@ impl DescribeEventSubscriptionsError {
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10661,7 +10565,7 @@ impl DescribePendingMaintenanceActionsError {
                     "ResourceNotFoundFault" => {
                         return RusotoError::Service(
                             DescribePendingMaintenanceActionsError::ResourceNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10714,14 +10618,14 @@ impl DescribeValidDBInstanceModificationsError {
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
                             DescribeValidDBInstanceModificationsError::DBInstanceNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
                             DescribeValidDBInstanceModificationsError::InvalidDBInstanceStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10776,23 +10680,21 @@ impl FailoverDBClusterError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            FailoverDBClusterError::DBClusterNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            FailoverDBClusterError::DBClusterNotFoundFault(parsed_error.message),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            FailoverDBClusterError::InvalidDBClusterStateFault(String::from(
+                            FailoverDBClusterError::InvalidDBClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
-                            FailoverDBClusterError::InvalidDBInstanceStateFault(String::from(
+                            FailoverDBClusterError::InvalidDBInstanceStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -10845,23 +10747,17 @@ impl ListTagsForResourceError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            ListTagsForResourceError::DBClusterNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ListTagsForResourceError::DBClusterNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
-                            ListTagsForResourceError::DBInstanceNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ListTagsForResourceError::DBInstanceNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
-                            ListTagsForResourceError::DBSnapshotNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ListTagsForResourceError::DBSnapshotNotFoundFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -10930,75 +10826,63 @@ impl ModifyDBClusterError {
                 match &parsed_error.code[..] {
                     "DBClusterAlreadyExistsFault" => {
                         return RusotoError::Service(
-                            ModifyDBClusterError::DBClusterAlreadyExistsFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBClusterError::DBClusterAlreadyExistsFault(parsed_error.message),
                         )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(ModifyDBClusterError::DBClusterNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DBClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyDBClusterError::DBClusterParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            ModifyDBClusterError::DBSubnetGroupNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBClusterError::DBSubnetGroupNotFoundFault(parsed_error.message),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            ModifyDBClusterError::InvalidDBClusterStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBClusterError::InvalidDBClusterStateFault(parsed_error.message),
                         )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
-                            ModifyDBClusterError::InvalidDBInstanceStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBClusterError::InvalidDBInstanceStateFault(parsed_error.message),
                         )
                     }
                     "InvalidDBSecurityGroupState" => {
                         return RusotoError::Service(
-                            ModifyDBClusterError::InvalidDBSecurityGroupStateFault(String::from(
+                            ModifyDBClusterError::InvalidDBSecurityGroupStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBSubnetGroupStateFault" => {
                         return RusotoError::Service(
-                            ModifyDBClusterError::InvalidDBSubnetGroupStateFault(String::from(
+                            ModifyDBClusterError::InvalidDBSubnetGroupStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(ModifyDBClusterError::InvalidSubnet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            ModifyDBClusterError::InvalidVPCNetworkStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBClusterError::InvalidVPCNetworkStateFault(parsed_error.message),
                         )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
-                            ModifyDBClusterError::StorageQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBClusterError::StorageQuotaExceededFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -11060,14 +10944,14 @@ impl ModifyDBClusterParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             ModifyDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -11125,19 +11009,19 @@ impl ModifyDBClusterSnapshotAttributeError {
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyDBClusterSnapshotAttributeError::DBClusterSnapshotNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterSnapshotStateFault" => return RusotoError::Service(
                         ModifyDBClusterSnapshotAttributeError::InvalidDBClusterSnapshotStateFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "SharedSnapshotQuotaExceeded" => {
                         return RusotoError::Service(
                             ModifyDBClusterSnapshotAttributeError::SharedSnapshotQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -11223,112 +11107,102 @@ impl ModifyDBInstanceError {
                 match &parsed_error.code[..] {
                     "AuthorizationNotFound" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::AuthorizationNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBInstanceError::AuthorizationNotFoundFault(parsed_error.message),
                         )
                     }
                     "CertificateNotFound" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::CertificateNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBInstanceError::CertificateNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBInstanceAlreadyExists" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::DBInstanceAlreadyExistsFault(String::from(
+                            ModifyDBInstanceError::DBInstanceAlreadyExistsFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::DBInstanceNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
                         )
                     }
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::DBParameterGroupNotFoundFault(String::from(
+                            ModifyDBInstanceError::DBParameterGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBSecurityGroupNotFound" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::DBSecurityGroupNotFoundFault(String::from(
+                            ModifyDBInstanceError::DBSecurityGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBUpgradeDependencyFailure" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::DBUpgradeDependencyFailureFault(String::from(
+                            ModifyDBInstanceError::DBUpgradeDependencyFailureFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DomainNotFoundFault" => {
                         return RusotoError::Service(ModifyDBInstanceError::DomainNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InsufficientDBInstanceCapacity" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::InsufficientDBInstanceCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                            ModifyDBInstanceError::InvalidDBInstanceStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBSecurityGroupState" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(String::from(
+                            ModifyDBInstanceError::InvalidDBSecurityGroupStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::InvalidVPCNetworkStateFault(String::from(
+                            ModifyDBInstanceError::InvalidVPCNetworkStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::OptionGroupNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBInstanceError::OptionGroupNotFoundFault(parsed_error.message),
                         )
                     }
                     "ProvisionedIopsNotAvailableInAZFault" => {
                         return RusotoError::Service(
                             ModifyDBInstanceError::ProvisionedIopsNotAvailableInAZFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::StorageQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyDBInstanceError::StorageQuotaExceededFault(parsed_error.message),
                         )
                     }
                     "StorageTypeNotSupported" => {
                         return RusotoError::Service(
-                            ModifyDBInstanceError::StorageTypeNotSupportedFault(String::from(
+                            ModifyDBInstanceError::StorageTypeNotSupportedFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -11393,14 +11267,14 @@ impl ModifyDBParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyDBParameterGroupError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             ModifyDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -11458,32 +11332,32 @@ impl ModifyDBSubnetGroupError {
                     "DBSubnetGroupDoesNotCoverEnoughAZs" => {
                         return RusotoError::Service(
                             ModifyDBSubnetGroupError::DBSubnetGroupDoesNotCoverEnoughAZs(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(String::from(
+                            ModifyDBSubnetGroupError::DBSubnetGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBSubnetQuotaExceededFault" => {
                         return RusotoError::Service(
-                            ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(String::from(
+                            ModifyDBSubnetGroupError::DBSubnetQuotaExceededFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(ModifyDBSubnetGroupError::InvalidSubnet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SubnetAlreadyInUse" => {
                         return RusotoError::Service(ModifyDBSubnetGroupError::SubnetAlreadyInUse(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -11545,43 +11419,43 @@ impl ModifyEventSubscriptionError {
                     "EventSubscriptionQuotaExceeded" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SNSInvalidTopic" => {
                         return RusotoError::Service(
-                            ModifyEventSubscriptionError::SNSInvalidTopicFault(String::from(
+                            ModifyEventSubscriptionError::SNSInvalidTopicFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SNSNoAuthorization" => {
                         return RusotoError::Service(
-                            ModifyEventSubscriptionError::SNSNoAuthorizationFault(String::from(
+                            ModifyEventSubscriptionError::SNSNoAuthorizationFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SNSTopicArnNotFound" => {
                         return RusotoError::Service(
-                            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(String::from(
+                            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SubscriptionCategoryNotFound" => {
                         return RusotoError::Service(
                             ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
-                            ModifyEventSubscriptionError::SubscriptionNotFoundFault(String::from(
+                            ModifyEventSubscriptionError::SubscriptionNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -11637,15 +11511,15 @@ impl PromoteReadReplicaDBClusterError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(String::from(
+                            PromoteReadReplicaDBClusterError::DBClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             PromoteReadReplicaDBClusterError::InvalidDBClusterStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -11696,16 +11570,14 @@ impl RebootDBInstanceError {
                 match &parsed_error.code[..] {
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
-                            RebootDBInstanceError::DBInstanceNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            RebootDBInstanceError::DBInstanceNotFoundFault(parsed_error.message),
                         )
                     }
                     "InvalidDBInstanceState" => {
                         return RusotoError::Service(
-                            RebootDBInstanceError::InvalidDBInstanceStateFault(String::from(
+                            RebootDBInstanceError::InvalidDBInstanceStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -11757,23 +11629,23 @@ impl RemoveRoleFromDBClusterError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            RemoveRoleFromDBClusterError::DBClusterNotFoundFault(String::from(
+                            RemoveRoleFromDBClusterError::DBClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBClusterRoleNotFound" => {
                         return RusotoError::Service(
-                            RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(String::from(
+                            RemoveRoleFromDBClusterError::DBClusterRoleNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
-                            RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(String::from(
+                            RemoveRoleFromDBClusterError::InvalidDBClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -11827,14 +11699,14 @@ impl RemoveSourceIdentifierFromSubscriptionError {
                     "SourceNotFound" => {
                         return RusotoError::Service(
                             RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SubscriptionNotFound" => {
                         return RusotoError::Service(
                             RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -11889,23 +11761,23 @@ impl RemoveTagsFromResourceError {
                 match &parsed_error.code[..] {
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
-                            RemoveTagsFromResourceError::DBClusterNotFoundFault(String::from(
+                            RemoveTagsFromResourceError::DBClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBInstanceNotFound" => {
                         return RusotoError::Service(
-                            RemoveTagsFromResourceError::DBInstanceNotFoundFault(String::from(
+                            RemoveTagsFromResourceError::DBInstanceNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
-                            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(String::from(
+                            RemoveTagsFromResourceError::DBSnapshotNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -11959,14 +11831,14 @@ impl ResetDBClusterParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ResetDBClusterParameterGroupError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             ResetDBClusterParameterGroupError::InvalidDBParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -12020,14 +11892,14 @@ impl ResetDBParameterGroupError {
                     "DBParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ResetDBParameterGroupError::DBParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBParameterGroupState" => {
                         return RusotoError::Service(
                             ResetDBParameterGroupError::InvalidDBParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -12109,7 +11981,7 @@ impl RestoreDBClusterFromSnapshotError {
                     "DBClusterAlreadyExistsFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBClusterAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -12123,96 +11995,94 @@ impl RestoreDBClusterFromSnapshotError {
                     "DBClusterQuotaExceededFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBClusterQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBClusterSnapshotNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSnapshotNotFound" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBSnapshotNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBSubnetGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InsufficientDBClusterCapacityFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InsufficientDBClusterCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InsufficientStorageClusterCapacity" => return RusotoError::Service(
                         RestoreDBClusterFromSnapshotError::InsufficientStorageClusterCapacityFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InvalidDBClusterSnapshotStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBSnapshotState" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InvalidDBSnapshotStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidRestoreFault" => {
                         return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::InvalidRestoreFault(String::from(
+                            RestoreDBClusterFromSnapshotError::InvalidRestoreFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(
-                            RestoreDBClusterFromSnapshotError::InvalidSubnet(String::from(
-                                parsed_error.message,
-                            )),
+                            RestoreDBClusterFromSnapshotError::InvalidSubnet(parsed_error.message),
                         )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::InvalidVPCNetworkStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::KMSKeyNotAccessibleFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::OptionGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::StorageQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -12318,14 +12188,14 @@ impl RestoreDBClusterToPointInTimeError {
                     "DBClusterAlreadyExistsFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBClusterAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBClusterNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBClusterNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -12337,96 +12207,94 @@ impl RestoreDBClusterToPointInTimeError {
                     "DBClusterQuotaExceededFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBClusterQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBClusterSnapshotNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBClusterSnapshotNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DBSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::DBSubnetGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InsufficientDBClusterCapacityFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InsufficientDBClusterCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InsufficientStorageClusterCapacity" => return RusotoError::Service(
                         RestoreDBClusterToPointInTimeError::InsufficientStorageClusterCapacityFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidDBClusterSnapshotStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidDBClusterSnapshotStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBClusterStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidDBClusterStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidDBSnapshotState" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidDBSnapshotStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidRestoreFault" => {
                         return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InvalidRestoreFault(String::from(
+                            RestoreDBClusterToPointInTimeError::InvalidRestoreFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(
-                            RestoreDBClusterToPointInTimeError::InvalidSubnet(String::from(
-                                parsed_error.message,
-                            )),
+                            RestoreDBClusterToPointInTimeError::InvalidSubnet(parsed_error.message),
                         )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::InvalidVPCNetworkStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "KMSKeyNotAccessibleFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::KMSKeyNotAccessibleFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "OptionGroupNotFoundFault" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::OptionGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "StorageQuotaExceeded" => {
                         return RusotoError::Service(
                             RestoreDBClusterToPointInTimeError::StorageQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -12851,7 +12719,7 @@ impl NeptuneClient {
     pub fn new(region: region::Region) -> NeptuneClient {
         NeptuneClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -12868,7 +12736,7 @@ impl NeptuneClient {
     {
         NeptuneClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

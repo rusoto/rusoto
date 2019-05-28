@@ -1639,7 +1639,7 @@ impl CodeStarClient {
     pub fn new(region: region::Region) -> CodeStarClient {
         CodeStarClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1656,7 +1656,7 @@ impl CodeStarClient {
     {
         CodeStarClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

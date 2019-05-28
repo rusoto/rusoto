@@ -4887,7 +4887,7 @@ impl WorkdocsClient {
     pub fn new(region: region::Region) -> WorkdocsClient {
         WorkdocsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -4904,7 +4904,7 @@ impl WorkdocsClient {
     {
         WorkdocsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

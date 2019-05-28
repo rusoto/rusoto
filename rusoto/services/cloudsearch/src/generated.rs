@@ -37,10 +37,7 @@ use xml::EventReader;
 struct APIVersionDeserializer;
 impl APIVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -51,10 +48,7 @@ impl APIVersionDeserializer {
 struct ARNDeserializer;
 impl ARNDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -72,7 +66,7 @@ pub struct AccessPoliciesStatus {
 struct AccessPoliciesStatusDeserializer;
 impl AccessPoliciesStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccessPoliciesStatus, XmlParseError> {
@@ -93,10 +87,7 @@ impl AccessPoliciesStatusDeserializer {
 struct AlgorithmicStemmingDeserializer;
 impl AlgorithmicStemmingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -122,7 +113,7 @@ pub struct AnalysisOptions {
 struct AnalysisOptionsDeserializer;
 impl AnalysisOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalysisOptions, XmlParseError> {
@@ -203,7 +194,7 @@ pub struct AnalysisScheme {
 struct AnalysisSchemeDeserializer;
 impl AnalysisSchemeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalysisScheme, XmlParseError> {
@@ -262,10 +253,7 @@ impl AnalysisSchemeSerializer {
 struct AnalysisSchemeLanguageDeserializer;
 impl AnalysisSchemeLanguageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -283,7 +271,7 @@ pub struct AnalysisSchemeStatus {
 struct AnalysisSchemeStatusDeserializer;
 impl AnalysisSchemeStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AnalysisSchemeStatus, XmlParseError> {
@@ -304,7 +292,7 @@ impl AnalysisSchemeStatusDeserializer {
 struct AnalysisSchemeStatusListDeserializer;
 impl AnalysisSchemeStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AnalysisSchemeStatus>, XmlParseError> {
@@ -331,7 +319,7 @@ pub struct AvailabilityOptionsStatus {
 struct AvailabilityOptionsStatusDeserializer;
 impl AvailabilityOptionsStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityOptionsStatus, XmlParseError> {
@@ -356,10 +344,7 @@ impl AvailabilityOptionsStatusDeserializer {
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -395,7 +380,7 @@ pub struct BuildSuggestersResponse {
 struct BuildSuggestersResponseDeserializer;
 impl BuildSuggestersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BuildSuggestersResponse, XmlParseError> {
@@ -445,7 +430,7 @@ pub struct CreateDomainResponse {
 struct CreateDomainResponseDeserializer;
 impl CreateDomainResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDomainResponse, XmlParseError> {
@@ -481,7 +466,7 @@ pub struct DateArrayOptions {
 struct DateArrayOptionsDeserializer;
 impl DateArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DateArrayOptions, XmlParseError> {
@@ -562,7 +547,7 @@ pub struct DateOptions {
 struct DateOptionsDeserializer;
 impl DateOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DateOptions, XmlParseError> {
@@ -663,7 +648,7 @@ pub struct DefineAnalysisSchemeResponse {
 struct DefineAnalysisSchemeResponseDeserializer;
 impl DefineAnalysisSchemeResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefineAnalysisSchemeResponse, XmlParseError> {
@@ -717,7 +702,7 @@ pub struct DefineExpressionResponse {
 struct DefineExpressionResponseDeserializer;
 impl DefineExpressionResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefineExpressionResponse, XmlParseError> {
@@ -772,7 +757,7 @@ pub struct DefineIndexFieldResponse {
 struct DefineIndexFieldResponseDeserializer;
 impl DefineIndexFieldResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefineIndexFieldResponse, XmlParseError> {
@@ -826,7 +811,7 @@ pub struct DefineSuggesterResponse {
 struct DefineSuggesterResponseDeserializer;
 impl DefineSuggesterResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefineSuggesterResponse, XmlParseError> {
@@ -881,7 +866,7 @@ pub struct DeleteAnalysisSchemeResponse {
 struct DeleteAnalysisSchemeResponseDeserializer;
 impl DeleteAnalysisSchemeResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteAnalysisSchemeResponse, XmlParseError> {
@@ -930,7 +915,7 @@ pub struct DeleteDomainResponse {
 struct DeleteDomainResponseDeserializer;
 impl DeleteDomainResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteDomainResponse, XmlParseError> {
@@ -983,7 +968,7 @@ pub struct DeleteExpressionResponse {
 struct DeleteExpressionResponseDeserializer;
 impl DeleteExpressionResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteExpressionResponse, XmlParseError> {
@@ -1038,7 +1023,7 @@ pub struct DeleteIndexFieldResponse {
 struct DeleteIndexFieldResponseDeserializer;
 impl DeleteIndexFieldResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIndexFieldResponse, XmlParseError> {
@@ -1093,7 +1078,7 @@ pub struct DeleteSuggesterResponse {
 struct DeleteSuggesterResponseDeserializer;
 impl DeleteSuggesterResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteSuggesterResponse, XmlParseError> {
@@ -1157,7 +1142,7 @@ pub struct DescribeAnalysisSchemesResponse {
 struct DescribeAnalysisSchemesResponseDeserializer;
 impl DescribeAnalysisSchemesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAnalysisSchemesResponse, XmlParseError> {
@@ -1216,7 +1201,7 @@ pub struct DescribeAvailabilityOptionsResponse {
 struct DescribeAvailabilityOptionsResponseDeserializer;
 impl DescribeAvailabilityOptionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAvailabilityOptionsResponse, XmlParseError> {
@@ -1274,7 +1259,7 @@ pub struct DescribeDomainsResponse {
 struct DescribeDomainsResponseDeserializer;
 impl DescribeDomainsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDomainsResponse, XmlParseError> {
@@ -1341,7 +1326,7 @@ pub struct DescribeExpressionsResponse {
 struct DescribeExpressionsResponseDeserializer;
 impl DescribeExpressionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeExpressionsResponse, XmlParseError> {
@@ -1408,7 +1393,7 @@ pub struct DescribeIndexFieldsResponse {
 struct DescribeIndexFieldsResponseDeserializer;
 impl DescribeIndexFieldsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeIndexFieldsResponse, XmlParseError> {
@@ -1459,7 +1444,7 @@ pub struct DescribeScalingParametersResponse {
 struct DescribeScalingParametersResponseDeserializer;
 impl DescribeScalingParametersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeScalingParametersResponse, XmlParseError> {
@@ -1516,7 +1501,7 @@ pub struct DescribeServiceAccessPoliciesResponse {
 struct DescribeServiceAccessPoliciesResponseDeserializer;
 impl DescribeServiceAccessPoliciesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeServiceAccessPoliciesResponse, XmlParseError> {
@@ -1580,7 +1565,7 @@ pub struct DescribeSuggestersResponse {
 struct DescribeSuggestersResponseDeserializer;
 impl DescribeSuggestersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSuggestersResponse, XmlParseError> {
@@ -1617,7 +1602,7 @@ pub struct DocumentSuggesterOptions {
 struct DocumentSuggesterOptionsDeserializer;
 impl DocumentSuggesterOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DocumentSuggesterOptions, XmlParseError> {
@@ -1670,10 +1655,7 @@ impl DocumentSuggesterOptionsSerializer {
 struct DomainIdDeserializer;
 impl DomainIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1684,10 +1666,7 @@ impl DomainIdDeserializer {
 struct DomainNameDeserializer;
 impl DomainNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1710,7 +1689,7 @@ impl DomainNameListSerializer {
 struct DomainNameMapDeserializer;
 impl DomainNameMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
@@ -1760,7 +1739,7 @@ pub struct DomainStatus {
 struct DomainStatusDeserializer;
 impl DomainStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DomainStatus, XmlParseError> {
@@ -1830,7 +1809,7 @@ impl DomainStatusDeserializer {
 struct DomainStatusListDeserializer;
 impl DomainStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DomainStatus>, XmlParseError> {
@@ -1847,10 +1826,7 @@ impl DomainStatusListDeserializer {
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -1876,7 +1852,7 @@ pub struct DoubleArrayOptions {
 struct DoubleArrayOptionsDeserializer;
 impl DoubleArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DoubleArrayOptions, XmlParseError> {
@@ -1958,7 +1934,7 @@ pub struct DoubleOptions {
 struct DoubleOptionsDeserializer;
 impl DoubleOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DoubleOptions, XmlParseError> {
@@ -2028,10 +2004,7 @@ impl DoubleOptionsSerializer {
 struct DynamicFieldNameDeserializer;
 impl DynamicFieldNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2061,7 +2034,7 @@ pub struct Expression {
 struct ExpressionDeserializer;
 impl ExpressionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Expression, XmlParseError> {
@@ -2113,7 +2086,7 @@ pub struct ExpressionStatus {
 struct ExpressionStatusDeserializer;
 impl ExpressionStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExpressionStatus, XmlParseError> {
@@ -2134,7 +2107,7 @@ impl ExpressionStatusDeserializer {
 struct ExpressionStatusListDeserializer;
 impl ExpressionStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ExpressionStatus>, XmlParseError> {
@@ -2151,10 +2124,7 @@ impl ExpressionStatusListDeserializer {
 struct ExpressionValueDeserializer;
 impl ExpressionValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2165,10 +2135,7 @@ impl ExpressionValueDeserializer {
 struct FieldNameDeserializer;
 impl FieldNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2179,10 +2146,7 @@ impl FieldNameDeserializer {
 struct FieldNameCommaListDeserializer;
 impl FieldNameCommaListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2193,7 +2157,7 @@ impl FieldNameCommaListDeserializer {
 struct FieldNameListDeserializer;
 impl FieldNameListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -2210,10 +2174,7 @@ impl FieldNameListDeserializer {
 struct FieldValueDeserializer;
 impl FieldValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2250,7 +2211,7 @@ pub struct IndexDocumentsResponse {
 struct IndexDocumentsResponseDeserializer;
 impl IndexDocumentsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IndexDocumentsResponse, XmlParseError> {
@@ -2289,7 +2250,7 @@ pub struct IndexField {
 struct IndexFieldDeserializer;
 impl IndexFieldDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IndexField, XmlParseError> {
@@ -2477,7 +2438,7 @@ pub struct IndexFieldStatus {
 struct IndexFieldStatusDeserializer;
 impl IndexFieldStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IndexFieldStatus, XmlParseError> {
@@ -2498,7 +2459,7 @@ impl IndexFieldStatusDeserializer {
 struct IndexFieldStatusListDeserializer;
 impl IndexFieldStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<IndexFieldStatus>, XmlParseError> {
@@ -2515,10 +2476,7 @@ impl IndexFieldStatusListDeserializer {
 struct IndexFieldTypeDeserializer;
 impl IndexFieldTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2529,10 +2487,7 @@ impl IndexFieldTypeDeserializer {
 struct InstanceCountDeserializer;
 impl InstanceCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2558,7 +2513,7 @@ pub struct IntArrayOptions {
 struct IntArrayOptionsDeserializer;
 impl IntArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IntArrayOptions, XmlParseError> {
@@ -2639,7 +2594,7 @@ pub struct IntOptions {
 struct IntOptionsDeserializer;
 impl IntOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IntOptions, XmlParseError> {
@@ -2724,7 +2679,7 @@ pub struct LatLonOptions {
 struct LatLonOptionsDeserializer;
 impl LatLonOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LatLonOptions, XmlParseError> {
@@ -2800,10 +2755,7 @@ pub struct Limits {
 struct LimitsDeserializer;
 impl LimitsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Limits, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Limits, XmlParseError> {
         deserialize_elements::<_, Limits, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "MaximumPartitionCount" => {
@@ -2835,7 +2787,7 @@ pub struct ListDomainNamesResponse {
 struct ListDomainNamesResponseDeserializer;
 impl ListDomainNamesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDomainNamesResponse, XmlParseError> {
@@ -2875,7 +2827,7 @@ pub struct LiteralArrayOptions {
 struct LiteralArrayOptionsDeserializer;
 impl LiteralArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LiteralArrayOptions, XmlParseError> {
@@ -2956,7 +2908,7 @@ pub struct LiteralOptions {
 struct LiteralOptionsDeserializer;
 impl LiteralOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LiteralOptions, XmlParseError> {
@@ -3026,10 +2978,7 @@ impl LiteralOptionsSerializer {
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3040,10 +2989,7 @@ impl LongDeserializer {
 struct MaximumPartitionCountDeserializer;
 impl MaximumPartitionCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3054,10 +3000,7 @@ impl MaximumPartitionCountDeserializer {
 struct MaximumReplicationCountDeserializer;
 impl MaximumReplicationCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3068,10 +3011,7 @@ impl MaximumReplicationCountDeserializer {
 struct MultiAZDeserializer;
 impl MultiAZDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3082,10 +3022,7 @@ impl MultiAZDeserializer {
 struct OptionStateDeserializer;
 impl OptionStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3111,7 +3048,7 @@ pub struct OptionStatus {
 struct OptionStatusDeserializer;
 impl OptionStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OptionStatus, XmlParseError> {
@@ -3145,10 +3082,7 @@ impl OptionStatusDeserializer {
 struct PartitionCountDeserializer;
 impl PartitionCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3159,10 +3093,7 @@ impl PartitionCountDeserializer {
 struct PartitionInstanceTypeDeserializer;
 impl PartitionInstanceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3173,10 +3104,7 @@ impl PartitionInstanceTypeDeserializer {
 struct PolicyDocumentDeserializer;
 impl PolicyDocumentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3198,7 +3126,7 @@ pub struct ScalingParameters {
 struct ScalingParametersDeserializer;
 impl ScalingParametersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScalingParameters, XmlParseError> {
@@ -3270,7 +3198,7 @@ pub struct ScalingParametersStatus {
 struct ScalingParametersStatusDeserializer;
 impl ScalingParametersStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScalingParametersStatus, XmlParseError> {
@@ -3295,10 +3223,7 @@ impl ScalingParametersStatusDeserializer {
 struct SearchInstanceTypeDeserializer;
 impl SearchInstanceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3315,7 +3240,7 @@ pub struct ServiceEndpoint {
 struct ServiceEndpointDeserializer;
 impl ServiceEndpointDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceEndpoint, XmlParseError> {
@@ -3333,10 +3258,7 @@ impl ServiceEndpointDeserializer {
 struct ServiceUrlDeserializer;
 impl ServiceUrlDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3347,10 +3269,7 @@ impl ServiceUrlDeserializer {
 struct StandardNameDeserializer;
 impl StandardNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3373,10 +3292,7 @@ impl StandardNameListSerializer {
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3394,7 +3310,7 @@ pub struct Suggester {
 struct SuggesterDeserializer;
 impl SuggesterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Suggester, XmlParseError> {
@@ -3442,10 +3358,7 @@ impl SuggesterSerializer {
 struct SuggesterFuzzyMatchingDeserializer;
 impl SuggesterFuzzyMatchingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3463,7 +3376,7 @@ pub struct SuggesterStatus {
 struct SuggesterStatusDeserializer;
 impl SuggesterStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SuggesterStatus, XmlParseError> {
@@ -3484,7 +3397,7 @@ impl SuggesterStatusDeserializer {
 struct SuggesterStatusListDeserializer;
 impl SuggesterStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SuggesterStatus>, XmlParseError> {
@@ -3516,7 +3429,7 @@ pub struct TextArrayOptions {
 struct TextArrayOptionsDeserializer;
 impl TextArrayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TextArrayOptions, XmlParseError> {
@@ -3597,7 +3510,7 @@ pub struct TextOptions {
 struct TextOptionsDeserializer;
 impl TextOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TextOptions, XmlParseError> {
@@ -3667,10 +3580,7 @@ impl TextOptionsSerializer {
 struct UIntValueDeserializer;
 impl UIntValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3710,7 +3620,7 @@ pub struct UpdateAvailabilityOptionsResponse {
 struct UpdateAvailabilityOptionsResponseDeserializer;
 impl UpdateAvailabilityOptionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateAvailabilityOptionsResponse, XmlParseError> {
@@ -3767,7 +3677,7 @@ pub struct UpdateScalingParametersResponse {
 struct UpdateScalingParametersResponseDeserializer;
 impl UpdateScalingParametersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateScalingParametersResponse, XmlParseError> {
@@ -3824,7 +3734,7 @@ pub struct UpdateServiceAccessPoliciesResponse {
 struct UpdateServiceAccessPoliciesResponseDeserializer;
 impl UpdateServiceAccessPoliciesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateServiceAccessPoliciesResponse, XmlParseError> {
@@ -3847,10 +3757,7 @@ impl UpdateServiceAccessPoliciesResponseDeserializer {
 struct UpdateTimestampDeserializer;
 impl UpdateTimestampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3861,10 +3768,7 @@ impl UpdateTimestampDeserializer {
 struct WordDeserializer;
 impl WordDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3892,18 +3796,18 @@ impl BuildSuggestersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(BuildSuggestersError::Base(String::from(
+                        return RusotoError::Service(BuildSuggestersError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(BuildSuggestersError::Internal(String::from(
+                        return RusotoError::Service(BuildSuggestersError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(BuildSuggestersError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -3955,18 +3859,16 @@ impl CreateDomainError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(CreateDomainError::Base(String::from(
-                            parsed_error.message,
-                        )))
+                        return RusotoError::Service(CreateDomainError::Base(parsed_error.message))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(CreateDomainError::Internal(String::from(
+                        return RusotoError::Service(CreateDomainError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateDomainError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4022,28 +3924,28 @@ impl DefineAnalysisSchemeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DefineAnalysisSchemeError::Base(String::from(
+                        return RusotoError::Service(DefineAnalysisSchemeError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DefineAnalysisSchemeError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4101,28 +4003,28 @@ impl DefineExpressionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DefineExpressionError::Base(String::from(
+                        return RusotoError::Service(DefineExpressionError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(DefineExpressionError::Internal(String::from(
+                        return RusotoError::Service(DefineExpressionError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DefineExpressionError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DefineExpressionError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DefineExpressionError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4180,28 +4082,28 @@ impl DefineIndexFieldError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DefineIndexFieldError::Base(String::from(
+                        return RusotoError::Service(DefineIndexFieldError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(DefineIndexFieldError::Internal(String::from(
+                        return RusotoError::Service(DefineIndexFieldError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DefineIndexFieldError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DefineIndexFieldError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DefineIndexFieldError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4259,28 +4161,28 @@ impl DefineSuggesterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DefineSuggesterError::Base(String::from(
+                        return RusotoError::Service(DefineSuggesterError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(DefineSuggesterError::Internal(String::from(
+                        return RusotoError::Service(DefineSuggesterError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DefineSuggesterError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(DefineSuggesterError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DefineSuggesterError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4336,23 +4238,23 @@ impl DeleteAnalysisSchemeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DeleteAnalysisSchemeError::Base(String::from(
+                        return RusotoError::Service(DeleteAnalysisSchemeError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DeleteAnalysisSchemeError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DeleteAnalysisSchemeError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteAnalysisSchemeError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4403,14 +4305,12 @@ impl DeleteDomainError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DeleteDomainError::Base(String::from(
-                            parsed_error.message,
-                        )))
+                        return RusotoError::Service(DeleteDomainError::Base(parsed_error.message))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(DeleteDomainError::Internal(String::from(
+                        return RusotoError::Service(DeleteDomainError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -4462,23 +4362,23 @@ impl DeleteExpressionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DeleteExpressionError::Base(String::from(
+                        return RusotoError::Service(DeleteExpressionError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(DeleteExpressionError::Internal(String::from(
+                        return RusotoError::Service(DeleteExpressionError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DeleteExpressionError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteExpressionError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4533,23 +4433,23 @@ impl DeleteIndexFieldError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DeleteIndexFieldError::Base(String::from(
+                        return RusotoError::Service(DeleteIndexFieldError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(DeleteIndexFieldError::Internal(String::from(
+                        return RusotoError::Service(DeleteIndexFieldError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DeleteIndexFieldError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteIndexFieldError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4604,23 +4504,23 @@ impl DeleteSuggesterError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DeleteSuggesterError::Base(String::from(
+                        return RusotoError::Service(DeleteSuggesterError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(DeleteSuggesterError::Internal(String::from(
+                        return RusotoError::Service(DeleteSuggesterError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DeleteSuggesterError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DeleteSuggesterError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4674,19 +4574,17 @@ impl DescribeAnalysisSchemesError {
                 match &parsed_error.code[..] {
                     "BaseException" => {
                         return RusotoError::Service(DescribeAnalysisSchemesError::Base(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeAnalysisSchemesError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
-                            DescribeAnalysisSchemesError::ResourceNotFound(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeAnalysisSchemesError::ResourceNotFound(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -4747,38 +4645,36 @@ impl DescribeAvailabilityOptionsError {
                 match &parsed_error.code[..] {
                     "BaseException" => {
                         return RusotoError::Service(DescribeAvailabilityOptionsError::Base(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DisabledAction" => {
                         return RusotoError::Service(
-                            DescribeAvailabilityOptionsError::DisabledOperation(String::from(
+                            DescribeAvailabilityOptionsError::DisabledOperation(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeAvailabilityOptionsError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(DescribeAvailabilityOptionsError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
-                            DescribeAvailabilityOptionsError::LimitExceeded(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeAvailabilityOptionsError::LimitExceeded(parsed_error.message),
                         )
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
-                            DescribeAvailabilityOptionsError::ResourceNotFound(String::from(
+                            DescribeAvailabilityOptionsError::ResourceNotFound(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -4831,14 +4727,14 @@ impl DescribeDomainsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DescribeDomainsError::Base(String::from(
+                        return RusotoError::Service(DescribeDomainsError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(DescribeDomainsError::Internal(String::from(
+                        return RusotoError::Service(DescribeDomainsError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -4888,18 +4784,18 @@ impl DescribeExpressionsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DescribeExpressionsError::Base(String::from(
+                        return RusotoError::Service(DescribeExpressionsError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeExpressionsError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DescribeExpressionsError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4951,18 +4847,18 @@ impl DescribeIndexFieldsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DescribeIndexFieldsError::Base(String::from(
+                        return RusotoError::Service(DescribeIndexFieldsError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeIndexFieldsError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DescribeIndexFieldsError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -5015,19 +4911,17 @@ impl DescribeScalingParametersError {
                 match &parsed_error.code[..] {
                     "BaseException" => {
                         return RusotoError::Service(DescribeScalingParametersError::Base(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeScalingParametersError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
-                            DescribeScalingParametersError::ResourceNotFound(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeScalingParametersError::ResourceNotFound(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -5082,19 +4976,19 @@ impl DescribeServiceAccessPoliciesError {
                 match &parsed_error.code[..] {
                     "BaseException" => {
                         return RusotoError::Service(DescribeServiceAccessPoliciesError::Base(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeServiceAccessPoliciesError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
-                            DescribeServiceAccessPoliciesError::ResourceNotFound(String::from(
+                            DescribeServiceAccessPoliciesError::ResourceNotFound(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -5146,18 +5040,18 @@ impl DescribeSuggestersError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(DescribeSuggestersError::Base(String::from(
+                        return RusotoError::Service(DescribeSuggestersError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(DescribeSuggestersError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(DescribeSuggestersError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -5209,18 +5103,18 @@ impl IndexDocumentsError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(IndexDocumentsError::Base(String::from(
+                        return RusotoError::Service(IndexDocumentsError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InternalException" => {
-                        return RusotoError::Service(IndexDocumentsError::Internal(String::from(
+                        return RusotoError::Service(IndexDocumentsError::Internal(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(IndexDocumentsError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -5268,9 +5162,9 @@ impl ListDomainNamesError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "BaseException" => {
-                        return RusotoError::Service(ListDomainNamesError::Base(String::from(
+                        return RusotoError::Service(ListDomainNamesError::Base(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -5326,36 +5220,32 @@ impl UpdateAvailabilityOptionsError {
                 match &parsed_error.code[..] {
                     "BaseException" => {
                         return RusotoError::Service(UpdateAvailabilityOptionsError::Base(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DisabledAction" => {
                         return RusotoError::Service(
-                            UpdateAvailabilityOptionsError::DisabledOperation(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateAvailabilityOptionsError::DisabledOperation(parsed_error.message),
                         )
                     }
                     "InternalException" => {
                         return RusotoError::Service(UpdateAvailabilityOptionsError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(UpdateAvailabilityOptionsError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateAvailabilityOptionsError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
-                            UpdateAvailabilityOptionsError::ResourceNotFound(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateAvailabilityOptionsError::ResourceNotFound(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -5415,29 +5305,27 @@ impl UpdateScalingParametersError {
                 match &parsed_error.code[..] {
                     "BaseException" => {
                         return RusotoError::Service(UpdateScalingParametersError::Base(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(UpdateScalingParametersError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(UpdateScalingParametersError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateScalingParametersError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
-                            UpdateScalingParametersError::ResourceNotFound(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateScalingParametersError::ResourceNotFound(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -5498,31 +5386,29 @@ impl UpdateServiceAccessPoliciesError {
                 match &parsed_error.code[..] {
                     "BaseException" => {
                         return RusotoError::Service(UpdateServiceAccessPoliciesError::Base(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalException" => {
                         return RusotoError::Service(UpdateServiceAccessPoliciesError::Internal(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidType" => {
                         return RusotoError::Service(UpdateServiceAccessPoliciesError::InvalidType(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
-                            UpdateServiceAccessPoliciesError::LimitExceeded(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateServiceAccessPoliciesError::LimitExceeded(parsed_error.message),
                         )
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(
-                            UpdateServiceAccessPoliciesError::ResourceNotFound(String::from(
+                            UpdateServiceAccessPoliciesError::ResourceNotFound(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -5713,7 +5599,7 @@ impl CloudSearchClient {
     pub fn new(region: region::Region) -> CloudSearchClient {
         CloudSearchClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -5730,7 +5616,7 @@ impl CloudSearchClient {
     {
         CloudSearchClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

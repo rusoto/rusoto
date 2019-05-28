@@ -1608,7 +1608,7 @@ impl ShieldClient {
     pub fn new(region: region::Region) -> ShieldClient {
         ShieldClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1625,7 +1625,7 @@ impl ShieldClient {
     {
         ShieldClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

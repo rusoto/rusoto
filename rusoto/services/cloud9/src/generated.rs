@@ -1179,7 +1179,7 @@ impl Cloud9Client {
     pub fn new(region: region::Region) -> Cloud9Client {
         Cloud9Client {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1196,7 +1196,7 @@ impl Cloud9Client {
     {
         Cloud9Client {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

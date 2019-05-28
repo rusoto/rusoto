@@ -7719,7 +7719,7 @@ impl GameLiftClient {
     pub fn new(region: region::Region) -> GameLiftClient {
         GameLiftClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -7736,7 +7736,7 @@ impl GameLiftClient {
     {
         GameLiftClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

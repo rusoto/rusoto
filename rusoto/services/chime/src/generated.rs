@@ -7558,6 +7558,7 @@ impl Chime for ChimeClient {
     ) -> RusotoFuture<ListPhoneNumbersResponse, ListPhoneNumbersError> {
         let request_uri = "/phone-numbers";
 
+<<<<<<< HEAD
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
@@ -7570,6 +7571,33 @@ impl Chime for ChimeClient {
         }
         if let Some(ref x) = input.max_results {
             params.put("max-results", x);
+=======
+impl ChimeClient {
+    /// Creates a client backed by the default tokio event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    pub fn new(region: region::Region) -> ChimeClient {
+        ChimeClient {
+            client: Client::shared(),
+            region,
+        }
+    }
+
+    pub fn new_with<P, D>(
+        request_dispatcher: D,
+        credentials_provider: P,
+        region: region::Region,
+    ) -> ChimeClient
+    where
+        P: ProvideAwsCredentials + Send + Sync + 'static,
+        P::Future: Send,
+        D: DispatchSignedRequest + Send + Sync + 'static,
+        D::Future: Send,
+    {
+        ChimeClient {
+            client: Client::new_with(credentials_provider, request_dispatcher),
+            region,
+>>>>>>> Regenerate crates.
         }
         if let Some(ref x) = input.next_token {
             params.put("next-token", x);

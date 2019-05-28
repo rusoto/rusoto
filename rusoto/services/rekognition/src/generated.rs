@@ -4778,7 +4778,7 @@ impl RekognitionClient {
     pub fn new(region: region::Region) -> RekognitionClient {
         RekognitionClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -4795,7 +4795,7 @@ impl RekognitionClient {
     {
         RekognitionClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

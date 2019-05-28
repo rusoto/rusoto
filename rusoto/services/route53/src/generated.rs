@@ -48,7 +48,7 @@ pub struct AccountLimit {
 struct AccountLimitDeserializer;
 impl AccountLimitDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountLimit, XmlParseError> {
@@ -69,10 +69,7 @@ impl AccountLimitDeserializer {
 struct AccountLimitTypeDeserializer;
 impl AccountLimitTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -113,7 +110,7 @@ pub struct AlarmIdentifier {
 struct AlarmIdentifierDeserializer;
 impl AlarmIdentifierDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AlarmIdentifier, XmlParseError> {
@@ -163,10 +160,7 @@ impl AlarmIdentifierSerializer {
 struct AlarmNameDeserializer;
 impl AlarmNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -198,10 +192,7 @@ impl AlarmNameSerializer {
 struct AliasHealthEnabledDeserializer;
 impl AliasHealthEnabledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -244,7 +235,7 @@ pub struct AliasTarget {
 struct AliasTargetDeserializer;
 impl AliasTargetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AliasTarget, XmlParseError> {
@@ -363,7 +354,7 @@ pub struct AssociateVPCWithHostedZoneResponse {
 struct AssociateVPCWithHostedZoneResponseDeserializer;
 impl AssociateVPCWithHostedZoneResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateVPCWithHostedZoneResponse, XmlParseError> {
@@ -488,7 +479,7 @@ pub struct ChangeInfo {
 struct ChangeInfoDeserializer;
 impl ChangeInfoDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeInfo, XmlParseError> {
@@ -550,7 +541,7 @@ pub struct ChangeResourceRecordSetsResponse {
 struct ChangeResourceRecordSetsResponseDeserializer;
 impl ChangeResourceRecordSetsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeResourceRecordSetsResponse, XmlParseError> {
@@ -572,10 +563,7 @@ impl ChangeResourceRecordSetsResponseDeserializer {
 struct ChangeStatusDeserializer;
 impl ChangeStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -625,7 +613,7 @@ pub struct ChangeTagsForResourceResponse {}
 struct ChangeTagsForResourceResponseDeserializer;
 impl ChangeTagsForResourceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeTagsForResourceResponse, XmlParseError> {
@@ -662,7 +650,7 @@ impl ChangesSerializer {
 struct CheckerIpRangesDeserializer;
 impl CheckerIpRangesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -679,7 +667,7 @@ impl CheckerIpRangesDeserializer {
 struct ChildHealthCheckListDeserializer;
 impl ChildHealthCheckListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -741,7 +729,7 @@ pub struct CloudWatchAlarmConfiguration {
 struct CloudWatchAlarmConfigurationDeserializer;
 impl CloudWatchAlarmConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchAlarmConfiguration, XmlParseError> {
@@ -790,10 +778,7 @@ impl CloudWatchAlarmConfigurationDeserializer {
 struct CloudWatchLogsLogGroupArnDeserializer;
 impl CloudWatchLogsLogGroupArnDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -825,10 +810,7 @@ impl CloudWatchLogsLogGroupArnSerializer {
 struct CloudWatchRegionDeserializer;
 impl CloudWatchRegionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -860,10 +842,7 @@ impl CloudWatchRegionSerializer {
 struct ComparisonOperatorDeserializer;
 impl ComparisonOperatorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -918,7 +897,7 @@ pub struct CreateHealthCheckResponse {
 struct CreateHealthCheckResponseDeserializer;
 impl CreateHealthCheckResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateHealthCheckResponse, XmlParseError> {
@@ -998,7 +977,7 @@ pub struct CreateHostedZoneResponse {
 struct CreateHostedZoneResponseDeserializer;
 impl CreateHostedZoneResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateHostedZoneResponse, XmlParseError> {
@@ -1068,7 +1047,7 @@ pub struct CreateQueryLoggingConfigResponse {
 struct CreateQueryLoggingConfigResponseDeserializer;
 impl CreateQueryLoggingConfigResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateQueryLoggingConfigResponse, XmlParseError> {
@@ -1129,7 +1108,7 @@ pub struct CreateReusableDelegationSetResponse {
 struct CreateReusableDelegationSetResponseDeserializer;
 impl CreateReusableDelegationSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReusableDelegationSetResponse, XmlParseError> {
@@ -1205,7 +1184,7 @@ pub struct CreateTrafficPolicyInstanceResponse {
 struct CreateTrafficPolicyInstanceResponseDeserializer;
 impl CreateTrafficPolicyInstanceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTrafficPolicyInstanceResponse, XmlParseError> {
@@ -1272,7 +1251,7 @@ pub struct CreateTrafficPolicyResponse {
 struct CreateTrafficPolicyResponseDeserializer;
 impl CreateTrafficPolicyResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTrafficPolicyResponse, XmlParseError> {
@@ -1335,7 +1314,7 @@ pub struct CreateTrafficPolicyVersionResponse {
 struct CreateTrafficPolicyVersionResponseDeserializer;
 impl CreateTrafficPolicyVersionResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTrafficPolicyVersionResponse, XmlParseError> {
@@ -1393,7 +1372,7 @@ pub struct CreateVPCAssociationAuthorizationResponse {
 struct CreateVPCAssociationAuthorizationResponseDeserializer;
 impl CreateVPCAssociationAuthorizationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVPCAssociationAuthorizationResponse, XmlParseError> {
@@ -1419,10 +1398,7 @@ impl CreateVPCAssociationAuthorizationResponseDeserializer {
 struct DNSNameDeserializer;
 impl DNSNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1454,10 +1430,7 @@ impl DNSNameSerializer {
 struct DNSRCodeDeserializer;
 impl DNSRCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1479,7 +1452,7 @@ pub struct DelegationSet {
 struct DelegationSetDeserializer;
 impl DelegationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DelegationSet, XmlParseError> {
@@ -1508,7 +1481,7 @@ impl DelegationSetDeserializer {
 struct DelegationSetNameServersDeserializer;
 impl DelegationSetNameServersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -1525,7 +1498,7 @@ impl DelegationSetNameServersDeserializer {
 struct DelegationSetsDeserializer;
 impl DelegationSetsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DelegationSet>, XmlParseError> {
@@ -1556,7 +1529,7 @@ pub struct DeleteHealthCheckResponse {}
 struct DeleteHealthCheckResponseDeserializer;
 impl DeleteHealthCheckResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteHealthCheckResponse, XmlParseError> {
@@ -1586,7 +1559,7 @@ pub struct DeleteHostedZoneResponse {
 struct DeleteHostedZoneResponseDeserializer;
 impl DeleteHostedZoneResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteHostedZoneResponse, XmlParseError> {
@@ -1617,7 +1590,7 @@ pub struct DeleteQueryLoggingConfigResponse {}
 struct DeleteQueryLoggingConfigResponseDeserializer;
 impl DeleteQueryLoggingConfigResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteQueryLoggingConfigResponse, XmlParseError> {
@@ -1644,7 +1617,7 @@ pub struct DeleteReusableDelegationSetResponse {}
 struct DeleteReusableDelegationSetResponseDeserializer;
 impl DeleteReusableDelegationSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReusableDelegationSetResponse, XmlParseError> {
@@ -1671,7 +1644,7 @@ pub struct DeleteTrafficPolicyInstanceResponse {}
 struct DeleteTrafficPolicyInstanceResponseDeserializer;
 impl DeleteTrafficPolicyInstanceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTrafficPolicyInstanceResponse, XmlParseError> {
@@ -1700,7 +1673,7 @@ pub struct DeleteTrafficPolicyResponse {}
 struct DeleteTrafficPolicyResponseDeserializer;
 impl DeleteTrafficPolicyResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTrafficPolicyResponse, XmlParseError> {
@@ -1746,7 +1719,7 @@ pub struct DeleteVPCAssociationAuthorizationResponse {}
 struct DeleteVPCAssociationAuthorizationResponseDeserializer;
 impl DeleteVPCAssociationAuthorizationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteVPCAssociationAuthorizationResponse, XmlParseError> {
@@ -1771,7 +1744,7 @@ pub struct Dimension {
 struct DimensionDeserializer;
 impl DimensionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Dimension, XmlParseError> {
@@ -1792,10 +1765,7 @@ impl DimensionDeserializer {
 struct DimensionFieldDeserializer;
 impl DimensionFieldDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1806,7 +1776,7 @@ impl DimensionFieldDeserializer {
 struct DimensionListDeserializer;
 impl DimensionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Dimension>, XmlParseError> {
@@ -1823,10 +1793,7 @@ impl DimensionListDeserializer {
 struct DisabledDeserializer;
 impl DisabledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -1916,7 +1883,7 @@ pub struct DisassociateVPCFromHostedZoneResponse {
 struct DisassociateVPCFromHostedZoneResponseDeserializer;
 impl DisassociateVPCFromHostedZoneResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisassociateVPCFromHostedZoneResponse, XmlParseError> {
@@ -1938,10 +1905,7 @@ impl DisassociateVPCFromHostedZoneResponseDeserializer {
 struct EnableSNIDeserializer;
 impl EnableSNIDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -1973,10 +1937,7 @@ impl EnableSNISerializer {
 struct EvaluationPeriodsDeserializer;
 impl EvaluationPeriodsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -1987,10 +1948,7 @@ impl EvaluationPeriodsDeserializer {
 struct FailureThresholdDeserializer;
 impl FailureThresholdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2022,10 +1980,7 @@ impl FailureThresholdSerializer {
 struct FullyQualifiedDomainNameDeserializer;
 impl FullyQualifiedDomainNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2068,7 +2023,7 @@ pub struct GeoLocation {
 struct GeoLocationDeserializer;
 impl GeoLocationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GeoLocation, XmlParseError> {
@@ -2143,10 +2098,7 @@ impl GeoLocationSerializer {
 struct GeoLocationContinentCodeDeserializer;
 impl GeoLocationContinentCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2178,10 +2130,7 @@ impl GeoLocationContinentCodeSerializer {
 struct GeoLocationContinentNameDeserializer;
 impl GeoLocationContinentNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2192,10 +2141,7 @@ impl GeoLocationContinentNameDeserializer {
 struct GeoLocationCountryCodeDeserializer;
 impl GeoLocationCountryCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2227,10 +2173,7 @@ impl GeoLocationCountryCodeSerializer {
 struct GeoLocationCountryNameDeserializer;
 impl GeoLocationCountryNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2258,7 +2201,7 @@ pub struct GeoLocationDetails {
 struct GeoLocationDetailsDeserializer;
 impl GeoLocationDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GeoLocationDetails, XmlParseError> {
@@ -2311,7 +2254,7 @@ impl GeoLocationDetailsDeserializer {
 struct GeoLocationDetailsListDeserializer;
 impl GeoLocationDetailsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GeoLocationDetails>, XmlParseError> {
@@ -2331,10 +2274,7 @@ impl GeoLocationDetailsListDeserializer {
 struct GeoLocationSubdivisionCodeDeserializer;
 impl GeoLocationSubdivisionCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2366,10 +2306,7 @@ impl GeoLocationSubdivisionCodeSerializer {
 struct GeoLocationSubdivisionNameDeserializer;
 impl GeoLocationSubdivisionNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2396,7 +2333,7 @@ pub struct GetAccountLimitResponse {
 struct GetAccountLimitResponseDeserializer;
 impl GetAccountLimitResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountLimitResponse, XmlParseError> {
@@ -2435,7 +2372,7 @@ pub struct GetChangeResponse {
 struct GetChangeResponseDeserializer;
 impl GetChangeResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetChangeResponse, XmlParseError> {
@@ -2464,7 +2401,7 @@ pub struct GetCheckerIpRangesResponse {
 struct GetCheckerIpRangesResponseDeserializer;
 impl GetCheckerIpRangesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCheckerIpRangesResponse, XmlParseError> {
@@ -2508,7 +2445,7 @@ pub struct GetGeoLocationResponse {
 struct GetGeoLocationResponseDeserializer;
 impl GetGeoLocationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetGeoLocationResponse, XmlParseError> {
@@ -2538,7 +2475,7 @@ pub struct GetHealthCheckCountResponse {
 struct GetHealthCheckCountResponseDeserializer;
 impl GetHealthCheckCountResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHealthCheckCountResponse, XmlParseError> {
@@ -2575,7 +2512,7 @@ pub struct GetHealthCheckLastFailureReasonResponse {
 struct GetHealthCheckLastFailureReasonResponseDeserializer;
 impl GetHealthCheckLastFailureReasonResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHealthCheckLastFailureReasonResponse, XmlParseError> {
@@ -2616,7 +2553,7 @@ pub struct GetHealthCheckResponse {
 struct GetHealthCheckResponseDeserializer;
 impl GetHealthCheckResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHealthCheckResponse, XmlParseError> {
@@ -2648,7 +2585,7 @@ pub struct GetHealthCheckStatusResponse {
 struct GetHealthCheckStatusResponseDeserializer;
 impl GetHealthCheckStatusResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHealthCheckStatusResponse, XmlParseError> {
@@ -2686,7 +2623,7 @@ pub struct GetHostedZoneCountResponse {
 struct GetHostedZoneCountResponseDeserializer;
 impl GetHostedZoneCountResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHostedZoneCountResponse, XmlParseError> {
@@ -2727,7 +2664,7 @@ pub struct GetHostedZoneLimitResponse {
 struct GetHostedZoneLimitResponseDeserializer;
 impl GetHostedZoneLimitResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHostedZoneLimitResponse, XmlParseError> {
@@ -2770,7 +2707,7 @@ pub struct GetHostedZoneResponse {
 struct GetHostedZoneResponseDeserializer;
 impl GetHostedZoneResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHostedZoneResponse, XmlParseError> {
@@ -2811,7 +2748,7 @@ pub struct GetQueryLoggingConfigResponse {
 struct GetQueryLoggingConfigResponseDeserializer;
 impl GetQueryLoggingConfigResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetQueryLoggingConfigResponse, XmlParseError> {
@@ -2854,7 +2791,7 @@ pub struct GetReusableDelegationSetLimitResponse {
 struct GetReusableDelegationSetLimitResponseDeserializer;
 impl GetReusableDelegationSetLimitResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetReusableDelegationSetLimitResponse, XmlParseError> {
@@ -2894,7 +2831,7 @@ pub struct GetReusableDelegationSetResponse {
 struct GetReusableDelegationSetResponseDeserializer;
 impl GetReusableDelegationSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetReusableDelegationSetResponse, XmlParseError> {
@@ -2928,7 +2865,7 @@ pub struct GetTrafficPolicyInstanceCountResponse {
 struct GetTrafficPolicyInstanceCountResponseDeserializer;
 impl GetTrafficPolicyInstanceCountResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTrafficPolicyInstanceCountResponse, XmlParseError> {
@@ -2968,7 +2905,7 @@ pub struct GetTrafficPolicyInstanceResponse {
 struct GetTrafficPolicyInstanceResponseDeserializer;
 impl GetTrafficPolicyInstanceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTrafficPolicyInstanceResponse, XmlParseError> {
@@ -3010,7 +2947,7 @@ pub struct GetTrafficPolicyResponse {
 struct GetTrafficPolicyResponseDeserializer;
 impl GetTrafficPolicyResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTrafficPolicyResponse, XmlParseError> {
@@ -3050,7 +2987,7 @@ pub struct HealthCheck {
 struct HealthCheckDeserializer;
 impl HealthCheckDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HealthCheck, XmlParseError> {
@@ -3132,7 +3069,7 @@ pub struct HealthCheckConfig {
 struct HealthCheckConfigDeserializer;
 impl HealthCheckConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HealthCheckConfig, XmlParseError> {
@@ -3371,10 +3308,7 @@ impl HealthCheckConfigSerializer {
 struct HealthCheckCountDeserializer;
 impl HealthCheckCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3385,10 +3319,7 @@ impl HealthCheckCountDeserializer {
 struct HealthCheckIdDeserializer;
 impl HealthCheckIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3420,10 +3351,7 @@ impl HealthCheckIdSerializer {
 struct HealthCheckNonceDeserializer;
 impl HealthCheckNonceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3466,7 +3394,7 @@ pub struct HealthCheckObservation {
 struct HealthCheckObservationDeserializer;
 impl HealthCheckObservationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HealthCheckObservation, XmlParseError> {
@@ -3493,7 +3421,7 @@ impl HealthCheckObservationDeserializer {
 struct HealthCheckObservationsDeserializer;
 impl HealthCheckObservationsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HealthCheckObservation>, XmlParseError> {
@@ -3513,10 +3441,7 @@ impl HealthCheckObservationsDeserializer {
 struct HealthCheckRegionDeserializer;
 impl HealthCheckRegionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3548,7 +3473,7 @@ impl HealthCheckRegionSerializer {
 struct HealthCheckRegionListDeserializer;
 impl HealthCheckRegionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -3586,10 +3511,7 @@ impl HealthCheckRegionListSerializer {
 struct HealthCheckTypeDeserializer;
 impl HealthCheckTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3621,10 +3543,7 @@ impl HealthCheckTypeSerializer {
 struct HealthCheckVersionDeserializer;
 impl HealthCheckVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3656,7 +3575,7 @@ impl HealthCheckVersionSerializer {
 struct HealthChecksDeserializer;
 impl HealthChecksDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HealthCheck>, XmlParseError> {
@@ -3673,10 +3592,7 @@ impl HealthChecksDeserializer {
 struct HealthThresholdDeserializer;
 impl HealthThresholdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3725,7 +3641,7 @@ pub struct HostedZone {
 struct HostedZoneDeserializer;
 impl HostedZoneDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostedZone, XmlParseError> {
@@ -3775,7 +3691,7 @@ pub struct HostedZoneConfig {
 struct HostedZoneConfigDeserializer;
 impl HostedZoneConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostedZoneConfig, XmlParseError> {
@@ -3834,10 +3750,7 @@ impl HostedZoneConfigSerializer {
 struct HostedZoneCountDeserializer;
 impl HostedZoneCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3857,7 +3770,7 @@ pub struct HostedZoneLimit {
 struct HostedZoneLimitDeserializer;
 impl HostedZoneLimitDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostedZoneLimit, XmlParseError> {
@@ -3878,10 +3791,7 @@ impl HostedZoneLimitDeserializer {
 struct HostedZoneLimitTypeDeserializer;
 impl HostedZoneLimitTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3913,10 +3823,7 @@ impl HostedZoneLimitTypeSerializer {
 struct HostedZoneRRSetCountDeserializer;
 impl HostedZoneRRSetCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3927,7 +3834,7 @@ impl HostedZoneRRSetCountDeserializer {
 struct HostedZonesDeserializer;
 impl HostedZonesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HostedZone>, XmlParseError> {
@@ -3944,10 +3851,7 @@ impl HostedZonesDeserializer {
 struct IPAddressDeserializer;
 impl IPAddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3979,10 +3883,7 @@ impl IPAddressSerializer {
 struct IPAddressCidrDeserializer;
 impl IPAddressCidrDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3993,10 +3894,7 @@ impl IPAddressCidrDeserializer {
 struct InsufficientDataHealthStatusDeserializer;
 impl InsufficientDataHealthStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4028,10 +3926,7 @@ impl InsufficientDataHealthStatusSerializer {
 struct InvertedDeserializer;
 impl InvertedDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -4063,10 +3958,7 @@ impl InvertedSerializer {
 struct IsPrivateZoneDeserializer;
 impl IsPrivateZoneDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -4098,10 +3990,7 @@ impl IsPrivateZoneSerializer {
 struct LimitValueDeserializer;
 impl LimitValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -4121,7 +4010,7 @@ pub struct LinkedService {
 struct LinkedServiceDeserializer;
 impl LinkedServiceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LinkedService, XmlParseError> {
@@ -4178,7 +4067,7 @@ pub struct ListGeoLocationsResponse {
 struct ListGeoLocationsResponseDeserializer;
 impl ListGeoLocationsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListGeoLocationsResponse, XmlParseError> {
@@ -4257,7 +4146,7 @@ pub struct ListHealthChecksResponse {
 struct ListHealthChecksResponseDeserializer;
 impl ListHealthChecksResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListHealthChecksResponse, XmlParseError> {
@@ -4327,7 +4216,7 @@ pub struct ListHostedZonesByNameResponse {
 struct ListHostedZonesByNameResponseDeserializer;
 impl ListHostedZonesByNameResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListHostedZonesByNameResponse, XmlParseError> {
@@ -4399,7 +4288,7 @@ pub struct ListHostedZonesResponse {
 struct ListHostedZonesResponseDeserializer;
 impl ListHostedZonesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListHostedZonesResponse, XmlParseError> {
@@ -4454,7 +4343,7 @@ pub struct ListQueryLoggingConfigsResponse {
 struct ListQueryLoggingConfigsResponseDeserializer;
 impl ListQueryLoggingConfigsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListQueryLoggingConfigsResponse, XmlParseError> {
@@ -4519,7 +4408,7 @@ pub struct ListResourceRecordSetsResponse {
 struct ListResourceRecordSetsResponseDeserializer;
 impl ListResourceRecordSetsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListResourceRecordSetsResponse, XmlParseError> {
@@ -4592,7 +4481,7 @@ pub struct ListReusableDelegationSetsResponse {
 struct ListReusableDelegationSetsResponseDeserializer;
 impl ListReusableDelegationSetsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReusableDelegationSetsResponse, XmlParseError> {
@@ -4648,7 +4537,7 @@ pub struct ListTagsForResourceResponse {
 struct ListTagsForResourceResponseDeserializer;
 impl ListTagsForResourceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResponse, XmlParseError> {
@@ -4704,7 +4593,7 @@ pub struct ListTagsForResourcesResponse {
 struct ListTagsForResourcesResponseDeserializer;
 impl ListTagsForResourcesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourcesResponse, XmlParseError> {
@@ -4752,7 +4641,7 @@ pub struct ListTrafficPoliciesResponse {
 struct ListTrafficPoliciesResponseDeserializer;
 impl ListTrafficPoliciesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPoliciesResponse, XmlParseError> {
@@ -4820,7 +4709,7 @@ pub struct ListTrafficPolicyInstancesByHostedZoneResponse {
 struct ListTrafficPolicyInstancesByHostedZoneResponseDeserializer;
 impl ListTrafficPolicyInstancesByHostedZoneResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPolicyInstancesByHostedZoneResponse, XmlParseError> {
@@ -4902,7 +4791,7 @@ pub struct ListTrafficPolicyInstancesByPolicyResponse {
 struct ListTrafficPolicyInstancesByPolicyResponseDeserializer;
 impl ListTrafficPolicyInstancesByPolicyResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPolicyInstancesByPolicyResponse, XmlParseError> {
@@ -4986,7 +4875,7 @@ pub struct ListTrafficPolicyInstancesResponse {
 struct ListTrafficPolicyInstancesResponseDeserializer;
 impl ListTrafficPolicyInstancesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPolicyInstancesResponse, XmlParseError> {
@@ -5064,7 +4953,7 @@ pub struct ListTrafficPolicyVersionsResponse {
 struct ListTrafficPolicyVersionsResponseDeserializer;
 impl ListTrafficPolicyVersionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTrafficPolicyVersionsResponse, XmlParseError> {
@@ -5126,7 +5015,7 @@ pub struct ListVPCAssociationAuthorizationsResponse {
 struct ListVPCAssociationAuthorizationsResponseDeserializer;
 impl ListVPCAssociationAuthorizationsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListVPCAssociationAuthorizationsResponse, XmlParseError> {
@@ -5180,10 +5069,7 @@ impl MaxResultsSerializer {
 struct MeasureLatencyDeserializer;
 impl MeasureLatencyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -5215,10 +5101,7 @@ impl MeasureLatencySerializer {
 struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5229,10 +5112,7 @@ impl MessageDeserializer {
 struct MetricNameDeserializer;
 impl MetricNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5243,10 +5123,7 @@ impl MetricNameDeserializer {
 struct NameserverDeserializer;
 impl NameserverDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5257,10 +5134,7 @@ impl NameserverDeserializer {
 struct NamespaceDeserializer;
 impl NamespaceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5271,10 +5145,7 @@ impl NamespaceDeserializer {
 struct NonceDeserializer;
 impl NonceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5306,10 +5177,7 @@ impl NonceSerializer {
 struct PageMarkerDeserializer;
 impl PageMarkerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5341,10 +5209,7 @@ impl PageMarkerSerializer {
 struct PageMaxItemsDeserializer;
 impl PageMaxItemsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5376,10 +5241,7 @@ impl PageMaxItemsSerializer {
 struct PageTruncatedDeserializer;
 impl PageTruncatedDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -5390,10 +5252,7 @@ impl PageTruncatedDeserializer {
 struct PaginationTokenDeserializer;
 impl PaginationTokenDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5425,10 +5284,7 @@ impl PaginationTokenSerializer {
 struct PeriodDeserializer;
 impl PeriodDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -5439,10 +5295,7 @@ impl PeriodDeserializer {
 struct PortDeserializer;
 impl PortDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -5485,7 +5338,7 @@ pub struct QueryLoggingConfig {
 struct QueryLoggingConfigDeserializer;
 impl QueryLoggingConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryLoggingConfig, XmlParseError> {
@@ -5514,10 +5367,7 @@ impl QueryLoggingConfigDeserializer {
 struct QueryLoggingConfigIdDeserializer;
 impl QueryLoggingConfigIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5549,7 +5399,7 @@ impl QueryLoggingConfigIdSerializer {
 struct QueryLoggingConfigsDeserializer;
 impl QueryLoggingConfigsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<QueryLoggingConfig>, XmlParseError> {
@@ -5569,10 +5419,7 @@ impl QueryLoggingConfigsDeserializer {
 struct RDataDeserializer;
 impl RDataDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5604,10 +5451,7 @@ impl RDataSerializer {
 struct RRTypeDeserializer;
 impl RRTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5639,7 +5483,7 @@ impl RRTypeSerializer {
 struct RecordDataDeserializer;
 impl RecordDataDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -5659,10 +5503,7 @@ impl RecordDataDeserializer {
 struct RecordDataEntryDeserializer;
 impl RecordDataEntryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5673,10 +5514,7 @@ impl RecordDataEntryDeserializer {
 struct RequestIntervalDeserializer;
 impl RequestIntervalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -5748,10 +5586,7 @@ impl ResettableElementNameListSerializer {
 struct ResourceDescriptionDeserializer;
 impl ResourceDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5783,10 +5618,7 @@ impl ResourceDescriptionSerializer {
 struct ResourceIdDeserializer;
 impl ResourceIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5818,10 +5650,7 @@ impl ResourceIdSerializer {
 struct ResourcePathDeserializer;
 impl ResourcePathDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5860,7 +5689,7 @@ pub struct ResourceRecord {
 struct ResourceRecordDeserializer;
 impl ResourceRecordDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceRecord, XmlParseError> {
@@ -5932,7 +5761,7 @@ pub struct ResourceRecordSet {
 struct ResourceRecordSetDeserializer;
 impl ResourceRecordSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceRecordSet, XmlParseError> {
@@ -6115,10 +5944,7 @@ impl ResourceRecordSetSerializer {
 struct ResourceRecordSetFailoverDeserializer;
 impl ResourceRecordSetFailoverDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6150,10 +5976,7 @@ impl ResourceRecordSetFailoverSerializer {
 struct ResourceRecordSetIdentifierDeserializer;
 impl ResourceRecordSetIdentifierDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6185,10 +6008,7 @@ impl ResourceRecordSetIdentifierSerializer {
 struct ResourceRecordSetMultiValueAnswerDeserializer;
 impl ResourceRecordSetMultiValueAnswerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -6220,10 +6040,7 @@ impl ResourceRecordSetMultiValueAnswerSerializer {
 struct ResourceRecordSetRegionDeserializer;
 impl ResourceRecordSetRegionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6255,10 +6072,7 @@ impl ResourceRecordSetRegionSerializer {
 struct ResourceRecordSetWeightDeserializer;
 impl ResourceRecordSetWeightDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -6290,7 +6104,7 @@ impl ResourceRecordSetWeightSerializer {
 struct ResourceRecordSetsDeserializer;
 impl ResourceRecordSetsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceRecordSet>, XmlParseError> {
@@ -6310,7 +6124,7 @@ impl ResourceRecordSetsDeserializer {
 struct ResourceRecordsDeserializer;
 impl ResourceRecordsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceRecord>, XmlParseError> {
@@ -6362,7 +6176,7 @@ pub struct ResourceTagSet {
 struct ResourceTagSetDeserializer;
 impl ResourceTagSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceTagSet, XmlParseError> {
@@ -6392,7 +6206,7 @@ impl ResourceTagSetDeserializer {
 struct ResourceTagSetListDeserializer;
 impl ResourceTagSetListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceTagSet>, XmlParseError> {
@@ -6421,7 +6235,7 @@ pub struct ReusableDelegationSetLimit {
 struct ReusableDelegationSetLimitDeserializer;
 impl ReusableDelegationSetLimitDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReusableDelegationSetLimit, XmlParseError> {
@@ -6447,10 +6261,7 @@ impl ReusableDelegationSetLimitDeserializer {
 struct ReusableDelegationSetLimitTypeDeserializer;
 impl ReusableDelegationSetLimitTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6482,10 +6293,7 @@ impl ReusableDelegationSetLimitTypeSerializer {
 struct SearchStringDeserializer;
 impl SearchStringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6517,10 +6325,7 @@ impl SearchStringSerializer {
 struct ServicePrincipalDeserializer;
 impl ServicePrincipalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6531,10 +6336,7 @@ impl ServicePrincipalDeserializer {
 struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6545,10 +6347,7 @@ impl StatisticDeserializer {
 struct StatusDeserializer;
 impl StatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6568,7 +6367,7 @@ pub struct StatusReport {
 struct StatusReportDeserializer;
 impl StatusReportDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StatusReport, XmlParseError> {
@@ -6611,10 +6410,7 @@ impl SubnetMaskSerializer {
 struct TTLDeserializer;
 impl TTLDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -6655,10 +6451,7 @@ pub struct Tag {
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tag, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -6709,10 +6502,7 @@ impl TagSerializer {
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6764,7 +6554,7 @@ impl TagKeyListSerializer {
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
@@ -6802,10 +6592,7 @@ impl TagListSerializer {
 struct TagResourceIdDeserializer;
 impl TagResourceIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6857,10 +6644,7 @@ impl TagResourceIdListSerializer {
 struct TagResourceTypeDeserializer;
 impl TagResourceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6892,10 +6676,7 @@ impl TagResourceTypeSerializer {
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6961,7 +6742,7 @@ pub struct TestDNSAnswerResponse {
 struct TestDNSAnswerResponseDeserializer;
 impl TestDNSAnswerResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TestDNSAnswerResponse, XmlParseError> {
@@ -6995,10 +6776,7 @@ impl TestDNSAnswerResponseDeserializer {
 struct ThresholdDeserializer;
 impl ThresholdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -7009,10 +6787,7 @@ impl ThresholdDeserializer {
 struct TimeStampDeserializer;
 impl TimeStampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7023,7 +6798,7 @@ impl TimeStampDeserializer {
 struct TrafficPoliciesDeserializer;
 impl TrafficPoliciesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TrafficPolicy>, XmlParseError> {
@@ -7060,7 +6835,7 @@ pub struct TrafficPolicy {
 struct TrafficPolicyDeserializer;
 impl TrafficPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrafficPolicy, XmlParseError> {
@@ -7096,10 +6871,7 @@ impl TrafficPolicyDeserializer {
 struct TrafficPolicyCommentDeserializer;
 impl TrafficPolicyCommentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7131,10 +6903,7 @@ impl TrafficPolicyCommentSerializer {
 struct TrafficPolicyDocumentDeserializer;
 impl TrafficPolicyDocumentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7166,10 +6935,7 @@ impl TrafficPolicyDocumentSerializer {
 struct TrafficPolicyIdDeserializer;
 impl TrafficPolicyIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7224,7 +6990,7 @@ pub struct TrafficPolicyInstance {
 struct TrafficPolicyInstanceDeserializer;
 impl TrafficPolicyInstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrafficPolicyInstance, XmlParseError> {
@@ -7273,10 +7039,7 @@ impl TrafficPolicyInstanceDeserializer {
 struct TrafficPolicyInstanceCountDeserializer;
 impl TrafficPolicyInstanceCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -7287,10 +7050,7 @@ impl TrafficPolicyInstanceCountDeserializer {
 struct TrafficPolicyInstanceIdDeserializer;
 impl TrafficPolicyInstanceIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7322,10 +7082,7 @@ impl TrafficPolicyInstanceIdSerializer {
 struct TrafficPolicyInstanceStateDeserializer;
 impl TrafficPolicyInstanceStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7336,7 +7093,7 @@ impl TrafficPolicyInstanceStateDeserializer {
 struct TrafficPolicyInstancesDeserializer;
 impl TrafficPolicyInstancesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TrafficPolicyInstance>, XmlParseError> {
@@ -7356,10 +7113,7 @@ impl TrafficPolicyInstancesDeserializer {
 struct TrafficPolicyNameDeserializer;
 impl TrafficPolicyNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7391,7 +7145,7 @@ impl TrafficPolicyNameSerializer {
 struct TrafficPolicySummariesDeserializer;
 impl TrafficPolicySummariesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TrafficPolicySummary>, XmlParseError> {
@@ -7426,7 +7180,7 @@ pub struct TrafficPolicySummary {
 struct TrafficPolicySummaryDeserializer;
 impl TrafficPolicySummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrafficPolicySummary, XmlParseError> {
@@ -7458,10 +7212,7 @@ impl TrafficPolicySummaryDeserializer {
 struct TrafficPolicyVersionDeserializer;
 impl TrafficPolicyVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -7493,10 +7244,7 @@ impl TrafficPolicyVersionSerializer {
 struct TrafficPolicyVersionMarkerDeserializer;
 impl TrafficPolicyVersionMarkerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7528,10 +7276,7 @@ impl TrafficPolicyVersionMarkerSerializer {
 struct TransportProtocolDeserializer;
 impl TransportProtocolDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7660,7 +7405,7 @@ pub struct UpdateHealthCheckResponse {
 struct UpdateHealthCheckResponseDeserializer;
 impl UpdateHealthCheckResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateHealthCheckResponse, XmlParseError> {
@@ -7718,7 +7463,7 @@ pub struct UpdateHostedZoneCommentResponse {
 struct UpdateHostedZoneCommentResponseDeserializer;
 impl UpdateHostedZoneCommentResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateHostedZoneCommentResponse, XmlParseError> {
@@ -7775,7 +7520,7 @@ pub struct UpdateTrafficPolicyCommentResponse {
 struct UpdateTrafficPolicyCommentResponseDeserializer;
 impl UpdateTrafficPolicyCommentResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTrafficPolicyCommentResponse, XmlParseError> {
@@ -7845,7 +7590,7 @@ pub struct UpdateTrafficPolicyInstanceResponse {
 struct UpdateTrafficPolicyInstanceResponseDeserializer;
 impl UpdateTrafficPolicyInstanceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTrafficPolicyInstanceResponse, XmlParseError> {
@@ -7871,10 +7616,7 @@ impl UpdateTrafficPolicyInstanceResponseDeserializer {
 struct UsageCountDeserializer;
 impl UsageCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -7893,10 +7635,7 @@ pub struct VPC {
 struct VPCDeserializer;
 impl VPCDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<VPC, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<VPC, XmlParseError> {
         deserialize_elements::<_, VPC, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "VPCId" => {
@@ -7947,10 +7686,7 @@ impl VPCSerializer {
 struct VPCIdDeserializer;
 impl VPCIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7982,10 +7718,7 @@ impl VPCIdSerializer {
 struct VPCRegionDeserializer;
 impl VPCRegionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -8017,7 +7750,7 @@ impl VPCRegionSerializer {
 struct VPCsDeserializer;
 impl VPCsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VPC>, XmlParseError> {
@@ -8062,46 +7795,40 @@ impl AssociateVPCWithHostedZoneError {
                 match &parsed_error.code[..] {
                     "ConflictingDomainExists" => {
                         return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::ConflictingDomainExists(String::from(
+                            AssociateVPCWithHostedZoneError::ConflictingDomainExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(AssociateVPCWithHostedZoneError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(AssociateVPCWithHostedZoneError::InvalidVPCId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitsExceeded" => {
                         return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::LimitsExceeded(String::from(
-                                parsed_error.message,
-                            )),
+                            AssociateVPCWithHostedZoneError::LimitsExceeded(parsed_error.message),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::NoSuchHostedZone(String::from(
-                                parsed_error.message,
-                            )),
+                            AssociateVPCWithHostedZoneError::NoSuchHostedZone(parsed_error.message),
                         )
                     }
                     "NotAuthorizedException" => {
                         return RusotoError::Service(
-                            AssociateVPCWithHostedZoneError::NotAuthorized(String::from(
-                                parsed_error.message,
-                            )),
+                            AssociateVPCWithHostedZoneError::NotAuthorized(parsed_error.message),
                         )
                     }
                     "PublicZoneVPCAssociation" => {
                         return RusotoError::Service(
                             AssociateVPCWithHostedZoneError::PublicZoneVPCAssociation(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8163,35 +7890,29 @@ impl ChangeResourceRecordSetsError {
                 match &parsed_error.code[..] {
                     "InvalidChangeBatch" => {
                         return RusotoError::Service(
-                            ChangeResourceRecordSetsError::InvalidChangeBatch(String::from(
-                                parsed_error.message,
-                            )),
+                            ChangeResourceRecordSetsError::InvalidChangeBatch(parsed_error.message),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(ChangeResourceRecordSetsError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(
-                            ChangeResourceRecordSetsError::NoSuchHealthCheck(String::from(
-                                parsed_error.message,
-                            )),
+                            ChangeResourceRecordSetsError::NoSuchHealthCheck(parsed_error.message),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            ChangeResourceRecordSetsError::NoSuchHostedZone(String::from(
-                                parsed_error.message,
-                            )),
+                            ChangeResourceRecordSetsError::NoSuchHostedZone(parsed_error.message),
                         )
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
-                            ChangeResourceRecordSetsError::PriorRequestNotComplete(String::from(
+                            ChangeResourceRecordSetsError::PriorRequestNotComplete(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -8250,29 +7971,29 @@ impl ChangeTagsForResourceError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ChangeTagsForResourceError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(ChangeTagsForResourceError::NoSuchHealthCheck(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(ChangeTagsForResourceError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
-                            ChangeTagsForResourceError::PriorRequestNotComplete(String::from(
+                            ChangeTagsForResourceError::PriorRequestNotComplete(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "ThrottlingException" => {
                         return RusotoError::Service(ChangeTagsForResourceError::Throttling(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8327,19 +8048,17 @@ impl CreateHealthCheckError {
                 match &parsed_error.code[..] {
                     "HealthCheckAlreadyExists" => {
                         return RusotoError::Service(
-                            CreateHealthCheckError::HealthCheckAlreadyExists(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateHealthCheckError::HealthCheckAlreadyExists(parsed_error.message),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateHealthCheckError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyHealthChecks" => {
                         return RusotoError::Service(CreateHealthCheckError::TooManyHealthChecks(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8404,55 +8123,47 @@ impl CreateHostedZoneError {
                 match &parsed_error.code[..] {
                     "ConflictingDomainExists" => {
                         return RusotoError::Service(
-                            CreateHostedZoneError::ConflictingDomainExists(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateHostedZoneError::ConflictingDomainExists(parsed_error.message),
                         )
                     }
                     "DelegationSetNotAvailable" => {
                         return RusotoError::Service(
-                            CreateHostedZoneError::DelegationSetNotAvailable(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateHostedZoneError::DelegationSetNotAvailable(parsed_error.message),
                         )
                     }
                     "DelegationSetNotReusable" => {
                         return RusotoError::Service(
-                            CreateHostedZoneError::DelegationSetNotReusable(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateHostedZoneError::DelegationSetNotReusable(parsed_error.message),
                         )
                     }
                     "HostedZoneAlreadyExists" => {
                         return RusotoError::Service(
-                            CreateHostedZoneError::HostedZoneAlreadyExists(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateHostedZoneError::HostedZoneAlreadyExists(parsed_error.message),
                         )
                     }
                     "InvalidDomainName" => {
                         return RusotoError::Service(CreateHostedZoneError::InvalidDomainName(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateHostedZoneError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(CreateHostedZoneError::InvalidVPCId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(CreateHostedZoneError::NoSuchDelegationSet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyHostedZones" => {
                         return RusotoError::Service(CreateHostedZoneError::TooManyHostedZones(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8517,41 +8228,39 @@ impl CreateQueryLoggingConfigError {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
                         return RusotoError::Service(
-                            CreateQueryLoggingConfigError::ConcurrentModification(String::from(
+                            CreateQueryLoggingConfigError::ConcurrentModification(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InsufficientCloudWatchLogsResourcePolicy" => {
                         return RusotoError::Service(
                             CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(CreateQueryLoggingConfigError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchCloudWatchLogsLogGroup" => {
                         return RusotoError::Service(
                             CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            CreateQueryLoggingConfigError::NoSuchHostedZone(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateQueryLoggingConfigError::NoSuchHostedZone(parsed_error.message),
                         )
                     }
                     "QueryLoggingConfigAlreadyExists" => {
                         return RusotoError::Service(
                             CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8621,50 +8330,44 @@ impl CreateReusableDelegationSetError {
                     "DelegationSetAlreadyCreated" => {
                         return RusotoError::Service(
                             CreateReusableDelegationSetError::DelegationSetAlreadyCreated(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DelegationSetAlreadyReusable" => {
                         return RusotoError::Service(
                             CreateReusableDelegationSetError::DelegationSetAlreadyReusable(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "DelegationSetNotAvailable" => {
                         return RusotoError::Service(
                             CreateReusableDelegationSetError::DelegationSetNotAvailable(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "HostedZoneNotFound" => {
                         return RusotoError::Service(
-                            CreateReusableDelegationSetError::HostedZoneNotFound(String::from(
+                            CreateReusableDelegationSetError::HostedZoneNotFound(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(
-                            CreateReusableDelegationSetError::InvalidArgument(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateReusableDelegationSetError::InvalidArgument(parsed_error.message),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            CreateReusableDelegationSetError::InvalidInput(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateReusableDelegationSetError::InvalidInput(parsed_error.message),
                         )
                     }
                     "LimitsExceeded" => {
                         return RusotoError::Service(
-                            CreateReusableDelegationSetError::LimitsExceeded(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateReusableDelegationSetError::LimitsExceeded(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -8723,28 +8426,26 @@ impl CreateTrafficPolicyError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(CreateTrafficPolicyError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidTrafficPolicyDocument" => {
                         return RusotoError::Service(
-                            CreateTrafficPolicyError::InvalidTrafficPolicyDocument(String::from(
+                            CreateTrafficPolicyError::InvalidTrafficPolicyDocument(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyTrafficPolicies" => {
                         return RusotoError::Service(
-                            CreateTrafficPolicyError::TooManyTrafficPolicies(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateTrafficPolicyError::TooManyTrafficPolicies(parsed_error.message),
                         )
                     }
                     "TrafficPolicyAlreadyExists" => {
                         return RusotoError::Service(
-                            CreateTrafficPolicyError::TrafficPolicyAlreadyExists(String::from(
+                            CreateTrafficPolicyError::TrafficPolicyAlreadyExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -8804,36 +8505,34 @@ impl CreateTrafficPolicyInstanceError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            CreateTrafficPolicyInstanceError::InvalidInput(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateTrafficPolicyInstanceError::InvalidInput(parsed_error.message),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            CreateTrafficPolicyInstanceError::NoSuchHostedZone(String::from(
+                            CreateTrafficPolicyInstanceError::NoSuchHostedZone(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
-                            CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
+                            CreateTrafficPolicyInstanceError::NoSuchTrafficPolicy(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyTrafficPolicyInstances" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyInstanceError::TooManyTrafficPolicyInstances(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TrafficPolicyInstanceAlreadyExists" => {
                         return RusotoError::Service(
                             CreateTrafficPolicyInstanceError::TrafficPolicyInstanceAlreadyExists(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8895,7 +8594,7 @@ impl CreateTrafficPolicyVersionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConcurrentModification" => return RusotoError::Service(CreateTrafficPolicyVersionError::ConcurrentModification(String::from(parsed_error.message))),"InvalidInput" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidInput(String::from(parsed_error.message))),"InvalidTrafficPolicyDocument" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(String::from(parsed_error.message))),"NoSuchTrafficPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(String::from(parsed_error.message))),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(String::from(parsed_error.message))),_ => {}
+                                    "ConcurrentModification" => return RusotoError::Service(CreateTrafficPolicyVersionError::ConcurrentModification(parsed_error.message)),"InvalidInput" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidInput(parsed_error.message)),"InvalidTrafficPolicyDocument" => return RusotoError::Service(CreateTrafficPolicyVersionError::InvalidTrafficPolicyDocument(parsed_error.message)),"NoSuchTrafficPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::NoSuchTrafficPolicy(parsed_error.message)),"TooManyTrafficPolicyVersionsForCurrentPolicy" => return RusotoError::Service(CreateTrafficPolicyVersionError::TooManyTrafficPolicyVersionsForCurrentPolicy(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -8956,34 +8655,34 @@ impl CreateVPCAssociationAuthorizationError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(
                             CreateVPCAssociationAuthorizationError::ConcurrentModification(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            CreateVPCAssociationAuthorizationError::InvalidInput(String::from(
+                            CreateVPCAssociationAuthorizationError::InvalidInput(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(
-                            CreateVPCAssociationAuthorizationError::InvalidVPCId(String::from(
+                            CreateVPCAssociationAuthorizationError::InvalidVPCId(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            CreateVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(
+                            CreateVPCAssociationAuthorizationError::NoSuchHostedZone(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyVPCAssociationAuthorizations" => return RusotoError::Service(
                         CreateVPCAssociationAuthorizationError::TooManyVPCAssociationAuthorizations(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     _ => {}
@@ -9040,17 +8739,17 @@ impl DeleteHealthCheckError {
                 match &parsed_error.code[..] {
                     "HealthCheckInUse" => {
                         return RusotoError::Service(DeleteHealthCheckError::HealthCheckInUse(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteHealthCheckError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(DeleteHealthCheckError::NoSuchHealthCheck(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9107,29 +8806,27 @@ impl DeleteHostedZoneError {
                 match &parsed_error.code[..] {
                     "HostedZoneNotEmpty" => {
                         return RusotoError::Service(DeleteHostedZoneError::HostedZoneNotEmpty(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidDomainName" => {
                         return RusotoError::Service(DeleteHostedZoneError::InvalidDomainName(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteHostedZoneError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(DeleteHostedZoneError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
-                            DeleteHostedZoneError::PriorRequestNotComplete(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteHostedZoneError::PriorRequestNotComplete(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -9184,21 +8881,21 @@ impl DeleteQueryLoggingConfigError {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
                         return RusotoError::Service(
-                            DeleteQueryLoggingConfigError::ConcurrentModification(String::from(
+                            DeleteQueryLoggingConfigError::ConcurrentModification(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteQueryLoggingConfigError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchQueryLoggingConfig" => {
                         return RusotoError::Service(
-                            DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
+                            DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9255,30 +8952,28 @@ impl DeleteReusableDelegationSetError {
                 match &parsed_error.code[..] {
                     "DelegationSetInUse" => {
                         return RusotoError::Service(
-                            DeleteReusableDelegationSetError::DelegationSetInUse(String::from(
+                            DeleteReusableDelegationSetError::DelegationSetInUse(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DelegationSetNotReusable" => {
                         return RusotoError::Service(
                             DeleteReusableDelegationSetError::DelegationSetNotReusable(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            DeleteReusableDelegationSetError::InvalidInput(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteReusableDelegationSetError::InvalidInput(parsed_error.message),
                         )
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(
-                            DeleteReusableDelegationSetError::NoSuchDelegationSet(String::from(
+                            DeleteReusableDelegationSetError::NoSuchDelegationSet(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9334,24 +9029,22 @@ impl DeleteTrafficPolicyError {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
                         return RusotoError::Service(
-                            DeleteTrafficPolicyError::ConcurrentModification(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteTrafficPolicyError::ConcurrentModification(parsed_error.message),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(DeleteTrafficPolicyError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(DeleteTrafficPolicyError::NoSuchTrafficPolicy(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TrafficPolicyInUse" => {
                         return RusotoError::Service(DeleteTrafficPolicyError::TrafficPolicyInUse(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9407,22 +9100,20 @@ impl DeleteTrafficPolicyInstanceError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            DeleteTrafficPolicyInstanceError::InvalidInput(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteTrafficPolicyInstanceError::InvalidInput(parsed_error.message),
                         )
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             DeleteTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
                             DeleteTrafficPolicyInstanceError::PriorRequestNotComplete(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9483,34 +9174,34 @@ impl DeleteVPCAssociationAuthorizationError {
                     "ConcurrentModification" => {
                         return RusotoError::Service(
                             DeleteVPCAssociationAuthorizationError::ConcurrentModification(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            DeleteVPCAssociationAuthorizationError::InvalidInput(String::from(
+                            DeleteVPCAssociationAuthorizationError::InvalidInput(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(
-                            DeleteVPCAssociationAuthorizationError::InvalidVPCId(String::from(
+                            DeleteVPCAssociationAuthorizationError::InvalidVPCId(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(String::from(
+                            DeleteVPCAssociationAuthorizationError::NoSuchHostedZone(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "VPCAssociationAuthorizationNotFound" => return RusotoError::Service(
                         DeleteVPCAssociationAuthorizationError::VPCAssociationAuthorizationNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     _ => {}
@@ -9573,36 +9264,32 @@ impl DisassociateVPCFromHostedZoneError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::InvalidInput(String::from(
-                                parsed_error.message,
-                            )),
+                            DisassociateVPCFromHostedZoneError::InvalidInput(parsed_error.message),
                         )
                     }
                     "InvalidVPCId" => {
                         return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::InvalidVPCId(String::from(
-                                parsed_error.message,
-                            )),
+                            DisassociateVPCFromHostedZoneError::InvalidVPCId(parsed_error.message),
                         )
                     }
                     "LastVPCAssociation" => {
                         return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::LastVPCAssociation(String::from(
+                            DisassociateVPCFromHostedZoneError::LastVPCAssociation(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            DisassociateVPCFromHostedZoneError::NoSuchHostedZone(String::from(
+                            DisassociateVPCFromHostedZoneError::NoSuchHostedZone(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "VPCAssociationNotFound" => {
                         return RusotoError::Service(
                             DisassociateVPCFromHostedZoneError::VPCAssociationNotFound(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9654,7 +9341,7 @@ impl GetAccountLimitError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(GetAccountLimitError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9702,14 +9389,14 @@ impl GetChangeError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
-                        return RusotoError::Service(GetChangeError::InvalidInput(String::from(
+                        return RusotoError::Service(GetChangeError::InvalidInput(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "NoSuchChange" => {
-                        return RusotoError::Service(GetChangeError::NoSuchChange(String::from(
+                        return RusotoError::Service(GetChangeError::NoSuchChange(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -9795,12 +9482,12 @@ impl GetGeoLocationError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(GetGeoLocationError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchGeoLocation" => {
                         return RusotoError::Service(GetGeoLocationError::NoSuchGeoLocation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9852,17 +9539,17 @@ impl GetHealthCheckError {
                 match &parsed_error.code[..] {
                     "IncompatibleVersion" => {
                         return RusotoError::Service(GetHealthCheckError::IncompatibleVersion(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(GetHealthCheckError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(GetHealthCheckError::NoSuchHealthCheck(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9952,16 +9639,16 @@ impl GetHealthCheckLastFailureReasonError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            GetHealthCheckLastFailureReasonError::InvalidInput(String::from(
+                            GetHealthCheckLastFailureReasonError::InvalidInput(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(
-                            GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(String::from(
+                            GetHealthCheckLastFailureReasonError::NoSuchHealthCheck(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -10011,12 +9698,12 @@ impl GetHealthCheckStatusError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(GetHealthCheckStatusError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(GetHealthCheckStatusError::NoSuchHealthCheck(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10066,12 +9753,12 @@ impl GetHostedZoneError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(GetHostedZoneError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(GetHostedZoneError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10119,7 +9806,7 @@ impl GetHostedZoneCountError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(GetHostedZoneCountError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10170,17 +9857,17 @@ impl GetHostedZoneLimitError {
                 match &parsed_error.code[..] {
                     "HostedZoneNotPrivate" => {
                         return RusotoError::Service(GetHostedZoneLimitError::HostedZoneNotPrivate(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(GetHostedZoneLimitError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(GetHostedZoneLimitError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10231,14 +9918,14 @@ impl GetQueryLoggingConfigError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(GetQueryLoggingConfigError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchQueryLoggingConfig" => {
                         return RusotoError::Service(
-                            GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
+                            GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -10290,21 +9977,21 @@ impl GetReusableDelegationSetError {
                 match &parsed_error.code[..] {
                     "DelegationSetNotReusable" => {
                         return RusotoError::Service(
-                            GetReusableDelegationSetError::DelegationSetNotReusable(String::from(
+                            GetReusableDelegationSetError::DelegationSetNotReusable(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(GetReusableDelegationSetError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(
-                            GetReusableDelegationSetError::NoSuchDelegationSet(String::from(
+                            GetReusableDelegationSetError::NoSuchDelegationSet(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -10357,16 +10044,14 @@ impl GetReusableDelegationSetLimitError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            GetReusableDelegationSetLimitError::InvalidInput(String::from(
-                                parsed_error.message,
-                            )),
+                            GetReusableDelegationSetLimitError::InvalidInput(parsed_error.message),
                         )
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(
-                            GetReusableDelegationSetLimitError::NoSuchDelegationSet(String::from(
+                            GetReusableDelegationSetLimitError::NoSuchDelegationSet(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -10416,12 +10101,12 @@ impl GetTrafficPolicyError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(GetTrafficPolicyError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(GetTrafficPolicyError::NoSuchTrafficPolicy(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10471,13 +10156,13 @@ impl GetTrafficPolicyInstanceError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(GetTrafficPolicyInstanceError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             GetTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10565,7 +10250,7 @@ impl ListGeoLocationsError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListGeoLocationsError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10614,12 +10299,12 @@ impl ListHealthChecksError {
                 match &parsed_error.code[..] {
                     "IncompatibleVersion" => {
                         return RusotoError::Service(ListHealthChecksError::IncompatibleVersion(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(ListHealthChecksError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10671,19 +10356,17 @@ impl ListHostedZonesError {
                 match &parsed_error.code[..] {
                     "DelegationSetNotReusable" => {
                         return RusotoError::Service(
-                            ListHostedZonesError::DelegationSetNotReusable(String::from(
-                                parsed_error.message,
-                            )),
+                            ListHostedZonesError::DelegationSetNotReusable(parsed_error.message),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(ListHostedZonesError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDelegationSet" => {
                         return RusotoError::Service(ListHostedZonesError::NoSuchDelegationSet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10734,12 +10417,12 @@ impl ListHostedZonesByNameError {
                 match &parsed_error.code[..] {
                     "InvalidDomainName" => {
                         return RusotoError::Service(ListHostedZonesByNameError::InvalidDomainName(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(ListHostedZonesByNameError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10791,21 +10474,19 @@ impl ListQueryLoggingConfigsError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListQueryLoggingConfigsError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidPaginationToken" => {
                         return RusotoError::Service(
-                            ListQueryLoggingConfigsError::InvalidPaginationToken(String::from(
+                            ListQueryLoggingConfigsError::InvalidPaginationToken(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            ListQueryLoggingConfigsError::NoSuchHostedZone(String::from(
-                                parsed_error.message,
-                            )),
+                            ListQueryLoggingConfigsError::NoSuchHostedZone(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -10856,12 +10537,12 @@ impl ListResourceRecordSetsError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListResourceRecordSetsError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(ListResourceRecordSetsError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10911,7 +10592,7 @@ impl ListReusableDelegationSetsError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListReusableDelegationSetsError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10966,29 +10647,27 @@ impl ListTagsForResourceError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTagsForResourceError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(ListTagsForResourceError::NoSuchHealthCheck(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(ListTagsForResourceError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
-                            ListTagsForResourceError::PriorRequestNotComplete(String::from(
-                                parsed_error.message,
-                            )),
+                            ListTagsForResourceError::PriorRequestNotComplete(parsed_error.message),
                         )
                     }
                     "ThrottlingException" => {
                         return RusotoError::Service(ListTagsForResourceError::Throttling(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -11047,29 +10726,29 @@ impl ListTagsForResourcesError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTagsForResourcesError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(ListTagsForResourcesError::NoSuchHealthCheck(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(ListTagsForResourcesError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
-                            ListTagsForResourcesError::PriorRequestNotComplete(String::from(
+                            ListTagsForResourcesError::PriorRequestNotComplete(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "ThrottlingException" => {
                         return RusotoError::Service(ListTagsForResourcesError::Throttling(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -11120,7 +10799,7 @@ impl ListTrafficPoliciesError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTrafficPoliciesError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -11171,13 +10850,13 @@ impl ListTrafficPolicyInstancesError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTrafficPolicyInstancesError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesError::NoSuchTrafficPolicyInstance(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -11233,20 +10912,20 @@ impl ListTrafficPolicyInstancesByHostedZoneError {
                     "InvalidInput" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesByHostedZoneError::InvalidInput(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesByHostedZoneError::NoSuchHostedZone(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "NoSuchTrafficPolicyInstance" => return RusotoError::Service(
                         ListTrafficPolicyInstancesByHostedZoneError::NoSuchTrafficPolicyInstance(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     _ => {}
@@ -11303,22 +10982,22 @@ impl ListTrafficPolicyInstancesByPolicyError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            ListTrafficPolicyInstancesByPolicyError::InvalidInput(String::from(
+                            ListTrafficPolicyInstancesByPolicyError::InvalidInput(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicy(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             ListTrafficPolicyInstancesByPolicyError::NoSuchTrafficPolicyInstance(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -11372,14 +11051,14 @@ impl ListTrafficPolicyVersionsError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(ListTrafficPolicyVersionsError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
-                            ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(String::from(
+                            ListTrafficPolicyVersionsError::NoSuchTrafficPolicy(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -11433,23 +11112,23 @@ impl ListVPCAssociationAuthorizationsError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            ListVPCAssociationAuthorizationsError::InvalidInput(String::from(
+                            ListVPCAssociationAuthorizationsError::InvalidInput(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidPaginationToken" => {
                         return RusotoError::Service(
                             ListVPCAssociationAuthorizationsError::InvalidPaginationToken(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            ListVPCAssociationAuthorizationsError::NoSuchHostedZone(String::from(
+                            ListVPCAssociationAuthorizationsError::NoSuchHostedZone(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -11500,12 +11179,12 @@ impl TestDNSAnswerError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(TestDNSAnswerError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(TestDNSAnswerError::NoSuchHostedZone(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -11557,19 +11236,19 @@ impl UpdateHealthCheckError {
                 match &parsed_error.code[..] {
                     "HealthCheckVersionMismatch" => {
                         return RusotoError::Service(
-                            UpdateHealthCheckError::HealthCheckVersionMismatch(String::from(
+                            UpdateHealthCheckError::HealthCheckVersionMismatch(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(UpdateHealthCheckError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHealthCheck" => {
                         return RusotoError::Service(UpdateHealthCheckError::NoSuchHealthCheck(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -11620,14 +11299,12 @@ impl UpdateHostedZoneCommentError {
                 match &parsed_error.code[..] {
                     "InvalidInput" => {
                         return RusotoError::Service(UpdateHostedZoneCommentError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchHostedZone" => {
                         return RusotoError::Service(
-                            UpdateHostedZoneCommentError::NoSuchHostedZone(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateHostedZoneCommentError::NoSuchHostedZone(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -11681,21 +11358,21 @@ impl UpdateTrafficPolicyCommentError {
                 match &parsed_error.code[..] {
                     "ConcurrentModification" => {
                         return RusotoError::Service(
-                            UpdateTrafficPolicyCommentError::ConcurrentModification(String::from(
+                            UpdateTrafficPolicyCommentError::ConcurrentModification(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(UpdateTrafficPolicyCommentError::InvalidInput(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
-                            UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(String::from(
+                            UpdateTrafficPolicyCommentError::NoSuchTrafficPolicy(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -11754,36 +11431,34 @@ impl UpdateTrafficPolicyInstanceError {
                 match &parsed_error.code[..] {
                     "ConflictingTypes" => {
                         return RusotoError::Service(
-                            UpdateTrafficPolicyInstanceError::ConflictingTypes(String::from(
+                            UpdateTrafficPolicyInstanceError::ConflictingTypes(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidInput" => {
                         return RusotoError::Service(
-                            UpdateTrafficPolicyInstanceError::InvalidInput(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateTrafficPolicyInstanceError::InvalidInput(parsed_error.message),
                         )
                     }
                     "NoSuchTrafficPolicy" => {
                         return RusotoError::Service(
-                            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(String::from(
+                            UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicy(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchTrafficPolicyInstance" => {
                         return RusotoError::Service(
                             UpdateTrafficPolicyInstanceError::NoSuchTrafficPolicyInstance(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "PriorRequestNotComplete" => {
                         return RusotoError::Service(
                             UpdateTrafficPolicyInstanceError::PriorRequestNotComplete(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -12183,7 +11858,7 @@ impl Route53Client {
     pub fn new(region: region::Region) -> Route53Client {
         Route53Client {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -12200,7 +11875,7 @@ impl Route53Client {
     {
         Route53Client {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

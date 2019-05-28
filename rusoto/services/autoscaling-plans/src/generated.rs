@@ -803,7 +803,7 @@ impl AutoscalingPlansClient {
     pub fn new(region: region::Region) -> AutoscalingPlansClient {
         AutoscalingPlansClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -820,7 +820,7 @@ impl AutoscalingPlansClient {
     {
         AutoscalingPlansClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

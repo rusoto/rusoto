@@ -4482,7 +4482,7 @@ impl DirectConnectClient {
     pub fn new(region: region::Region) -> DirectConnectClient {
         DirectConnectClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -4499,7 +4499,7 @@ impl DirectConnectClient {
     {
         DirectConnectClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

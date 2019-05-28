@@ -954,7 +954,7 @@ impl TranscribeClient {
     pub fn new(region: region::Region) -> TranscribeClient {
         TranscribeClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -971,7 +971,7 @@ impl TranscribeClient {
     {
         TranscribeClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -5803,7 +5803,7 @@ impl MediaConvertClient {
     pub fn new(region: region::Region) -> MediaConvertClient {
         MediaConvertClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -5820,7 +5820,7 @@ impl MediaConvertClient {
     {
         MediaConvertClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

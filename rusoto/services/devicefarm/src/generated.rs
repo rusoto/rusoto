@@ -6828,7 +6828,7 @@ impl DeviceFarmClient {
     pub fn new(region: region::Region) -> DeviceFarmClient {
         DeviceFarmClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -6845,7 +6845,7 @@ impl DeviceFarmClient {
     {
         DeviceFarmClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

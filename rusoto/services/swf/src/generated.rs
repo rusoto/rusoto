@@ -4466,7 +4466,7 @@ impl SwfClient {
     pub fn new(region: region::Region) -> SwfClient {
         SwfClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -4483,7 +4483,7 @@ impl SwfClient {
     {
         SwfClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

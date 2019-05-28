@@ -490,7 +490,7 @@ impl ResourceGroupsTaggingApiClient {
     pub fn new(region: region::Region) -> ResourceGroupsTaggingApiClient {
         ResourceGroupsTaggingApiClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -507,7 +507,7 @@ impl ResourceGroupsTaggingApiClient {
     {
         ResourceGroupsTaggingApiClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

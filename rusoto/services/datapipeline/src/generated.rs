@@ -1799,7 +1799,7 @@ impl DataPipelineClient {
     pub fn new(region: region::Region) -> DataPipelineClient {
         DataPipelineClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1816,7 +1816,7 @@ impl DataPipelineClient {
     {
         DataPipelineClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

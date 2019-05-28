@@ -2771,7 +2771,7 @@ impl KinesisClient {
     pub fn new(region: region::Region) -> KinesisClient {
         KinesisClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2788,7 +2788,7 @@ impl KinesisClient {
     {
         KinesisClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

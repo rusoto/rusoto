@@ -1423,7 +1423,7 @@ impl OpsWorksCMClient {
     pub fn new(region: region::Region) -> OpsWorksCMClient {
         OpsWorksCMClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1440,7 +1440,7 @@ impl OpsWorksCMClient {
     {
         OpsWorksCMClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

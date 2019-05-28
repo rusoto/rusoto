@@ -2133,7 +2133,7 @@ impl RamClient {
     pub fn new(region: region::Region) -> RamClient {
         RamClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2150,7 +2150,7 @@ impl RamClient {
     {
         RamClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

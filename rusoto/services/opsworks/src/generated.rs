@@ -6117,7 +6117,7 @@ impl OpsWorksClient {
     pub fn new(region: region::Region) -> OpsWorksClient {
         OpsWorksClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -6134,7 +6134,7 @@ impl OpsWorksClient {
     {
         OpsWorksClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

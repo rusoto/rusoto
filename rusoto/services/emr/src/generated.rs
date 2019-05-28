@@ -3568,7 +3568,7 @@ impl EmrClient {
     pub fn new(region: region::Region) -> EmrClient {
         EmrClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3585,7 +3585,7 @@ impl EmrClient {
     {
         EmrClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

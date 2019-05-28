@@ -12572,7 +12572,7 @@ impl CognitoIdentityProviderClient {
     pub fn new(region: region::Region) -> CognitoIdentityProviderClient {
         CognitoIdentityProviderClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -12589,7 +12589,7 @@ impl CognitoIdentityProviderClient {
     {
         CognitoIdentityProviderClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

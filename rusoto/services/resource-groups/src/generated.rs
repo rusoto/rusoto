@@ -1237,7 +1237,7 @@ impl ResourceGroupsClient {
     pub fn new(region: region::Region) -> ResourceGroupsClient {
         ResourceGroupsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1254,7 +1254,7 @@ impl ResourceGroupsClient {
     {
         ResourceGroupsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

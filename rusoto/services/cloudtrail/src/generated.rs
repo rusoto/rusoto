@@ -2036,7 +2036,7 @@ impl CloudTrailClient {
     pub fn new(region: region::Region) -> CloudTrailClient {
         CloudTrailClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2053,7 +2053,7 @@ impl CloudTrailClient {
     {
         CloudTrailClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

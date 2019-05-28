@@ -120,7 +120,7 @@ pub struct BatchResultErrorEntry {
 struct BatchResultErrorEntryDeserializer;
 impl BatchResultErrorEntryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BatchResultErrorEntry, XmlParseError> {
@@ -147,7 +147,7 @@ impl BatchResultErrorEntryDeserializer {
 struct BatchResultErrorEntryListDeserializer;
 impl BatchResultErrorEntryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<BatchResultErrorEntry>, XmlParseError> {
@@ -176,7 +176,7 @@ impl BatchResultErrorEntryListDeserializer {
 struct BinaryDeserializer;
 impl BinaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
@@ -190,7 +190,7 @@ impl BinaryDeserializer {
 struct BinaryListDeserializer;
 impl BinaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<bytes::Bytes>, XmlParseError> {
@@ -219,10 +219,7 @@ impl BinaryListSerializer {
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -315,7 +312,7 @@ pub struct ChangeMessageVisibilityBatchResult {
 struct ChangeMessageVisibilityBatchResultDeserializer;
 impl ChangeMessageVisibilityBatchResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeMessageVisibilityBatchResult, XmlParseError> {
@@ -356,7 +353,7 @@ pub struct ChangeMessageVisibilityBatchResultEntry {
 struct ChangeMessageVisibilityBatchResultEntryDeserializer;
 impl ChangeMessageVisibilityBatchResultEntryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeMessageVisibilityBatchResultEntry, XmlParseError> {
@@ -378,7 +375,7 @@ impl ChangeMessageVisibilityBatchResultEntryDeserializer {
 struct ChangeMessageVisibilityBatchResultEntryListDeserializer;
 impl ChangeMessageVisibilityBatchResultEntryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ChangeMessageVisibilityBatchResultEntry>, XmlParseError> {
@@ -476,7 +473,7 @@ pub struct CreateQueueResult {
 struct CreateQueueResultDeserializer;
 impl CreateQueueResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateQueueResult, XmlParseError> {
@@ -567,7 +564,7 @@ pub struct DeleteMessageBatchResult {
 struct DeleteMessageBatchResultDeserializer;
 impl DeleteMessageBatchResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteMessageBatchResult, XmlParseError> {
@@ -608,7 +605,7 @@ pub struct DeleteMessageBatchResultEntry {
 struct DeleteMessageBatchResultEntryDeserializer;
 impl DeleteMessageBatchResultEntryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteMessageBatchResultEntry, XmlParseError> {
@@ -630,7 +627,7 @@ impl DeleteMessageBatchResultEntryDeserializer {
 struct DeleteMessageBatchResultEntryListDeserializer;
 impl DeleteMessageBatchResultEntryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DeleteMessageBatchResultEntry>, XmlParseError> {
@@ -741,7 +738,7 @@ pub struct GetQueueAttributesResult {
 struct GetQueueAttributesResultDeserializer;
 impl GetQueueAttributesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetQueueAttributesResult, XmlParseError> {
@@ -801,7 +798,7 @@ pub struct GetQueueUrlResult {
 struct GetQueueUrlResultDeserializer;
 impl GetQueueUrlResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetQueueUrlResult, XmlParseError> {
@@ -846,7 +843,7 @@ pub struct ListDeadLetterSourceQueuesResult {
 struct ListDeadLetterSourceQueuesResultDeserializer;
 impl ListDeadLetterSourceQueuesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDeadLetterSourceQueuesResult, XmlParseError> {
@@ -894,7 +891,7 @@ pub struct ListQueueTagsResult {
 struct ListQueueTagsResultDeserializer;
 impl ListQueueTagsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListQueueTagsResult, XmlParseError> {
@@ -941,7 +938,7 @@ pub struct ListQueuesResult {
 struct ListQueuesResultDeserializer;
 impl ListQueuesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListQueuesResult, XmlParseError> {
@@ -980,7 +977,7 @@ pub struct Message {
 struct MessageDeserializer;
 impl MessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Message, XmlParseError> {
@@ -1054,7 +1051,7 @@ pub struct MessageAttributeValue {
 struct MessageAttributeValueDeserializer;
 impl MessageAttributeValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MessageAttributeValue, XmlParseError> {
@@ -1125,7 +1122,7 @@ impl MessageAttributeValueSerializer {
 struct MessageBodyAttributeMapDeserializer;
 impl MessageBodyAttributeMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, MessageAttributeValue>, XmlParseError> {
@@ -1166,7 +1163,7 @@ impl MessageBodyAttributeMapSerializer {
 struct MessageListDeserializer;
 impl MessageListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Message>, XmlParseError> {
@@ -1193,7 +1190,7 @@ impl MessageListDeserializer {
 struct MessageSystemAttributeMapDeserializer;
 impl MessageSystemAttributeMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
@@ -1213,10 +1210,7 @@ impl MessageSystemAttributeMapDeserializer {
 struct MessageSystemAttributeNameDeserializer;
 impl MessageSystemAttributeNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1247,7 +1241,7 @@ impl PurgeQueueRequestSerializer {
 struct QueueAttributeMapDeserializer;
 impl QueueAttributeMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
@@ -1284,10 +1278,7 @@ impl QueueAttributeMapSerializer {
 struct QueueAttributeNameDeserializer;
 impl QueueAttributeNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1298,7 +1289,7 @@ impl QueueAttributeNameDeserializer {
 struct QueueUrlListDeserializer;
 impl QueueUrlListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -1396,7 +1387,7 @@ pub struct ReceiveMessageResult {
 struct ReceiveMessageResultDeserializer;
 impl ReceiveMessageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiveMessageResult, XmlParseError> {
@@ -1536,7 +1527,7 @@ pub struct SendMessageBatchResult {
 struct SendMessageBatchResultDeserializer;
 impl SendMessageBatchResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendMessageBatchResult, XmlParseError> {
@@ -1581,7 +1572,7 @@ pub struct SendMessageBatchResultEntry {
 struct SendMessageBatchResultEntryDeserializer;
 impl SendMessageBatchResultEntryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendMessageBatchResultEntry, XmlParseError> {
@@ -1620,7 +1611,7 @@ impl SendMessageBatchResultEntryDeserializer {
 struct SendMessageBatchResultEntryListDeserializer;
 impl SendMessageBatchResultEntryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SendMessageBatchResultEntry>, XmlParseError> {
@@ -1712,7 +1703,7 @@ pub struct SendMessageResult {
 struct SendMessageResultDeserializer;
 impl SendMessageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendMessageResult, XmlParseError> {
@@ -1771,10 +1762,7 @@ impl SetQueueAttributesRequestSerializer {
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1785,7 +1773,7 @@ impl StringDeserializer {
 struct StringListDeserializer;
 impl StringListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -1814,10 +1802,7 @@ impl StringListSerializer {
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1840,7 +1825,7 @@ impl TagKeyListSerializer {
 struct TagMapDeserializer;
 impl TagMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
@@ -1899,10 +1884,7 @@ impl TagQueueRequestSerializer {
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1948,9 +1930,9 @@ impl AddPermissionError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OverLimit" => {
-                        return RusotoError::Service(AddPermissionError::OverLimit(String::from(
+                        return RusotoError::Service(AddPermissionError::OverLimit(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -1998,16 +1980,14 @@ impl ChangeMessageVisibilityError {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.MessageNotInflight" => {
                         return RusotoError::Service(
-                            ChangeMessageVisibilityError::MessageNotInflight(String::from(
-                                parsed_error.message,
-                            )),
+                            ChangeMessageVisibilityError::MessageNotInflight(parsed_error.message),
                         )
                     }
                     "ReceiptHandleIsInvalid" => {
                         return RusotoError::Service(
-                            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(String::from(
+                            ChangeMessageVisibilityError::ReceiptHandleIsInvalid(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -2064,28 +2044,28 @@ impl ChangeMessageVisibilityBatchError {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
                         return RusotoError::Service(
                             ChangeMessageVisibilityBatchError::BatchEntryIdsNotDistinct(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return RusotoError::Service(
-                            ChangeMessageVisibilityBatchError::EmptyBatchRequest(String::from(
+                            ChangeMessageVisibilityBatchError::EmptyBatchRequest(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return RusotoError::Service(
-                            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(String::from(
+                            ChangeMessageVisibilityBatchError::InvalidBatchEntryId(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return RusotoError::Service(
                             ChangeMessageVisibilityBatchError::TooManyEntriesInBatchRequest(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -2138,12 +2118,12 @@ impl CreateQueueError {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.QueueDeletedRecently" => {
                         return RusotoError::Service(CreateQueueError::QueueDeletedRecently(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "QueueAlreadyExists" => {
                         return RusotoError::Service(CreateQueueError::QueueNameExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -2193,12 +2173,12 @@ impl DeleteMessageError {
                 match &parsed_error.code[..] {
                     "InvalidIdFormat" => {
                         return RusotoError::Service(DeleteMessageError::InvalidIdFormat(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ReceiptHandleIsInvalid" => {
                         return RusotoError::Service(DeleteMessageError::ReceiptHandleIsInvalid(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -2252,26 +2232,24 @@ impl DeleteMessageBatchError {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
                         return RusotoError::Service(
-                            DeleteMessageBatchError::BatchEntryIdsNotDistinct(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteMessageBatchError::BatchEntryIdsNotDistinct(parsed_error.message),
                         )
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return RusotoError::Service(DeleteMessageBatchError::EmptyBatchRequest(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return RusotoError::Service(DeleteMessageBatchError::InvalidBatchEntryId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return RusotoError::Service(
-                            DeleteMessageBatchError::TooManyEntriesInBatchRequest(String::from(
+                            DeleteMessageBatchError::TooManyEntriesInBatchRequest(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -2358,7 +2336,7 @@ impl GetQueueAttributesError {
                 match &parsed_error.code[..] {
                     "InvalidAttributeName" => {
                         return RusotoError::Service(GetQueueAttributesError::InvalidAttributeName(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -2405,7 +2383,7 @@ impl GetQueueUrlError {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.NonExistentQueue" => {
                         return RusotoError::Service(GetQueueUrlError::QueueDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -2454,9 +2432,9 @@ impl ListDeadLetterSourceQueuesError {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.NonExistentQueue" => {
                         return RusotoError::Service(
-                            ListDeadLetterSourceQueuesError::QueueDoesNotExist(String::from(
+                            ListDeadLetterSourceQueuesError::QueueDoesNotExist(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -2579,12 +2557,12 @@ impl PurgeQueueError {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.PurgeQueueInProgress" => {
                         return RusotoError::Service(PurgeQueueError::PurgeQueueInProgress(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "AWS.SimpleQueueService.NonExistentQueue" => {
                         return RusotoError::Service(PurgeQueueError::QueueDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -2631,9 +2609,9 @@ impl ReceiveMessageError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "OverLimit" => {
-                        return RusotoError::Service(ReceiveMessageError::OverLimit(String::from(
+                        return RusotoError::Service(ReceiveMessageError::OverLimit(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -2718,12 +2696,12 @@ impl SendMessageError {
                 match &parsed_error.code[..] {
                     "InvalidMessageContents" => {
                         return RusotoError::Service(SendMessageError::InvalidMessageContents(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "AWS.SimpleQueueService.UnsupportedOperation" => {
                         return RusotoError::Service(SendMessageError::UnsupportedOperation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -2781,36 +2759,34 @@ impl SendMessageBatchError {
                 match &parsed_error.code[..] {
                     "AWS.SimpleQueueService.BatchEntryIdsNotDistinct" => {
                         return RusotoError::Service(
-                            SendMessageBatchError::BatchEntryIdsNotDistinct(String::from(
-                                parsed_error.message,
-                            )),
+                            SendMessageBatchError::BatchEntryIdsNotDistinct(parsed_error.message),
                         )
                     }
                     "AWS.SimpleQueueService.BatchRequestTooLong" => {
                         return RusotoError::Service(SendMessageBatchError::BatchRequestTooLong(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "AWS.SimpleQueueService.EmptyBatchRequest" => {
                         return RusotoError::Service(SendMessageBatchError::EmptyBatchRequest(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "AWS.SimpleQueueService.InvalidBatchEntryId" => {
                         return RusotoError::Service(SendMessageBatchError::InvalidBatchEntryId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "AWS.SimpleQueueService.TooManyEntriesInBatchRequest" => {
                         return RusotoError::Service(
-                            SendMessageBatchError::TooManyEntriesInBatchRequest(String::from(
+                            SendMessageBatchError::TooManyEntriesInBatchRequest(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "AWS.SimpleQueueService.UnsupportedOperation" => {
                         return RusotoError::Service(SendMessageBatchError::UnsupportedOperation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -2862,7 +2838,7 @@ impl SetQueueAttributesError {
                 match &parsed_error.code[..] {
                     "InvalidAttributeName" => {
                         return RusotoError::Service(SetQueueAttributesError::InvalidAttributeName(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -3084,7 +3060,7 @@ impl SqsClient {
     pub fn new(region: region::Region) -> SqsClient {
         SqsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3101,7 +3077,7 @@ impl SqsClient {
     {
         SqsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

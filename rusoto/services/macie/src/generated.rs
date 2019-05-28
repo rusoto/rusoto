@@ -621,7 +621,7 @@ impl MacieClient {
     pub fn new(region: region::Region) -> MacieClient {
         MacieClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -638,7 +638,7 @@ impl MacieClient {
     {
         MacieClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -1431,7 +1431,7 @@ impl AWSSupportClient {
     pub fn new(region: region::Region) -> AWSSupportClient {
         AWSSupportClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1448,7 +1448,7 @@ impl AWSSupportClient {
     {
         AWSSupportClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

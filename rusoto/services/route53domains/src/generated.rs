@@ -2225,7 +2225,7 @@ impl Route53DomainsClient {
     pub fn new(region: region::Region) -> Route53DomainsClient {
         Route53DomainsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2242,7 +2242,7 @@ impl Route53DomainsClient {
     {
         Route53DomainsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -1225,7 +1225,7 @@ impl AcmClient {
     pub fn new(region: region::Region) -> AcmClient {
         AcmClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1242,7 +1242,7 @@ impl AcmClient {
     {
         AcmClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

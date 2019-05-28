@@ -1860,7 +1860,7 @@ impl CognitoSyncClient {
     pub fn new(region: region::Region) -> CognitoSyncClient {
         CognitoSyncClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1877,7 +1877,7 @@ impl CognitoSyncClient {
     {
         CognitoSyncClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

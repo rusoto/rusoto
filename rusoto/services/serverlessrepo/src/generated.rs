@@ -2114,7 +2114,7 @@ impl ServerlessRepoClient {
     pub fn new(region: region::Region) -> ServerlessRepoClient {
         ServerlessRepoClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2131,7 +2131,7 @@ impl ServerlessRepoClient {
     {
         ServerlessRepoClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

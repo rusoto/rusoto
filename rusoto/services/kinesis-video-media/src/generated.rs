@@ -149,7 +149,7 @@ impl KinesisVideoMediaClient {
     pub fn new(region: region::Region) -> KinesisVideoMediaClient {
         KinesisVideoMediaClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -166,7 +166,7 @@ impl KinesisVideoMediaClient {
     {
         KinesisVideoMediaClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

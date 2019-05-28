@@ -982,7 +982,7 @@ impl KinesisVideoClient {
     pub fn new(region: region::Region) -> KinesisVideoClient {
         KinesisVideoClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -999,7 +999,7 @@ impl KinesisVideoClient {
     {
         KinesisVideoClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

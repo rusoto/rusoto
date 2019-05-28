@@ -2089,7 +2089,7 @@ impl KinesisFirehoseClient {
     pub fn new(region: region::Region) -> KinesisFirehoseClient {
         KinesisFirehoseClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2106,7 +2106,7 @@ impl KinesisFirehoseClient {
     {
         KinesisFirehoseClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

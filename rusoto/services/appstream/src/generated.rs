@@ -4361,7 +4361,7 @@ impl AppStreamClient {
     pub fn new(region: region::Region) -> AppStreamClient {
         AppStreamClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -4378,7 +4378,7 @@ impl AppStreamClient {
     {
         AppStreamClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

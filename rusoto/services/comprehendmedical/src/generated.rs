@@ -330,7 +330,7 @@ impl ComprehendMedicalClient {
     pub fn new(region: region::Region) -> ComprehendMedicalClient {
         ComprehendMedicalClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -347,7 +347,7 @@ impl ComprehendMedicalClient {
     {
         ComprehendMedicalClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

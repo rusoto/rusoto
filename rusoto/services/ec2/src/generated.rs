@@ -86,7 +86,7 @@ pub struct AcceptReservedInstancesExchangeQuoteResult {
 struct AcceptReservedInstancesExchangeQuoteResultDeserializer;
 impl AcceptReservedInstancesExchangeQuoteResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AcceptReservedInstancesExchangeQuoteResult, XmlParseError> {
@@ -142,7 +142,7 @@ pub struct AcceptTransitGatewayVpcAttachmentResult {
 struct AcceptTransitGatewayVpcAttachmentResultDeserializer;
 impl AcceptTransitGatewayVpcAttachmentResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AcceptTransitGatewayVpcAttachmentResult, XmlParseError> {
@@ -205,7 +205,7 @@ pub struct AcceptVpcEndpointConnectionsResult {
 struct AcceptVpcEndpointConnectionsResultDeserializer;
 impl AcceptVpcEndpointConnectionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AcceptVpcEndpointConnectionsResult, XmlParseError> {
@@ -264,7 +264,7 @@ pub struct AcceptVpcPeeringConnectionResult {
 struct AcceptVpcPeeringConnectionResultDeserializer;
 impl AcceptVpcPeeringConnectionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AcceptVpcPeeringConnectionResult, XmlParseError> {
@@ -299,7 +299,7 @@ pub struct AccountAttribute {
 struct AccountAttributeDeserializer;
 impl AccountAttributeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountAttribute, XmlParseError> {
@@ -326,7 +326,7 @@ impl AccountAttributeDeserializer {
 struct AccountAttributeListDeserializer;
 impl AccountAttributeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AccountAttribute>, XmlParseError> {
@@ -362,7 +362,7 @@ pub struct AccountAttributeValue {
 struct AccountAttributeValueDeserializer;
 impl AccountAttributeValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountAttributeValue, XmlParseError> {
@@ -381,7 +381,7 @@ impl AccountAttributeValueDeserializer {
 struct AccountAttributeValueListDeserializer;
 impl AccountAttributeValueListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AccountAttributeValue>, XmlParseError> {
@@ -413,7 +413,7 @@ pub struct ActiveInstance {
 struct ActiveInstanceDeserializer;
 impl ActiveInstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ActiveInstance, XmlParseError> {
@@ -447,7 +447,7 @@ impl ActiveInstanceDeserializer {
 struct ActiveInstanceSetDeserializer;
 impl ActiveInstanceSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ActiveInstance>, XmlParseError> {
@@ -464,10 +464,7 @@ impl ActiveInstanceSetDeserializer {
 struct ActivityStatusDeserializer;
 impl ActivityStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -503,7 +500,7 @@ pub struct Address {
 struct AddressDeserializer;
 impl AddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Address, XmlParseError> {
@@ -560,7 +557,7 @@ impl AddressDeserializer {
 struct AddressListDeserializer;
 impl AddressListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Address>, XmlParseError> {
@@ -607,7 +604,7 @@ pub struct AdvertiseByoipCidrResult {
 struct AdvertiseByoipCidrResultDeserializer;
 impl AdvertiseByoipCidrResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AdvertiseByoipCidrResult, XmlParseError> {
@@ -678,7 +675,7 @@ pub struct AllocateAddressResult {
 struct AllocateAddressResultDeserializer;
 impl AllocateAddressResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AllocateAddressResult, XmlParseError> {
@@ -761,7 +758,7 @@ pub struct AllocateHostsResult {
 struct AllocateHostsResultDeserializer;
 impl AllocateHostsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AllocateHostsResult, XmlParseError> {
@@ -793,10 +790,7 @@ impl AllocationIdListSerializer {
 struct AllocationStateDeserializer;
 impl AllocationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -807,10 +801,7 @@ impl AllocationStateDeserializer {
 struct AllocationStrategyDeserializer;
 impl AllocationStrategyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -830,7 +821,7 @@ pub struct AllowedPrincipal {
 struct AllowedPrincipalDeserializer;
 impl AllowedPrincipalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AllowedPrincipal, XmlParseError> {
@@ -854,7 +845,7 @@ impl AllowedPrincipalDeserializer {
 struct AllowedPrincipalSetDeserializer;
 impl AllowedPrincipalSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AllowedPrincipal>, XmlParseError> {
@@ -918,7 +909,7 @@ pub struct ApplySecurityGroupsToClientVpnTargetNetworkResult {
 struct ApplySecurityGroupsToClientVpnTargetNetworkResultDeserializer;
 impl ApplySecurityGroupsToClientVpnTargetNetworkResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ApplySecurityGroupsToClientVpnTargetNetworkResult, XmlParseError> {
@@ -945,10 +936,7 @@ impl ApplySecurityGroupsToClientVpnTargetNetworkResultDeserializer {
 struct ArchitectureValuesDeserializer;
 impl ArchitectureValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1003,7 +991,7 @@ pub struct AssignIpv6AddressesResult {
 struct AssignIpv6AddressesResultDeserializer;
 impl AssignIpv6AddressesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssignIpv6AddressesResult, XmlParseError> {
@@ -1138,7 +1126,7 @@ pub struct AssociateAddressResult {
 struct AssociateAddressResultDeserializer;
 impl AssociateAddressResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateAddressResult, XmlParseError> {
@@ -1200,7 +1188,7 @@ pub struct AssociateClientVpnTargetNetworkResult {
 struct AssociateClientVpnTargetNetworkResultDeserializer;
 impl AssociateClientVpnTargetNetworkResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateClientVpnTargetNetworkResult, XmlParseError> {
@@ -1289,7 +1277,7 @@ pub struct AssociateIamInstanceProfileResult {
 struct AssociateIamInstanceProfileResultDeserializer;
 impl AssociateIamInstanceProfileResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateIamInstanceProfileResult, XmlParseError> {
@@ -1351,7 +1339,7 @@ pub struct AssociateRouteTableResult {
 struct AssociateRouteTableResultDeserializer;
 impl AssociateRouteTableResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateRouteTableResult, XmlParseError> {
@@ -1407,7 +1395,7 @@ pub struct AssociateSubnetCidrBlockResult {
 struct AssociateSubnetCidrBlockResultDeserializer;
 impl AssociateSubnetCidrBlockResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateSubnetCidrBlockResult, XmlParseError> {
@@ -1475,7 +1463,7 @@ pub struct AssociateTransitGatewayRouteTableResult {
 struct AssociateTransitGatewayRouteTableResultDeserializer;
 impl AssociateTransitGatewayRouteTableResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateTransitGatewayRouteTableResult, XmlParseError> {
@@ -1542,7 +1530,7 @@ pub struct AssociateVpcCidrBlockResult {
 struct AssociateVpcCidrBlockResultDeserializer;
 impl AssociateVpcCidrBlockResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociateVpcCidrBlockResult, XmlParseError> {
@@ -1607,7 +1595,7 @@ pub struct AssociationStatus {
 struct AssociationStatusDeserializer;
 impl AssociationStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AssociationStatus, XmlParseError> {
@@ -1630,10 +1618,7 @@ impl AssociationStatusDeserializer {
 struct AssociationStatusCodeDeserializer;
 impl AssociationStatusCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1684,7 +1669,7 @@ pub struct AttachClassicLinkVpcResult {
 struct AttachClassicLinkVpcResultDeserializer;
 impl AttachClassicLinkVpcResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachClassicLinkVpcResult, XmlParseError> {
@@ -1777,7 +1762,7 @@ pub struct AttachNetworkInterfaceResult {
 struct AttachNetworkInterfaceResultDeserializer;
 impl AttachNetworkInterfaceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachNetworkInterfaceResult, XmlParseError> {
@@ -1869,7 +1854,7 @@ pub struct AttachVpnGatewayResult {
 struct AttachVpnGatewayResultDeserializer;
 impl AttachVpnGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttachVpnGatewayResult, XmlParseError> {
@@ -1888,10 +1873,7 @@ impl AttachVpnGatewayResultDeserializer {
 struct AttachmentStatusDeserializer;
 impl AttachmentStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1909,7 +1891,7 @@ pub struct AttributeBooleanValue {
 struct AttributeBooleanValueDeserializer;
 impl AttributeBooleanValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttributeBooleanValue, XmlParseError> {
@@ -1950,7 +1932,7 @@ pub struct AttributeValue {
 struct AttributeValueDeserializer;
 impl AttributeValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AttributeValue, XmlParseError> {
@@ -2001,7 +1983,7 @@ pub struct AuthorizationRule {
 struct AuthorizationRuleDeserializer;
 impl AuthorizationRuleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AuthorizationRule, XmlParseError> {
@@ -2040,7 +2022,7 @@ impl AuthorizationRuleDeserializer {
 struct AuthorizationRuleSetDeserializer;
 impl AuthorizationRuleSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AuthorizationRule>, XmlParseError> {
@@ -2116,7 +2098,7 @@ pub struct AuthorizeClientVpnIngressResult {
 struct AuthorizeClientVpnIngressResultDeserializer;
 impl AuthorizeClientVpnIngressResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AuthorizeClientVpnIngressResult, XmlParseError> {
@@ -2286,10 +2268,7 @@ impl AuthorizeSecurityGroupIngressRequestSerializer {
 struct AutoAcceptSharedAttachmentsValueDeserializer;
 impl AutoAcceptSharedAttachmentsValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2300,10 +2279,7 @@ impl AutoAcceptSharedAttachmentsValueDeserializer {
 struct AutoPlacementDeserializer;
 impl AutoPlacementDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2329,7 +2305,7 @@ pub struct AvailabilityZone {
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityZone, XmlParseError> {
@@ -2364,7 +2340,7 @@ impl AvailabilityZoneDeserializer {
 struct AvailabilityZoneListDeserializer;
 impl AvailabilityZoneListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AvailabilityZone>, XmlParseError> {
@@ -2388,7 +2364,7 @@ pub struct AvailabilityZoneMessage {
 struct AvailabilityZoneMessageDeserializer;
 impl AvailabilityZoneMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityZoneMessage, XmlParseError> {
@@ -2410,7 +2386,7 @@ impl AvailabilityZoneMessageDeserializer {
 struct AvailabilityZoneMessageListDeserializer;
 impl AvailabilityZoneMessageListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AvailabilityZoneMessage>, XmlParseError> {
@@ -2429,10 +2405,7 @@ impl AvailabilityZoneMessageListDeserializer {
 struct AvailabilityZoneStateDeserializer;
 impl AvailabilityZoneStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2452,7 +2425,7 @@ pub struct AvailableCapacity {
 struct AvailableCapacityDeserializer;
 impl AvailableCapacityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailableCapacity, XmlParseError> {
@@ -2479,7 +2452,7 @@ impl AvailableCapacityDeserializer {
 struct AvailableInstanceCapacityListDeserializer;
 impl AvailableInstanceCapacityListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceCapacity>, XmlParseError> {
@@ -2496,10 +2469,7 @@ impl AvailableInstanceCapacityListDeserializer {
 struct BatchStateDeserializer;
 impl BatchStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2522,7 +2492,7 @@ impl BillingProductListSerializer {
 struct BlobDeserializer;
 impl BlobDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<bytes::Bytes, XmlParseError> {
@@ -2572,7 +2542,7 @@ pub struct BlockDeviceMapping {
 struct BlockDeviceMappingDeserializer;
 impl BlockDeviceMappingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BlockDeviceMapping, XmlParseError> {
@@ -2628,7 +2598,7 @@ impl BlockDeviceMappingSerializer {
 struct BlockDeviceMappingListDeserializer;
 impl BlockDeviceMappingListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<BlockDeviceMapping>, XmlParseError> {
@@ -2668,10 +2638,7 @@ impl BlockDeviceMappingRequestListSerializer {
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2729,7 +2696,7 @@ pub struct BundleInstanceResult {
 struct BundleInstanceResultDeserializer;
 impl BundleInstanceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BundleInstanceResult, XmlParseError> {
@@ -2771,7 +2738,7 @@ pub struct BundleTask {
 struct BundleTaskDeserializer;
 impl BundleTaskDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BundleTask, XmlParseError> {
@@ -2820,7 +2787,7 @@ pub struct BundleTaskError {
 struct BundleTaskErrorDeserializer;
 impl BundleTaskErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BundleTaskError, XmlParseError> {
@@ -2841,7 +2808,7 @@ impl BundleTaskErrorDeserializer {
 struct BundleTaskListDeserializer;
 impl BundleTaskListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<BundleTask>, XmlParseError> {
@@ -2858,10 +2825,7 @@ impl BundleTaskListDeserializer {
 struct BundleTaskStateDeserializer;
 impl BundleTaskStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2885,7 +2849,7 @@ pub struct ByoipCidr {
 struct ByoipCidrDeserializer;
 impl ByoipCidrDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ByoipCidr, XmlParseError> {
@@ -2913,7 +2877,7 @@ impl ByoipCidrDeserializer {
 struct ByoipCidrSetDeserializer;
 impl ByoipCidrSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ByoipCidr>, XmlParseError> {
@@ -2930,10 +2894,7 @@ impl ByoipCidrSetDeserializer {
 struct ByoipCidrStateDeserializer;
 impl ByoipCidrStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2944,10 +2905,7 @@ impl ByoipCidrStateDeserializer {
 struct CancelBatchErrorCodeDeserializer;
 impl CancelBatchErrorCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2990,7 +2948,7 @@ pub struct CancelBundleTaskResult {
 struct CancelBundleTaskResultDeserializer;
 impl CancelBundleTaskResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelBundleTaskResult, XmlParseError> {
@@ -3044,7 +3002,7 @@ pub struct CancelCapacityReservationResult {
 struct CancelCapacityReservationResultDeserializer;
 impl CancelCapacityReservationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelCapacityReservationResult, XmlParseError> {
@@ -3165,7 +3123,7 @@ pub struct CancelImportTaskResult {
 struct CancelImportTaskResultDeserializer;
 impl CancelImportTaskResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelImportTaskResult, XmlParseError> {
@@ -3221,7 +3179,7 @@ pub struct CancelReservedInstancesListingResult {
 struct CancelReservedInstancesListingResultDeserializer;
 impl CancelReservedInstancesListingResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelReservedInstancesListingResult, XmlParseError> {
@@ -3257,7 +3215,7 @@ pub struct CancelSpotFleetRequestsError {
 struct CancelSpotFleetRequestsErrorDeserializer;
 impl CancelSpotFleetRequestsErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelSpotFleetRequestsError, XmlParseError> {
@@ -3293,7 +3251,7 @@ pub struct CancelSpotFleetRequestsErrorItem {
 struct CancelSpotFleetRequestsErrorItemDeserializer;
 impl CancelSpotFleetRequestsErrorItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelSpotFleetRequestsErrorItem, XmlParseError> {
@@ -3323,7 +3281,7 @@ impl CancelSpotFleetRequestsErrorItemDeserializer {
 struct CancelSpotFleetRequestsErrorSetDeserializer;
 impl CancelSpotFleetRequestsErrorSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CancelSpotFleetRequestsErrorItem>, XmlParseError> {
@@ -3386,7 +3344,7 @@ pub struct CancelSpotFleetRequestsResponse {
 struct CancelSpotFleetRequestsResponseDeserializer;
 impl CancelSpotFleetRequestsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelSpotFleetRequestsResponse, XmlParseError> {
@@ -3432,7 +3390,7 @@ pub struct CancelSpotFleetRequestsSuccessItem {
 struct CancelSpotFleetRequestsSuccessItemDeserializer;
 impl CancelSpotFleetRequestsSuccessItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelSpotFleetRequestsSuccessItem, XmlParseError> {
@@ -3471,7 +3429,7 @@ impl CancelSpotFleetRequestsSuccessItemDeserializer {
 struct CancelSpotFleetRequestsSuccessSetDeserializer;
 impl CancelSpotFleetRequestsSuccessSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CancelSpotFleetRequestsSuccessItem>, XmlParseError> {
@@ -3490,10 +3448,7 @@ impl CancelSpotFleetRequestsSuccessSetDeserializer {
 struct CancelSpotInstanceRequestStateDeserializer;
 impl CancelSpotInstanceRequestStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3540,7 +3495,7 @@ pub struct CancelSpotInstanceRequestsResult {
 struct CancelSpotInstanceRequestsResultDeserializer;
 impl CancelSpotInstanceRequestsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelSpotInstanceRequestsResult, XmlParseError> {
@@ -3576,7 +3531,7 @@ pub struct CancelledSpotInstanceRequest {
 struct CancelledSpotInstanceRequestDeserializer;
 impl CancelledSpotInstanceRequestDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelledSpotInstanceRequest, XmlParseError> {
@@ -3606,7 +3561,7 @@ impl CancelledSpotInstanceRequestDeserializer {
 struct CancelledSpotInstanceRequestListDeserializer;
 impl CancelledSpotInstanceRequestListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CancelledSpotInstanceRequest>, XmlParseError> {
@@ -3660,7 +3615,7 @@ pub struct CapacityReservation {
 struct CapacityReservationDeserializer;
 impl CapacityReservationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CapacityReservation, XmlParseError> {
@@ -3761,10 +3716,7 @@ impl CapacityReservationIdSetSerializer {
 struct CapacityReservationInstancePlatformDeserializer;
 impl CapacityReservationInstancePlatformDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3775,10 +3727,7 @@ impl CapacityReservationInstancePlatformDeserializer {
 struct CapacityReservationPreferenceDeserializer;
 impl CapacityReservationPreferenceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3789,7 +3738,7 @@ impl CapacityReservationPreferenceDeserializer {
 struct CapacityReservationSetDeserializer;
 impl CapacityReservationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CapacityReservation>, XmlParseError> {
@@ -3849,7 +3798,7 @@ pub struct CapacityReservationSpecificationResponse {
 struct CapacityReservationSpecificationResponseDeserializer;
 impl CapacityReservationSpecificationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CapacityReservationSpecificationResponse, XmlParseError> {
@@ -3882,10 +3831,7 @@ impl CapacityReservationSpecificationResponseDeserializer {
 struct CapacityReservationStateDeserializer;
 impl CapacityReservationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3928,7 +3874,7 @@ pub struct CapacityReservationTargetResponse {
 struct CapacityReservationTargetResponseDeserializer;
 impl CapacityReservationTargetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CapacityReservationTargetResponse, XmlParseError> {
@@ -3953,10 +3899,7 @@ impl CapacityReservationTargetResponseDeserializer {
 struct CapacityReservationTenancyDeserializer;
 impl CapacityReservationTenancyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3974,7 +3917,7 @@ pub struct CertificateAuthentication {
 struct CertificateAuthenticationDeserializer;
 impl CertificateAuthenticationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CertificateAuthentication, XmlParseError> {
@@ -4054,7 +3997,7 @@ pub struct CidrBlock {
 struct CidrBlockDeserializer;
 impl CidrBlockDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CidrBlock, XmlParseError> {
@@ -4072,7 +4015,7 @@ impl CidrBlockDeserializer {
 struct CidrBlockSetDeserializer;
 impl CidrBlockSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CidrBlock>, XmlParseError> {
@@ -4098,7 +4041,7 @@ pub struct ClassicLinkDnsSupport {
 struct ClassicLinkDnsSupportDeserializer;
 impl ClassicLinkDnsSupportDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClassicLinkDnsSupport, XmlParseError> {
@@ -4122,7 +4065,7 @@ impl ClassicLinkDnsSupportDeserializer {
 struct ClassicLinkDnsSupportListDeserializer;
 impl ClassicLinkDnsSupportListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ClassicLinkDnsSupport>, XmlParseError> {
@@ -4154,7 +4097,7 @@ pub struct ClassicLinkInstance {
 struct ClassicLinkInstanceDeserializer;
 impl ClassicLinkInstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClassicLinkInstance, XmlParseError> {
@@ -4185,7 +4128,7 @@ impl ClassicLinkInstanceDeserializer {
 struct ClassicLinkInstanceListDeserializer;
 impl ClassicLinkInstanceListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ClassicLinkInstance>, XmlParseError> {
@@ -4209,7 +4152,7 @@ pub struct ClassicLoadBalancer {
 struct ClassicLoadBalancerDeserializer;
 impl ClassicLoadBalancerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClassicLoadBalancer, XmlParseError> {
@@ -4243,7 +4186,7 @@ impl ClassicLoadBalancerSerializer {
 struct ClassicLoadBalancersDeserializer;
 impl ClassicLoadBalancersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ClassicLoadBalancer>, XmlParseError> {
@@ -4279,7 +4222,7 @@ pub struct ClassicLoadBalancersConfig {
 struct ClassicLoadBalancersConfigDeserializer;
 impl ClassicLoadBalancersConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClassicLoadBalancersConfig, XmlParseError> {
@@ -4335,7 +4278,7 @@ pub struct ClientCertificateRevocationListStatus {
 struct ClientCertificateRevocationListStatusDeserializer;
 impl ClientCertificateRevocationListStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientCertificateRevocationListStatus, XmlParseError> {
@@ -4364,10 +4307,7 @@ impl ClientCertificateRevocationListStatusDeserializer {
 struct ClientCertificateRevocationListStatusCodeDeserializer;
 impl ClientCertificateRevocationListStatusCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4426,7 +4366,7 @@ pub struct ClientVpnAuthentication {
 struct ClientVpnAuthenticationDeserializer;
 impl ClientVpnAuthenticationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientVpnAuthentication, XmlParseError> {
@@ -4464,7 +4404,7 @@ impl ClientVpnAuthenticationDeserializer {
 struct ClientVpnAuthenticationListDeserializer;
 impl ClientVpnAuthenticationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ClientVpnAuthentication>, XmlParseError> {
@@ -4534,10 +4474,7 @@ impl ClientVpnAuthenticationRequestListSerializer {
 struct ClientVpnAuthenticationTypeDeserializer;
 impl ClientVpnAuthenticationTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4557,7 +4494,7 @@ pub struct ClientVpnAuthorizationRuleStatus {
 struct ClientVpnAuthorizationRuleStatusDeserializer;
 impl ClientVpnAuthorizationRuleStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientVpnAuthorizationRuleStatus, XmlParseError> {
@@ -4586,10 +4523,7 @@ impl ClientVpnAuthorizationRuleStatusDeserializer {
 struct ClientVpnAuthorizationRuleStatusCodeDeserializer;
 impl ClientVpnAuthorizationRuleStatusCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4631,7 +4565,7 @@ pub struct ClientVpnConnection {
 struct ClientVpnConnectionDeserializer;
 impl ClientVpnConnectionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientVpnConnection, XmlParseError> {
@@ -4698,7 +4632,7 @@ impl ClientVpnConnectionDeserializer {
 struct ClientVpnConnectionSetDeserializer;
 impl ClientVpnConnectionSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ClientVpnConnection>, XmlParseError> {
@@ -4724,7 +4658,7 @@ pub struct ClientVpnConnectionStatus {
 struct ClientVpnConnectionStatusDeserializer;
 impl ClientVpnConnectionStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientVpnConnectionStatus, XmlParseError> {
@@ -4751,10 +4685,7 @@ impl ClientVpnConnectionStatusDeserializer {
 struct ClientVpnConnectionStatusCodeDeserializer;
 impl ClientVpnConnectionStatusCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4800,7 +4731,7 @@ pub struct ClientVpnEndpoint {
 struct ClientVpnEndpointDeserializer;
 impl ClientVpnEndpointDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientVpnEndpoint, XmlParseError> {
@@ -4898,7 +4829,7 @@ pub struct ClientVpnEndpointStatus {
 struct ClientVpnEndpointStatusDeserializer;
 impl ClientVpnEndpointStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientVpnEndpointStatus, XmlParseError> {
@@ -4925,10 +4856,7 @@ impl ClientVpnEndpointStatusDeserializer {
 struct ClientVpnEndpointStatusCodeDeserializer;
 impl ClientVpnEndpointStatusCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4958,7 +4886,7 @@ pub struct ClientVpnRoute {
 struct ClientVpnRouteDeserializer;
 impl ClientVpnRouteDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientVpnRoute, XmlParseError> {
@@ -5001,7 +4929,7 @@ impl ClientVpnRouteDeserializer {
 struct ClientVpnRouteSetDeserializer;
 impl ClientVpnRouteSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ClientVpnRoute>, XmlParseError> {
@@ -5027,7 +4955,7 @@ pub struct ClientVpnRouteStatus {
 struct ClientVpnRouteStatusDeserializer;
 impl ClientVpnRouteStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ClientVpnRouteStatus, XmlParseError> {
@@ -5050,10 +4978,7 @@ impl ClientVpnRouteStatusDeserializer {
 struct ClientVpnRouteStatusCodeDeserializer;
 impl ClientVpnRouteStatusCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5064,7 +4989,7 @@ impl ClientVpnRouteStatusCodeDeserializer {
 struct ClientVpnSecurityGroupIdSetDeserializer;
 impl ClientVpnSecurityGroupIdSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -5128,7 +5053,7 @@ pub struct ConfirmProductInstanceResult {
 struct ConfirmProductInstanceResultDeserializer;
 impl ConfirmProductInstanceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConfirmProductInstanceResult, XmlParseError> {
@@ -5199,7 +5124,7 @@ pub struct ConnectionLogResponseOptions {
 struct ConnectionLogResponseOptionsDeserializer;
 impl ConnectionLogResponseOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConnectionLogResponseOptions, XmlParseError> {
@@ -5252,7 +5177,7 @@ pub struct ConnectionNotification {
 struct ConnectionNotificationDeserializer;
 impl ConnectionNotificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConnectionNotification, XmlParseError> {
@@ -5305,7 +5230,7 @@ impl ConnectionNotificationDeserializer {
 struct ConnectionNotificationSetDeserializer;
 impl ConnectionNotificationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ConnectionNotification>, XmlParseError> {
@@ -5324,10 +5249,7 @@ impl ConnectionNotificationSetDeserializer {
 struct ConnectionNotificationStateDeserializer;
 impl ConnectionNotificationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5338,10 +5260,7 @@ impl ConnectionNotificationStateDeserializer {
 struct ConnectionNotificationTypeDeserializer;
 impl ConnectionNotificationTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5352,10 +5271,7 @@ impl ConnectionNotificationTypeDeserializer {
 struct ContainerFormatDeserializer;
 impl ContainerFormatDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5397,7 +5313,7 @@ pub struct ConversionTask {
 struct ConversionTaskDeserializer;
 impl ConversionTaskDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConversionTask, XmlParseError> {
@@ -5446,10 +5362,7 @@ impl ConversionTaskDeserializer {
 struct ConversionTaskStateDeserializer;
 impl ConversionTaskStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5511,7 +5424,7 @@ pub struct CopyFpgaImageResult {
 struct CopyFpgaImageResultDeserializer;
 impl CopyFpgaImageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyFpgaImageResult, XmlParseError> {
@@ -5591,7 +5504,7 @@ pub struct CopyImageResult {
 struct CopyImageResultDeserializer;
 impl CopyImageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopyImageResult, XmlParseError> {
@@ -5672,7 +5585,7 @@ pub struct CopySnapshotResult {
 struct CopySnapshotResultDeserializer;
 impl CopySnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopySnapshotResult, XmlParseError> {
@@ -5699,7 +5612,7 @@ pub struct CpuOptions {
 struct CpuOptionsDeserializer;
 impl CpuOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CpuOptions, XmlParseError> {
@@ -5843,7 +5756,7 @@ pub struct CreateCapacityReservationResult {
 struct CreateCapacityReservationResultDeserializer;
 impl CreateCapacityReservationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCapacityReservationResult, XmlParseError> {
@@ -5959,7 +5872,7 @@ pub struct CreateClientVpnEndpointResult {
 struct CreateClientVpnEndpointResultDeserializer;
 impl CreateClientVpnEndpointResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateClientVpnEndpointResult, XmlParseError> {
@@ -6047,7 +5960,7 @@ pub struct CreateClientVpnRouteResult {
 struct CreateClientVpnRouteResultDeserializer;
 impl CreateClientVpnRouteResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateClientVpnRouteResult, XmlParseError> {
@@ -6109,7 +6022,7 @@ pub struct CreateCustomerGatewayResult {
 struct CreateCustomerGatewayResultDeserializer;
 impl CreateCustomerGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCustomerGatewayResult, XmlParseError> {
@@ -6167,7 +6080,7 @@ pub struct CreateDefaultSubnetResult {
 struct CreateDefaultSubnetResultDeserializer;
 impl CreateDefaultSubnetResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDefaultSubnetResult, XmlParseError> {
@@ -6216,7 +6129,7 @@ pub struct CreateDefaultVpcResult {
 struct CreateDefaultVpcResultDeserializer;
 impl CreateDefaultVpcResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDefaultVpcResult, XmlParseError> {
@@ -6268,7 +6181,7 @@ pub struct CreateDhcpOptionsResult {
 struct CreateDhcpOptionsResultDeserializer;
 impl CreateDhcpOptionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDhcpOptionsResult, XmlParseError> {
@@ -6328,7 +6241,7 @@ pub struct CreateEgressOnlyInternetGatewayResult {
 struct CreateEgressOnlyInternetGatewayResultDeserializer;
 impl CreateEgressOnlyInternetGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateEgressOnlyInternetGatewayResult, XmlParseError> {
@@ -6371,7 +6284,7 @@ pub struct EC2CreateFleetError {
 struct EC2CreateFleetErrorDeserializer;
 impl EC2CreateFleetErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EC2CreateFleetError, XmlParseError> {
@@ -6406,7 +6319,7 @@ impl EC2CreateFleetErrorDeserializer {
 struct CreateFleetErrorsSetDeserializer;
 impl CreateFleetErrorsSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EC2CreateFleetError>, XmlParseError> {
@@ -6438,7 +6351,7 @@ pub struct CreateFleetInstance {
 struct CreateFleetInstanceDeserializer;
 impl CreateFleetInstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateFleetInstance, XmlParseError> {
@@ -6481,7 +6394,7 @@ impl CreateFleetInstanceDeserializer {
 struct CreateFleetInstancesSetDeserializer;
 impl CreateFleetInstancesSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CreateFleetInstance>, XmlParseError> {
@@ -6614,7 +6527,7 @@ pub struct CreateFleetResult {
 struct CreateFleetResultDeserializer;
 impl CreateFleetResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateFleetResult, XmlParseError> {
@@ -6718,7 +6631,7 @@ pub struct CreateFlowLogsResult {
 struct CreateFlowLogsResultDeserializer;
 impl CreateFlowLogsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateFlowLogsResult, XmlParseError> {
@@ -6806,7 +6719,7 @@ pub struct CreateFpgaImageResult {
 struct CreateFpgaImageResultDeserializer;
 impl CreateFpgaImageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateFpgaImageResult, XmlParseError> {
@@ -6881,7 +6794,7 @@ pub struct CreateImageResult {
 struct CreateImageResultDeserializer;
 impl CreateImageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateImageResult, XmlParseError> {
@@ -6945,7 +6858,7 @@ pub struct CreateInstanceExportTaskResult {
 struct CreateInstanceExportTaskResultDeserializer;
 impl CreateInstanceExportTaskResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateInstanceExportTaskResult, XmlParseError> {
@@ -6995,7 +6908,7 @@ pub struct CreateInternetGatewayResult {
 struct CreateInternetGatewayResultDeserializer;
 impl CreateInternetGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateInternetGatewayResult, XmlParseError> {
@@ -7094,7 +7007,7 @@ pub struct CreateLaunchTemplateResult {
 struct CreateLaunchTemplateResultDeserializer;
 impl CreateLaunchTemplateResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateLaunchTemplateResult, XmlParseError> {
@@ -7178,7 +7091,7 @@ pub struct CreateLaunchTemplateVersionResult {
 struct CreateLaunchTemplateVersionResultDeserializer;
 impl CreateLaunchTemplateVersionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateLaunchTemplateVersionResult, XmlParseError> {
@@ -7239,7 +7152,7 @@ pub struct CreateNatGatewayResult {
 struct CreateNatGatewayResultDeserializer;
 impl CreateNatGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateNatGatewayResult, XmlParseError> {
@@ -7358,7 +7271,7 @@ pub struct CreateNetworkAclResult {
 struct CreateNetworkAclResultDeserializer;
 impl CreateNetworkAclResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateNetworkAclResult, XmlParseError> {
@@ -7425,7 +7338,7 @@ pub struct CreateNetworkInterfacePermissionResult {
 struct CreateNetworkInterfacePermissionResultDeserializer;
 impl CreateNetworkInterfacePermissionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateNetworkInterfacePermissionResult, XmlParseError> {
@@ -7538,7 +7451,7 @@ pub struct CreateNetworkInterfaceResult {
 struct CreateNetworkInterfaceResultDeserializer;
 impl CreateNetworkInterfaceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateNetworkInterfaceResult, XmlParseError> {
@@ -7645,7 +7558,7 @@ pub struct CreateReservedInstancesListingResult {
 struct CreateReservedInstancesListingResultDeserializer;
 impl CreateReservedInstancesListingResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReservedInstancesListingResult, XmlParseError> {
@@ -7762,7 +7675,7 @@ pub struct CreateRouteResult {
 struct CreateRouteResultDeserializer;
 impl CreateRouteResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateRouteResult, XmlParseError> {
@@ -7810,7 +7723,7 @@ pub struct CreateRouteTableResult {
 struct CreateRouteTableResultDeserializer;
 impl CreateRouteTableResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateRouteTableResult, XmlParseError> {
@@ -7870,7 +7783,7 @@ pub struct CreateSecurityGroupResult {
 struct CreateSecurityGroupResultDeserializer;
 impl CreateSecurityGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateSecurityGroupResult, XmlParseError> {
@@ -7968,7 +7881,7 @@ pub struct CreateSpotDatafeedSubscriptionResult {
 struct CreateSpotDatafeedSubscriptionResultDeserializer;
 impl CreateSpotDatafeedSubscriptionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateSpotDatafeedSubscriptionResult, XmlParseError> {
@@ -8042,7 +7955,7 @@ pub struct CreateSubnetResult {
 struct CreateSubnetResultDeserializer;
 impl CreateSubnetResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateSubnetResult, XmlParseError> {
@@ -8141,7 +8054,7 @@ pub struct CreateTransitGatewayResult {
 struct CreateTransitGatewayResultDeserializer;
 impl CreateTransitGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTransitGatewayResult, XmlParseError> {
@@ -8218,7 +8131,7 @@ pub struct CreateTransitGatewayRouteResult {
 struct CreateTransitGatewayRouteResultDeserializer;
 impl CreateTransitGatewayRouteResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTransitGatewayRouteResult, XmlParseError> {
@@ -8284,7 +8197,7 @@ pub struct CreateTransitGatewayRouteTableResult {
 struct CreateTransitGatewayRouteTableResultDeserializer;
 impl CreateTransitGatewayRouteTableResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTransitGatewayRouteTableResult, XmlParseError> {
@@ -8402,7 +8315,7 @@ pub struct CreateTransitGatewayVpcAttachmentResult {
 struct CreateTransitGatewayVpcAttachmentResultDeserializer;
 impl CreateTransitGatewayVpcAttachmentResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTransitGatewayVpcAttachmentResult, XmlParseError> {
@@ -8437,7 +8350,7 @@ pub struct CreateVolumePermission {
 struct CreateVolumePermissionDeserializer;
 impl CreateVolumePermissionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVolumePermission, XmlParseError> {
@@ -8477,7 +8390,7 @@ impl CreateVolumePermissionSerializer {
 struct CreateVolumePermissionListDeserializer;
 impl CreateVolumePermissionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CreateVolumePermission>, XmlParseError> {
@@ -8671,7 +8584,7 @@ pub struct CreateVpcEndpointConnectionNotificationResult {
 struct CreateVpcEndpointConnectionNotificationResultDeserializer;
 impl CreateVpcEndpointConnectionNotificationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVpcEndpointConnectionNotificationResult, XmlParseError> {
@@ -8785,7 +8698,7 @@ pub struct CreateVpcEndpointResult {
 struct CreateVpcEndpointResultDeserializer;
 impl CreateVpcEndpointResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVpcEndpointResult, XmlParseError> {
@@ -8862,7 +8775,7 @@ pub struct CreateVpcEndpointServiceConfigurationResult {
 struct CreateVpcEndpointServiceConfigurationResultDeserializer;
 impl CreateVpcEndpointServiceConfigurationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVpcEndpointServiceConfigurationResult, XmlParseError> {
@@ -8939,7 +8852,7 @@ pub struct CreateVpcPeeringConnectionResult {
 struct CreateVpcPeeringConnectionResultDeserializer;
 impl CreateVpcPeeringConnectionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVpcPeeringConnectionResult, XmlParseError> {
@@ -9008,7 +8921,7 @@ pub struct CreateVpcResult {
 struct CreateVpcResultDeserializer;
 impl CreateVpcResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVpcResult, XmlParseError> {
@@ -9083,7 +8996,7 @@ pub struct CreateVpnConnectionResult {
 struct CreateVpnConnectionResultDeserializer;
 impl CreateVpnConnectionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVpnConnectionResult, XmlParseError> {
@@ -9179,7 +9092,7 @@ pub struct CreateVpnGatewayResult {
 struct CreateVpnGatewayResultDeserializer;
 impl CreateVpnGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateVpnGatewayResult, XmlParseError> {
@@ -9205,7 +9118,7 @@ pub struct CreditSpecification {
 struct CreditSpecificationDeserializer;
 impl CreditSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreditSpecification, XmlParseError> {
@@ -9243,10 +9156,7 @@ impl CreditSpecificationRequestSerializer {
 struct CurrencyCodeValuesDeserializer;
 impl CurrencyCodeValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -9274,7 +9184,7 @@ pub struct CustomerGateway {
 struct CustomerGatewayDeserializer;
 impl CustomerGatewayDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomerGateway, XmlParseError> {
@@ -9322,7 +9232,7 @@ impl CustomerGatewayIdStringListSerializer {
 struct CustomerGatewayListDeserializer;
 impl CustomerGatewayListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CustomerGateway>, XmlParseError> {
@@ -9339,10 +9249,7 @@ impl CustomerGatewayListDeserializer {
 struct DatafeedSubscriptionStateDeserializer;
 impl DatafeedSubscriptionStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -9353,10 +9260,7 @@ impl DatafeedSubscriptionStateDeserializer {
 struct DateTimeDeserializer;
 impl DateTimeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -9367,10 +9271,7 @@ impl DateTimeDeserializer {
 struct DefaultRouteTableAssociationValueDeserializer;
 impl DefaultRouteTableAssociationValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -9381,10 +9282,7 @@ impl DefaultRouteTableAssociationValueDeserializer {
 struct DefaultRouteTablePropagationValueDeserializer;
 impl DefaultRouteTablePropagationValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -9395,10 +9293,7 @@ impl DefaultRouteTablePropagationValueDeserializer {
 struct DefaultTargetCapacityTypeDeserializer;
 impl DefaultTargetCapacityTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -9442,7 +9337,7 @@ pub struct DeleteClientVpnEndpointResult {
 struct DeleteClientVpnEndpointResultDeserializer;
 impl DeleteClientVpnEndpointResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteClientVpnEndpointResult, XmlParseError> {
@@ -9510,7 +9405,7 @@ pub struct DeleteClientVpnRouteResult {
 struct DeleteClientVpnRouteResultDeserializer;
 impl DeleteClientVpnRouteResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteClientVpnRouteResult, XmlParseError> {
@@ -9622,7 +9517,7 @@ pub struct DeleteEgressOnlyInternetGatewayResult {
 struct DeleteEgressOnlyInternetGatewayResultDeserializer;
 impl DeleteEgressOnlyInternetGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteEgressOnlyInternetGatewayResult, XmlParseError> {
@@ -9654,7 +9549,7 @@ pub struct DeleteFleetError {
 struct DeleteFleetErrorDeserializer;
 impl DeleteFleetErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteFleetError, XmlParseError> {
@@ -9677,10 +9572,7 @@ impl DeleteFleetErrorDeserializer {
 struct DeleteFleetErrorCodeDeserializer;
 impl DeleteFleetErrorCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -9700,7 +9592,7 @@ pub struct DeleteFleetErrorItem {
 struct DeleteFleetErrorItemDeserializer;
 impl DeleteFleetErrorItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteFleetErrorItem, XmlParseError> {
@@ -9722,7 +9614,7 @@ impl DeleteFleetErrorItemDeserializer {
 struct DeleteFleetErrorSetDeserializer;
 impl DeleteFleetErrorSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DeleteFleetErrorItem>, XmlParseError> {
@@ -9752,7 +9644,7 @@ pub struct DeleteFleetSuccessItem {
 struct DeleteFleetSuccessItemDeserializer;
 impl DeleteFleetSuccessItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteFleetSuccessItem, XmlParseError> {
@@ -9783,7 +9675,7 @@ impl DeleteFleetSuccessItemDeserializer {
 struct DeleteFleetSuccessSetDeserializer;
 impl DeleteFleetSuccessSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DeleteFleetSuccessItem>, XmlParseError> {
@@ -9844,7 +9736,7 @@ pub struct DeleteFleetsResult {
 struct DeleteFleetsResultDeserializer;
 impl DeleteFleetsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteFleetsResult, XmlParseError> {
@@ -9909,7 +9801,7 @@ pub struct DeleteFlowLogsResult {
 struct DeleteFlowLogsResultDeserializer;
 impl DeleteFlowLogsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteFlowLogsResult, XmlParseError> {
@@ -9959,7 +9851,7 @@ pub struct DeleteFpgaImageResult {
 struct DeleteFpgaImageResultDeserializer;
 impl DeleteFpgaImageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteFpgaImageResult, XmlParseError> {
@@ -10065,7 +9957,7 @@ pub struct DeleteLaunchTemplateResult {
 struct DeleteLaunchTemplateResultDeserializer;
 impl DeleteLaunchTemplateResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteLaunchTemplateResult, XmlParseError> {
@@ -10141,7 +10033,7 @@ pub struct DeleteLaunchTemplateVersionsResponseErrorItem {
 struct DeleteLaunchTemplateVersionsResponseErrorItemDeserializer;
 impl DeleteLaunchTemplateVersionsResponseErrorItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteLaunchTemplateVersionsResponseErrorItem, XmlParseError> {
@@ -10180,7 +10072,7 @@ impl DeleteLaunchTemplateVersionsResponseErrorItemDeserializer {
 struct DeleteLaunchTemplateVersionsResponseErrorSetDeserializer;
 impl DeleteLaunchTemplateVersionsResponseErrorSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DeleteLaunchTemplateVersionsResponseErrorItem>, XmlParseError> {
@@ -10212,7 +10104,7 @@ pub struct DeleteLaunchTemplateVersionsResponseSuccessItem {
 struct DeleteLaunchTemplateVersionsResponseSuccessItemDeserializer;
 impl DeleteLaunchTemplateVersionsResponseSuccessItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteLaunchTemplateVersionsResponseSuccessItem, XmlParseError> {
@@ -10245,7 +10137,7 @@ impl DeleteLaunchTemplateVersionsResponseSuccessItemDeserializer {
 struct DeleteLaunchTemplateVersionsResponseSuccessSetDeserializer;
 impl DeleteLaunchTemplateVersionsResponseSuccessSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DeleteLaunchTemplateVersionsResponseSuccessItem>, XmlParseError> {
@@ -10276,7 +10168,7 @@ pub struct DeleteLaunchTemplateVersionsResult {
 struct DeleteLaunchTemplateVersionsResultDeserializer;
 impl DeleteLaunchTemplateVersionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteLaunchTemplateVersionsResult, XmlParseError> {
@@ -10333,7 +10225,7 @@ pub struct DeleteNatGatewayResult {
 struct DeleteNatGatewayResultDeserializer;
 impl DeleteNatGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteNatGatewayResult, XmlParseError> {
@@ -10452,7 +10344,7 @@ pub struct DeleteNetworkInterfacePermissionResult {
 struct DeleteNetworkInterfacePermissionResultDeserializer;
 impl DeleteNetworkInterfacePermissionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteNetworkInterfacePermissionResult, XmlParseError> {
@@ -10764,7 +10656,7 @@ pub struct DeleteTransitGatewayResult {
 struct DeleteTransitGatewayResultDeserializer;
 impl DeleteTransitGatewayResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTransitGatewayResult, XmlParseError> {
@@ -10828,7 +10720,7 @@ pub struct DeleteTransitGatewayRouteResult {
 struct DeleteTransitGatewayRouteResultDeserializer;
 impl DeleteTransitGatewayRouteResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTransitGatewayRouteResult, XmlParseError> {
@@ -10885,7 +10777,7 @@ pub struct DeleteTransitGatewayRouteTableResult {
 struct DeleteTransitGatewayRouteTableResultDeserializer;
 impl DeleteTransitGatewayRouteTableResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTransitGatewayRouteTableResult, XmlParseError> {
@@ -10944,7 +10836,7 @@ pub struct DeleteTransitGatewayVpcAttachmentResult {
 struct DeleteTransitGatewayVpcAttachmentResultDeserializer;
 impl DeleteTransitGatewayVpcAttachmentResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTransitGatewayVpcAttachmentResult, XmlParseError> {
@@ -11033,7 +10925,7 @@ pub struct DeleteVpcEndpointConnectionNotificationsResult {
 struct DeleteVpcEndpointConnectionNotificationsResultDeserializer;
 impl DeleteVpcEndpointConnectionNotificationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteVpcEndpointConnectionNotificationsResult, XmlParseError> {
@@ -11095,7 +10987,7 @@ pub struct DeleteVpcEndpointServiceConfigurationsResult {
 struct DeleteVpcEndpointServiceConfigurationsResultDeserializer;
 impl DeleteVpcEndpointServiceConfigurationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteVpcEndpointServiceConfigurationsResult, XmlParseError> {
@@ -11155,7 +11047,7 @@ pub struct DeleteVpcEndpointsResult {
 struct DeleteVpcEndpointsResultDeserializer;
 impl DeleteVpcEndpointsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteVpcEndpointsResult, XmlParseError> {
@@ -11212,7 +11104,7 @@ pub struct DeleteVpcPeeringConnectionResult {
 struct DeleteVpcPeeringConnectionResultDeserializer;
 impl DeleteVpcPeeringConnectionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteVpcPeeringConnectionResult, XmlParseError> {
@@ -11373,7 +11265,7 @@ pub struct DeprovisionByoipCidrResult {
 struct DeprovisionByoipCidrResultDeserializer;
 impl DeprovisionByoipCidrResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeprovisionByoipCidrResult, XmlParseError> {
@@ -11457,7 +11349,7 @@ pub struct DescribeAccountAttributesResult {
 struct DescribeAccountAttributesResultDeserializer;
 impl DescribeAccountAttributesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAccountAttributesResult, XmlParseError> {
@@ -11538,7 +11430,7 @@ pub struct DescribeAddressesResult {
 struct DescribeAddressesResultDeserializer;
 impl DescribeAddressesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAddressesResult, XmlParseError> {
@@ -11591,7 +11483,7 @@ pub struct DescribeAggregateIdFormatResult {
 struct DescribeAggregateIdFormatResultDeserializer;
 impl DescribeAggregateIdFormatResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAggregateIdFormatResult, XmlParseError> {
@@ -11675,7 +11567,7 @@ pub struct DescribeAvailabilityZonesResult {
 struct DescribeAvailabilityZonesResultDeserializer;
 impl DescribeAvailabilityZonesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAvailabilityZonesResult, XmlParseError> {
@@ -11747,7 +11639,7 @@ pub struct DescribeBundleTasksResult {
 struct DescribeBundleTasksResultDeserializer;
 impl DescribeBundleTasksResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeBundleTasksResult, XmlParseError> {
@@ -11811,7 +11703,7 @@ pub struct DescribeByoipCidrsResult {
 struct DescribeByoipCidrsResultDeserializer;
 impl DescribeByoipCidrsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeByoipCidrsResult, XmlParseError> {
@@ -11895,7 +11787,7 @@ pub struct DescribeCapacityReservationsResult {
 struct DescribeCapacityReservationsResultDeserializer;
 impl DescribeCapacityReservationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeCapacityReservationsResult, XmlParseError> {
@@ -11982,7 +11874,7 @@ pub struct DescribeClassicLinkInstancesResult {
 struct DescribeClassicLinkInstancesResultDeserializer;
 impl DescribeClassicLinkInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeClassicLinkInstancesResult, XmlParseError> {
@@ -12070,7 +11962,7 @@ pub struct DescribeClientVpnAuthorizationRulesResult {
 struct DescribeClientVpnAuthorizationRulesResultDeserializer;
 impl DescribeClientVpnAuthorizationRulesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeClientVpnAuthorizationRulesResult, XmlParseError> {
@@ -12155,7 +12047,7 @@ pub struct DescribeClientVpnConnectionsResult {
 struct DescribeClientVpnConnectionsResultDeserializer;
 impl DescribeClientVpnConnectionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeClientVpnConnectionsResult, XmlParseError> {
@@ -12240,7 +12132,7 @@ pub struct DescribeClientVpnEndpointsResult {
 struct DescribeClientVpnEndpointsResultDeserializer;
 impl DescribeClientVpnEndpointsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeClientVpnEndpointsResult, XmlParseError> {
@@ -12322,7 +12214,7 @@ pub struct DescribeClientVpnRoutesResult {
 struct DescribeClientVpnRoutesResultDeserializer;
 impl DescribeClientVpnRoutesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeClientVpnRoutesResult, XmlParseError> {
@@ -12413,7 +12305,7 @@ pub struct DescribeClientVpnTargetNetworksResult {
 struct DescribeClientVpnTargetNetworksResultDeserializer;
 impl DescribeClientVpnTargetNetworksResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeClientVpnTargetNetworksResult, XmlParseError> {
@@ -12444,7 +12336,7 @@ impl DescribeClientVpnTargetNetworksResultDeserializer {
 struct DescribeConversionTaskListDeserializer;
 impl DescribeConversionTaskListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ConversionTask>, XmlParseError> {
@@ -12499,7 +12391,7 @@ pub struct DescribeConversionTasksResult {
 struct DescribeConversionTasksResultDeserializer;
 impl DescribeConversionTasksResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeConversionTasksResult, XmlParseError> {
@@ -12573,7 +12465,7 @@ pub struct DescribeCustomerGatewaysResult {
 struct DescribeCustomerGatewaysResultDeserializer;
 impl DescribeCustomerGatewaysResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeCustomerGatewaysResult, XmlParseError> {
@@ -12657,7 +12549,7 @@ pub struct DescribeDhcpOptionsResult {
 struct DescribeDhcpOptionsResultDeserializer;
 impl DescribeDhcpOptionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeDhcpOptionsResult, XmlParseError> {
@@ -12732,7 +12624,7 @@ pub struct DescribeEgressOnlyInternetGatewaysResult {
 struct DescribeEgressOnlyInternetGatewaysResultDeserializer;
 impl DescribeEgressOnlyInternetGatewaysResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEgressOnlyInternetGatewaysResult, XmlParseError> {
@@ -12821,7 +12713,7 @@ pub struct DescribeElasticGpusResult {
 struct DescribeElasticGpusResultDeserializer;
 impl DescribeElasticGpusResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeElasticGpusResult, XmlParseError> {
@@ -12885,7 +12777,7 @@ pub struct DescribeExportTasksResult {
 struct DescribeExportTasksResultDeserializer;
 impl DescribeExportTasksResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeExportTasksResult, XmlParseError> {
@@ -12922,7 +12814,7 @@ pub struct DescribeFleetError {
 struct DescribeFleetErrorDeserializer;
 impl DescribeFleetErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeFleetError, XmlParseError> {
@@ -13013,7 +12905,7 @@ pub struct DescribeFleetHistoryResult {
 struct DescribeFleetHistoryResultDeserializer;
 impl DescribeFleetHistoryResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeFleetHistoryResult, XmlParseError> {
@@ -13107,7 +12999,7 @@ pub struct DescribeFleetInstancesResult {
 struct DescribeFleetInstancesResultDeserializer;
 impl DescribeFleetInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeFleetInstancesResult, XmlParseError> {
@@ -13138,7 +13030,7 @@ impl DescribeFleetInstancesResultDeserializer {
 struct DescribeFleetsErrorSetDeserializer;
 impl DescribeFleetsErrorSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DescribeFleetError>, XmlParseError> {
@@ -13170,7 +13062,7 @@ pub struct DescribeFleetsInstances {
 struct DescribeFleetsInstancesDeserializer;
 impl DescribeFleetsInstancesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeFleetsInstances, XmlParseError> {
@@ -13217,7 +13109,7 @@ impl DescribeFleetsInstancesDeserializer {
 struct DescribeFleetsInstancesSetDeserializer;
 impl DescribeFleetsInstancesSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DescribeFleetsInstances>, XmlParseError> {
@@ -13293,7 +13185,7 @@ pub struct DescribeFleetsResult {
 struct DescribeFleetsResultDeserializer;
 impl DescribeFleetsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeFleetsResult, XmlParseError> {
@@ -13373,7 +13265,7 @@ pub struct DescribeFlowLogsResult {
 struct DescribeFlowLogsResultDeserializer;
 impl DescribeFlowLogsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeFlowLogsResult, XmlParseError> {
@@ -13429,7 +13321,7 @@ pub struct DescribeFpgaImageAttributeResult {
 struct DescribeFpgaImageAttributeResultDeserializer;
 impl DescribeFpgaImageAttributeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeFpgaImageAttributeResult, XmlParseError> {
@@ -13521,7 +13413,7 @@ pub struct DescribeFpgaImagesResult {
 struct DescribeFpgaImagesResultDeserializer;
 impl DescribeFpgaImagesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeFpgaImagesResult, XmlParseError> {
@@ -13607,7 +13499,7 @@ pub struct DescribeHostReservationOfferingsResult {
 struct DescribeHostReservationOfferingsResultDeserializer;
 impl DescribeHostReservationOfferingsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeHostReservationOfferingsResult, XmlParseError> {
@@ -13686,7 +13578,7 @@ pub struct DescribeHostReservationsResult {
 struct DescribeHostReservationsResultDeserializer;
 impl DescribeHostReservationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeHostReservationsResult, XmlParseError> {
@@ -13768,7 +13660,7 @@ pub struct DescribeHostsResult {
 struct DescribeHostsResultDeserializer;
 impl DescribeHostsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeHostsResult, XmlParseError> {
@@ -13847,7 +13739,7 @@ pub struct DescribeIamInstanceProfileAssociationsResult {
 struct DescribeIamInstanceProfileAssociationsResultDeserializer;
 impl DescribeIamInstanceProfileAssociationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeIamInstanceProfileAssociationsResult, XmlParseError> {
@@ -13905,7 +13797,7 @@ pub struct DescribeIdFormatResult {
 struct DescribeIdFormatResultDeserializer;
 impl DescribeIdFormatResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeIdFormatResult, XmlParseError> {
@@ -13955,7 +13847,7 @@ pub struct DescribeIdentityIdFormatResult {
 struct DescribeIdentityIdFormatResultDeserializer;
 impl DescribeIdentityIdFormatResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeIdentityIdFormatResult, XmlParseError> {
@@ -14070,7 +13962,7 @@ pub struct DescribeImagesResult {
 struct DescribeImagesResultDeserializer;
 impl DescribeImagesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeImagesResult, XmlParseError> {
@@ -14149,7 +14041,7 @@ pub struct DescribeImportImageTasksResult {
 struct DescribeImportImageTasksResultDeserializer;
 impl DescribeImportImageTasksResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeImportImageTasksResult, XmlParseError> {
@@ -14238,7 +14130,7 @@ pub struct DescribeImportSnapshotTasksResult {
 struct DescribeImportSnapshotTasksResultDeserializer;
 impl DescribeImportSnapshotTasksResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeImportSnapshotTasksResult, XmlParseError> {
@@ -14356,7 +14248,7 @@ pub struct DescribeInstanceCreditSpecificationsResult {
 struct DescribeInstanceCreditSpecificationsResultDeserializer;
 impl DescribeInstanceCreditSpecificationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeInstanceCreditSpecificationsResult, XmlParseError> {
@@ -14451,7 +14343,7 @@ pub struct DescribeInstanceStatusResult {
 struct DescribeInstanceStatusResultDeserializer;
 impl DescribeInstanceStatusResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeInstanceStatusResult, XmlParseError> {
@@ -14538,7 +14430,7 @@ pub struct DescribeInstancesResult {
 struct DescribeInstancesResultDeserializer;
 impl DescribeInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeInstancesResult, XmlParseError> {
@@ -14622,7 +14514,7 @@ pub struct DescribeInternetGatewaysResult {
 struct DescribeInternetGatewaysResultDeserializer;
 impl DescribeInternetGatewaysResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeInternetGatewaysResult, XmlParseError> {
@@ -14697,7 +14589,7 @@ pub struct DescribeKeyPairsResult {
 struct DescribeKeyPairsResultDeserializer;
 impl DescribeKeyPairsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeKeyPairsResult, XmlParseError> {
@@ -14794,7 +14686,7 @@ pub struct DescribeLaunchTemplateVersionsResult {
 struct DescribeLaunchTemplateVersionsResultDeserializer;
 impl DescribeLaunchTemplateVersionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeLaunchTemplateVersionsResult, XmlParseError> {
@@ -14890,7 +14782,7 @@ pub struct DescribeLaunchTemplatesResult {
 struct DescribeLaunchTemplatesResultDeserializer;
 impl DescribeLaunchTemplatesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeLaunchTemplatesResult, XmlParseError> {
@@ -14974,7 +14866,7 @@ pub struct DescribeMovingAddressesResult {
 struct DescribeMovingAddressesResultDeserializer;
 impl DescribeMovingAddressesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeMovingAddressesResult, XmlParseError> {
@@ -15056,7 +14948,7 @@ pub struct DescribeNatGatewaysResult {
 struct DescribeNatGatewaysResultDeserializer;
 impl DescribeNatGatewaysResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeNatGatewaysResult, XmlParseError> {
@@ -15140,7 +15032,7 @@ pub struct DescribeNetworkAclsResult {
 struct DescribeNetworkAclsResultDeserializer;
 impl DescribeNetworkAclsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeNetworkAclsResult, XmlParseError> {
@@ -15215,7 +15107,7 @@ pub struct DescribeNetworkInterfaceAttributeResult {
 struct DescribeNetworkInterfaceAttributeResultDeserializer;
 impl DescribeNetworkInterfaceAttributeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeNetworkInterfaceAttributeResult, XmlParseError> {
@@ -15322,7 +15214,7 @@ pub struct DescribeNetworkInterfacePermissionsResult {
 struct DescribeNetworkInterfacePermissionsResultDeserializer;
 impl DescribeNetworkInterfacePermissionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeNetworkInterfacePermissionsResult, XmlParseError> {
@@ -15411,7 +15303,7 @@ pub struct DescribeNetworkInterfacesResult {
 struct DescribeNetworkInterfacesResultDeserializer;
 impl DescribeNetworkInterfacesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeNetworkInterfacesResult, XmlParseError> {
@@ -15486,7 +15378,7 @@ pub struct DescribePlacementGroupsResult {
 struct DescribePlacementGroupsResultDeserializer;
 impl DescribePlacementGroupsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribePlacementGroupsResult, XmlParseError> {
@@ -15570,7 +15462,7 @@ pub struct DescribePrefixListsResult {
 struct DescribePrefixListsResultDeserializer;
 impl DescribePrefixListsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribePrefixListsResult, XmlParseError> {
@@ -15645,7 +15537,7 @@ pub struct DescribePrincipalIdFormatResult {
 struct DescribePrincipalIdFormatResultDeserializer;
 impl DescribePrincipalIdFormatResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribePrincipalIdFormatResult, XmlParseError> {
@@ -15715,7 +15607,7 @@ pub struct DescribePublicIpv4PoolsResult {
 struct DescribePublicIpv4PoolsResultDeserializer;
 impl DescribePublicIpv4PoolsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribePublicIpv4PoolsResult, XmlParseError> {
@@ -15787,7 +15679,7 @@ pub struct DescribeRegionsResult {
 struct DescribeRegionsResultDeserializer;
 impl DescribeRegionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeRegionsResult, XmlParseError> {
@@ -15856,7 +15748,7 @@ pub struct DescribeReservedInstancesListingsResult {
 struct DescribeReservedInstancesListingsResultDeserializer;
 impl DescribeReservedInstancesListingsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReservedInstancesListingsResult, XmlParseError> {
@@ -15936,7 +15828,7 @@ pub struct DescribeReservedInstancesModificationsResult {
 struct DescribeReservedInstancesModificationsResultDeserializer;
 impl DescribeReservedInstancesModificationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReservedInstancesModificationsResult, XmlParseError> {
@@ -16075,7 +15967,7 @@ pub struct DescribeReservedInstancesOfferingsResult {
 struct DescribeReservedInstancesOfferingsResultDeserializer;
 impl DescribeReservedInstancesOfferingsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReservedInstancesOfferingsResult, XmlParseError> {
@@ -16162,7 +16054,7 @@ pub struct DescribeReservedInstancesResult {
 struct DescribeReservedInstancesResultDeserializer;
 impl DescribeReservedInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReservedInstancesResult, XmlParseError> {
@@ -16247,7 +16139,7 @@ pub struct DescribeRouteTablesResult {
 struct DescribeRouteTablesResultDeserializer;
 impl DescribeRouteTablesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeRouteTablesResult, XmlParseError> {
@@ -16358,7 +16250,7 @@ pub struct DescribeScheduledInstanceAvailabilityResult {
 struct DescribeScheduledInstanceAvailabilityResultDeserializer;
 impl DescribeScheduledInstanceAvailabilityResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeScheduledInstanceAvailabilityResult, XmlParseError> {
@@ -16456,7 +16348,7 @@ pub struct DescribeScheduledInstancesResult {
 struct DescribeScheduledInstancesResultDeserializer;
 impl DescribeScheduledInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeScheduledInstancesResult, XmlParseError> {
@@ -16516,7 +16408,7 @@ pub struct DescribeSecurityGroupReferencesResult {
 struct DescribeSecurityGroupReferencesResultDeserializer;
 impl DescribeSecurityGroupReferencesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSecurityGroupReferencesResult, XmlParseError> {
@@ -16609,7 +16501,7 @@ pub struct DescribeSecurityGroupsResult {
 struct DescribeSecurityGroupsResultDeserializer;
 impl DescribeSecurityGroupsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSecurityGroupsResult, XmlParseError> {
@@ -16675,7 +16567,7 @@ pub struct DescribeSnapshotAttributeResult {
 struct DescribeSnapshotAttributeResultDeserializer;
 impl DescribeSnapshotAttributeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSnapshotAttributeResult, XmlParseError> {
@@ -16786,7 +16678,7 @@ pub struct DescribeSnapshotsResult {
 struct DescribeSnapshotsResultDeserializer;
 impl DescribeSnapshotsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSnapshotsResult, XmlParseError> {
@@ -16842,7 +16734,7 @@ pub struct DescribeSpotDatafeedSubscriptionResult {
 struct DescribeSpotDatafeedSubscriptionResultDeserializer;
 impl DescribeSpotDatafeedSubscriptionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSpotDatafeedSubscriptionResult, XmlParseError> {
@@ -16917,7 +16809,7 @@ pub struct DescribeSpotFleetInstancesResponse {
 struct DescribeSpotFleetInstancesResponseDeserializer;
 impl DescribeSpotFleetInstancesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSpotFleetInstancesResponse, XmlParseError> {
@@ -17011,7 +16903,7 @@ pub struct DescribeSpotFleetRequestHistoryResponse {
 struct DescribeSpotFleetRequestHistoryResponseDeserializer;
 impl DescribeSpotFleetRequestHistoryResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSpotFleetRequestHistoryResponse, XmlParseError> {
@@ -17104,7 +16996,7 @@ pub struct DescribeSpotFleetRequestsResponse {
 struct DescribeSpotFleetRequestsResponseDeserializer;
 impl DescribeSpotFleetRequestsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSpotFleetRequestsResponse, XmlParseError> {
@@ -17193,7 +17085,7 @@ pub struct DescribeSpotInstanceRequestsResult {
 struct DescribeSpotInstanceRequestsResultDeserializer;
 impl DescribeSpotInstanceRequestsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSpotInstanceRequestsResult, XmlParseError> {
@@ -17306,7 +17198,7 @@ pub struct DescribeSpotPriceHistoryResult {
 struct DescribeSpotPriceHistoryResultDeserializer;
 impl DescribeSpotPriceHistoryResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSpotPriceHistoryResult, XmlParseError> {
@@ -17378,7 +17270,7 @@ pub struct DescribeStaleSecurityGroupsResult {
 struct DescribeStaleSecurityGroupsResultDeserializer;
 impl DescribeStaleSecurityGroupsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStaleSecurityGroupsResult, XmlParseError> {
@@ -17465,7 +17357,7 @@ pub struct DescribeSubnetsResult {
 struct DescribeSubnetsResultDeserializer;
 impl DescribeSubnetsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSubnetsResult, XmlParseError> {
@@ -17536,7 +17428,7 @@ pub struct DescribeTagsResult {
 struct DescribeTagsResultDeserializer;
 impl DescribeTagsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeTagsResult, XmlParseError> {
@@ -17616,7 +17508,7 @@ pub struct DescribeTransitGatewayAttachmentsResult {
 struct DescribeTransitGatewayAttachmentsResultDeserializer;
 impl DescribeTransitGatewayAttachmentsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeTransitGatewayAttachmentsResult, XmlParseError> {
@@ -17703,7 +17595,7 @@ pub struct DescribeTransitGatewayRouteTablesResult {
 struct DescribeTransitGatewayRouteTablesResultDeserializer;
 impl DescribeTransitGatewayRouteTablesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeTransitGatewayRouteTablesResult, XmlParseError> {
@@ -17794,7 +17686,7 @@ pub struct DescribeTransitGatewayVpcAttachmentsResult {
 struct DescribeTransitGatewayVpcAttachmentsResultDeserializer;
 impl DescribeTransitGatewayVpcAttachmentsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeTransitGatewayVpcAttachmentsResult, XmlParseError> {
@@ -17881,7 +17773,7 @@ pub struct DescribeTransitGatewaysResult {
 struct DescribeTransitGatewaysResultDeserializer;
 impl DescribeTransitGatewaysResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeTransitGatewaysResult, XmlParseError> {
@@ -17950,7 +17842,7 @@ pub struct DescribeVolumeAttributeResult {
 struct DescribeVolumeAttributeResultDeserializer;
 impl DescribeVolumeAttributeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVolumeAttributeResult, XmlParseError> {
@@ -18040,7 +17932,7 @@ pub struct DescribeVolumeStatusResult {
 struct DescribeVolumeStatusResultDeserializer;
 impl DescribeVolumeStatusResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVolumeStatusResult, XmlParseError> {
@@ -18124,7 +18016,7 @@ pub struct DescribeVolumesModificationsResult {
 struct DescribeVolumesModificationsResultDeserializer;
 impl DescribeVolumesModificationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVolumesModificationsResult, XmlParseError> {
@@ -18211,7 +18103,7 @@ pub struct DescribeVolumesResult {
 struct DescribeVolumesResultDeserializer;
 impl DescribeVolumesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVolumesResult, XmlParseError> {
@@ -18271,7 +18163,7 @@ pub struct DescribeVpcAttributeResult {
 struct DescribeVpcAttributeResultDeserializer;
 impl DescribeVpcAttributeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcAttributeResult, XmlParseError> {
@@ -18350,7 +18242,7 @@ pub struct DescribeVpcClassicLinkDnsSupportResult {
 struct DescribeVpcClassicLinkDnsSupportResultDeserializer;
 impl DescribeVpcClassicLinkDnsSupportResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcClassicLinkDnsSupportResult, XmlParseError> {
@@ -18423,7 +18315,7 @@ pub struct DescribeVpcClassicLinkResult {
 struct DescribeVpcClassicLinkResultDeserializer;
 impl DescribeVpcClassicLinkResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcClassicLinkResult, XmlParseError> {
@@ -18507,7 +18399,7 @@ pub struct DescribeVpcEndpointConnectionNotificationsResult {
 struct DescribeVpcEndpointConnectionNotificationsResultDeserializer;
 impl DescribeVpcEndpointConnectionNotificationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcEndpointConnectionNotificationsResult, XmlParseError> {
@@ -18585,7 +18477,7 @@ pub struct DescribeVpcEndpointConnectionsResult {
 struct DescribeVpcEndpointConnectionsResultDeserializer;
 impl DescribeVpcEndpointConnectionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcEndpointConnectionsResult, XmlParseError> {
@@ -18676,7 +18568,7 @@ pub struct DescribeVpcEndpointServiceConfigurationsResult {
 struct DescribeVpcEndpointServiceConfigurationsResultDeserializer;
 impl DescribeVpcEndpointServiceConfigurationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcEndpointServiceConfigurationsResult, XmlParseError> {
@@ -18761,7 +18653,7 @@ pub struct DescribeVpcEndpointServicePermissionsResult {
 struct DescribeVpcEndpointServicePermissionsResultDeserializer;
 impl DescribeVpcEndpointServicePermissionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcEndpointServicePermissionsResult, XmlParseError> {
@@ -18852,7 +18744,7 @@ pub struct DescribeVpcEndpointServicesResult {
 struct DescribeVpcEndpointServicesResultDeserializer;
 impl DescribeVpcEndpointServicesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcEndpointServicesResult, XmlParseError> {
@@ -18943,7 +18835,7 @@ pub struct DescribeVpcEndpointsResult {
 struct DescribeVpcEndpointsResultDeserializer;
 impl DescribeVpcEndpointsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcEndpointsResult, XmlParseError> {
@@ -19027,7 +18919,7 @@ pub struct DescribeVpcPeeringConnectionsResult {
 struct DescribeVpcPeeringConnectionsResultDeserializer;
 impl DescribeVpcPeeringConnectionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcPeeringConnectionsResult, XmlParseError> {
@@ -19114,7 +19006,7 @@ pub struct DescribeVpcsResult {
 struct DescribeVpcsResultDeserializer;
 impl DescribeVpcsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpcsResult, XmlParseError> {
@@ -19184,7 +19076,7 @@ pub struct DescribeVpnConnectionsResult {
 struct DescribeVpnConnectionsResultDeserializer;
 impl DescribeVpnConnectionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpnConnectionsResult, XmlParseError> {
@@ -19255,7 +19147,7 @@ pub struct DescribeVpnGatewaysResult {
 struct DescribeVpnGatewaysResultDeserializer;
 impl DescribeVpnGatewaysResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeVpnGatewaysResult, XmlParseError> {
@@ -19312,7 +19204,7 @@ pub struct DetachClassicLinkVpcResult {
 struct DetachClassicLinkVpcResultDeserializer;
 impl DetachClassicLinkVpcResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DetachClassicLinkVpcResult, XmlParseError> {
@@ -19465,10 +19357,7 @@ impl DetachVpnGatewayRequestSerializer {
 struct DeviceTypeDeserializer;
 impl DeviceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -19488,7 +19377,7 @@ pub struct DhcpConfiguration {
 struct DhcpConfigurationDeserializer;
 impl DhcpConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DhcpConfiguration, XmlParseError> {
@@ -19511,7 +19400,7 @@ impl DhcpConfigurationDeserializer {
 struct DhcpConfigurationListDeserializer;
 impl DhcpConfigurationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DhcpConfiguration>, XmlParseError> {
@@ -19528,7 +19417,7 @@ impl DhcpConfigurationListDeserializer {
 struct DhcpConfigurationValueListDeserializer;
 impl DhcpConfigurationValueListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AttributeValue>, XmlParseError> {
@@ -19558,7 +19447,7 @@ pub struct DhcpOptions {
 struct DhcpOptionsDeserializer;
 impl DhcpOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DhcpOptions, XmlParseError> {
@@ -19605,7 +19494,7 @@ impl DhcpOptionsIdStringListSerializer {
 struct DhcpOptionsListDeserializer;
 impl DhcpOptionsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DhcpOptions>, XmlParseError> {
@@ -19629,7 +19518,7 @@ pub struct DirectoryServiceAuthentication {
 struct DirectoryServiceAuthenticationDeserializer;
 impl DirectoryServiceAuthenticationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DirectoryServiceAuthentication, XmlParseError> {
@@ -19769,7 +19658,7 @@ pub struct DisableTransitGatewayRouteTablePropagationResult {
 struct DisableTransitGatewayRouteTablePropagationResultDeserializer;
 impl DisableTransitGatewayRouteTablePropagationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisableTransitGatewayRouteTablePropagationResult, XmlParseError> {
@@ -19847,7 +19736,7 @@ pub struct DisableVpcClassicLinkDnsSupportResult {
 struct DisableVpcClassicLinkDnsSupportResultDeserializer;
 impl DisableVpcClassicLinkDnsSupportResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisableVpcClassicLinkDnsSupportResult, XmlParseError> {
@@ -19899,7 +19788,7 @@ pub struct DisableVpcClassicLinkResult {
 struct DisableVpcClassicLinkResultDeserializer;
 impl DisableVpcClassicLinkResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisableVpcClassicLinkResult, XmlParseError> {
@@ -19993,7 +19882,7 @@ pub struct DisassociateClientVpnTargetNetworkResult {
 struct DisassociateClientVpnTargetNetworkResultDeserializer;
 impl DisassociateClientVpnTargetNetworkResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisassociateClientVpnTargetNetworkResult, XmlParseError> {
@@ -20048,7 +19937,7 @@ pub struct DisassociateIamInstanceProfileResult {
 struct DisassociateIamInstanceProfileResultDeserializer;
 impl DisassociateIamInstanceProfileResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisassociateIamInstanceProfileResult, XmlParseError> {
@@ -20131,7 +20020,7 @@ pub struct DisassociateSubnetCidrBlockResult {
 struct DisassociateSubnetCidrBlockResultDeserializer;
 impl DisassociateSubnetCidrBlockResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisassociateSubnetCidrBlockResult, XmlParseError> {
@@ -20203,7 +20092,7 @@ pub struct DisassociateTransitGatewayRouteTableResult {
 struct DisassociateTransitGatewayRouteTableResultDeserializer;
 impl DisassociateTransitGatewayRouteTableResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisassociateTransitGatewayRouteTableResult, XmlParseError> {
@@ -20260,7 +20149,7 @@ pub struct DisassociateVpcCidrBlockResult {
 struct DisassociateVpcCidrBlockResultDeserializer;
 impl DisassociateVpcCidrBlockResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisassociateVpcCidrBlockResult, XmlParseError> {
@@ -20349,7 +20238,7 @@ pub struct DiskImageDescription {
 struct DiskImageDescriptionDeserializer;
 impl DiskImageDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DiskImageDescription, XmlParseError> {
@@ -20406,10 +20295,7 @@ impl DiskImageDetailSerializer {
 struct DiskImageFormatDeserializer;
 impl DiskImageFormatDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -20441,7 +20327,7 @@ pub struct DiskImageVolumeDescription {
 struct DiskImageVolumeDescriptionDeserializer;
 impl DiskImageVolumeDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DiskImageVolumeDescription, XmlParseError> {
@@ -20475,7 +20361,7 @@ pub struct DnsEntry {
 struct DnsEntryDeserializer;
 impl DnsEntryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DnsEntry, XmlParseError> {
@@ -20497,7 +20383,7 @@ impl DnsEntryDeserializer {
 struct DnsEntrySetDeserializer;
 impl DnsEntrySetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DnsEntry>, XmlParseError> {
@@ -20545,10 +20431,7 @@ impl DnsServersOptionsModifyStructureSerializer {
 struct DnsSupportValueDeserializer;
 impl DnsSupportValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -20559,10 +20442,7 @@ impl DnsSupportValueDeserializer {
 struct DomainTypeDeserializer;
 impl DomainTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -20573,10 +20453,7 @@ impl DomainTypeDeserializer {
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -20606,7 +20483,7 @@ pub struct EbsBlockDevice {
 struct EbsBlockDeviceDeserializer;
 impl EbsBlockDeviceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EbsBlockDevice, XmlParseError> {
@@ -20696,7 +20573,7 @@ pub struct EbsInstanceBlockDevice {
 struct EbsInstanceBlockDeviceDeserializer;
 impl EbsInstanceBlockDeviceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EbsInstanceBlockDevice, XmlParseError> {
@@ -20765,7 +20642,7 @@ pub struct EgressOnlyInternetGateway {
 struct EgressOnlyInternetGatewayDeserializer;
 impl EgressOnlyInternetGatewayDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EgressOnlyInternetGateway, XmlParseError> {
@@ -20799,10 +20676,7 @@ impl EgressOnlyInternetGatewayDeserializer {
 struct EgressOnlyInternetGatewayIdDeserializer;
 impl EgressOnlyInternetGatewayIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -20825,7 +20699,7 @@ impl EgressOnlyInternetGatewayIdListSerializer {
 struct EgressOnlyInternetGatewayListDeserializer;
 impl EgressOnlyInternetGatewayListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EgressOnlyInternetGateway>, XmlParseError> {
@@ -20857,7 +20731,7 @@ pub struct ElasticGpuAssociation {
 struct ElasticGpuAssociationDeserializer;
 impl ElasticGpuAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ElasticGpuAssociation, XmlParseError> {
@@ -20894,7 +20768,7 @@ impl ElasticGpuAssociationDeserializer {
 struct ElasticGpuAssociationListDeserializer;
 impl ElasticGpuAssociationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ElasticGpuAssociation>, XmlParseError> {
@@ -20920,7 +20794,7 @@ pub struct ElasticGpuHealth {
 struct ElasticGpuHealthDeserializer;
 impl ElasticGpuHealthDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ElasticGpuHealth, XmlParseError> {
@@ -20950,7 +20824,7 @@ impl ElasticGpuIdSetSerializer {
 struct ElasticGpuSetDeserializer;
 impl ElasticGpuSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ElasticGpus>, XmlParseError> {
@@ -21005,7 +20879,7 @@ pub struct ElasticGpuSpecificationResponse {
 struct ElasticGpuSpecificationResponseDeserializer;
 impl ElasticGpuSpecificationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ElasticGpuSpecificationResponse, XmlParseError> {
@@ -21027,7 +20901,7 @@ impl ElasticGpuSpecificationResponseDeserializer {
 struct ElasticGpuSpecificationResponseListDeserializer;
 impl ElasticGpuSpecificationResponseListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ElasticGpuSpecificationResponse>, XmlParseError> {
@@ -21058,10 +20932,7 @@ impl ElasticGpuSpecificationsSerializer {
 struct ElasticGpuStateDeserializer;
 impl ElasticGpuStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -21072,10 +20943,7 @@ impl ElasticGpuStateDeserializer {
 struct ElasticGpuStatusDeserializer;
 impl ElasticGpuStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -21103,7 +20971,7 @@ pub struct ElasticGpus {
 struct ElasticGpusDeserializer;
 impl ElasticGpusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ElasticGpus, XmlParseError> {
@@ -21178,7 +21046,7 @@ pub struct ElasticInferenceAcceleratorAssociation {
 struct ElasticInferenceAcceleratorAssociationDeserializer;
 impl ElasticInferenceAcceleratorAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ElasticInferenceAcceleratorAssociation, XmlParseError> {
@@ -21225,7 +21093,7 @@ impl ElasticInferenceAcceleratorAssociationDeserializer {
 struct ElasticInferenceAcceleratorAssociationListDeserializer;
 impl ElasticInferenceAcceleratorAssociationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ElasticInferenceAcceleratorAssociation>, XmlParseError> {
@@ -21351,7 +21219,7 @@ pub struct EnableTransitGatewayRouteTablePropagationResult {
 struct EnableTransitGatewayRouteTablePropagationResultDeserializer;
 impl EnableTransitGatewayRouteTablePropagationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EnableTransitGatewayRouteTablePropagationResult, XmlParseError> {
@@ -21454,7 +21322,7 @@ pub struct EnableVpcClassicLinkDnsSupportResult {
 struct EnableVpcClassicLinkDnsSupportResultDeserializer;
 impl EnableVpcClassicLinkDnsSupportResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EnableVpcClassicLinkDnsSupportResult, XmlParseError> {
@@ -21506,7 +21374,7 @@ pub struct EnableVpcClassicLinkResult {
 struct EnableVpcClassicLinkResultDeserializer;
 impl EnableVpcClassicLinkResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EnableVpcClassicLinkResult, XmlParseError> {
@@ -21528,10 +21396,7 @@ impl EnableVpcClassicLinkResultDeserializer {
 struct EndDateTypeDeserializer;
 impl EndDateTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -21542,7 +21407,7 @@ impl EndDateTypeDeserializer {
 struct EndpointSetDeserializer;
 impl EndpointSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ClientVpnEndpoint>, XmlParseError> {
@@ -21559,10 +21424,7 @@ impl EndpointSetDeserializer {
 struct EventCodeDeserializer;
 impl EventCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -21584,7 +21446,7 @@ pub struct EventInformation {
 struct EventInformationDeserializer;
 impl EventInformationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventInformation, XmlParseError> {
@@ -21610,10 +21472,7 @@ impl EventInformationDeserializer {
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -21624,10 +21483,7 @@ impl EventTypeDeserializer {
 struct ExcessCapacityTerminationPolicyDeserializer;
 impl ExcessCapacityTerminationPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -21689,7 +21545,7 @@ pub struct ExportClientVpnClientCertificateRevocationListResult {
 struct ExportClientVpnClientCertificateRevocationListResultDeserializer;
 impl ExportClientVpnClientCertificateRevocationListResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExportClientVpnClientCertificateRevocationListResult, XmlParseError> {
@@ -21754,7 +21610,7 @@ pub struct ExportClientVpnClientConfigurationResult {
 struct ExportClientVpnClientConfigurationResultDeserializer;
 impl ExportClientVpnClientConfigurationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExportClientVpnClientConfigurationResult, XmlParseError> {
@@ -21779,10 +21635,7 @@ impl ExportClientVpnClientConfigurationResultDeserializer {
 struct ExportEnvironmentDeserializer;
 impl ExportEnvironmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -21810,7 +21663,7 @@ pub struct ExportTask {
 struct ExportTaskDeserializer;
 impl ExportTaskDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExportTask, XmlParseError> {
@@ -21862,7 +21715,7 @@ impl ExportTaskIdStringListSerializer {
 struct ExportTaskListDeserializer;
 impl ExportTaskListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ExportTask>, XmlParseError> {
@@ -21879,10 +21732,7 @@ impl ExportTaskListDeserializer {
 struct ExportTaskStateDeserializer;
 impl ExportTaskStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -21906,7 +21756,7 @@ pub struct ExportToS3Task {
 struct ExportToS3TaskDeserializer;
 impl ExportToS3TaskDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExportToS3Task, XmlParseError> {
@@ -22021,7 +21871,7 @@ pub struct ExportTransitGatewayRoutesResult {
 struct ExportTransitGatewayRoutesResultDeserializer;
 impl ExportTransitGatewayRoutesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExportTransitGatewayRoutesResult, XmlParseError> {
@@ -22086,10 +21936,7 @@ impl FilterListSerializer {
 struct FleetActivityStatusDeserializer;
 impl FleetActivityStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -22145,7 +21992,7 @@ pub struct FleetData {
 struct FleetDataDeserializer;
 impl FleetDataDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FleetData, XmlParseError> {
@@ -22265,10 +22112,7 @@ impl FleetDataDeserializer {
 struct FleetEventTypeDeserializer;
 impl FleetEventTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -22279,10 +22123,7 @@ impl FleetEventTypeDeserializer {
 struct FleetExcessCapacityTerminationPolicyDeserializer;
 impl FleetExcessCapacityTerminationPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -22305,10 +22146,7 @@ impl FleetIdSetSerializer {
 struct FleetIdentifierDeserializer;
 impl FleetIdentifierDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -22328,7 +22166,7 @@ pub struct FleetLaunchTemplateConfig {
 struct FleetLaunchTemplateConfigDeserializer;
 impl FleetLaunchTemplateConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FleetLaunchTemplateConfig, XmlParseError> {
@@ -22362,7 +22200,7 @@ impl FleetLaunchTemplateConfigDeserializer {
 struct FleetLaunchTemplateConfigListDeserializer;
 impl FleetLaunchTemplateConfigListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FleetLaunchTemplateConfig>, XmlParseError> {
@@ -22447,7 +22285,7 @@ pub struct FleetLaunchTemplateOverrides {
 struct FleetLaunchTemplateOverridesDeserializer;
 impl FleetLaunchTemplateOverridesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FleetLaunchTemplateOverrides, XmlParseError> {
@@ -22495,7 +22333,7 @@ impl FleetLaunchTemplateOverridesDeserializer {
 struct FleetLaunchTemplateOverridesListDeserializer;
 impl FleetLaunchTemplateOverridesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FleetLaunchTemplateOverrides>, XmlParseError> {
@@ -22593,7 +22431,7 @@ pub struct FleetLaunchTemplateSpecification {
 struct FleetLaunchTemplateSpecificationDeserializer;
 impl FleetLaunchTemplateSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FleetLaunchTemplateSpecification, XmlParseError> {
@@ -22680,10 +22518,7 @@ impl FleetLaunchTemplateSpecificationRequestSerializer {
 struct FleetOnDemandAllocationStrategyDeserializer;
 impl FleetOnDemandAllocationStrategyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -22694,7 +22529,7 @@ impl FleetOnDemandAllocationStrategyDeserializer {
 struct FleetSetDeserializer;
 impl FleetSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FleetData>, XmlParseError> {
@@ -22711,10 +22546,7 @@ impl FleetSetDeserializer {
 struct FleetStateCodeDeserializer;
 impl FleetStateCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -22725,10 +22557,7 @@ impl FleetStateCodeDeserializer {
 struct FleetTypeDeserializer;
 impl FleetTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -22739,10 +22568,7 @@ impl FleetTypeDeserializer {
 struct FloatDeserializer;
 impl FloatDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f32, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f32, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f32::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -22780,7 +22606,7 @@ pub struct FlowLog {
 struct FlowLogDeserializer;
 impl FlowLogDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FlowLog, XmlParseError> {
@@ -22843,7 +22669,7 @@ impl FlowLogDeserializer {
 struct FlowLogSetDeserializer;
 impl FlowLogSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FlowLog>, XmlParseError> {
@@ -22895,7 +22721,7 @@ pub struct FpgaImage {
 struct FpgaImageDeserializer;
 impl FpgaImageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FpgaImage, XmlParseError> {
@@ -22980,7 +22806,7 @@ pub struct FpgaImageAttribute {
 struct FpgaImageAttributeDeserializer;
 impl FpgaImageAttributeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FpgaImageAttribute, XmlParseError> {
@@ -23027,7 +22853,7 @@ impl FpgaImageIdListSerializer {
 struct FpgaImageListDeserializer;
 impl FpgaImageListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<FpgaImage>, XmlParseError> {
@@ -23053,7 +22879,7 @@ pub struct FpgaImageState {
 struct FpgaImageStateDeserializer;
 impl FpgaImageStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<FpgaImageState, XmlParseError> {
@@ -23074,10 +22900,7 @@ impl FpgaImageStateDeserializer {
 struct FpgaImageStateCodeDeserializer;
 impl FpgaImageStateCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -23088,10 +22911,7 @@ impl FpgaImageStateCodeDeserializer {
 struct GatewayTypeDeserializer;
 impl GatewayTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -23141,7 +22961,7 @@ pub struct GetConsoleOutputResult {
 struct GetConsoleOutputResultDeserializer;
 impl GetConsoleOutputResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetConsoleOutputResult, XmlParseError> {
@@ -23202,7 +23022,7 @@ pub struct GetConsoleScreenshotResult {
 struct GetConsoleScreenshotResultDeserializer;
 impl GetConsoleScreenshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetConsoleScreenshotResult, XmlParseError> {
@@ -23367,7 +23187,7 @@ pub struct GetHostReservationPurchasePreviewResult {
 struct GetHostReservationPurchasePreviewResultDeserializer;
 impl GetHostReservationPurchasePreviewResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetHostReservationPurchasePreviewResult, XmlParseError> {
@@ -23435,7 +23255,7 @@ pub struct GetLaunchTemplateDataResult {
 struct GetLaunchTemplateDataResultDeserializer;
 impl GetLaunchTemplateDataResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetLaunchTemplateDataResult, XmlParseError> {
@@ -23495,7 +23315,7 @@ pub struct GetPasswordDataResult {
 struct GetPasswordDataResultDeserializer;
 impl GetPasswordDataResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetPasswordDataResult, XmlParseError> {
@@ -23581,7 +23401,7 @@ pub struct GetReservedInstancesExchangeQuoteResult {
 struct GetReservedInstancesExchangeQuoteResultDeserializer;
 impl GetReservedInstancesExchangeQuoteResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetReservedInstancesExchangeQuoteResult, XmlParseError> {
@@ -23715,7 +23535,7 @@ pub struct GetTransitGatewayAttachmentPropagationsResult {
 struct GetTransitGatewayAttachmentPropagationsResultDeserializer;
 impl GetTransitGatewayAttachmentPropagationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTransitGatewayAttachmentPropagationsResult, XmlParseError> {
@@ -23805,7 +23625,7 @@ pub struct GetTransitGatewayRouteTableAssociationsResult {
 struct GetTransitGatewayRouteTableAssociationsResultDeserializer;
 impl GetTransitGatewayRouteTableAssociationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTransitGatewayRouteTableAssociationsResult, XmlParseError> {
@@ -23893,7 +23713,7 @@ pub struct GetTransitGatewayRouteTablePropagationsResult {
 struct GetTransitGatewayRouteTablePropagationsResultDeserializer;
 impl GetTransitGatewayRouteTablePropagationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTransitGatewayRouteTablePropagationsResult, XmlParseError> {
@@ -23925,7 +23745,7 @@ impl GetTransitGatewayRouteTablePropagationsResultDeserializer {
 struct GroupIdStringListDeserializer;
 impl GroupIdStringListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -23963,7 +23783,7 @@ pub struct GroupIdentifier {
 struct GroupIdentifierDeserializer;
 impl GroupIdentifierDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GroupIdentifier, XmlParseError> {
@@ -24003,7 +23823,7 @@ impl GroupIdentifierSerializer {
 struct GroupIdentifierListDeserializer;
 impl GroupIdentifierListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<GroupIdentifier>, XmlParseError> {
@@ -24032,7 +23852,7 @@ impl GroupIdentifierListSerializer {
 struct GroupIdentifierSetDeserializer;
 impl GroupIdentifierSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SecurityGroupIdentifier>, XmlParseError> {
@@ -24081,7 +23901,7 @@ pub struct HibernationOptions {
 struct HibernationOptionsDeserializer;
 impl HibernationOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HibernationOptions, XmlParseError> {
@@ -24132,7 +23952,7 @@ pub struct HistoryRecord {
 struct HistoryRecordDeserializer;
 impl HistoryRecordDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HistoryRecord, XmlParseError> {
@@ -24170,7 +23990,7 @@ pub struct HistoryRecordEntry {
 struct HistoryRecordEntryDeserializer;
 impl HistoryRecordEntryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HistoryRecordEntry, XmlParseError> {
@@ -24198,7 +24018,7 @@ impl HistoryRecordEntryDeserializer {
 struct HistoryRecordSetDeserializer;
 impl HistoryRecordSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HistoryRecordEntry>, XmlParseError> {
@@ -24215,7 +24035,7 @@ impl HistoryRecordSetDeserializer {
 struct HistoryRecordsDeserializer;
 impl HistoryRecordsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HistoryRecord>, XmlParseError> {
@@ -24261,10 +24081,7 @@ pub struct Host {
 struct HostDeserializer;
 impl HostDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Host, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Host, XmlParseError> {
         deserialize_elements::<_, Host, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "allocationTime" => {
@@ -24338,7 +24155,7 @@ pub struct HostInstance {
 struct HostInstanceDeserializer;
 impl HostInstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostInstance, XmlParseError> {
@@ -24360,7 +24177,7 @@ impl HostInstanceDeserializer {
 struct HostInstanceListDeserializer;
 impl HostInstanceListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HostInstance>, XmlParseError> {
@@ -24377,7 +24194,7 @@ impl HostInstanceListDeserializer {
 struct HostListDeserializer;
 impl HostListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Host>, XmlParseError> {
@@ -24413,7 +24230,7 @@ pub struct HostOffering {
 struct HostOfferingDeserializer;
 impl HostOfferingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostOffering, XmlParseError> {
@@ -24457,7 +24274,7 @@ impl HostOfferingDeserializer {
 struct HostOfferingSetDeserializer;
 impl HostOfferingSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HostOffering>, XmlParseError> {
@@ -24487,7 +24304,7 @@ pub struct HostProperties {
 struct HostPropertiesDeserializer;
 impl HostPropertiesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostProperties, XmlParseError> {
@@ -24548,7 +24365,7 @@ pub struct HostReservation {
 struct HostReservationDeserializer;
 impl HostReservationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostReservation, XmlParseError> {
@@ -24630,7 +24447,7 @@ impl HostReservationIdSetSerializer {
 struct HostReservationSetDeserializer;
 impl HostReservationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<HostReservation>, XmlParseError> {
@@ -24647,10 +24464,7 @@ impl HostReservationSetDeserializer {
 struct HypervisorTypeDeserializer;
 impl HypervisorTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -24670,7 +24484,7 @@ pub struct IamInstanceProfile {
 struct IamInstanceProfileDeserializer;
 impl IamInstanceProfileDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IamInstanceProfile, XmlParseError> {
@@ -24706,7 +24520,7 @@ pub struct IamInstanceProfileAssociation {
 struct IamInstanceProfileAssociationDeserializer;
 impl IamInstanceProfileAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IamInstanceProfileAssociation, XmlParseError> {
@@ -24750,7 +24564,7 @@ impl IamInstanceProfileAssociationDeserializer {
 struct IamInstanceProfileAssociationSetDeserializer;
 impl IamInstanceProfileAssociationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<IamInstanceProfileAssociation>, XmlParseError> {
@@ -24769,10 +24583,7 @@ impl IamInstanceProfileAssociationSetDeserializer {
 struct IamInstanceProfileAssociationStateDeserializer;
 impl IamInstanceProfileAssociationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -24792,7 +24603,7 @@ pub struct IamInstanceProfileSpecification {
 struct IamInstanceProfileSpecificationDeserializer;
 impl IamInstanceProfileSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IamInstanceProfileSpecification, XmlParseError> {
@@ -24845,7 +24656,7 @@ pub struct IcmpTypeCode {
 struct IcmpTypeCodeDeserializer;
 impl IcmpTypeCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IcmpTypeCode, XmlParseError> {
@@ -24896,7 +24707,7 @@ pub struct IdFormat {
 struct IdFormatDeserializer;
 impl IdFormatDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdFormat, XmlParseError> {
@@ -24920,7 +24731,7 @@ impl IdFormatDeserializer {
 struct IdFormatListDeserializer;
 impl IdFormatListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<IdFormat>, XmlParseError> {
@@ -24990,10 +24801,7 @@ pub struct Image {
 struct ImageDeserializer;
 impl ImageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Image, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Image, XmlParseError> {
         deserialize_elements::<_, Image, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "architecture" => {
@@ -25129,7 +24937,7 @@ pub struct ImageAttribute {
 struct ImageAttributeDeserializer;
 impl ImageAttributeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImageAttribute, XmlParseError> {
@@ -25257,7 +25065,7 @@ impl ImageIdStringListSerializer {
 struct ImageListDeserializer;
 impl ImageListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Image>, XmlParseError> {
@@ -25274,10 +25082,7 @@ impl ImageListDeserializer {
 struct ImageStateDeserializer;
 impl ImageStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -25288,10 +25093,7 @@ impl ImageStateDeserializer {
 struct ImageTypeValuesDeserializer;
 impl ImageTypeValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -25345,7 +25147,7 @@ pub struct ImportClientVpnClientCertificateRevocationListResult {
 struct ImportClientVpnClientCertificateRevocationListResultDeserializer;
 impl ImportClientVpnClientCertificateRevocationListResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportClientVpnClientCertificateRevocationListResult, XmlParseError> {
@@ -25483,7 +25285,7 @@ pub struct ImportImageResult {
 struct ImportImageResultDeserializer;
 impl ImportImageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportImageResult, XmlParseError> {
@@ -25573,7 +25375,7 @@ pub struct ImportImageTask {
 struct ImportImageTaskDeserializer;
 impl ImportImageTaskDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportImageTask, XmlParseError> {
@@ -25632,7 +25434,7 @@ impl ImportImageTaskDeserializer {
 struct ImportImageTaskListDeserializer;
 impl ImportImageTaskListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ImportImageTask>, XmlParseError> {
@@ -25795,7 +25597,7 @@ pub struct ImportInstanceResult {
 struct ImportInstanceResultDeserializer;
 impl ImportInstanceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportInstanceResult, XmlParseError> {
@@ -25829,7 +25631,7 @@ pub struct ImportInstanceTaskDetails {
 struct ImportInstanceTaskDetailsDeserializer;
 impl ImportInstanceTaskDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportInstanceTaskDetails, XmlParseError> {
@@ -25886,7 +25688,7 @@ pub struct ImportInstanceVolumeDetailItem {
 struct ImportInstanceVolumeDetailItemDeserializer;
 impl ImportInstanceVolumeDetailItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportInstanceVolumeDetailItem, XmlParseError> {
@@ -25934,7 +25736,7 @@ impl ImportInstanceVolumeDetailItemDeserializer {
 struct ImportInstanceVolumeDetailSetDeserializer;
 impl ImportInstanceVolumeDetailSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ImportInstanceVolumeDetailItem>, XmlParseError> {
@@ -25991,7 +25793,7 @@ pub struct ImportKeyPairResult {
 struct ImportKeyPairResultDeserializer;
 impl ImportKeyPairResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportKeyPairResult, XmlParseError> {
@@ -26089,7 +25891,7 @@ pub struct ImportSnapshotResult {
 struct ImportSnapshotResultDeserializer;
 impl ImportSnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportSnapshotResult, XmlParseError> {
@@ -26128,7 +25930,7 @@ pub struct ImportSnapshotTask {
 struct ImportSnapshotTaskDeserializer;
 impl ImportSnapshotTaskDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportSnapshotTask, XmlParseError> {
@@ -26156,7 +25958,7 @@ impl ImportSnapshotTaskDeserializer {
 struct ImportSnapshotTaskListDeserializer;
 impl ImportSnapshotTaskListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ImportSnapshotTask>, XmlParseError> {
@@ -26231,7 +26033,7 @@ pub struct ImportVolumeResult {
 struct ImportVolumeResultDeserializer;
 impl ImportVolumeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportVolumeResult, XmlParseError> {
@@ -26267,7 +26069,7 @@ pub struct ImportVolumeTaskDetails {
 struct ImportVolumeTaskDetailsDeserializer;
 impl ImportVolumeTaskDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ImportVolumeTaskDetails, XmlParseError> {
@@ -26404,7 +26206,7 @@ pub struct Instance {
 struct InstanceDeserializer;
 impl InstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Instance, XmlParseError> {
@@ -26670,7 +26472,7 @@ pub struct InstanceAttribute {
 struct InstanceAttributeDeserializer;
 impl InstanceAttributeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceAttribute, XmlParseError> {
@@ -26776,7 +26578,7 @@ pub struct InstanceBlockDeviceMapping {
 struct InstanceBlockDeviceMappingDeserializer;
 impl InstanceBlockDeviceMappingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceBlockDeviceMapping, XmlParseError> {
@@ -26804,7 +26606,7 @@ impl InstanceBlockDeviceMappingDeserializer {
 struct InstanceBlockDeviceMappingListDeserializer;
 impl InstanceBlockDeviceMappingListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceBlockDeviceMapping>, XmlParseError> {
@@ -26890,7 +26692,7 @@ pub struct InstanceCapacity {
 struct InstanceCapacityDeserializer;
 impl InstanceCapacityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceCapacity, XmlParseError> {
@@ -26928,7 +26730,7 @@ pub struct InstanceCount {
 struct InstanceCountDeserializer;
 impl InstanceCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceCount, XmlParseError> {
@@ -26950,7 +26752,7 @@ impl InstanceCountDeserializer {
 struct InstanceCountListDeserializer;
 impl InstanceCountListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceCount>, XmlParseError> {
@@ -26976,7 +26778,7 @@ pub struct InstanceCreditSpecification {
 struct InstanceCreditSpecificationDeserializer;
 impl InstanceCreditSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceCreditSpecification, XmlParseError> {
@@ -27003,7 +26805,7 @@ impl InstanceCreditSpecificationDeserializer {
 struct InstanceCreditSpecificationListDeserializer;
 impl InstanceCreditSpecificationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceCreditSpecification>, XmlParseError> {
@@ -27084,7 +26886,7 @@ pub struct InstanceExportDetails {
 struct InstanceExportDetailsDeserializer;
 impl InstanceExportDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceExportDetails, XmlParseError> {
@@ -27108,10 +26910,7 @@ impl InstanceExportDetailsDeserializer {
 struct InstanceHealthStatusDeserializer;
 impl InstanceHealthStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -27122,10 +26921,7 @@ impl InstanceHealthStatusDeserializer {
 struct InstanceIdDeserializer;
 impl InstanceIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -27136,7 +26932,7 @@ impl InstanceIdDeserializer {
 struct InstanceIdSetDeserializer;
 impl InstanceIdSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -27165,7 +26961,7 @@ impl InstanceIdStringListSerializer {
 struct InstanceIdsSetDeserializer;
 impl InstanceIdsSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -27182,10 +26978,7 @@ impl InstanceIdsSetDeserializer {
 struct InstanceInterruptionBehaviorDeserializer;
 impl InstanceInterruptionBehaviorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -27203,7 +26996,7 @@ pub struct InstanceIpv6Address {
 struct InstanceIpv6AddressDeserializer;
 impl InstanceIpv6AddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceIpv6Address, XmlParseError> {
@@ -27238,7 +27031,7 @@ impl InstanceIpv6AddressSerializer {
 struct InstanceIpv6AddressListDeserializer;
 impl InstanceIpv6AddressListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceIpv6Address>, XmlParseError> {
@@ -27300,10 +27093,7 @@ impl InstanceIpv6AddressRequestSerializer {
 struct InstanceLifecycleDeserializer;
 impl InstanceLifecycleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -27314,10 +27104,7 @@ impl InstanceLifecycleDeserializer {
 struct InstanceLifecycleTypeDeserializer;
 impl InstanceLifecycleTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -27328,7 +27115,7 @@ impl InstanceLifecycleTypeDeserializer {
 struct InstanceListDeserializer;
 impl InstanceListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Instance>, XmlParseError> {
@@ -27376,10 +27163,7 @@ impl InstanceMarketOptionsRequestSerializer {
 struct InstanceMatchCriteriaDeserializer;
 impl InstanceMatchCriteriaDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -27399,7 +27183,7 @@ pub struct InstanceMonitoring {
 struct InstanceMonitoringDeserializer;
 impl InstanceMonitoringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceMonitoring, XmlParseError> {
@@ -27421,7 +27205,7 @@ impl InstanceMonitoringDeserializer {
 struct InstanceMonitoringListDeserializer;
 impl InstanceMonitoringListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceMonitoring>, XmlParseError> {
@@ -27475,7 +27259,7 @@ pub struct InstanceNetworkInterface {
 struct InstanceNetworkInterfaceDeserializer;
 impl InstanceNetworkInterfaceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceNetworkInterface, XmlParseError> {
@@ -27585,7 +27369,7 @@ pub struct InstanceNetworkInterfaceAssociation {
 struct InstanceNetworkInterfaceAssociationDeserializer;
 impl InstanceNetworkInterfaceAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceNetworkInterfaceAssociation, XmlParseError> {
@@ -27630,7 +27414,7 @@ pub struct InstanceNetworkInterfaceAttachment {
 struct InstanceNetworkInterfaceAttachmentDeserializer;
 impl InstanceNetworkInterfaceAttachmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceNetworkInterfaceAttachment, XmlParseError> {
@@ -27671,7 +27455,7 @@ impl InstanceNetworkInterfaceAttachmentDeserializer {
 struct InstanceNetworkInterfaceListDeserializer;
 impl InstanceNetworkInterfaceListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceNetworkInterface>, XmlParseError> {
@@ -27721,7 +27505,7 @@ pub struct InstanceNetworkInterfaceSpecification {
 struct InstanceNetworkInterfaceSpecificationDeserializer;
 impl InstanceNetworkInterfaceSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceNetworkInterfaceSpecification, XmlParseError> {
@@ -27885,7 +27669,7 @@ impl InstanceNetworkInterfaceSpecificationSerializer {
 struct InstanceNetworkInterfaceSpecificationListDeserializer;
 impl InstanceNetworkInterfaceSpecificationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceNetworkInterfaceSpecification>, XmlParseError> {
@@ -27933,7 +27717,7 @@ pub struct InstancePrivateIpAddress {
 struct InstancePrivateIpAddressDeserializer;
 impl InstancePrivateIpAddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstancePrivateIpAddress, XmlParseError> {
@@ -27971,7 +27755,7 @@ impl InstancePrivateIpAddressDeserializer {
 struct InstancePrivateIpAddressListDeserializer;
 impl InstancePrivateIpAddressListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstancePrivateIpAddress>, XmlParseError> {
@@ -27999,7 +27783,7 @@ pub struct InstanceState {
 struct InstanceStateDeserializer;
 impl InstanceStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceState, XmlParseError> {
@@ -28031,7 +27815,7 @@ pub struct InstanceStateChange {
 struct InstanceStateChangeDeserializer;
 impl InstanceStateChangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceStateChange, XmlParseError> {
@@ -28061,7 +27845,7 @@ impl InstanceStateChangeDeserializer {
 struct InstanceStateChangeListDeserializer;
 impl InstanceStateChangeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceStateChange>, XmlParseError> {
@@ -28078,10 +27862,7 @@ impl InstanceStateChangeListDeserializer {
 struct InstanceStateNameDeserializer;
 impl InstanceStateNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -28109,7 +27890,7 @@ pub struct InstanceStatus {
 struct InstanceStatusDeserializer;
 impl InstanceStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceStatus, XmlParseError> {
@@ -28165,7 +27946,7 @@ pub struct InstanceStatusDetails {
 struct InstanceStatusDetailsDeserializer;
 impl InstanceStatusDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceStatusDetails, XmlParseError> {
@@ -28190,7 +27971,7 @@ impl InstanceStatusDetailsDeserializer {
 struct InstanceStatusDetailsListDeserializer;
 impl InstanceStatusDetailsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceStatusDetails>, XmlParseError> {
@@ -28226,7 +28007,7 @@ pub struct InstanceStatusEvent {
 struct InstanceStatusEventDeserializer;
 impl InstanceStatusEventDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceStatusEvent, XmlParseError> {
@@ -28265,7 +28046,7 @@ impl InstanceStatusEventDeserializer {
 struct InstanceStatusEventListDeserializer;
 impl InstanceStatusEventListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceStatusEvent>, XmlParseError> {
@@ -28282,7 +28063,7 @@ impl InstanceStatusEventListDeserializer {
 struct InstanceStatusListDeserializer;
 impl InstanceStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InstanceStatus>, XmlParseError> {
@@ -28308,7 +28089,7 @@ pub struct InstanceStatusSummary {
 struct InstanceStatusSummaryDeserializer;
 impl InstanceStatusSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InstanceStatusSummary, XmlParseError> {
@@ -28331,10 +28112,7 @@ impl InstanceStatusSummaryDeserializer {
 struct InstanceTypeDeserializer;
 impl InstanceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -28357,10 +28135,7 @@ impl InstanceTypeListSerializer {
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -28371,10 +28146,7 @@ impl IntegerDeserializer {
 struct InterfacePermissionTypeDeserializer;
 impl InterfacePermissionTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -28398,7 +28170,7 @@ pub struct InternetGateway {
 struct InternetGatewayDeserializer;
 impl InternetGatewayDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InternetGateway, XmlParseError> {
@@ -28442,7 +28214,7 @@ pub struct InternetGatewayAttachment {
 struct InternetGatewayAttachmentDeserializer;
 impl InternetGatewayAttachmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InternetGatewayAttachment, XmlParseError> {
@@ -28468,7 +28240,7 @@ impl InternetGatewayAttachmentDeserializer {
 struct InternetGatewayAttachmentListDeserializer;
 impl InternetGatewayAttachmentListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InternetGatewayAttachment>, XmlParseError> {
@@ -28487,7 +28259,7 @@ impl InternetGatewayAttachmentListDeserializer {
 struct InternetGatewayListDeserializer;
 impl InternetGatewayListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InternetGateway>, XmlParseError> {
@@ -28523,7 +28295,7 @@ pub struct IpPermission {
 struct IpPermissionDeserializer;
 impl IpPermissionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IpPermission, XmlParseError> {
@@ -28617,7 +28389,7 @@ impl IpPermissionSerializer {
 struct IpPermissionListDeserializer;
 impl IpPermissionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<IpPermission>, XmlParseError> {
@@ -28655,7 +28427,7 @@ pub struct IpRange {
 struct IpRangeDeserializer;
 impl IpRangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IpRange, XmlParseError> {
@@ -28695,7 +28467,7 @@ impl IpRangeSerializer {
 struct IpRangeListDeserializer;
 impl IpRangeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<IpRange>, XmlParseError> {
@@ -28724,7 +28496,7 @@ impl IpRangeListSerializer {
 struct IpRangesDeserializer;
 impl IpRangesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -28741,7 +28513,7 @@ impl IpRangesDeserializer {
 struct Ipv6AddressListDeserializer;
 impl Ipv6AddressListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -28777,7 +28549,7 @@ pub struct Ipv6CidrBlock {
 struct Ipv6CidrBlockDeserializer;
 impl Ipv6CidrBlockDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Ipv6CidrBlock, XmlParseError> {
@@ -28796,7 +28568,7 @@ impl Ipv6CidrBlockDeserializer {
 struct Ipv6CidrBlockSetDeserializer;
 impl Ipv6CidrBlockSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Ipv6CidrBlock>, XmlParseError> {
@@ -28822,7 +28594,7 @@ pub struct Ipv6Range {
 struct Ipv6RangeDeserializer;
 impl Ipv6RangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Ipv6Range, XmlParseError> {
@@ -28862,7 +28634,7 @@ impl Ipv6RangeSerializer {
 struct Ipv6RangeListDeserializer;
 impl Ipv6RangeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Ipv6Range>, XmlParseError> {
@@ -28891,10 +28663,7 @@ impl Ipv6RangeListSerializer {
 struct Ipv6SupportValueDeserializer;
 impl Ipv6SupportValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -28928,7 +28697,7 @@ pub struct KeyPair {
 struct KeyPairDeserializer;
 impl KeyPairDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeyPair, XmlParseError> {
@@ -28962,7 +28731,7 @@ pub struct KeyPairInfo {
 struct KeyPairInfoDeserializer;
 impl KeyPairInfoDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeyPairInfo, XmlParseError> {
@@ -28984,7 +28753,7 @@ impl KeyPairInfoDeserializer {
 struct KeyPairListDeserializer;
 impl KeyPairListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<KeyPairInfo>, XmlParseError> {
@@ -29010,7 +28779,7 @@ pub struct LaunchPermission {
 struct LaunchPermissionDeserializer;
 impl LaunchPermissionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchPermission, XmlParseError> {
@@ -29050,7 +28819,7 @@ impl LaunchPermissionSerializer {
 struct LaunchPermissionListDeserializer;
 impl LaunchPermissionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchPermission>, XmlParseError> {
@@ -29148,7 +28917,7 @@ pub struct LaunchSpecification {
 struct LaunchSpecificationDeserializer;
 impl LaunchSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchSpecification, XmlParseError> {
@@ -29233,7 +29002,7 @@ impl LaunchSpecificationDeserializer {
 struct LaunchSpecsListDeserializer;
 impl LaunchSpecsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SpotFleetLaunchSpecification>, XmlParseError> {
@@ -29283,7 +29052,7 @@ pub struct LaunchTemplate {
 struct LaunchTemplateDeserializer;
 impl LaunchTemplateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplate, XmlParseError> {
@@ -29338,7 +29107,7 @@ pub struct LaunchTemplateAndOverridesResponse {
 struct LaunchTemplateAndOverridesResponseDeserializer;
 impl LaunchTemplateAndOverridesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateAndOverridesResponse, XmlParseError> {
@@ -29384,7 +29153,7 @@ pub struct LaunchTemplateBlockDeviceMapping {
 struct LaunchTemplateBlockDeviceMappingDeserializer;
 impl LaunchTemplateBlockDeviceMappingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateBlockDeviceMapping, XmlParseError> {
@@ -29419,7 +29188,7 @@ impl LaunchTemplateBlockDeviceMappingDeserializer {
 struct LaunchTemplateBlockDeviceMappingListDeserializer;
 impl LaunchTemplateBlockDeviceMappingListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateBlockDeviceMapping>, XmlParseError> {
@@ -29541,7 +29310,7 @@ pub struct LaunchTemplateCapacityReservationSpecificationResponse {
 struct LaunchTemplateCapacityReservationSpecificationResponseDeserializer;
 impl LaunchTemplateCapacityReservationSpecificationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateCapacityReservationSpecificationResponse, XmlParseError> {
@@ -29583,7 +29352,7 @@ pub struct LaunchTemplateConfig {
 struct LaunchTemplateConfigDeserializer;
 impl LaunchTemplateConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateConfig, XmlParseError> {
@@ -29637,7 +29406,7 @@ impl LaunchTemplateConfigSerializer {
 struct LaunchTemplateConfigListDeserializer;
 impl LaunchTemplateConfigListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateConfig>, XmlParseError> {
@@ -29677,7 +29446,7 @@ pub struct LaunchTemplateCpuOptions {
 struct LaunchTemplateCpuOptionsDeserializer;
 impl LaunchTemplateCpuOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateCpuOptions, XmlParseError> {
@@ -29750,7 +29519,7 @@ pub struct LaunchTemplateEbsBlockDevice {
 struct LaunchTemplateEbsBlockDeviceDeserializer;
 impl LaunchTemplateEbsBlockDeviceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateEbsBlockDevice, XmlParseError> {
@@ -29893,7 +29662,7 @@ pub struct LaunchTemplateElasticInferenceAcceleratorResponse {
 struct LaunchTemplateElasticInferenceAcceleratorResponseDeserializer;
 impl LaunchTemplateElasticInferenceAcceleratorResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateElasticInferenceAcceleratorResponse, XmlParseError> {
@@ -29915,7 +29684,7 @@ impl LaunchTemplateElasticInferenceAcceleratorResponseDeserializer {
 struct LaunchTemplateElasticInferenceAcceleratorResponseListDeserializer;
 impl LaunchTemplateElasticInferenceAcceleratorResponseListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateElasticInferenceAcceleratorResponse>, XmlParseError> {
@@ -29936,10 +29705,7 @@ impl LaunchTemplateElasticInferenceAcceleratorResponseListDeserializer {
 struct LaunchTemplateErrorCodeDeserializer;
 impl LaunchTemplateErrorCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -29957,7 +29723,7 @@ pub struct LaunchTemplateHibernationOptions {
 struct LaunchTemplateHibernationOptionsDeserializer;
 impl LaunchTemplateHibernationOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateHibernationOptions, XmlParseError> {
@@ -30011,7 +29777,7 @@ pub struct LaunchTemplateIamInstanceProfileSpecification {
 struct LaunchTemplateIamInstanceProfileSpecificationDeserializer;
 impl LaunchTemplateIamInstanceProfileSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateIamInstanceProfileSpecification, XmlParseError> {
@@ -30076,7 +29842,7 @@ pub struct LaunchTemplateInstanceMarketOptions {
 struct LaunchTemplateInstanceMarketOptionsDeserializer;
 impl LaunchTemplateInstanceMarketOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateInstanceMarketOptions, XmlParseError> {
@@ -30172,7 +29938,7 @@ pub struct LaunchTemplateInstanceNetworkInterfaceSpecification {
 struct LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer;
 impl LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateInstanceNetworkInterfaceSpecification, XmlParseError> {
@@ -30260,7 +30026,7 @@ impl LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer {
 struct LaunchTemplateInstanceNetworkInterfaceSpecificationListDeserializer;
 impl LaunchTemplateInstanceNetworkInterfaceSpecificationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateInstanceNetworkInterfaceSpecification>, XmlParseError> {
@@ -30412,7 +30178,7 @@ pub struct LaunchTemplateLicenseConfiguration {
 struct LaunchTemplateLicenseConfigurationDeserializer;
 impl LaunchTemplateLicenseConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateLicenseConfiguration, XmlParseError> {
@@ -30462,7 +30228,7 @@ impl LaunchTemplateLicenseConfigurationRequestSerializer {
 struct LaunchTemplateLicenseListDeserializer;
 impl LaunchTemplateLicenseListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateLicenseConfiguration>, XmlParseError> {
@@ -30497,10 +30263,7 @@ impl LaunchTemplateLicenseSpecificationListRequestSerializer {
 struct LaunchTemplateNameDeserializer;
 impl LaunchTemplateNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -30540,7 +30303,7 @@ pub struct LaunchTemplateOverrides {
 struct LaunchTemplateOverridesDeserializer;
 impl LaunchTemplateOverridesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateOverrides, XmlParseError> {
@@ -30613,7 +30376,7 @@ impl LaunchTemplateOverridesSerializer {
 struct LaunchTemplateOverridesListDeserializer;
 impl LaunchTemplateOverridesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateOverrides>, XmlParseError> {
@@ -30661,7 +30424,7 @@ pub struct LaunchTemplatePlacement {
 struct LaunchTemplatePlacementDeserializer;
 impl LaunchTemplatePlacementDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplatePlacement, XmlParseError> {
@@ -30747,7 +30510,7 @@ impl LaunchTemplatePlacementRequestSerializer {
 struct LaunchTemplateSetDeserializer;
 impl LaunchTemplateSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplate>, XmlParseError> {
@@ -30811,7 +30574,7 @@ pub struct LaunchTemplateSpotMarketOptions {
 struct LaunchTemplateSpotMarketOptionsDeserializer;
 impl LaunchTemplateSpotMarketOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateSpotMarketOptions, XmlParseError> {
@@ -30913,7 +30676,7 @@ pub struct LaunchTemplateTagSpecification {
 struct LaunchTemplateTagSpecificationDeserializer;
 impl LaunchTemplateTagSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateTagSpecification, XmlParseError> {
@@ -30943,7 +30706,7 @@ impl LaunchTemplateTagSpecificationDeserializer {
 struct LaunchTemplateTagSpecificationListDeserializer;
 impl LaunchTemplateTagSpecificationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateTagSpecification>, XmlParseError> {
@@ -31025,7 +30788,7 @@ pub struct LaunchTemplateVersion {
 struct LaunchTemplateVersionDeserializer;
 impl LaunchTemplateVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplateVersion, XmlParseError> {
@@ -31077,7 +30840,7 @@ impl LaunchTemplateVersionDeserializer {
 struct LaunchTemplateVersionSetDeserializer;
 impl LaunchTemplateVersionSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LaunchTemplateVersion>, XmlParseError> {
@@ -31103,7 +30866,7 @@ pub struct LaunchTemplatesMonitoring {
 struct LaunchTemplatesMonitoringDeserializer;
 impl LaunchTemplatesMonitoringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LaunchTemplatesMonitoring, XmlParseError> {
@@ -31154,7 +30917,7 @@ pub struct LicenseConfiguration {
 struct LicenseConfigurationDeserializer;
 impl LicenseConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LicenseConfiguration, XmlParseError> {
@@ -31200,7 +30963,7 @@ impl LicenseConfigurationRequestSerializer {
 struct LicenseListDeserializer;
 impl LicenseListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LicenseConfiguration>, XmlParseError> {
@@ -31231,10 +30994,7 @@ impl LicenseSpecificationListRequestSerializer {
 struct ListingStateDeserializer;
 impl ListingStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -31245,10 +31005,7 @@ impl ListingStateDeserializer {
 struct ListingStatusDeserializer;
 impl ListingStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -31268,7 +31025,7 @@ pub struct LoadBalancersConfig {
 struct LoadBalancersConfigDeserializer;
 impl LoadBalancersConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoadBalancersConfig, XmlParseError> {
@@ -31332,7 +31089,7 @@ pub struct LoadPermission {
 struct LoadPermissionDeserializer;
 impl LoadPermissionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoadPermission, XmlParseError> {
@@ -31353,7 +31110,7 @@ impl LoadPermissionDeserializer {
 struct LoadPermissionListDeserializer;
 impl LoadPermissionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LoadPermission>, XmlParseError> {
@@ -31444,10 +31201,7 @@ impl LoadPermissionRequestSerializer {
 struct LogDestinationTypeDeserializer;
 impl LogDestinationTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -31458,10 +31212,7 @@ impl LogDestinationTypeDeserializer {
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -31472,10 +31223,7 @@ impl LongDeserializer {
 struct MarketTypeDeserializer;
 impl MarketTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -31548,7 +31296,7 @@ pub struct ModifyCapacityReservationResult {
 struct ModifyCapacityReservationResultDeserializer;
 impl ModifyCapacityReservationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyCapacityReservationResult, XmlParseError> {
@@ -31634,7 +31382,7 @@ pub struct ModifyClientVpnEndpointResult {
 struct ModifyClientVpnEndpointResultDeserializer;
 impl ModifyClientVpnEndpointResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyClientVpnEndpointResult, XmlParseError> {
@@ -31753,7 +31501,7 @@ pub struct ModifyFleetResult {
 struct ModifyFleetResultDeserializer;
 impl ModifyFleetResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyFleetResult, XmlParseError> {
@@ -31857,7 +31605,7 @@ pub struct ModifyFpgaImageAttributeResult {
 struct ModifyFpgaImageAttributeResultDeserializer;
 impl ModifyFpgaImageAttributeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyFpgaImageAttributeResult, XmlParseError> {
@@ -31920,7 +31668,7 @@ pub struct ModifyHostsResult {
 struct ModifyHostsResultDeserializer;
 impl ModifyHostsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyHostsResult, XmlParseError> {
@@ -32260,7 +32008,7 @@ pub struct ModifyInstanceCapacityReservationAttributesResult {
 struct ModifyInstanceCapacityReservationAttributesResultDeserializer;
 impl ModifyInstanceCapacityReservationAttributesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyInstanceCapacityReservationAttributesResult, XmlParseError> {
@@ -32325,7 +32073,7 @@ pub struct ModifyInstanceCreditSpecificationResult {
 struct ModifyInstanceCreditSpecificationResultDeserializer;
 impl ModifyInstanceCreditSpecificationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyInstanceCreditSpecificationResult, XmlParseError> {
@@ -32471,7 +32219,7 @@ pub struct ModifyInstancePlacementResult {
 struct ModifyInstancePlacementResultDeserializer;
 impl ModifyInstancePlacementResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyInstancePlacementResult, XmlParseError> {
@@ -32540,7 +32288,7 @@ pub struct ModifyLaunchTemplateResult {
 struct ModifyLaunchTemplateResultDeserializer;
 impl ModifyLaunchTemplateResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyLaunchTemplateResult, XmlParseError> {
@@ -32672,7 +32420,7 @@ pub struct ModifyReservedInstancesResult {
 struct ModifyReservedInstancesResultDeserializer;
 impl ModifyReservedInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyReservedInstancesResult, XmlParseError> {
@@ -32803,7 +32551,7 @@ pub struct ModifySpotFleetRequestResponse {
 struct ModifySpotFleetRequestResponseDeserializer;
 impl ModifySpotFleetRequestResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifySpotFleetRequestResponse, XmlParseError> {
@@ -32953,7 +32701,7 @@ pub struct ModifyTransitGatewayVpcAttachmentResult {
 struct ModifyTransitGatewayVpcAttachmentResultDeserializer;
 impl ModifyTransitGatewayVpcAttachmentResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyTransitGatewayVpcAttachmentResult, XmlParseError> {
@@ -33058,7 +32806,7 @@ pub struct ModifyVolumeResult {
 struct ModifyVolumeResultDeserializer;
 impl ModifyVolumeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyVolumeResult, XmlParseError> {
@@ -33170,7 +32918,7 @@ pub struct ModifyVpcEndpointConnectionNotificationResult {
 struct ModifyVpcEndpointConnectionNotificationResultDeserializer;
 impl ModifyVpcEndpointConnectionNotificationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyVpcEndpointConnectionNotificationResult, XmlParseError> {
@@ -33295,7 +33043,7 @@ pub struct ModifyVpcEndpointResult {
 struct ModifyVpcEndpointResultDeserializer;
 impl ModifyVpcEndpointResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyVpcEndpointResult, XmlParseError> {
@@ -33374,7 +33122,7 @@ pub struct ModifyVpcEndpointServiceConfigurationResult {
 struct ModifyVpcEndpointServiceConfigurationResultDeserializer;
 impl ModifyVpcEndpointServiceConfigurationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyVpcEndpointServiceConfigurationResult, XmlParseError> {
@@ -33448,7 +33196,7 @@ pub struct ModifyVpcEndpointServicePermissionsResult {
 struct ModifyVpcEndpointServicePermissionsResultDeserializer;
 impl ModifyVpcEndpointServicePermissionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyVpcEndpointServicePermissionsResult, XmlParseError> {
@@ -33523,7 +33271,7 @@ pub struct ModifyVpcPeeringConnectionOptionsResult {
 struct ModifyVpcPeeringConnectionOptionsResultDeserializer;
 impl ModifyVpcPeeringConnectionOptionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyVpcPeeringConnectionOptionsResult, XmlParseError> {
@@ -33592,7 +33340,7 @@ pub struct ModifyVpcTenancyResult {
 struct ModifyVpcTenancyResultDeserializer;
 impl ModifyVpcTenancyResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyVpcTenancyResult, XmlParseError> {
@@ -33711,7 +33459,7 @@ pub struct MonitorInstancesResult {
 struct MonitorInstancesResultDeserializer;
 impl MonitorInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MonitorInstancesResult, XmlParseError> {
@@ -33738,7 +33486,7 @@ pub struct Monitoring {
 struct MonitoringDeserializer;
 impl MonitoringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Monitoring, XmlParseError> {
@@ -33756,10 +33504,7 @@ impl MonitoringDeserializer {
 struct MonitoringStateDeserializer;
 impl MonitoringStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -33802,7 +33547,7 @@ pub struct MoveAddressToVpcResult {
 struct MoveAddressToVpcResultDeserializer;
 impl MoveAddressToVpcResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MoveAddressToVpcResult, XmlParseError> {
@@ -33824,10 +33569,7 @@ impl MoveAddressToVpcResultDeserializer {
 struct MoveStatusDeserializer;
 impl MoveStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -33847,7 +33589,7 @@ pub struct MovingAddressStatus {
 struct MovingAddressStatusDeserializer;
 impl MovingAddressStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<MovingAddressStatus, XmlParseError> {
@@ -33869,7 +33611,7 @@ impl MovingAddressStatusDeserializer {
 struct MovingAddressStatusSetDeserializer;
 impl MovingAddressStatusSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<MovingAddressStatus>, XmlParseError> {
@@ -33913,7 +33655,7 @@ pub struct NatGateway {
 struct NatGatewayDeserializer;
 impl NatGatewayDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NatGateway, XmlParseError> {
@@ -33987,7 +33729,7 @@ pub struct NatGatewayAddress {
 struct NatGatewayAddressDeserializer;
 impl NatGatewayAddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NatGatewayAddress, XmlParseError> {
@@ -34018,7 +33760,7 @@ impl NatGatewayAddressDeserializer {
 struct NatGatewayAddressListDeserializer;
 impl NatGatewayAddressListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NatGatewayAddress>, XmlParseError> {
@@ -34035,7 +33777,7 @@ impl NatGatewayAddressListDeserializer {
 struct NatGatewayListDeserializer;
 impl NatGatewayListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NatGateway>, XmlParseError> {
@@ -34052,10 +33794,7 @@ impl NatGatewayListDeserializer {
 struct NatGatewayStateDeserializer;
 impl NatGatewayStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -34085,7 +33824,7 @@ pub struct NetworkAcl {
 struct NetworkAclDeserializer;
 impl NetworkAclDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkAcl, XmlParseError> {
@@ -34142,7 +33881,7 @@ pub struct NetworkAclAssociation {
 struct NetworkAclAssociationDeserializer;
 impl NetworkAclAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkAclAssociation, XmlParseError> {
@@ -34170,7 +33909,7 @@ impl NetworkAclAssociationDeserializer {
 struct NetworkAclAssociationListDeserializer;
 impl NetworkAclAssociationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NetworkAclAssociation>, XmlParseError> {
@@ -34210,7 +33949,7 @@ pub struct NetworkAclEntry {
 struct NetworkAclEntryDeserializer;
 impl NetworkAclEntryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkAclEntry, XmlParseError> {
@@ -34254,7 +33993,7 @@ impl NetworkAclEntryDeserializer {
 struct NetworkAclEntryListDeserializer;
 impl NetworkAclEntryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NetworkAclEntry>, XmlParseError> {
@@ -34271,7 +34010,7 @@ impl NetworkAclEntryListDeserializer {
 struct NetworkAclListDeserializer;
 impl NetworkAclListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NetworkAcl>, XmlParseError> {
@@ -34333,7 +34072,7 @@ pub struct NetworkInterface {
 struct NetworkInterfaceDeserializer;
 impl NetworkInterfaceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkInterface, XmlParseError> {
@@ -34456,7 +34195,7 @@ pub struct NetworkInterfaceAssociation {
 struct NetworkInterfaceAssociationDeserializer;
 impl NetworkInterfaceAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkInterfaceAssociation, XmlParseError> {
@@ -34513,7 +34252,7 @@ pub struct NetworkInterfaceAttachment {
 struct NetworkInterfaceAttachmentDeserializer;
 impl NetworkInterfaceAttachmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkInterfaceAttachment, XmlParseError> {
@@ -34610,7 +34349,7 @@ pub struct NetworkInterfaceIpv6Address {
 struct NetworkInterfaceIpv6AddressDeserializer;
 impl NetworkInterfaceIpv6AddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkInterfaceIpv6Address, XmlParseError> {
@@ -34633,7 +34372,7 @@ impl NetworkInterfaceIpv6AddressDeserializer {
 struct NetworkInterfaceIpv6AddressesListDeserializer;
 impl NetworkInterfaceIpv6AddressesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NetworkInterfaceIpv6Address>, XmlParseError> {
@@ -34652,7 +34391,7 @@ impl NetworkInterfaceIpv6AddressesListDeserializer {
 struct NetworkInterfaceListDeserializer;
 impl NetworkInterfaceListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NetworkInterface>, XmlParseError> {
@@ -34686,7 +34425,7 @@ pub struct NetworkInterfacePermission {
 struct NetworkInterfacePermissionDeserializer;
 impl NetworkInterfacePermissionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkInterfacePermission, XmlParseError> {
@@ -34749,7 +34488,7 @@ impl NetworkInterfacePermissionIdListSerializer {
 struct NetworkInterfacePermissionListDeserializer;
 impl NetworkInterfacePermissionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NetworkInterfacePermission>, XmlParseError> {
@@ -34777,7 +34516,7 @@ pub struct NetworkInterfacePermissionState {
 struct NetworkInterfacePermissionStateDeserializer;
 impl NetworkInterfacePermissionStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkInterfacePermissionState, XmlParseError> {
@@ -34807,10 +34546,7 @@ impl NetworkInterfacePermissionStateDeserializer {
 struct NetworkInterfacePermissionStateCodeDeserializer;
 impl NetworkInterfacePermissionStateCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -34834,7 +34570,7 @@ pub struct NetworkInterfacePrivateIpAddress {
 struct NetworkInterfacePrivateIpAddressDeserializer;
 impl NetworkInterfacePrivateIpAddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NetworkInterfacePrivateIpAddress, XmlParseError> {
@@ -34871,7 +34607,7 @@ impl NetworkInterfacePrivateIpAddressDeserializer {
 struct NetworkInterfacePrivateIpAddressListDeserializer;
 impl NetworkInterfacePrivateIpAddressListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NetworkInterfacePrivateIpAddress>, XmlParseError> {
@@ -34890,10 +34626,7 @@ impl NetworkInterfacePrivateIpAddressListDeserializer {
 struct NetworkInterfaceStatusDeserializer;
 impl NetworkInterfaceStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -34904,10 +34637,7 @@ impl NetworkInterfaceStatusDeserializer {
 struct NetworkInterfaceTypeDeserializer;
 impl NetworkInterfaceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -34957,10 +34687,7 @@ impl NewDhcpConfigurationListSerializer {
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -34983,7 +34710,7 @@ impl OccurrenceDayRequestSetSerializer {
 struct OccurrenceDaySetDeserializer;
 impl OccurrenceDaySetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<i64>, XmlParseError> {
@@ -35000,10 +34727,7 @@ impl OccurrenceDaySetDeserializer {
 struct OfferingClassTypeDeserializer;
 impl OfferingClassTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35014,10 +34738,7 @@ impl OfferingClassTypeDeserializer {
 struct OfferingTypeValuesDeserializer;
 impl OfferingTypeValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35028,10 +34749,7 @@ impl OfferingTypeValuesDeserializer {
 struct OnDemandAllocationStrategyDeserializer;
 impl OnDemandAllocationStrategyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35055,7 +34773,7 @@ pub struct OnDemandOptions {
 struct OnDemandOptionsDeserializer;
 impl OnDemandOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OnDemandOptions, XmlParseError> {
@@ -35146,10 +34864,7 @@ impl OwnerStringListSerializer {
 struct PaymentOptionDeserializer;
 impl PaymentOptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35173,10 +34888,7 @@ pub struct PciId {
 struct PciIdDeserializer;
 impl PciIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<PciId, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<PciId, XmlParseError> {
         deserialize_elements::<_, PciId, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "DeviceId" => {
@@ -35212,7 +34924,7 @@ pub struct PeeringConnectionOptions {
 struct PeeringConnectionOptionsDeserializer;
 impl PeeringConnectionOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PeeringConnectionOptions, XmlParseError> {
@@ -35293,10 +35005,7 @@ impl PeeringConnectionOptionsRequestSerializer {
 struct PermissionGroupDeserializer;
 impl PermissionGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35326,7 +35035,7 @@ pub struct Placement {
 struct PlacementDeserializer;
 impl PlacementDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Placement, XmlParseError> {
@@ -35412,7 +35121,7 @@ pub struct PlacementGroup {
 struct PlacementGroupDeserializer;
 impl PlacementGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PlacementGroup, XmlParseError> {
@@ -35444,7 +35153,7 @@ impl PlacementGroupDeserializer {
 struct PlacementGroupListDeserializer;
 impl PlacementGroupListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PlacementGroup>, XmlParseError> {
@@ -35461,10 +35170,7 @@ impl PlacementGroupListDeserializer {
 struct PlacementGroupStateDeserializer;
 impl PlacementGroupStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35494,7 +35200,7 @@ pub struct PlacementResponse {
 struct PlacementResponseDeserializer;
 impl PlacementResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PlacementResponse, XmlParseError> {
@@ -35512,10 +35218,7 @@ impl PlacementResponseDeserializer {
 struct PlacementStrategyDeserializer;
 impl PlacementStrategyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35526,10 +35229,7 @@ impl PlacementStrategyDeserializer {
 struct PlatformValuesDeserializer;
 impl PlatformValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35549,7 +35249,7 @@ pub struct PortRange {
 struct PortRangeDeserializer;
 impl PortRangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PortRange, XmlParseError> {
@@ -35600,7 +35300,7 @@ pub struct PrefixList {
 struct PrefixListDeserializer;
 impl PrefixListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PrefixList, XmlParseError> {
@@ -35637,7 +35337,7 @@ pub struct PrefixListId {
 struct PrefixListIdDeserializer;
 impl PrefixListIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PrefixListId, XmlParseError> {
@@ -35678,7 +35378,7 @@ impl PrefixListIdSerializer {
 struct PrefixListIdListDeserializer;
 impl PrefixListIdListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PrefixListId>, XmlParseError> {
@@ -35707,7 +35407,7 @@ impl PrefixListIdListSerializer {
 struct PrefixListIdSetDeserializer;
 impl PrefixListIdSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -35724,7 +35424,7 @@ impl PrefixListIdSetDeserializer {
 struct PrefixListSetDeserializer;
 impl PrefixListSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PrefixList>, XmlParseError> {
@@ -35754,7 +35454,7 @@ pub struct PriceSchedule {
 struct PriceScheduleDeserializer;
 impl PriceScheduleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PriceSchedule, XmlParseError> {
@@ -35784,7 +35484,7 @@ impl PriceScheduleDeserializer {
 struct PriceScheduleListDeserializer;
 impl PriceScheduleListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PriceSchedule>, XmlParseError> {
@@ -35853,7 +35553,7 @@ pub struct PricingDetail {
 struct PricingDetailDeserializer;
 impl PricingDetailDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PricingDetail, XmlParseError> {
@@ -35874,7 +35574,7 @@ impl PricingDetailDeserializer {
 struct PricingDetailsListDeserializer;
 impl PricingDetailsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PricingDetail>, XmlParseError> {
@@ -35900,7 +35600,7 @@ pub struct PrincipalIdFormat {
 struct PrincipalIdFormatDeserializer;
 impl PrincipalIdFormatDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PrincipalIdFormat, XmlParseError> {
@@ -35923,7 +35623,7 @@ impl PrincipalIdFormatDeserializer {
 struct PrincipalIdFormatListDeserializer;
 impl PrincipalIdFormatListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PrincipalIdFormat>, XmlParseError> {
@@ -35940,10 +35640,7 @@ impl PrincipalIdFormatListDeserializer {
 struct PrincipalTypeDeserializer;
 impl PrincipalTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -35979,7 +35676,7 @@ pub struct PrivateIpAddressSpecification {
 struct PrivateIpAddressSpecificationDeserializer;
 impl PrivateIpAddressSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PrivateIpAddressSpecification, XmlParseError> {
@@ -36024,7 +35721,7 @@ impl PrivateIpAddressSpecificationSerializer {
 struct PrivateIpAddressSpecificationListDeserializer;
 impl PrivateIpAddressSpecificationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PrivateIpAddressSpecification>, XmlParseError> {
@@ -36075,7 +35772,7 @@ pub struct ProductCode {
 struct ProductCodeDeserializer;
 impl ProductCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProductCode, XmlParseError> {
@@ -36098,7 +35795,7 @@ impl ProductCodeDeserializer {
 struct ProductCodeListDeserializer;
 impl ProductCodeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ProductCode>, XmlParseError> {
@@ -36127,10 +35824,7 @@ impl ProductCodeStringListSerializer {
 struct ProductCodeValuesDeserializer;
 impl ProductCodeValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -36160,7 +35854,7 @@ pub struct PropagatingVgw {
 struct PropagatingVgwDeserializer;
 impl PropagatingVgwDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PropagatingVgw, XmlParseError> {
@@ -36178,7 +35872,7 @@ impl PropagatingVgwDeserializer {
 struct PropagatingVgwListDeserializer;
 impl PropagatingVgwListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PropagatingVgw>, XmlParseError> {
@@ -36239,7 +35933,7 @@ pub struct ProvisionByoipCidrResult {
 struct ProvisionByoipCidrResultDeserializer;
 impl ProvisionByoipCidrResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProvisionByoipCidrResult, XmlParseError> {
@@ -36277,7 +35971,7 @@ pub struct ProvisionedBandwidth {
 struct ProvisionedBandwidthDeserializer;
 impl ProvisionedBandwidthDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ProvisionedBandwidth, XmlParseError> {
@@ -36336,7 +36030,7 @@ pub struct PublicIpv4Pool {
 struct PublicIpv4PoolDeserializer;
 impl PublicIpv4PoolDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublicIpv4Pool, XmlParseError> {
@@ -36390,7 +36084,7 @@ pub struct PublicIpv4PoolRange {
 struct PublicIpv4PoolRangeDeserializer;
 impl PublicIpv4PoolRangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PublicIpv4PoolRange, XmlParseError> {
@@ -36422,7 +36116,7 @@ impl PublicIpv4PoolRangeDeserializer {
 struct PublicIpv4PoolRangeSetDeserializer;
 impl PublicIpv4PoolRangeSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PublicIpv4PoolRange>, XmlParseError> {
@@ -36439,7 +36133,7 @@ impl PublicIpv4PoolRangeSetDeserializer {
 struct PublicIpv4PoolSetDeserializer;
 impl PublicIpv4PoolSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PublicIpv4Pool>, XmlParseError> {
@@ -36477,7 +36171,7 @@ pub struct Purchase {
 struct PurchaseDeserializer;
 impl PurchaseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Purchase, XmlParseError> {
@@ -36582,7 +36276,7 @@ pub struct PurchaseHostReservationResult {
 struct PurchaseHostReservationResultDeserializer;
 impl PurchaseHostReservationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PurchaseHostReservationResult, XmlParseError> {
@@ -36714,7 +36408,7 @@ pub struct PurchaseReservedInstancesOfferingResult {
 struct PurchaseReservedInstancesOfferingResultDeserializer;
 impl PurchaseReservedInstancesOfferingResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PurchaseReservedInstancesOfferingResult, XmlParseError> {
@@ -36780,7 +36474,7 @@ pub struct PurchaseScheduledInstancesResult {
 struct PurchaseScheduledInstancesResultDeserializer;
 impl PurchaseScheduledInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PurchaseScheduledInstancesResult, XmlParseError> {
@@ -36807,7 +36501,7 @@ impl PurchaseScheduledInstancesResultDeserializer {
 struct PurchaseSetDeserializer;
 impl PurchaseSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Purchase>, XmlParseError> {
@@ -36824,7 +36518,7 @@ impl PurchaseSetDeserializer {
 struct PurchasedScheduledInstanceSetDeserializer;
 impl PurchasedScheduledInstanceSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ScheduledInstance>, XmlParseError> {
@@ -36841,10 +36535,7 @@ impl PurchasedScheduledInstanceSetDeserializer {
 struct RIProductDescriptionDeserializer;
 impl RIProductDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -36904,7 +36595,7 @@ pub struct RecurringCharge {
 struct RecurringChargeDeserializer;
 impl RecurringChargeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecurringCharge, XmlParseError> {
@@ -36928,10 +36619,7 @@ impl RecurringChargeDeserializer {
 struct RecurringChargeFrequencyDeserializer;
 impl RecurringChargeFrequencyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -36942,7 +36630,7 @@ impl RecurringChargeFrequencyDeserializer {
 struct RecurringChargesListDeserializer;
 impl RecurringChargesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RecurringCharge>, XmlParseError> {
@@ -36968,10 +36656,7 @@ pub struct Region {
 struct RegionDeserializer;
 impl RegionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Region, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Region, XmlParseError> {
         deserialize_elements::<_, Region, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "regionEndpoint" => {
@@ -36989,7 +36674,7 @@ impl RegionDeserializer {
 struct RegionListDeserializer;
 impl RegionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Region>, XmlParseError> {
@@ -37113,7 +36798,7 @@ pub struct RegisterImageResult {
 struct RegisterImageResultDeserializer;
 impl RegisterImageResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RegisterImageResult, XmlParseError> {
@@ -37164,7 +36849,7 @@ pub struct RejectTransitGatewayVpcAttachmentResult {
 struct RejectTransitGatewayVpcAttachmentResultDeserializer;
 impl RejectTransitGatewayVpcAttachmentResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RejectTransitGatewayVpcAttachmentResult, XmlParseError> {
@@ -37227,7 +36912,7 @@ pub struct RejectVpcEndpointConnectionsResult {
 struct RejectVpcEndpointConnectionsResultDeserializer;
 impl RejectVpcEndpointConnectionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RejectVpcEndpointConnectionsResult, XmlParseError> {
@@ -37284,7 +36969,7 @@ pub struct RejectVpcPeeringConnectionResult {
 struct RejectVpcPeeringConnectionResultDeserializer;
 impl RejectVpcPeeringConnectionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RejectVpcPeeringConnectionResult, XmlParseError> {
@@ -37368,7 +37053,7 @@ pub struct ReleaseHostsResult {
 struct ReleaseHostsResultDeserializer;
 impl ReleaseHostsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReleaseHostsResult, XmlParseError> {
@@ -37432,7 +37117,7 @@ pub struct ReplaceIamInstanceProfileAssociationResult {
 struct ReplaceIamInstanceProfileAssociationResultDeserializer;
 impl ReplaceIamInstanceProfileAssociationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplaceIamInstanceProfileAssociationResult, XmlParseError> {
@@ -37497,7 +37182,7 @@ pub struct ReplaceNetworkAclAssociationResult {
 struct ReplaceNetworkAclAssociationResultDeserializer;
 impl ReplaceNetworkAclAssociationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplaceNetworkAclAssociationResult, XmlParseError> {
@@ -37710,7 +37395,7 @@ pub struct ReplaceRouteTableAssociationResult {
 struct ReplaceRouteTableAssociationResultDeserializer;
 impl ReplaceRouteTableAssociationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplaceRouteTableAssociationResult, XmlParseError> {
@@ -37785,7 +37470,7 @@ pub struct ReplaceTransitGatewayRouteResult {
 struct ReplaceTransitGatewayRouteResultDeserializer;
 impl ReplaceTransitGatewayRouteResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplaceTransitGatewayRouteResult, XmlParseError> {
@@ -38133,7 +37818,7 @@ pub struct RequestSpotFleetResponse {
 struct RequestSpotFleetResponseDeserializer;
 impl RequestSpotFleetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RequestSpotFleetResponse, XmlParseError> {
@@ -38255,7 +37940,7 @@ pub struct RequestSpotInstancesResult {
 struct RequestSpotInstancesResultDeserializer;
 impl RequestSpotInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RequestSpotInstancesResult, XmlParseError> {
@@ -38422,7 +38107,7 @@ pub struct Reservation {
 struct ReservationDeserializer;
 impl ReservationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Reservation, XmlParseError> {
@@ -38457,7 +38142,7 @@ impl ReservationDeserializer {
 struct ReservationListDeserializer;
 impl ReservationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Reservation>, XmlParseError> {
@@ -38474,10 +38159,7 @@ impl ReservationListDeserializer {
 struct ReservationStateDeserializer;
 impl ReservationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -38499,7 +38181,7 @@ pub struct ReservationValue {
 struct ReservationValueDeserializer;
 impl ReservationValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservationValue, XmlParseError> {
@@ -38577,7 +38259,7 @@ pub struct ReservedInstanceReservationValue {
 struct ReservedInstanceReservationValueDeserializer;
 impl ReservedInstanceReservationValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedInstanceReservationValue, XmlParseError> {
@@ -38608,7 +38290,7 @@ impl ReservedInstanceReservationValueDeserializer {
 struct ReservedInstanceReservationValueSetDeserializer;
 impl ReservedInstanceReservationValueSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedInstanceReservationValue>, XmlParseError> {
@@ -38627,10 +38309,7 @@ impl ReservedInstanceReservationValueSetDeserializer {
 struct ReservedInstanceStateDeserializer;
 impl ReservedInstanceStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -38682,7 +38361,7 @@ pub struct ReservedInstances {
 struct ReservedInstancesDeserializer;
 impl ReservedInstancesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedInstances, XmlParseError> {
@@ -38793,7 +38472,7 @@ pub struct ReservedInstancesConfiguration {
 struct ReservedInstancesConfigurationDeserializer;
 impl ReservedInstancesConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedInstancesConfiguration, XmlParseError> {
@@ -38878,7 +38557,7 @@ pub struct ReservedInstancesId {
 struct ReservedInstancesIdDeserializer;
 impl ReservedInstancesIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedInstancesId, XmlParseError> {
@@ -38911,7 +38590,7 @@ impl ReservedInstancesIdStringListSerializer {
 struct ReservedInstancesListDeserializer;
 impl ReservedInstancesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedInstances>, XmlParseError> {
@@ -38953,7 +38632,7 @@ pub struct ReservedInstancesListing {
 struct ReservedInstancesListingDeserializer;
 impl ReservedInstancesListingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedInstancesListing, XmlParseError> {
@@ -39018,7 +38697,7 @@ impl ReservedInstancesListingDeserializer {
 struct ReservedInstancesListingListDeserializer;
 impl ReservedInstancesListingListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedInstancesListing>, XmlParseError> {
@@ -39060,7 +38739,7 @@ pub struct ReservedInstancesModification {
 struct ReservedInstancesModificationDeserializer;
 impl ReservedInstancesModificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedInstancesModification, XmlParseError> {
@@ -39137,7 +38816,7 @@ impl ReservedInstancesModificationIdStringListSerializer {
 struct ReservedInstancesModificationListDeserializer;
 impl ReservedInstancesModificationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedInstancesModification>, XmlParseError> {
@@ -39165,7 +38844,7 @@ pub struct ReservedInstancesModificationResult {
 struct ReservedInstancesModificationResultDeserializer;
 impl ReservedInstancesModificationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedInstancesModificationResult, XmlParseError> {
@@ -39197,7 +38876,7 @@ impl ReservedInstancesModificationResultDeserializer {
 struct ReservedInstancesModificationResultListDeserializer;
 impl ReservedInstancesModificationResultListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedInstancesModificationResult>, XmlParseError> {
@@ -39251,7 +38930,7 @@ pub struct ReservedInstancesOffering {
 struct ReservedInstancesOfferingDeserializer;
 impl ReservedInstancesOfferingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedInstancesOffering, XmlParseError> {
@@ -39361,7 +39040,7 @@ impl ReservedInstancesOfferingIdStringListSerializer {
 struct ReservedInstancesOfferingListDeserializer;
 impl ReservedInstancesOfferingListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedInstancesOffering>, XmlParseError> {
@@ -39380,7 +39059,7 @@ impl ReservedInstancesOfferingListDeserializer {
 struct ReservedIntancesIdsDeserializer;
 impl ReservedIntancesIdsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedInstancesId>, XmlParseError> {
@@ -39481,7 +39160,7 @@ pub struct ResetFpgaImageAttributeResult {
 struct ResetFpgaImageAttributeResultDeserializer;
 impl ResetFpgaImageAttributeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResetFpgaImageAttributeResult, XmlParseError> {
@@ -39641,10 +39320,7 @@ impl ResourceListSerializer {
 struct ResourceTypeDeserializer;
 impl ResourceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -39664,7 +39340,7 @@ pub struct ResponseError {
 struct ResponseErrorDeserializer;
 impl ResponseErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResponseError, XmlParseError> {
@@ -39687,7 +39363,7 @@ impl ResponseErrorDeserializer {
 struct ResponseHostIdListDeserializer;
 impl ResponseHostIdListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -39704,7 +39380,7 @@ impl ResponseHostIdListDeserializer {
 struct ResponseHostIdSetDeserializer;
 impl ResponseHostIdSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -39778,7 +39454,7 @@ pub struct ResponseLaunchTemplateData {
 struct ResponseLaunchTemplateDataDeserializer;
 impl ResponseLaunchTemplateDataDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResponseLaunchTemplateData, XmlParseError> {
@@ -39983,7 +39659,7 @@ pub struct RestoreAddressToClassicResult {
 struct RestoreAddressToClassicResultDeserializer;
 impl RestoreAddressToClassicResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RestoreAddressToClassicResult, XmlParseError> {
@@ -40057,7 +39733,7 @@ pub struct RevokeClientVpnIngressResult {
 struct RevokeClientVpnIngressResultDeserializer;
 impl RevokeClientVpnIngressResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RevokeClientVpnIngressResult, XmlParseError> {
@@ -40258,10 +39934,7 @@ pub struct Route {
 struct RouteDeserializer;
 impl RouteDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Route, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Route, XmlParseError> {
         deserialize_elements::<_, Route, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "destinationCidrBlock" => {
@@ -40333,7 +40006,7 @@ impl RouteDeserializer {
 struct RouteListDeserializer;
 impl RouteListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Route>, XmlParseError> {
@@ -40350,10 +40023,7 @@ impl RouteListDeserializer {
 struct RouteOriginDeserializer;
 impl RouteOriginDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -40364,10 +40034,7 @@ impl RouteOriginDeserializer {
 struct RouteStateDeserializer;
 impl RouteStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -40397,7 +40064,7 @@ pub struct RouteTable {
 struct RouteTableDeserializer;
 impl RouteTableDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RouteTable, XmlParseError> {
@@ -40458,7 +40125,7 @@ pub struct RouteTableAssociation {
 struct RouteTableAssociationDeserializer;
 impl RouteTableAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RouteTableAssociation, XmlParseError> {
@@ -40489,7 +40156,7 @@ impl RouteTableAssociationDeserializer {
 struct RouteTableAssociationListDeserializer;
 impl RouteTableAssociationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RouteTableAssociation>, XmlParseError> {
@@ -40508,7 +40175,7 @@ impl RouteTableAssociationListDeserializer {
 struct RouteTableListDeserializer;
 impl RouteTableListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RouteTable>, XmlParseError> {
@@ -40525,10 +40192,7 @@ impl RouteTableListDeserializer {
 struct RuleActionDeserializer;
 impl RuleActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -40546,7 +40210,7 @@ pub struct RunInstancesMonitoringEnabled {
 struct RunInstancesMonitoringEnabledDeserializer;
 impl RunInstancesMonitoringEnabledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RunInstancesMonitoringEnabled, XmlParseError> {
@@ -40899,7 +40563,7 @@ pub struct RunScheduledInstancesResult {
 struct RunScheduledInstancesResultDeserializer;
 impl RunScheduledInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RunScheduledInstancesResult, XmlParseError> {
@@ -40938,7 +40602,7 @@ pub struct S3Storage {
 struct S3StorageDeserializer;
 impl S3StorageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Storage, XmlParseError> {
@@ -41041,7 +40705,7 @@ pub struct ScheduledInstance {
 struct ScheduledInstanceDeserializer;
 impl ScheduledInstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScheduledInstance, XmlParseError> {
@@ -41156,7 +40820,7 @@ pub struct ScheduledInstanceAvailability {
 struct ScheduledInstanceAvailabilityDeserializer;
 impl ScheduledInstanceAvailabilityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScheduledInstanceAvailability, XmlParseError> {
@@ -41240,7 +40904,7 @@ impl ScheduledInstanceAvailabilityDeserializer {
 struct ScheduledInstanceAvailabilitySetDeserializer;
 impl ScheduledInstanceAvailabilitySetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ScheduledInstanceAvailability>, XmlParseError> {
@@ -41286,7 +40950,7 @@ pub struct ScheduledInstanceRecurrence {
 struct ScheduledInstanceRecurrenceDeserializer;
 impl ScheduledInstanceRecurrenceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ScheduledInstanceRecurrence, XmlParseError> {
@@ -41375,7 +41039,7 @@ impl ScheduledInstanceRecurrenceRequestSerializer {
 struct ScheduledInstanceSetDeserializer;
 impl ScheduledInstanceSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ScheduledInstance>, XmlParseError> {
@@ -41859,10 +41523,7 @@ impl ScheduledInstancesSecurityGroupIdSetSerializer {
 struct ScopeDeserializer;
 impl ScopeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -41916,7 +41577,7 @@ pub struct SearchTransitGatewayRoutesResult {
 struct SearchTransitGatewayRoutesResultDeserializer;
 impl SearchTransitGatewayRoutesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SearchTransitGatewayRoutesResult, XmlParseError> {
@@ -41967,7 +41628,7 @@ pub struct SecurityGroup {
 struct SecurityGroupDeserializer;
 impl SecurityGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SecurityGroup, XmlParseError> {
@@ -42013,7 +41674,7 @@ impl SecurityGroupDeserializer {
 struct SecurityGroupIdStringListDeserializer;
 impl SecurityGroupIdStringListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -42051,7 +41712,7 @@ pub struct SecurityGroupIdentifier {
 struct SecurityGroupIdentifierDeserializer;
 impl SecurityGroupIdentifierDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SecurityGroupIdentifier, XmlParseError> {
@@ -42076,7 +41737,7 @@ impl SecurityGroupIdentifierDeserializer {
 struct SecurityGroupListDeserializer;
 impl SecurityGroupListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SecurityGroup>, XmlParseError> {
@@ -42104,7 +41765,7 @@ pub struct SecurityGroupReference {
 struct SecurityGroupReferenceDeserializer;
 impl SecurityGroupReferenceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SecurityGroupReference, XmlParseError> {
@@ -42132,7 +41793,7 @@ impl SecurityGroupReferenceDeserializer {
 struct SecurityGroupReferencesDeserializer;
 impl SecurityGroupReferencesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SecurityGroupReference>, XmlParseError> {
@@ -42190,7 +41851,7 @@ pub struct ServiceConfiguration {
 struct ServiceConfigurationDeserializer;
 impl ServiceConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceConfiguration, XmlParseError> {
@@ -42261,7 +41922,7 @@ impl ServiceConfigurationDeserializer {
 struct ServiceConfigurationSetDeserializer;
 impl ServiceConfigurationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServiceConfiguration>, XmlParseError> {
@@ -42307,7 +41968,7 @@ pub struct ServiceDetail {
 struct ServiceDetailDeserializer;
 impl ServiceDetailDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceDetail, XmlParseError> {
@@ -42373,7 +42034,7 @@ impl ServiceDetailDeserializer {
 struct ServiceDetailSetDeserializer;
 impl ServiceDetailSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServiceDetail>, XmlParseError> {
@@ -42390,10 +42051,7 @@ impl ServiceDetailSetDeserializer {
 struct ServiceStateDeserializer;
 impl ServiceStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -42404,10 +42062,7 @@ impl ServiceStateDeserializer {
 struct ServiceTypeDeserializer;
 impl ServiceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -42425,7 +42080,7 @@ pub struct ServiceTypeDetail {
 struct ServiceTypeDetailDeserializer;
 impl ServiceTypeDetailDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ServiceTypeDetail, XmlParseError> {
@@ -42444,7 +42099,7 @@ impl ServiceTypeDetailDeserializer {
 struct ServiceTypeDetailSetDeserializer;
 impl ServiceTypeDetailSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ServiceTypeDetail>, XmlParseError> {
@@ -42461,10 +42116,7 @@ impl ServiceTypeDetailSetDeserializer {
 struct ShutdownBehaviorDeserializer;
 impl ShutdownBehaviorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -42558,7 +42210,7 @@ pub struct Snapshot {
 struct SnapshotDeserializer;
 impl SnapshotDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Snapshot, XmlParseError> {
@@ -42646,7 +42298,7 @@ pub struct SnapshotDetail {
 struct SnapshotDetailDeserializer;
 impl SnapshotDetailDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SnapshotDetail, XmlParseError> {
@@ -42696,7 +42348,7 @@ impl SnapshotDetailDeserializer {
 struct SnapshotDetailListDeserializer;
 impl SnapshotDetailListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SnapshotDetail>, XmlParseError> {
@@ -42765,7 +42417,7 @@ impl SnapshotIdStringListSerializer {
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Snapshot>, XmlParseError> {
@@ -42782,10 +42434,7 @@ impl SnapshotListDeserializer {
 struct SnapshotStateDeserializer;
 impl SnapshotStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -42823,7 +42472,7 @@ pub struct SnapshotTaskDetail {
 struct SnapshotTaskDetailDeserializer;
 impl SnapshotTaskDetailDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SnapshotTaskDetail, XmlParseError> {
@@ -42876,10 +42525,7 @@ impl SnapshotTaskDetailDeserializer {
 struct SpotAllocationStrategyDeserializer;
 impl SpotAllocationStrategyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -42905,7 +42551,7 @@ pub struct SpotDatafeedSubscription {
 struct SpotDatafeedSubscriptionDeserializer;
 impl SpotDatafeedSubscriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotDatafeedSubscription, XmlParseError> {
@@ -42984,7 +42630,7 @@ pub struct SpotFleetLaunchSpecification {
 struct SpotFleetLaunchSpecificationDeserializer;
 impl SpotFleetLaunchSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotFleetLaunchSpecification, XmlParseError> {
@@ -43190,7 +42836,7 @@ pub struct SpotFleetMonitoring {
 struct SpotFleetMonitoringDeserializer;
 impl SpotFleetMonitoringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotFleetMonitoring, XmlParseError> {
@@ -43239,7 +42885,7 @@ pub struct SpotFleetRequestConfig {
 struct SpotFleetRequestConfigDeserializer;
 impl SpotFleetRequestConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotFleetRequestConfig, XmlParseError> {
@@ -43327,7 +42973,7 @@ pub struct SpotFleetRequestConfigData {
 struct SpotFleetRequestConfigDataDeserializer;
 impl SpotFleetRequestConfigDataDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotFleetRequestConfigData, XmlParseError> {
@@ -43569,7 +43215,7 @@ impl SpotFleetRequestConfigDataSerializer {
 struct SpotFleetRequestConfigSetDeserializer;
 impl SpotFleetRequestConfigSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SpotFleetRequestConfig>, XmlParseError> {
@@ -43597,7 +43243,7 @@ pub struct SpotFleetTagSpecification {
 struct SpotFleetTagSpecificationDeserializer;
 impl SpotFleetTagSpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotFleetTagSpecification, XmlParseError> {
@@ -43646,7 +43292,7 @@ impl SpotFleetTagSpecificationSerializer {
 struct SpotFleetTagSpecificationListDeserializer;
 impl SpotFleetTagSpecificationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SpotFleetTagSpecification>, XmlParseError> {
@@ -43677,10 +43323,7 @@ impl SpotFleetTagSpecificationListSerializer {
 struct SpotInstanceInterruptionBehaviorDeserializer;
 impl SpotInstanceInterruptionBehaviorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -43734,7 +43377,7 @@ pub struct SpotInstanceRequest {
 struct SpotInstanceRequestDeserializer;
 impl SpotInstanceRequestDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotInstanceRequest, XmlParseError> {
@@ -43849,7 +43492,7 @@ impl SpotInstanceRequestIdListSerializer {
 struct SpotInstanceRequestListDeserializer;
 impl SpotInstanceRequestListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SpotInstanceRequest>, XmlParseError> {
@@ -43866,10 +43509,7 @@ impl SpotInstanceRequestListDeserializer {
 struct SpotInstanceStateDeserializer;
 impl SpotInstanceStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -43889,7 +43529,7 @@ pub struct SpotInstanceStateFault {
 struct SpotInstanceStateFaultDeserializer;
 impl SpotInstanceStateFaultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotInstanceStateFault, XmlParseError> {
@@ -43921,7 +43561,7 @@ pub struct SpotInstanceStatus {
 struct SpotInstanceStatusDeserializer;
 impl SpotInstanceStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotInstanceStatus, XmlParseError> {
@@ -43945,10 +43585,7 @@ impl SpotInstanceStatusDeserializer {
 struct SpotInstanceTypeDeserializer;
 impl SpotInstanceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -44024,7 +43661,7 @@ pub struct SpotOptions {
 struct SpotOptionsDeserializer;
 impl SpotOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotOptions, XmlParseError> {
@@ -44144,7 +43781,7 @@ pub struct SpotPlacement {
 struct SpotPlacementDeserializer;
 impl SpotPlacementDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotPlacement, XmlParseError> {
@@ -44206,7 +43843,7 @@ pub struct SpotPrice {
 struct SpotPriceDeserializer;
 impl SpotPriceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SpotPrice, XmlParseError> {
@@ -44243,7 +43880,7 @@ impl SpotPriceDeserializer {
 struct SpotPriceHistoryListDeserializer;
 impl SpotPriceHistoryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SpotPrice>, XmlParseError> {
@@ -44277,7 +43914,7 @@ pub struct StaleIpPermission {
 struct StaleIpPermissionDeserializer;
 impl StaleIpPermissionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StaleIpPermission, XmlParseError> {
@@ -44316,7 +43953,7 @@ impl StaleIpPermissionDeserializer {
 struct StaleIpPermissionSetDeserializer;
 impl StaleIpPermissionSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StaleIpPermission>, XmlParseError> {
@@ -44350,7 +43987,7 @@ pub struct StaleSecurityGroup {
 struct StaleSecurityGroupDeserializer;
 impl StaleSecurityGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StaleSecurityGroup, XmlParseError> {
@@ -44390,7 +44027,7 @@ impl StaleSecurityGroupDeserializer {
 struct StaleSecurityGroupSetDeserializer;
 impl StaleSecurityGroupSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StaleSecurityGroup>, XmlParseError> {
@@ -44446,7 +44083,7 @@ pub struct StartInstancesResult {
 struct StartInstancesResultDeserializer;
 impl StartInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StartInstancesResult, XmlParseError> {
@@ -44466,10 +44103,7 @@ impl StartInstancesResultDeserializer {
 struct StateDeserializer;
 impl StateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -44489,7 +44123,7 @@ pub struct StateReason {
 struct StateReasonDeserializer;
 impl StateReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StateReason, XmlParseError> {
@@ -44510,10 +44144,7 @@ impl StateReasonDeserializer {
 struct StatusDeserializer;
 impl StatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -44524,10 +44155,7 @@ impl StatusDeserializer {
 struct StatusNameDeserializer;
 impl StatusNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -44538,10 +44166,7 @@ impl StatusNameDeserializer {
 struct StatusTypeDeserializer;
 impl StatusTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -44596,7 +44221,7 @@ pub struct StopInstancesResult {
 struct StopInstancesResultDeserializer;
 impl StopInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopInstancesResult, XmlParseError> {
@@ -44623,7 +44248,7 @@ pub struct Storage {
 struct StorageDeserializer;
 impl StorageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Storage, XmlParseError> {
@@ -44684,10 +44309,7 @@ impl StorageLocationSerializer {
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -44731,10 +44353,7 @@ pub struct Subnet {
 struct SubnetDeserializer;
 impl SubnetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Subnet, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Subnet, XmlParseError> {
         deserialize_elements::<_, Subnet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "assignIpv6AddressOnCreation" => {
@@ -44818,7 +44437,7 @@ pub struct SubnetCidrBlockState {
 struct SubnetCidrBlockStateDeserializer;
 impl SubnetCidrBlockStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SubnetCidrBlockState, XmlParseError> {
@@ -44842,10 +44461,7 @@ impl SubnetCidrBlockStateDeserializer {
 struct SubnetCidrBlockStateCodeDeserializer;
 impl SubnetCidrBlockStateCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -44879,7 +44495,7 @@ pub struct SubnetIpv6CidrBlockAssociation {
 struct SubnetIpv6CidrBlockAssociationDeserializer;
 impl SubnetIpv6CidrBlockAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SubnetIpv6CidrBlockAssociation, XmlParseError> {
@@ -44913,7 +44529,7 @@ impl SubnetIpv6CidrBlockAssociationDeserializer {
 struct SubnetIpv6CidrBlockAssociationSetDeserializer;
 impl SubnetIpv6CidrBlockAssociationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SubnetIpv6CidrBlockAssociation>, XmlParseError> {
@@ -44932,7 +44548,7 @@ impl SubnetIpv6CidrBlockAssociationSetDeserializer {
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Subnet>, XmlParseError> {
@@ -44949,10 +44565,7 @@ impl SubnetListDeserializer {
 struct SubnetStateDeserializer;
 impl SubnetStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -44970,7 +44583,7 @@ pub struct SuccessfulInstanceCreditSpecificationItem {
 struct SuccessfulInstanceCreditSpecificationItemDeserializer;
 impl SuccessfulInstanceCreditSpecificationItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SuccessfulInstanceCreditSpecificationItem, XmlParseError> {
@@ -44993,7 +44606,7 @@ impl SuccessfulInstanceCreditSpecificationItemDeserializer {
 struct SuccessfulInstanceCreditSpecificationSetDeserializer;
 impl SuccessfulInstanceCreditSpecificationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SuccessfulInstanceCreditSpecificationItem>, XmlParseError> {
@@ -45014,10 +44627,7 @@ impl SuccessfulInstanceCreditSpecificationSetDeserializer {
 struct SummaryStatusDeserializer;
 impl SummaryStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -45037,10 +44647,7 @@ pub struct Tag {
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tag, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "key" => {
@@ -45090,7 +44697,7 @@ pub struct TagDescription {
 struct TagDescriptionDeserializer;
 impl TagDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagDescription, XmlParseError> {
@@ -45120,7 +44727,7 @@ impl TagDescriptionDeserializer {
 struct TagDescriptionListDeserializer;
 impl TagDescriptionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TagDescription>, XmlParseError> {
@@ -45137,7 +44744,7 @@ impl TagDescriptionListDeserializer {
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
@@ -45217,7 +44824,7 @@ pub struct TargetCapacitySpecification {
 struct TargetCapacitySpecificationDeserializer;
 impl TargetCapacitySpecificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetCapacitySpecification, XmlParseError> {
@@ -45314,7 +44921,7 @@ pub struct TargetConfiguration {
 struct TargetConfigurationDeserializer;
 impl TargetConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetConfiguration, XmlParseError> {
@@ -45379,7 +44986,7 @@ pub struct TargetGroup {
 struct TargetGroupDeserializer;
 impl TargetGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetGroup, XmlParseError> {
@@ -45413,7 +45020,7 @@ impl TargetGroupSerializer {
 struct TargetGroupsDeserializer;
 impl TargetGroupsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TargetGroup>, XmlParseError> {
@@ -45449,7 +45056,7 @@ pub struct TargetGroupsConfig {
 struct TargetGroupsConfigDeserializer;
 impl TargetGroupsConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetGroupsConfig, XmlParseError> {
@@ -45506,7 +45113,7 @@ pub struct TargetNetwork {
 struct TargetNetworkDeserializer;
 impl TargetNetworkDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetNetwork, XmlParseError> {
@@ -45546,7 +45153,7 @@ impl TargetNetworkDeserializer {
 struct TargetNetworkSetDeserializer;
 impl TargetNetworkSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TargetNetwork>, XmlParseError> {
@@ -45572,7 +45179,7 @@ pub struct TargetReservationValue {
 struct TargetReservationValueDeserializer;
 impl TargetReservationValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TargetReservationValue, XmlParseError> {
@@ -45599,7 +45206,7 @@ impl TargetReservationValueDeserializer {
 struct TargetReservationValueSetDeserializer;
 impl TargetReservationValueSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TargetReservationValue>, XmlParseError> {
@@ -45618,10 +45225,7 @@ impl TargetReservationValueSetDeserializer {
 struct TelemetryStatusDeserializer;
 impl TelemetryStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -45632,10 +45236,7 @@ impl TelemetryStatusDeserializer {
 struct TenancyDeserializer;
 impl TenancyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -45693,7 +45294,7 @@ pub struct TerminateClientVpnConnectionsResult {
 struct TerminateClientVpnConnectionsResultDeserializer;
 impl TerminateClientVpnConnectionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TerminateClientVpnConnectionsResult, XmlParseError> {
@@ -45740,7 +45341,7 @@ pub struct TerminateConnectionStatus {
 struct TerminateConnectionStatusDeserializer;
 impl TerminateConnectionStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TerminateConnectionStatus, XmlParseError> {
@@ -45777,7 +45378,7 @@ impl TerminateConnectionStatusDeserializer {
 struct TerminateConnectionStatusSetDeserializer;
 impl TerminateConnectionStatusSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TerminateConnectionStatus>, XmlParseError> {
@@ -45830,7 +45431,7 @@ pub struct TerminateInstancesResult {
 struct TerminateInstancesResultDeserializer;
 impl TerminateInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TerminateInstancesResult, XmlParseError> {
@@ -45857,10 +45458,7 @@ impl TerminateInstancesResultDeserializer {
 struct TrafficTypeDeserializer;
 impl TrafficTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -45892,7 +45490,7 @@ pub struct TransitGateway {
 struct TransitGatewayDeserializer;
 impl TransitGatewayDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGateway, XmlParseError> {
@@ -45955,7 +45553,7 @@ pub struct TransitGatewayAssociation {
 struct TransitGatewayAssociationDeserializer;
 impl TransitGatewayAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayAssociation, XmlParseError> {
@@ -46003,10 +45601,7 @@ impl TransitGatewayAssociationDeserializer {
 struct TransitGatewayAssociationStateDeserializer;
 impl TransitGatewayAssociationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -46042,7 +45637,7 @@ pub struct TransitGatewayAttachment {
 struct TransitGatewayAttachmentDeserializer;
 impl TransitGatewayAttachmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayAttachment, XmlParseError> {
@@ -46124,7 +45719,7 @@ pub struct TransitGatewayAttachmentAssociation {
 struct TransitGatewayAttachmentAssociationDeserializer;
 impl TransitGatewayAttachmentAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayAttachmentAssociation, XmlParseError> {
@@ -46166,7 +45761,7 @@ impl TransitGatewayAttachmentIdStringListSerializer {
 struct TransitGatewayAttachmentListDeserializer;
 impl TransitGatewayAttachmentListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGatewayAttachment>, XmlParseError> {
@@ -46194,7 +45789,7 @@ pub struct TransitGatewayAttachmentPropagation {
 struct TransitGatewayAttachmentPropagationDeserializer;
 impl TransitGatewayAttachmentPropagationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayAttachmentPropagation, XmlParseError> {
@@ -46224,7 +45819,7 @@ impl TransitGatewayAttachmentPropagationDeserializer {
 struct TransitGatewayAttachmentPropagationListDeserializer;
 impl TransitGatewayAttachmentPropagationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGatewayAttachmentPropagation>, XmlParseError> {
@@ -46243,10 +45838,7 @@ impl TransitGatewayAttachmentPropagationListDeserializer {
 struct TransitGatewayAttachmentResourceTypeDeserializer;
 impl TransitGatewayAttachmentResourceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -46257,10 +45849,7 @@ impl TransitGatewayAttachmentResourceTypeDeserializer {
 struct TransitGatewayAttachmentStateDeserializer;
 impl TransitGatewayAttachmentStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -46283,7 +45872,7 @@ impl TransitGatewayIdStringListSerializer {
 struct TransitGatewayListDeserializer;
 impl TransitGatewayListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGateway>, XmlParseError> {
@@ -46321,7 +45910,7 @@ pub struct TransitGatewayOptions {
 struct TransitGatewayOptionsDeserializer;
 impl TransitGatewayOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayOptions, XmlParseError> {
@@ -46400,7 +45989,7 @@ pub struct TransitGatewayPropagation {
 struct TransitGatewayPropagationDeserializer;
 impl TransitGatewayPropagationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayPropagation, XmlParseError> {
@@ -46448,10 +46037,7 @@ impl TransitGatewayPropagationDeserializer {
 struct TransitGatewayPropagationStateDeserializer;
 impl TransitGatewayPropagationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -46531,7 +46117,7 @@ pub struct TransitGatewayRoute {
 struct TransitGatewayRouteDeserializer;
 impl TransitGatewayRouteDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayRoute, XmlParseError> {
@@ -46581,7 +46167,7 @@ pub struct TransitGatewayRouteAttachment {
 struct TransitGatewayRouteAttachmentDeserializer;
 impl TransitGatewayRouteAttachmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayRouteAttachment, XmlParseError> {
@@ -46618,7 +46204,7 @@ impl TransitGatewayRouteAttachmentDeserializer {
 struct TransitGatewayRouteAttachmentListDeserializer;
 impl TransitGatewayRouteAttachmentListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGatewayRouteAttachment>, XmlParseError> {
@@ -46637,7 +46223,7 @@ impl TransitGatewayRouteAttachmentListDeserializer {
 struct TransitGatewayRouteListDeserializer;
 impl TransitGatewayRouteListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGatewayRoute>, XmlParseError> {
@@ -46654,10 +46240,7 @@ impl TransitGatewayRouteListDeserializer {
 struct TransitGatewayRouteStateDeserializer;
 impl TransitGatewayRouteStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -46687,7 +46270,7 @@ pub struct TransitGatewayRouteTable {
 struct TransitGatewayRouteTableDeserializer;
 impl TransitGatewayRouteTableDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayRouteTable, XmlParseError> {
@@ -46757,7 +46340,7 @@ pub struct TransitGatewayRouteTableAssociation {
 struct TransitGatewayRouteTableAssociationDeserializer;
 impl TransitGatewayRouteTableAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayRouteTableAssociation, XmlParseError> {
@@ -46799,7 +46382,7 @@ impl TransitGatewayRouteTableAssociationDeserializer {
 struct TransitGatewayRouteTableAssociationListDeserializer;
 impl TransitGatewayRouteTableAssociationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGatewayRouteTableAssociation>, XmlParseError> {
@@ -46830,7 +46413,7 @@ impl TransitGatewayRouteTableIdStringListSerializer {
 struct TransitGatewayRouteTableListDeserializer;
 impl TransitGatewayRouteTableListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGatewayRouteTable>, XmlParseError> {
@@ -46862,7 +46445,7 @@ pub struct TransitGatewayRouteTablePropagation {
 struct TransitGatewayRouteTablePropagationDeserializer;
 impl TransitGatewayRouteTablePropagationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayRouteTablePropagation, XmlParseError> {
@@ -46904,7 +46487,7 @@ impl TransitGatewayRouteTablePropagationDeserializer {
 struct TransitGatewayRouteTablePropagationListDeserializer;
 impl TransitGatewayRouteTablePropagationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGatewayRouteTablePropagation>, XmlParseError> {
@@ -46923,10 +46506,7 @@ impl TransitGatewayRouteTablePropagationListDeserializer {
 struct TransitGatewayRouteTableStateDeserializer;
 impl TransitGatewayRouteTableStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -46937,10 +46517,7 @@ impl TransitGatewayRouteTableStateDeserializer {
 struct TransitGatewayRouteTypeDeserializer;
 impl TransitGatewayRouteTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -46951,10 +46528,7 @@ impl TransitGatewayRouteTypeDeserializer {
 struct TransitGatewayStateDeserializer;
 impl TransitGatewayStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -46988,7 +46562,7 @@ pub struct TransitGatewayVpcAttachment {
 struct TransitGatewayVpcAttachmentDeserializer;
 impl TransitGatewayVpcAttachmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayVpcAttachment, XmlParseError> {
@@ -47049,7 +46623,7 @@ impl TransitGatewayVpcAttachmentDeserializer {
 struct TransitGatewayVpcAttachmentListDeserializer;
 impl TransitGatewayVpcAttachmentListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TransitGatewayVpcAttachment>, XmlParseError> {
@@ -47077,7 +46651,7 @@ pub struct TransitGatewayVpcAttachmentOptions {
 struct TransitGatewayVpcAttachmentOptionsDeserializer;
 impl TransitGatewayVpcAttachmentOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TransitGatewayVpcAttachmentOptions, XmlParseError> {
@@ -47108,10 +46682,7 @@ impl TransitGatewayVpcAttachmentOptionsDeserializer {
 struct TransportProtocolDeserializer;
 impl TransportProtocolDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -47171,7 +46742,7 @@ pub struct UnassignIpv6AddressesResult {
 struct UnassignIpv6AddressesResultDeserializer;
 impl UnassignIpv6AddressesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UnassignIpv6AddressesResult, XmlParseError> {
@@ -47268,7 +46839,7 @@ pub struct UnmonitorInstancesResult {
 struct UnmonitorInstancesResultDeserializer;
 impl UnmonitorInstancesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UnmonitorInstancesResult, XmlParseError> {
@@ -47292,10 +46863,7 @@ impl UnmonitorInstancesResultDeserializer {
 struct UnsuccessfulInstanceCreditSpecificationErrorCodeDeserializer;
 impl UnsuccessfulInstanceCreditSpecificationErrorCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -47315,7 +46883,7 @@ pub struct UnsuccessfulInstanceCreditSpecificationItem {
 struct UnsuccessfulInstanceCreditSpecificationItemDeserializer;
 impl UnsuccessfulInstanceCreditSpecificationItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UnsuccessfulInstanceCreditSpecificationItem, XmlParseError> {
@@ -47350,7 +46918,7 @@ pub struct UnsuccessfulInstanceCreditSpecificationItemError {
 struct UnsuccessfulInstanceCreditSpecificationItemErrorDeserializer;
 impl UnsuccessfulInstanceCreditSpecificationItemErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UnsuccessfulInstanceCreditSpecificationItemError, XmlParseError> {
@@ -47375,7 +46943,7 @@ impl UnsuccessfulInstanceCreditSpecificationItemErrorDeserializer {
 struct UnsuccessfulInstanceCreditSpecificationSetDeserializer;
 impl UnsuccessfulInstanceCreditSpecificationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UnsuccessfulInstanceCreditSpecificationItem>, XmlParseError> {
@@ -47405,7 +46973,7 @@ pub struct UnsuccessfulItem {
 struct UnsuccessfulItemDeserializer;
 impl UnsuccessfulItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UnsuccessfulItem, XmlParseError> {
@@ -47437,7 +47005,7 @@ pub struct UnsuccessfulItemError {
 struct UnsuccessfulItemErrorDeserializer;
 impl UnsuccessfulItemErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UnsuccessfulItemError, XmlParseError> {
@@ -47458,7 +47026,7 @@ impl UnsuccessfulItemErrorDeserializer {
 struct UnsuccessfulItemListDeserializer;
 impl UnsuccessfulItemListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UnsuccessfulItem>, XmlParseError> {
@@ -47475,7 +47043,7 @@ impl UnsuccessfulItemListDeserializer {
 struct UnsuccessfulItemSetDeserializer;
 impl UnsuccessfulItemSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UnsuccessfulItem>, XmlParseError> {
@@ -47540,7 +47108,7 @@ pub struct UpdateSecurityGroupRuleDescriptionsEgressResult {
 struct UpdateSecurityGroupRuleDescriptionsEgressResultDeserializer;
 impl UpdateSecurityGroupRuleDescriptionsEgressResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateSecurityGroupRuleDescriptionsEgressResult, XmlParseError> {
@@ -47610,7 +47178,7 @@ pub struct UpdateSecurityGroupRuleDescriptionsIngressResult {
 struct UpdateSecurityGroupRuleDescriptionsIngressResultDeserializer;
 impl UpdateSecurityGroupRuleDescriptionsIngressResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateSecurityGroupRuleDescriptionsIngressResult, XmlParseError> {
@@ -47668,7 +47236,7 @@ pub struct UserBucketDetails {
 struct UserBucketDetailsDeserializer;
 impl UserBucketDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UserBucketDetails, XmlParseError> {
@@ -47741,7 +47309,7 @@ pub struct UserIdGroupPair {
 struct UserIdGroupPairDeserializer;
 impl UserIdGroupPairDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UserIdGroupPair, XmlParseError> {
@@ -47818,7 +47386,7 @@ impl UserIdGroupPairSerializer {
 struct UserIdGroupPairListDeserializer;
 impl UserIdGroupPairListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UserIdGroupPair>, XmlParseError> {
@@ -47847,7 +47415,7 @@ impl UserIdGroupPairListSerializer {
 struct UserIdGroupPairSetDeserializer;
 impl UserIdGroupPairSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<UserIdGroupPair>, XmlParseError> {
@@ -47876,7 +47444,7 @@ impl UserIdStringListSerializer {
 struct ValueStringListDeserializer;
 impl ValueStringListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -47905,10 +47473,7 @@ impl ValueStringListSerializer {
 struct VersionDescriptionDeserializer;
 impl VersionDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -47946,7 +47511,7 @@ pub struct VgwTelemetry {
 struct VgwTelemetryDeserializer;
 impl VgwTelemetryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VgwTelemetry, XmlParseError> {
@@ -47984,7 +47549,7 @@ impl VgwTelemetryDeserializer {
 struct VgwTelemetryListDeserializer;
 impl VgwTelemetryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VgwTelemetry>, XmlParseError> {
@@ -48001,10 +47566,7 @@ impl VgwTelemetryListDeserializer {
 struct VirtualizationTypeDeserializer;
 impl VirtualizationTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -48044,10 +47606,7 @@ pub struct Volume {
 struct VolumeDeserializer;
 impl VolumeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Volume, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Volume, XmlParseError> {
         deserialize_elements::<_, Volume, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "attachmentSet" => {
@@ -48118,7 +47677,7 @@ pub struct VolumeAttachment {
 struct VolumeAttachmentDeserializer;
 impl VolumeAttachmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VolumeAttachment, XmlParseError> {
@@ -48156,7 +47715,7 @@ impl VolumeAttachmentDeserializer {
 struct VolumeAttachmentListDeserializer;
 impl VolumeAttachmentListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VolumeAttachment>, XmlParseError> {
@@ -48173,10 +47732,7 @@ impl VolumeAttachmentListDeserializer {
 struct VolumeAttachmentStateDeserializer;
 impl VolumeAttachmentStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -48218,7 +47774,7 @@ impl VolumeIdStringListSerializer {
 struct VolumeListDeserializer;
 impl VolumeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Volume>, XmlParseError> {
@@ -48264,7 +47820,7 @@ pub struct VolumeModification {
 struct VolumeModificationDeserializer;
 impl VolumeModificationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VolumeModification, XmlParseError> {
@@ -48328,7 +47884,7 @@ impl VolumeModificationDeserializer {
 struct VolumeModificationListDeserializer;
 impl VolumeModificationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VolumeModification>, XmlParseError> {
@@ -48345,10 +47901,7 @@ impl VolumeModificationListDeserializer {
 struct VolumeModificationStateDeserializer;
 impl VolumeModificationStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -48359,10 +47912,7 @@ impl VolumeModificationStateDeserializer {
 struct VolumeStateDeserializer;
 impl VolumeStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -48386,7 +47936,7 @@ pub struct VolumeStatusAction {
 struct VolumeStatusActionDeserializer;
 impl VolumeStatusActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VolumeStatusAction, XmlParseError> {
@@ -48413,7 +47963,7 @@ impl VolumeStatusActionDeserializer {
 struct VolumeStatusActionsListDeserializer;
 impl VolumeStatusActionsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VolumeStatusAction>, XmlParseError> {
@@ -48439,7 +47989,7 @@ pub struct VolumeStatusDetails {
 struct VolumeStatusDetailsDeserializer;
 impl VolumeStatusDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VolumeStatusDetails, XmlParseError> {
@@ -48460,7 +48010,7 @@ impl VolumeStatusDetailsDeserializer {
 struct VolumeStatusDetailsListDeserializer;
 impl VolumeStatusDetailsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VolumeStatusDetails>, XmlParseError> {
@@ -48492,7 +48042,7 @@ pub struct VolumeStatusEvent {
 struct VolumeStatusEventDeserializer;
 impl VolumeStatusEventDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VolumeStatusEvent, XmlParseError> {
@@ -48522,7 +48072,7 @@ impl VolumeStatusEventDeserializer {
 struct VolumeStatusEventsListDeserializer;
 impl VolumeStatusEventsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VolumeStatusEvent>, XmlParseError> {
@@ -48548,7 +48098,7 @@ pub struct VolumeStatusInfo {
 struct VolumeStatusInfoDeserializer;
 impl VolumeStatusInfoDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VolumeStatusInfo, XmlParseError> {
@@ -48573,10 +48123,7 @@ impl VolumeStatusInfoDeserializer {
 struct VolumeStatusInfoStatusDeserializer;
 impl VolumeStatusInfoStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -48602,7 +48149,7 @@ pub struct VolumeStatusItem {
 struct VolumeStatusItemDeserializer;
 impl VolumeStatusItemDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VolumeStatusItem, XmlParseError> {
@@ -48640,7 +48187,7 @@ impl VolumeStatusItemDeserializer {
 struct VolumeStatusListDeserializer;
 impl VolumeStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VolumeStatusItem>, XmlParseError> {
@@ -48657,10 +48204,7 @@ impl VolumeStatusListDeserializer {
 struct VolumeStatusNameDeserializer;
 impl VolumeStatusNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -48671,10 +48215,7 @@ impl VolumeStatusNameDeserializer {
 struct VolumeTypeDeserializer;
 impl VolumeTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -48710,10 +48251,7 @@ pub struct Vpc {
 struct VpcDeserializer;
 impl VpcDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Vpc, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Vpc, XmlParseError> {
         deserialize_elements::<_, Vpc, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "cidrBlock" => {
@@ -48778,7 +48316,7 @@ pub struct VpcAttachment {
 struct VpcAttachmentDeserializer;
 impl VpcAttachmentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcAttachment, XmlParseError> {
@@ -48799,7 +48337,7 @@ impl VpcAttachmentDeserializer {
 struct VpcAttachmentListDeserializer;
 impl VpcAttachmentListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcAttachment>, XmlParseError> {
@@ -48827,7 +48365,7 @@ pub struct VpcCidrBlockAssociation {
 struct VpcCidrBlockAssociationDeserializer;
 impl VpcCidrBlockAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcCidrBlockAssociation, XmlParseError> {
@@ -48859,7 +48397,7 @@ impl VpcCidrBlockAssociationDeserializer {
 struct VpcCidrBlockAssociationSetDeserializer;
 impl VpcCidrBlockAssociationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcCidrBlockAssociation>, XmlParseError> {
@@ -48887,7 +48425,7 @@ pub struct VpcCidrBlockState {
 struct VpcCidrBlockStateDeserializer;
 impl VpcCidrBlockStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcCidrBlockState, XmlParseError> {
@@ -48911,10 +48449,7 @@ impl VpcCidrBlockStateDeserializer {
 struct VpcCidrBlockStateCodeDeserializer;
 impl VpcCidrBlockStateCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -48936,7 +48471,7 @@ pub struct VpcClassicLink {
 struct VpcClassicLinkDeserializer;
 impl VpcClassicLinkDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcClassicLink, XmlParseError> {
@@ -48977,7 +48512,7 @@ impl VpcClassicLinkIdListSerializer {
 struct VpcClassicLinkListDeserializer;
 impl VpcClassicLinkListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcClassicLink>, XmlParseError> {
@@ -49029,7 +48564,7 @@ pub struct VpcEndpoint {
 struct VpcEndpointDeserializer;
 impl VpcEndpointDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcEndpoint, XmlParseError> {
@@ -49128,7 +48663,7 @@ pub struct VpcEndpointConnection {
 struct VpcEndpointConnectionDeserializer;
 impl VpcEndpointConnectionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcEndpointConnection, XmlParseError> {
@@ -49164,7 +48699,7 @@ impl VpcEndpointConnectionDeserializer {
 struct VpcEndpointConnectionSetDeserializer;
 impl VpcEndpointConnectionSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcEndpointConnection>, XmlParseError> {
@@ -49183,7 +48718,7 @@ impl VpcEndpointConnectionSetDeserializer {
 struct VpcEndpointSetDeserializer;
 impl VpcEndpointSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcEndpoint>, XmlParseError> {
@@ -49200,10 +48735,7 @@ impl VpcEndpointSetDeserializer {
 struct VpcEndpointTypeDeserializer;
 impl VpcEndpointTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -49237,7 +48769,7 @@ pub struct VpcIpv6CidrBlockAssociation {
 struct VpcIpv6CidrBlockAssociationDeserializer;
 impl VpcIpv6CidrBlockAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcIpv6CidrBlockAssociation, XmlParseError> {
@@ -49271,7 +48803,7 @@ impl VpcIpv6CidrBlockAssociationDeserializer {
 struct VpcIpv6CidrBlockAssociationSetDeserializer;
 impl VpcIpv6CidrBlockAssociationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcIpv6CidrBlockAssociation>, XmlParseError> {
@@ -49290,7 +48822,7 @@ impl VpcIpv6CidrBlockAssociationSetDeserializer {
 struct VpcListDeserializer;
 impl VpcListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Vpc>, XmlParseError> {
@@ -49324,7 +48856,7 @@ pub struct VpcPeeringConnection {
 struct VpcPeeringConnectionDeserializer;
 impl VpcPeeringConnectionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcPeeringConnection, XmlParseError> {
@@ -49373,7 +48905,7 @@ impl VpcPeeringConnectionDeserializer {
 struct VpcPeeringConnectionListDeserializer;
 impl VpcPeeringConnectionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpcPeeringConnection>, XmlParseError> {
@@ -49403,7 +48935,7 @@ pub struct VpcPeeringConnectionOptionsDescription {
 struct VpcPeeringConnectionOptionsDescriptionDeserializer;
 impl VpcPeeringConnectionOptionsDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcPeeringConnectionOptionsDescription, XmlParseError> {
@@ -49452,7 +48984,7 @@ pub struct VpcPeeringConnectionStateReason {
 struct VpcPeeringConnectionStateReasonDeserializer;
 impl VpcPeeringConnectionStateReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcPeeringConnectionStateReason, XmlParseError> {
@@ -49481,10 +49013,7 @@ impl VpcPeeringConnectionStateReasonDeserializer {
 struct VpcPeeringConnectionStateReasonCodeDeserializer;
 impl VpcPeeringConnectionStateReasonCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -49514,7 +49043,7 @@ pub struct VpcPeeringConnectionVpcInfo {
 struct VpcPeeringConnectionVpcInfoDeserializer;
 impl VpcPeeringConnectionVpcInfoDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpcPeeringConnectionVpcInfo, XmlParseError> {
@@ -49563,10 +49092,7 @@ impl VpcPeeringConnectionVpcInfoDeserializer {
 struct VpcStateDeserializer;
 impl VpcStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -49606,7 +49132,7 @@ pub struct VpnConnection {
 struct VpnConnectionDeserializer;
 impl VpnConnectionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpnConnection, XmlParseError> {
@@ -49684,7 +49210,7 @@ impl VpnConnectionIdStringListSerializer {
 struct VpnConnectionListDeserializer;
 impl VpnConnectionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpnConnection>, XmlParseError> {
@@ -49708,7 +49234,7 @@ pub struct VpnConnectionOptions {
 struct VpnConnectionOptionsDeserializer;
 impl VpnConnectionOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpnConnectionOptions, XmlParseError> {
@@ -49758,10 +49284,7 @@ impl VpnConnectionOptionsSpecificationSerializer {
 struct VpnEcmpSupportValueDeserializer;
 impl VpnEcmpSupportValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -49791,7 +49314,7 @@ pub struct VpnGateway {
 struct VpnGatewayDeserializer;
 impl VpnGatewayDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpnGateway, XmlParseError> {
@@ -49846,7 +49369,7 @@ impl VpnGatewayIdStringListSerializer {
 struct VpnGatewayListDeserializer;
 impl VpnGatewayListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpnGateway>, XmlParseError> {
@@ -49863,10 +49386,7 @@ impl VpnGatewayListDeserializer {
 struct VpnProtocolDeserializer;
 impl VpnProtocolDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -49877,10 +49397,7 @@ impl VpnProtocolDeserializer {
 struct VpnStateDeserializer;
 impl VpnStateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -49902,7 +49419,7 @@ pub struct VpnStaticRoute {
 struct VpnStaticRouteDeserializer;
 impl VpnStaticRouteDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VpnStaticRoute, XmlParseError> {
@@ -49931,7 +49448,7 @@ impl VpnStaticRouteDeserializer {
 struct VpnStaticRouteListDeserializer;
 impl VpnStaticRouteListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<VpnStaticRoute>, XmlParseError> {
@@ -49948,10 +49465,7 @@ impl VpnStaticRouteListDeserializer {
 struct VpnStaticRouteSourceDeserializer;
 impl VpnStaticRouteSourceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -50019,7 +49533,7 @@ pub struct WithdrawByoipCidrResult {
 struct WithdrawByoipCidrResultDeserializer;
 impl WithdrawByoipCidrResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<WithdrawByoipCidrResult, XmlParseError> {
@@ -65206,7 +64720,7 @@ impl Ec2Client {
     pub fn new(region: region::Region) -> Ec2Client {
         Ec2Client {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -65223,7 +64737,7 @@ impl Ec2Client {
     {
         Ec2Client {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

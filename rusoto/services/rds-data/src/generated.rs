@@ -303,7 +303,7 @@ impl RdsDataClient {
     pub fn new(region: region::Region) -> RdsDataClient {
         RdsDataClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -320,7 +320,7 @@ impl RdsDataClient {
     {
         RdsDataClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

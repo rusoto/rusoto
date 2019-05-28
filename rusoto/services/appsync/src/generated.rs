@@ -3622,7 +3622,7 @@ impl AppSyncClient {
     pub fn new(region: region::Region) -> AppSyncClient {
         AppSyncClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3639,7 +3639,7 @@ impl AppSyncClient {
     {
         AppSyncClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

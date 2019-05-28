@@ -46,7 +46,7 @@ pub struct AddHeaderAction {
 struct AddHeaderActionDeserializer;
 impl AddHeaderActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AddHeaderAction, XmlParseError> {
@@ -82,10 +82,7 @@ impl AddHeaderActionSerializer {
 struct AddressDeserializer;
 impl AddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -96,7 +93,7 @@ impl AddressDeserializer {
 struct AddressListDeserializer;
 impl AddressListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -125,10 +122,7 @@ impl AddressListSerializer {
 struct AmazonResourceNameDeserializer;
 impl AmazonResourceNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -139,10 +133,7 @@ impl AmazonResourceNameDeserializer {
 struct BehaviorOnMXFailureDeserializer;
 impl BehaviorOnMXFailureDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -195,7 +186,7 @@ pub struct BounceAction {
 struct BounceActionDeserializer;
 impl BounceActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BounceAction, XmlParseError> {
@@ -256,10 +247,7 @@ impl BounceActionSerializer {
 struct BounceMessageDeserializer;
 impl BounceMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -270,10 +258,7 @@ impl BounceMessageDeserializer {
 struct BounceSmtpReplyCodeDeserializer;
 impl BounceSmtpReplyCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -284,10 +269,7 @@ impl BounceSmtpReplyCodeDeserializer {
 struct BounceStatusCodeDeserializer;
 impl BounceStatusCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -410,7 +392,7 @@ pub struct BulkEmailDestinationStatus {
 struct BulkEmailDestinationStatusDeserializer;
 impl BulkEmailDestinationStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<BulkEmailDestinationStatus, XmlParseError> {
@@ -440,7 +422,7 @@ impl BulkEmailDestinationStatusDeserializer {
 struct BulkEmailDestinationStatusListDeserializer;
 impl BulkEmailDestinationStatusListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<BulkEmailDestinationStatus>, XmlParseError> {
@@ -459,10 +441,7 @@ impl BulkEmailDestinationStatusListDeserializer {
 struct BulkEmailStatusDeserializer;
 impl BulkEmailStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -473,10 +452,7 @@ impl BulkEmailStatusDeserializer {
 struct CidrDeserializer;
 impl CidrDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -517,7 +493,7 @@ pub struct CloneReceiptRuleSetResponse {}
 struct CloneReceiptRuleSetResponseDeserializer;
 impl CloneReceiptRuleSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloneReceiptRuleSetResponse, XmlParseError> {
@@ -540,7 +516,7 @@ pub struct CloudWatchDestination {
 struct CloudWatchDestinationDeserializer;
 impl CloudWatchDestinationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchDestination, XmlParseError> {
@@ -592,7 +568,7 @@ pub struct CloudWatchDimensionConfiguration {
 struct CloudWatchDimensionConfigurationDeserializer;
 impl CloudWatchDimensionConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudWatchDimensionConfiguration, XmlParseError> {
@@ -653,7 +629,7 @@ impl CloudWatchDimensionConfigurationSerializer {
 struct CloudWatchDimensionConfigurationsDeserializer;
 impl CloudWatchDimensionConfigurationsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CloudWatchDimensionConfiguration>, XmlParseError> {
@@ -691,7 +667,7 @@ pub struct ConfigurationSet {
 struct ConfigurationSetDeserializer;
 impl ConfigurationSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ConfigurationSet, XmlParseError> {
@@ -734,10 +710,7 @@ impl ConfigurationSetAttributeListSerializer {
 struct ConfigurationSetNameDeserializer;
 impl ConfigurationSetNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -748,7 +721,7 @@ impl ConfigurationSetNameDeserializer {
 struct ConfigurationSetsDeserializer;
 impl ConfigurationSetsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ConfigurationSet>, XmlParseError> {
@@ -790,10 +763,7 @@ impl ContentSerializer {
 struct CounterDeserializer;
 impl CounterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -842,7 +812,7 @@ pub struct CreateConfigurationSetEventDestinationResponse {}
 struct CreateConfigurationSetEventDestinationResponseDeserializer;
 impl CreateConfigurationSetEventDestinationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetEventDestinationResponse, XmlParseError> {
@@ -886,7 +856,7 @@ pub struct CreateConfigurationSetResponse {}
 struct CreateConfigurationSetResponseDeserializer;
 impl CreateConfigurationSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetResponse, XmlParseError> {
@@ -939,7 +909,7 @@ pub struct CreateConfigurationSetTrackingOptionsResponse {}
 struct CreateConfigurationSetTrackingOptionsResponseDeserializer;
 impl CreateConfigurationSetTrackingOptionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateConfigurationSetTrackingOptionsResponse, XmlParseError> {
@@ -1033,7 +1003,7 @@ pub struct CreateReceiptFilterResponse {}
 struct CreateReceiptFilterResponseDeserializer;
 impl CreateReceiptFilterResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptFilterResponse, XmlParseError> {
@@ -1081,7 +1051,7 @@ pub struct CreateReceiptRuleResponse {}
 struct CreateReceiptRuleResponseDeserializer;
 impl CreateReceiptRuleResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptRuleResponse, XmlParseError> {
@@ -1121,7 +1091,7 @@ pub struct CreateReceiptRuleSetResponse {}
 struct CreateReceiptRuleSetResponseDeserializer;
 impl CreateReceiptRuleSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReceiptRuleSetResponse, XmlParseError> {
@@ -1160,7 +1130,7 @@ pub struct CreateTemplateResponse {}
 struct CreateTemplateResponseDeserializer;
 impl CreateTemplateResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateTemplateResponse, XmlParseError> {
@@ -1176,10 +1146,7 @@ impl CreateTemplateResponseDeserializer {
 struct CustomMailFromStatusDeserializer;
 impl CustomMailFromStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1190,10 +1157,7 @@ impl CustomMailFromStatusDeserializer {
 struct CustomRedirectDomainDeserializer;
 impl CustomRedirectDomainDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1219,7 +1183,7 @@ pub struct CustomVerificationEmailTemplate {
 struct CustomVerificationEmailTemplateDeserializer;
 impl CustomVerificationEmailTemplateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomVerificationEmailTemplate, XmlParseError> {
@@ -1268,7 +1232,7 @@ impl CustomVerificationEmailTemplateDeserializer {
 struct CustomVerificationEmailTemplatesDeserializer;
 impl CustomVerificationEmailTemplatesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CustomVerificationEmailTemplate>, XmlParseError> {
@@ -1287,10 +1251,7 @@ impl CustomVerificationEmailTemplatesDeserializer {
 struct DefaultDimensionValueDeserializer;
 impl DefaultDimensionValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1338,7 +1299,7 @@ pub struct DeleteConfigurationSetEventDestinationResponse {}
 struct DeleteConfigurationSetEventDestinationResponseDeserializer;
 impl DeleteConfigurationSetEventDestinationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetEventDestinationResponse, XmlParseError> {
@@ -1381,7 +1342,7 @@ pub struct DeleteConfigurationSetResponse {}
 struct DeleteConfigurationSetResponseDeserializer;
 impl DeleteConfigurationSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetResponse, XmlParseError> {
@@ -1428,7 +1389,7 @@ pub struct DeleteConfigurationSetTrackingOptionsResponse {}
 struct DeleteConfigurationSetTrackingOptionsResponseDeserializer;
 impl DeleteConfigurationSetTrackingOptionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteConfigurationSetTrackingOptionsResponse, XmlParseError> {
@@ -1495,7 +1456,7 @@ pub struct DeleteIdentityPolicyResponse {}
 struct DeleteIdentityPolicyResponseDeserializer;
 impl DeleteIdentityPolicyResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIdentityPolicyResponse, XmlParseError> {
@@ -1535,7 +1496,7 @@ pub struct DeleteIdentityResponse {}
 struct DeleteIdentityResponseDeserializer;
 impl DeleteIdentityResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteIdentityResponse, XmlParseError> {
@@ -1575,7 +1536,7 @@ pub struct DeleteReceiptFilterResponse {}
 struct DeleteReceiptFilterResponseDeserializer;
 impl DeleteReceiptFilterResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptFilterResponse, XmlParseError> {
@@ -1618,7 +1579,7 @@ pub struct DeleteReceiptRuleResponse {}
 struct DeleteReceiptRuleResponseDeserializer;
 impl DeleteReceiptRuleResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptRuleResponse, XmlParseError> {
@@ -1658,7 +1619,7 @@ pub struct DeleteReceiptRuleSetResponse {}
 struct DeleteReceiptRuleSetResponseDeserializer;
 impl DeleteReceiptRuleSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReceiptRuleSetResponse, XmlParseError> {
@@ -1697,7 +1658,7 @@ pub struct DeleteTemplateResponse {}
 struct DeleteTemplateResponseDeserializer;
 impl DeleteTemplateResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteTemplateResponse, XmlParseError> {
@@ -1757,7 +1718,7 @@ pub struct DescribeActiveReceiptRuleSetResponse {
 struct DescribeActiveReceiptRuleSetResponseDeserializer;
 impl DescribeActiveReceiptRuleSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeActiveReceiptRuleSetResponse, XmlParseError> {
@@ -1831,7 +1792,7 @@ pub struct DescribeConfigurationSetResponse {
 struct DescribeConfigurationSetResponseDeserializer;
 impl DescribeConfigurationSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeConfigurationSetResponse, XmlParseError> {
@@ -1903,7 +1864,7 @@ pub struct DescribeReceiptRuleResponse {
 struct DescribeReceiptRuleResponseDeserializer;
 impl DescribeReceiptRuleResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReceiptRuleResponse, XmlParseError> {
@@ -1954,7 +1915,7 @@ pub struct DescribeReceiptRuleSetResponse {
 struct DescribeReceiptRuleSetResponseDeserializer;
 impl DescribeReceiptRuleSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeReceiptRuleSetResponse, XmlParseError> {
@@ -2027,10 +1988,7 @@ impl DestinationSerializer {
 struct DimensionNameDeserializer;
 impl DimensionNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2041,10 +1999,7 @@ impl DimensionNameDeserializer {
 struct DimensionValueSourceDeserializer;
 impl DimensionValueSourceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2055,7 +2010,7 @@ impl DimensionValueSourceDeserializer {
 struct DkimAttributesDeserializer;
 impl DkimAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityDkimAttributes>, XmlParseError> {
@@ -2078,10 +2033,7 @@ impl DkimAttributesDeserializer {
 struct EnabledDeserializer;
 impl EnabledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2092,10 +2044,7 @@ impl EnabledDeserializer {
 struct SesErrorDeserializer;
 impl SesErrorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2123,7 +2072,7 @@ pub struct EventDestination {
 struct EventDestinationDeserializer;
 impl EventDestinationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventDestination, XmlParseError> {
@@ -2214,10 +2163,7 @@ impl EventDestinationSerializer {
 struct EventDestinationNameDeserializer;
 impl EventDestinationNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2228,7 +2174,7 @@ impl EventDestinationNameDeserializer {
 struct EventDestinationsDeserializer;
 impl EventDestinationsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EventDestination>, XmlParseError> {
@@ -2245,10 +2191,7 @@ impl EventDestinationsDeserializer {
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2259,7 +2202,7 @@ impl EventTypeDeserializer {
 struct EventTypesDeserializer;
 impl EventTypesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -2322,10 +2265,7 @@ impl ExtensionFieldListSerializer {
 struct FailureRedirectionURLDeserializer;
 impl FailureRedirectionURLDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2336,10 +2276,7 @@ impl FailureRedirectionURLDeserializer {
 struct FromAddressDeserializer;
 impl FromAddressDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2357,7 +2294,7 @@ pub struct GetAccountSendingEnabledResponse {
 struct GetAccountSendingEnabledResponseDeserializer;
 impl GetAccountSendingEnabledResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetAccountSendingEnabledResponse, XmlParseError> {
@@ -2416,7 +2353,7 @@ pub struct GetCustomVerificationEmailTemplateResponse {
 struct GetCustomVerificationEmailTemplateResponseDeserializer;
 impl GetCustomVerificationEmailTemplateResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCustomVerificationEmailTemplateResponse, XmlParseError> {
@@ -2502,7 +2439,7 @@ pub struct GetIdentityDkimAttributesResponse {
 struct GetIdentityDkimAttributesResponseDeserializer;
 impl GetIdentityDkimAttributesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityDkimAttributesResponse, XmlParseError> {
@@ -2561,7 +2498,7 @@ pub struct GetIdentityMailFromDomainAttributesResponse {
 struct GetIdentityMailFromDomainAttributesResponseDeserializer;
 impl GetIdentityMailFromDomainAttributesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityMailFromDomainAttributesResponse, XmlParseError> {
@@ -2619,7 +2556,7 @@ pub struct GetIdentityNotificationAttributesResponse {
 struct GetIdentityNotificationAttributesResponseDeserializer;
 impl GetIdentityNotificationAttributesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityNotificationAttributesResponse, XmlParseError> {
@@ -2679,7 +2616,7 @@ pub struct GetIdentityPoliciesResponse {
 struct GetIdentityPoliciesResponseDeserializer;
 impl GetIdentityPoliciesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityPoliciesResponse, XmlParseError> {
@@ -2733,7 +2670,7 @@ pub struct GetIdentityVerificationAttributesResponse {
 struct GetIdentityVerificationAttributesResponseDeserializer;
 impl GetIdentityVerificationAttributesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetIdentityVerificationAttributesResponse, XmlParseError> {
@@ -2770,7 +2707,7 @@ pub struct GetSendQuotaResponse {
 struct GetSendQuotaResponseDeserializer;
 impl GetSendQuotaResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSendQuotaResponse, XmlParseError> {
@@ -2808,7 +2745,7 @@ pub struct GetSendStatisticsResponse {
 struct GetSendStatisticsResponseDeserializer;
 impl GetSendStatisticsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetSendStatisticsResponse, XmlParseError> {
@@ -2856,7 +2793,7 @@ pub struct GetTemplateResponse {
 struct GetTemplateResponseDeserializer;
 impl GetTemplateResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTemplateResponse, XmlParseError> {
@@ -2874,10 +2811,7 @@ impl GetTemplateResponseDeserializer {
 struct HeaderNameDeserializer;
 impl HeaderNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2888,10 +2822,7 @@ impl HeaderNameDeserializer {
 struct HeaderValueDeserializer;
 impl HeaderValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2902,10 +2833,7 @@ impl HeaderValueDeserializer {
 struct HtmlPartDeserializer;
 impl HtmlPartDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2916,10 +2844,7 @@ impl HtmlPartDeserializer {
 struct IdentityDeserializer;
 impl IdentityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2941,7 +2866,7 @@ pub struct IdentityDkimAttributes {
 struct IdentityDkimAttributesDeserializer;
 impl IdentityDkimAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityDkimAttributes, XmlParseError> {
@@ -2970,7 +2895,7 @@ impl IdentityDkimAttributesDeserializer {
 struct IdentityListDeserializer;
 impl IdentityListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -3010,7 +2935,7 @@ pub struct IdentityMailFromDomainAttributes {
 struct IdentityMailFromDomainAttributesDeserializer;
 impl IdentityMailFromDomainAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityMailFromDomainAttributes, XmlParseError> {
@@ -3065,7 +2990,7 @@ pub struct IdentityNotificationAttributes {
 struct IdentityNotificationAttributesDeserializer;
 impl IdentityNotificationAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityNotificationAttributes, XmlParseError> {
@@ -3130,7 +3055,7 @@ pub struct IdentityVerificationAttributes {
 struct IdentityVerificationAttributesDeserializer;
 impl IdentityVerificationAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IdentityVerificationAttributes, XmlParseError> {
@@ -3161,10 +3086,7 @@ impl IdentityVerificationAttributesDeserializer {
 struct InvocationTypeDeserializer;
 impl InvocationTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3184,7 +3106,7 @@ pub struct KinesisFirehoseDestination {
 struct KinesisFirehoseDestinationDeserializer;
 impl KinesisFirehoseDestinationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KinesisFirehoseDestination, XmlParseError> {
@@ -3242,7 +3164,7 @@ pub struct LambdaAction {
 struct LambdaActionDeserializer;
 impl LambdaActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaAction, XmlParseError> {
@@ -3292,10 +3214,7 @@ impl LambdaActionSerializer {
 struct LastFreshStartDeserializer;
 impl LastFreshStartDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3342,7 +3261,7 @@ pub struct ListConfigurationSetsResponse {
 struct ListConfigurationSetsResponseDeserializer;
 impl ListConfigurationSetsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListConfigurationSetsResponse, XmlParseError> {
@@ -3410,7 +3329,7 @@ pub struct ListCustomVerificationEmailTemplatesResponse {
 struct ListCustomVerificationEmailTemplatesResponseDeserializer;
 impl ListCustomVerificationEmailTemplatesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCustomVerificationEmailTemplatesResponse, XmlParseError> {
@@ -3482,7 +3401,7 @@ pub struct ListIdentitiesResponse {
 struct ListIdentitiesResponseDeserializer;
 impl ListIdentitiesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListIdentitiesResponse, XmlParseError> {
@@ -3531,7 +3450,7 @@ pub struct ListIdentityPoliciesResponse {
 struct ListIdentityPoliciesResponseDeserializer;
 impl ListIdentityPoliciesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListIdentityPoliciesResponse, XmlParseError> {
@@ -3579,7 +3498,7 @@ pub struct ListReceiptFiltersResponse {
 struct ListReceiptFiltersResponseDeserializer;
 impl ListReceiptFiltersResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReceiptFiltersResponse, XmlParseError> {
@@ -3634,7 +3553,7 @@ pub struct ListReceiptRuleSetsResponse {
 struct ListReceiptRuleSetsResponseDeserializer;
 impl ListReceiptRuleSetsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListReceiptRuleSetsResponse, XmlParseError> {
@@ -3696,7 +3615,7 @@ pub struct ListTemplatesResponse {
 struct ListTemplatesResponseDeserializer;
 impl ListTemplatesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTemplatesResponse, XmlParseError> {
@@ -3726,7 +3645,7 @@ pub struct ListVerifiedEmailAddressesResponse {
 struct ListVerifiedEmailAddressesResponseDeserializer;
 impl ListVerifiedEmailAddressesResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListVerifiedEmailAddressesResponse, XmlParseError> {
@@ -3750,7 +3669,7 @@ impl ListVerifiedEmailAddressesResponseDeserializer {
 struct MailFromDomainAttributesDeserializer;
 impl MailFromDomainAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityMailFromDomainAttributes>, XmlParseError>
@@ -3774,10 +3693,7 @@ impl MailFromDomainAttributesDeserializer {
 struct MailFromDomainNameDeserializer;
 impl MailFromDomainNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3788,10 +3704,7 @@ impl MailFromDomainNameDeserializer {
 struct Max24HourSendDeserializer;
 impl Max24HourSendDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3802,10 +3715,7 @@ impl Max24HourSendDeserializer {
 struct MaxSendRateDeserializer;
 impl MaxSendRateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3873,10 +3783,7 @@ impl MessageDsnSerializer {
 struct MessageIdDeserializer;
 impl MessageIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3921,10 +3828,7 @@ impl MessageTagListSerializer {
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3935,7 +3839,7 @@ impl NextTokenDeserializer {
 struct NotificationAttributesDeserializer;
 impl NotificationAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityNotificationAttributes>, XmlParseError>
@@ -3959,10 +3863,7 @@ impl NotificationAttributesDeserializer {
 struct NotificationTopicDeserializer;
 impl NotificationTopicDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3973,10 +3874,7 @@ impl NotificationTopicDeserializer {
 struct PolicyDeserializer;
 impl PolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3987,7 +3885,7 @@ impl PolicyDeserializer {
 struct PolicyMapDeserializer;
 impl PolicyMapDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, String>, XmlParseError> {
@@ -4010,10 +3908,7 @@ impl PolicyMapDeserializer {
 struct PolicyNameDeserializer;
 impl PolicyNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4024,7 +3919,7 @@ impl PolicyNameDeserializer {
 struct PolicyNameListDeserializer;
 impl PolicyNameListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4083,7 +3978,7 @@ pub struct PutIdentityPolicyResponse {}
 struct PutIdentityPolicyResponseDeserializer;
 impl PutIdentityPolicyResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PutIdentityPolicyResponse, XmlParseError> {
@@ -4141,7 +4036,7 @@ pub struct ReceiptAction {
 struct ReceiptActionDeserializer;
 impl ReceiptActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptAction, XmlParseError> {
@@ -4252,7 +4147,7 @@ impl ReceiptActionSerializer {
 struct ReceiptActionsListDeserializer;
 impl ReceiptActionsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptAction>, XmlParseError> {
@@ -4290,7 +4185,7 @@ pub struct ReceiptFilter {
 struct ReceiptFilterDeserializer;
 impl ReceiptFilterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptFilter, XmlParseError> {
@@ -4330,7 +4225,7 @@ impl ReceiptFilterSerializer {
 struct ReceiptFilterListDeserializer;
 impl ReceiptFilterListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptFilter>, XmlParseError> {
@@ -4347,10 +4242,7 @@ impl ReceiptFilterListDeserializer {
 struct ReceiptFilterNameDeserializer;
 impl ReceiptFilterNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4361,10 +4253,7 @@ impl ReceiptFilterNameDeserializer {
 struct ReceiptFilterPolicyDeserializer;
 impl ReceiptFilterPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4384,7 +4273,7 @@ pub struct ReceiptIpFilter {
 struct ReceiptIpFilterDeserializer;
 impl ReceiptIpFilterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptIpFilter, XmlParseError> {
@@ -4437,7 +4326,7 @@ pub struct ReceiptRule {
 struct ReceiptRuleDeserializer;
 impl ReceiptRuleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptRule, XmlParseError> {
@@ -4512,10 +4401,7 @@ impl ReceiptRuleSerializer {
 struct ReceiptRuleNameDeserializer;
 impl ReceiptRuleNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4547,7 +4433,7 @@ pub struct ReceiptRuleSetMetadata {
 struct ReceiptRuleSetMetadataDeserializer;
 impl ReceiptRuleSetMetadataDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReceiptRuleSetMetadata, XmlParseError> {
@@ -4571,10 +4457,7 @@ impl ReceiptRuleSetMetadataDeserializer {
 struct ReceiptRuleSetNameDeserializer;
 impl ReceiptRuleSetNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4585,7 +4468,7 @@ impl ReceiptRuleSetNameDeserializer {
 struct ReceiptRuleSetsListsDeserializer;
 impl ReceiptRuleSetsListsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptRuleSetMetadata>, XmlParseError> {
@@ -4604,7 +4487,7 @@ impl ReceiptRuleSetsListsDeserializer {
 struct ReceiptRulesListDeserializer;
 impl ReceiptRulesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReceiptRule>, XmlParseError> {
@@ -4621,10 +4504,7 @@ impl ReceiptRulesListDeserializer {
 struct RecipientDeserializer;
 impl RecipientDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4687,7 +4567,7 @@ impl RecipientDsnFieldsSerializer {
 struct RecipientsListDeserializer;
 impl RecipientsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4716,10 +4596,7 @@ impl RecipientsListSerializer {
 struct RenderedTemplateDeserializer;
 impl RenderedTemplateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4761,7 +4638,7 @@ pub struct ReorderReceiptRuleSetResponse {}
 struct ReorderReceiptRuleSetResponseDeserializer;
 impl ReorderReceiptRuleSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReorderReceiptRuleSetResponse, XmlParseError> {
@@ -4788,7 +4665,7 @@ pub struct ReputationOptions {
 struct ReputationOptionsDeserializer;
 impl ReputationOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReputationOptions, XmlParseError> {
@@ -4832,7 +4709,7 @@ pub struct S3Action {
 struct S3ActionDeserializer;
 impl S3ActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Action, XmlParseError> {
@@ -4890,10 +4767,7 @@ impl S3ActionSerializer {
 struct S3BucketNameDeserializer;
 impl S3BucketNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4904,10 +4778,7 @@ impl S3BucketNameDeserializer {
 struct S3KeyPrefixDeserializer;
 impl S3KeyPrefixDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4927,7 +4798,7 @@ pub struct SNSAction {
 struct SNSActionDeserializer;
 impl SNSActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SNSAction, XmlParseError> {
@@ -4967,10 +4838,7 @@ impl SNSActionSerializer {
 struct SNSActionEncodingDeserializer;
 impl SNSActionEncodingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4988,7 +4856,7 @@ pub struct SNSDestination {
 struct SNSDestinationDeserializer;
 impl SNSDestinationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SNSDestination, XmlParseError> {
@@ -5079,7 +4947,7 @@ pub struct SendBounceResponse {
 struct SendBounceResponseDeserializer;
 impl SendBounceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendBounceResponse, XmlParseError> {
@@ -5187,7 +5055,7 @@ pub struct SendBulkTemplatedEmailResponse {
 struct SendBulkTemplatedEmailResponseDeserializer;
 impl SendBulkTemplatedEmailResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendBulkTemplatedEmailResponse, XmlParseError> {
@@ -5250,7 +5118,7 @@ pub struct SendCustomVerificationEmailResponse {
 struct SendCustomVerificationEmailResponseDeserializer;
 impl SendCustomVerificationEmailResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendCustomVerificationEmailResponse, XmlParseError> {
@@ -5288,7 +5156,7 @@ pub struct SendDataPoint {
 struct SendDataPointDeserializer;
 impl SendDataPointDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendDataPoint, XmlParseError> {
@@ -5319,7 +5187,7 @@ impl SendDataPointDeserializer {
 struct SendDataPointListDeserializer;
 impl SendDataPointListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SendDataPoint>, XmlParseError> {
@@ -5414,7 +5282,7 @@ pub struct SendEmailResponse {
 struct SendEmailResponseDeserializer;
 impl SendEmailResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendEmailResponse, XmlParseError> {
@@ -5509,7 +5377,7 @@ pub struct SendRawEmailResponse {
 struct SendRawEmailResponseDeserializer;
 impl SendRawEmailResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendRawEmailResponse, XmlParseError> {
@@ -5612,7 +5480,7 @@ pub struct SendTemplatedEmailResponse {
 struct SendTemplatedEmailResponseDeserializer;
 impl SendTemplatedEmailResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SendTemplatedEmailResponse, XmlParseError> {
@@ -5634,10 +5502,7 @@ impl SendTemplatedEmailResponseDeserializer {
 struct SentLast24HoursDeserializer;
 impl SentLast24HoursDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -5674,7 +5539,7 @@ pub struct SetActiveReceiptRuleSetResponse {}
 struct SetActiveReceiptRuleSetResponseDeserializer;
 impl SetActiveReceiptRuleSetResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetActiveReceiptRuleSetResponse, XmlParseError> {
@@ -5717,7 +5582,7 @@ pub struct SetIdentityDkimEnabledResponse {}
 struct SetIdentityDkimEnabledResponseDeserializer;
 impl SetIdentityDkimEnabledResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityDkimEnabledResponse, XmlParseError> {
@@ -5767,7 +5632,7 @@ pub struct SetIdentityFeedbackForwardingEnabledResponse {}
 struct SetIdentityFeedbackForwardingEnabledResponseDeserializer;
 impl SetIdentityFeedbackForwardingEnabledResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityFeedbackForwardingEnabledResponse, XmlParseError> {
@@ -5820,7 +5685,7 @@ pub struct SetIdentityHeadersInNotificationsEnabledResponse {}
 struct SetIdentityHeadersInNotificationsEnabledResponseDeserializer;
 impl SetIdentityHeadersInNotificationsEnabledResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityHeadersInNotificationsEnabledResponse, XmlParseError> {
@@ -5873,7 +5738,7 @@ pub struct SetIdentityMailFromDomainResponse {}
 struct SetIdentityMailFromDomainResponseDeserializer;
 impl SetIdentityMailFromDomainResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityMailFromDomainResponse, XmlParseError> {
@@ -5924,7 +5789,7 @@ pub struct SetIdentityNotificationTopicResponse {}
 struct SetIdentityNotificationTopicResponseDeserializer;
 impl SetIdentityNotificationTopicResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetIdentityNotificationTopicResponse, XmlParseError> {
@@ -5972,7 +5837,7 @@ pub struct SetReceiptRulePositionResponse {}
 struct SetReceiptRulePositionResponseDeserializer;
 impl SetReceiptRulePositionResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SetReceiptRulePositionResponse, XmlParseError> {
@@ -5997,7 +5862,7 @@ pub struct StopAction {
 struct StopActionDeserializer;
 impl StopActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopAction, XmlParseError> {
@@ -6037,10 +5902,7 @@ impl StopActionSerializer {
 struct StopScopeDeserializer;
 impl StopScopeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6051,10 +5913,7 @@ impl StopScopeDeserializer {
 struct SubjectDeserializer;
 impl SubjectDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6065,10 +5924,7 @@ impl SubjectDeserializer {
 struct SubjectPartDeserializer;
 impl SubjectPartDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6079,10 +5935,7 @@ impl SubjectPartDeserializer {
 struct SuccessRedirectionURLDeserializer;
 impl SuccessRedirectionURLDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6106,7 +5959,7 @@ pub struct Template {
 struct TemplateDeserializer;
 impl TemplateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Template, XmlParseError> {
@@ -6158,10 +6011,7 @@ impl TemplateSerializer {
 struct TemplateContentDeserializer;
 impl TemplateContentDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6181,7 +6031,7 @@ pub struct TemplateMetadata {
 struct TemplateMetadataDeserializer;
 impl TemplateMetadataDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TemplateMetadata, XmlParseError> {
@@ -6205,7 +6055,7 @@ impl TemplateMetadataDeserializer {
 struct TemplateMetadataListDeserializer;
 impl TemplateMetadataListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TemplateMetadata>, XmlParseError> {
@@ -6222,10 +6072,7 @@ impl TemplateMetadataListDeserializer {
 struct TemplateNameDeserializer;
 impl TemplateNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6264,7 +6111,7 @@ pub struct TestRenderTemplateResponse {
 struct TestRenderTemplateResponseDeserializer;
 impl TestRenderTemplateResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TestRenderTemplateResponse, XmlParseError> {
@@ -6289,10 +6136,7 @@ impl TestRenderTemplateResponseDeserializer {
 struct TextPartDeserializer;
 impl TextPartDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6303,10 +6147,7 @@ impl TextPartDeserializer {
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6317,10 +6158,7 @@ impl TimestampDeserializer {
 struct TlsPolicyDeserializer;
 impl TlsPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6338,7 +6176,7 @@ pub struct TrackingOptions {
 struct TrackingOptionsDeserializer;
 impl TrackingOptionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrackingOptions, XmlParseError> {
@@ -6439,7 +6277,7 @@ pub struct UpdateConfigurationSetEventDestinationResponse {}
 struct UpdateConfigurationSetEventDestinationResponseDeserializer;
 impl UpdateConfigurationSetEventDestinationResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateConfigurationSetEventDestinationResponse, XmlParseError> {
@@ -6552,7 +6390,7 @@ pub struct UpdateConfigurationSetTrackingOptionsResponse {}
 struct UpdateConfigurationSetTrackingOptionsResponseDeserializer;
 impl UpdateConfigurationSetTrackingOptionsResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateConfigurationSetTrackingOptionsResponse, XmlParseError> {
@@ -6650,7 +6488,7 @@ pub struct UpdateReceiptRuleResponse {}
 struct UpdateReceiptRuleResponseDeserializer;
 impl UpdateReceiptRuleResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateReceiptRuleResponse, XmlParseError> {
@@ -6687,7 +6525,7 @@ pub struct UpdateTemplateResponse {}
 struct UpdateTemplateResponseDeserializer;
 impl UpdateTemplateResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTemplateResponse, XmlParseError> {
@@ -6703,7 +6541,7 @@ impl UpdateTemplateResponseDeserializer {
 struct VerificationAttributesDeserializer;
 impl VerificationAttributesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<::std::collections::HashMap<String, IdentityVerificationAttributes>, XmlParseError>
@@ -6727,10 +6565,7 @@ impl VerificationAttributesDeserializer {
 struct VerificationStatusDeserializer;
 impl VerificationStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6741,10 +6576,7 @@ impl VerificationStatusDeserializer {
 struct VerificationTokenDeserializer;
 impl VerificationTokenDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6755,7 +6587,7 @@ impl VerificationTokenDeserializer {
 struct VerificationTokenListDeserializer;
 impl VerificationTokenListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -6799,7 +6631,7 @@ pub struct VerifyDomainDkimResponse {
 struct VerifyDomainDkimResponseDeserializer;
 impl VerifyDomainDkimResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyDomainDkimResponse, XmlParseError> {
@@ -6852,7 +6684,7 @@ pub struct VerifyDomainIdentityResponse {
 struct VerifyDomainIdentityResponseDeserializer;
 impl VerifyDomainIdentityResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyDomainIdentityResponse, XmlParseError> {
@@ -6919,7 +6751,7 @@ pub struct VerifyEmailIdentityResponse {}
 struct VerifyEmailIdentityResponseDeserializer;
 impl VerifyEmailIdentityResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<VerifyEmailIdentityResponse, XmlParseError> {
@@ -6944,7 +6776,7 @@ pub struct WorkmailAction {
 struct WorkmailActionDeserializer;
 impl WorkmailActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<WorkmailAction, XmlParseError> {
@@ -7006,17 +6838,17 @@ impl CloneReceiptRuleSetError {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
                         return RusotoError::Service(CloneReceiptRuleSetError::AlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CloneReceiptRuleSetError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(CloneReceiptRuleSetError::RuleSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7070,20 +6902,20 @@ impl CreateConfigurationSetError {
                     "ConfigurationSetAlreadyExists" => {
                         return RusotoError::Service(
                             CreateConfigurationSetError::ConfigurationSetAlreadyExists(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidConfigurationSet" => {
                         return RusotoError::Service(
-                            CreateConfigurationSetError::InvalidConfigurationSet(String::from(
+                            CreateConfigurationSetError::InvalidConfigurationSet(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateConfigurationSetError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7144,37 +6976,37 @@ impl CreateConfigurationSetEventDestinationError {
                 match &parsed_error.code[..] {
                     "ConfigurationSetDoesNotExist" => return RusotoError::Service(
                         CreateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "EventDestinationAlreadyExists" => return RusotoError::Service(
                         CreateConfigurationSetEventDestinationError::EventDestinationAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidCloudWatchDestination" => return RusotoError::Service(
                         CreateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidFirehoseDestination" => {
                         return RusotoError::Service(
                             CreateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidSNSDestination" => {
                         return RusotoError::Service(
                             CreateConfigurationSetEventDestinationError::InvalidSNSDestination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(
                             CreateConfigurationSetEventDestinationError::LimitExceeded(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7241,19 +7073,19 @@ impl CreateConfigurationSetTrackingOptionsError {
                 match &parsed_error.code[..] {
                     "ConfigurationSetDoesNotExist" => return RusotoError::Service(
                         CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidTrackingOptions" => {
                         return RusotoError::Service(
                             CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TrackingOptionsAlreadyExistsException" => return RusotoError::Service(
                         CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     _ => {}
@@ -7312,7 +7144,7 @@ impl CreateCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message))),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message))),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message))),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message))),_ => {}
+                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExists" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),"LimitExceeded" => return RusotoError::Service(CreateCustomVerificationEmailTemplateError::LimitExceeded(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -7361,12 +7193,12 @@ impl CreateReceiptFilterError {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateReceiptFilterError::AlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateReceiptFilterError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7426,39 +7258,37 @@ impl CreateReceiptRuleError {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateReceiptRuleError::AlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidLambdaFunction" => {
                         return RusotoError::Service(CreateReceiptRuleError::InvalidLambdaFunction(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidS3Configuration" => {
                         return RusotoError::Service(
-                            CreateReceiptRuleError::InvalidS3Configuration(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateReceiptRuleError::InvalidS3Configuration(parsed_error.message),
                         )
                     }
                     "InvalidSnsTopic" => {
                         return RusotoError::Service(CreateReceiptRuleError::InvalidSnsTopic(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateReceiptRuleError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(CreateReceiptRuleError::RuleDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(CreateReceiptRuleError::RuleSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7513,12 +7343,12 @@ impl CreateReceiptRuleSetError {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateReceiptRuleSetError::AlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateReceiptRuleSetError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7570,17 +7400,17 @@ impl CreateTemplateError {
                 match &parsed_error.code[..] {
                     "AlreadyExists" => {
                         return RusotoError::Service(CreateTemplateError::AlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidTemplate" => {
                         return RusotoError::Service(CreateTemplateError::InvalidTemplate(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateTemplateError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7630,7 +7460,7 @@ impl DeleteConfigurationSetError {
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
                             DeleteConfigurationSetError::ConfigurationSetDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7682,12 +7512,12 @@ impl DeleteConfigurationSetEventDestinationError {
                 match &parsed_error.code[..] {
                     "ConfigurationSetDoesNotExist" => return RusotoError::Service(
                         DeleteConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "EventDestinationDoesNotExist" => return RusotoError::Service(
                         DeleteConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     _ => {}
@@ -7743,13 +7573,13 @@ impl DeleteConfigurationSetTrackingOptionsError {
                 match &parsed_error.code[..] {
                     "ConfigurationSetDoesNotExist" => return RusotoError::Service(
                         DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "TrackingOptionsDoesNotExistException" => {
                         return RusotoError::Service(
                             DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7952,7 +7782,7 @@ impl DeleteReceiptRuleError {
                 match &parsed_error.code[..] {
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(DeleteReceiptRuleError::RuleSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7999,7 +7829,7 @@ impl DeleteReceiptRuleSetError {
                 match &parsed_error.code[..] {
                     "CannotDelete" => {
                         return RusotoError::Service(DeleteReceiptRuleSetError::CannotDelete(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8162,7 +7992,7 @@ impl DescribeConfigurationSetError {
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
                             DescribeConfigurationSetError::ConfigurationSetDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8212,12 +8042,12 @@ impl DescribeReceiptRuleError {
                 match &parsed_error.code[..] {
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(DescribeReceiptRuleError::RuleDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(DescribeReceiptRuleError::RuleSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8265,9 +8095,7 @@ impl DescribeReceiptRuleSetError {
                 match &parsed_error.code[..] {
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(
-                            DescribeReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -8351,7 +8179,7 @@ impl GetCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message))),_ => {}
+                                    "CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -8660,7 +8488,7 @@ impl GetTemplateError {
                 match &parsed_error.code[..] {
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(GetTemplateError::TemplateDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9007,7 +8835,7 @@ impl PutIdentityPolicyError {
                 match &parsed_error.code[..] {
                     "InvalidPolicy" => {
                         return RusotoError::Service(PutIdentityPolicyError::InvalidPolicy(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9056,14 +8884,12 @@ impl ReorderReceiptRuleSetError {
                 match &parsed_error.code[..] {
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(ReorderReceiptRuleSetError::RuleDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(
-                            ReorderReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                                parsed_error.message,
-                            )),
+                            ReorderReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -9111,7 +8937,7 @@ impl SendBounceError {
                 match &parsed_error.code[..] {
                     "MessageRejected" => {
                         return RusotoError::Service(SendBounceError::MessageRejected(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9168,42 +8994,38 @@ impl SendBulkTemplatedEmailError {
                 match &parsed_error.code[..] {
                     "AccountSendingPausedException" => {
                         return RusotoError::Service(
-                            SendBulkTemplatedEmailError::AccountSendingPaused(String::from(
-                                parsed_error.message,
-                            )),
+                            SendBulkTemplatedEmailError::AccountSendingPaused(parsed_error.message),
                         )
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
                             SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return RusotoError::Service(
                             SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return RusotoError::Service(
-                            SendBulkTemplatedEmailError::MailFromDomainNotVerified(String::from(
+                            SendBulkTemplatedEmailError::MailFromDomainNotVerified(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "MessageRejected" => {
                         return RusotoError::Service(SendBulkTemplatedEmailError::MessageRejected(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(
-                            SendBulkTemplatedEmailError::TemplateDoesNotExist(String::from(
-                                parsed_error.message,
-                            )),
+                            SendBulkTemplatedEmailError::TemplateDoesNotExist(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -9263,7 +9085,7 @@ impl SendCustomVerificationEmailError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message))),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message))),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(String::from(parsed_error.message))),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(String::from(parsed_error.message))),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(String::from(parsed_error.message))),_ => {}
+                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(SendCustomVerificationEmailError::FromEmailAddressNotVerified(parsed_error.message)),"MessageRejected" => return RusotoError::Service(SendCustomVerificationEmailError::MessageRejected(parsed_error.message)),"ProductionAccessNotGranted" => return RusotoError::Service(SendCustomVerificationEmailError::ProductionAccessNotGranted(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -9321,28 +9143,28 @@ impl SendEmailError {
                 match &parsed_error.code[..] {
                     "AccountSendingPausedException" => {
                         return RusotoError::Service(SendEmailError::AccountSendingPaused(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(SendEmailError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return RusotoError::Service(SendEmailError::ConfigurationSetSendingPaused(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return RusotoError::Service(SendEmailError::MailFromDomainNotVerified(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MessageRejected" => {
-                        return RusotoError::Service(SendEmailError::MessageRejected(String::from(
+                        return RusotoError::Service(SendEmailError::MessageRejected(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -9400,31 +9222,27 @@ impl SendRawEmailError {
                 match &parsed_error.code[..] {
                     "AccountSendingPausedException" => {
                         return RusotoError::Service(SendRawEmailError::AccountSendingPaused(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
-                            SendRawEmailError::ConfigurationSetDoesNotExist(String::from(
-                                parsed_error.message,
-                            )),
+                            SendRawEmailError::ConfigurationSetDoesNotExist(parsed_error.message),
                         )
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return RusotoError::Service(
-                            SendRawEmailError::ConfigurationSetSendingPaused(String::from(
-                                parsed_error.message,
-                            )),
+                            SendRawEmailError::ConfigurationSetSendingPaused(parsed_error.message),
                         )
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return RusotoError::Service(SendRawEmailError::MailFromDomainNotVerified(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MessageRejected" => {
                         return RusotoError::Service(SendRawEmailError::MessageRejected(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9485,38 +9303,38 @@ impl SendTemplatedEmailError {
                 match &parsed_error.code[..] {
                     "AccountSendingPausedException" => {
                         return RusotoError::Service(SendTemplatedEmailError::AccountSendingPaused(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
-                            SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
+                            SendTemplatedEmailError::ConfigurationSetDoesNotExist(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "ConfigurationSetSendingPausedException" => {
                         return RusotoError::Service(
-                            SendTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
+                            SendTemplatedEmailError::ConfigurationSetSendingPaused(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "MailFromDomainNotVerifiedException" => {
                         return RusotoError::Service(
-                            SendTemplatedEmailError::MailFromDomainNotVerified(String::from(
+                            SendTemplatedEmailError::MailFromDomainNotVerified(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "MessageRejected" => {
                         return RusotoError::Service(SendTemplatedEmailError::MessageRejected(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(SendTemplatedEmailError::TemplateDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9568,9 +9386,7 @@ impl SetActiveReceiptRuleSetError {
                 match &parsed_error.code[..] {
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(
-                            SetActiveReceiptRuleSetError::RuleSetDoesNotExist(String::from(
-                                parsed_error.message,
-                            )),
+                            SetActiveReceiptRuleSetError::RuleSetDoesNotExist(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -9810,14 +9626,12 @@ impl SetReceiptRulePositionError {
                 match &parsed_error.code[..] {
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(SetReceiptRulePositionError::RuleDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(
-                            SetReceiptRulePositionError::RuleSetDoesNotExist(String::from(
-                                parsed_error.message,
-                            )),
+                            SetReceiptRulePositionError::RuleSetDoesNotExist(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -9869,21 +9683,21 @@ impl TestRenderTemplateError {
                 match &parsed_error.code[..] {
                     "InvalidRenderingParameter" => {
                         return RusotoError::Service(
-                            TestRenderTemplateError::InvalidRenderingParameter(String::from(
+                            TestRenderTemplateError::InvalidRenderingParameter(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "MissingRenderingAttribute" => {
                         return RusotoError::Service(
-                            TestRenderTemplateError::MissingRenderingAttribute(String::from(
+                            TestRenderTemplateError::MissingRenderingAttribute(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(TestRenderTemplateError::TemplateDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9981,30 +9795,30 @@ impl UpdateConfigurationSetEventDestinationError {
                 match &parsed_error.code[..] {
                     "ConfigurationSetDoesNotExist" => return RusotoError::Service(
                         UpdateConfigurationSetEventDestinationError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "EventDestinationDoesNotExist" => return RusotoError::Service(
                         UpdateConfigurationSetEventDestinationError::EventDestinationDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidCloudWatchDestination" => return RusotoError::Service(
                         UpdateConfigurationSetEventDestinationError::InvalidCloudWatchDestination(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidFirehoseDestination" => {
                         return RusotoError::Service(
                             UpdateConfigurationSetEventDestinationError::InvalidFirehoseDestination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidSNSDestination" => {
                         return RusotoError::Service(
                             UpdateConfigurationSetEventDestinationError::InvalidSNSDestination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10064,7 +9878,7 @@ impl UpdateConfigurationSetReputationMetricsEnabledError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message))),_ => {}
+                                    "ConfigurationSetDoesNotExist" => return RusotoError::Service(UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -10113,7 +9927,7 @@ impl UpdateConfigurationSetSendingEnabledError {
                     "ConfigurationSetDoesNotExist" => {
                         return RusotoError::Service(
                             UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10169,20 +9983,20 @@ impl UpdateConfigurationSetTrackingOptionsError {
                 match &parsed_error.code[..] {
                     "ConfigurationSetDoesNotExist" => return RusotoError::Service(
                         UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidTrackingOptions" => {
                         return RusotoError::Service(
                             UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TrackingOptionsDoesNotExistException" => {
                         return RusotoError::Service(
                             UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -10240,7 +10054,7 @@ impl UpdateCustomVerificationEmailTemplateError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message))),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message))),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message))),_ => {}
+                                    "CustomVerificationEmailInvalidContent" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExist" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(parsed_error.message)),"FromEmailAddressNotVerified" => return RusotoError::Service(UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -10296,34 +10110,32 @@ impl UpdateReceiptRuleError {
                 match &parsed_error.code[..] {
                     "InvalidLambdaFunction" => {
                         return RusotoError::Service(UpdateReceiptRuleError::InvalidLambdaFunction(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidS3Configuration" => {
                         return RusotoError::Service(
-                            UpdateReceiptRuleError::InvalidS3Configuration(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateReceiptRuleError::InvalidS3Configuration(parsed_error.message),
                         )
                     }
                     "InvalidSnsTopic" => {
                         return RusotoError::Service(UpdateReceiptRuleError::InvalidSnsTopic(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(UpdateReceiptRuleError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "RuleDoesNotExist" => {
                         return RusotoError::Service(UpdateReceiptRuleError::RuleDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "RuleSetDoesNotExist" => {
                         return RusotoError::Service(UpdateReceiptRuleError::RuleSetDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10377,12 +10189,12 @@ impl UpdateTemplateError {
                 match &parsed_error.code[..] {
                     "InvalidTemplate" => {
                         return RusotoError::Service(UpdateTemplateError::InvalidTemplate(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TemplateDoesNotExist" => {
                         return RusotoError::Service(UpdateTemplateError::TemplateDoesNotExist(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -11030,7 +10842,7 @@ impl SesClient {
     pub fn new(region: region::Region) -> SesClient {
         SesClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -11047,7 +10859,7 @@ impl SesClient {
     {
         SesClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

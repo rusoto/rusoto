@@ -1620,7 +1620,7 @@ impl CloudHsmClient {
     pub fn new(region: region::Region) -> CloudHsmClient {
         CloudHsmClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1637,7 +1637,7 @@ impl CloudHsmClient {
     {
         CloudHsmClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

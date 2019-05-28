@@ -998,7 +998,7 @@ impl PollyClient {
     pub fn new(region: region::Region) -> PollyClient {
         PollyClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1015,7 +1015,7 @@ impl PollyClient {
     {
         PollyClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

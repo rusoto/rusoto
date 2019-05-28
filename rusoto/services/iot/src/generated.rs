@@ -18020,7 +18020,7 @@ impl IotClient {
     pub fn new(region: region::Region) -> IotClient {
         IotClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -18037,7 +18037,7 @@ impl IotClient {
     {
         IotClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

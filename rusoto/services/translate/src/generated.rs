@@ -580,7 +580,7 @@ impl TranslateClient {
     pub fn new(region: region::Region) -> TranslateClient {
         TranslateClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -597,7 +597,7 @@ impl TranslateClient {
     {
         TranslateClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

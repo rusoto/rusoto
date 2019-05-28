@@ -8523,7 +8523,7 @@ impl CloudDirectoryClient {
     pub fn new(region: region::Region) -> CloudDirectoryClient {
         CloudDirectoryClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -8540,7 +8540,7 @@ impl CloudDirectoryClient {
     {
         CloudDirectoryClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

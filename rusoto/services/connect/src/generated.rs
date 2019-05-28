@@ -2382,7 +2382,7 @@ impl ConnectClient {
     pub fn new(region: region::Region) -> ConnectClient {
         ConnectClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2399,7 +2399,7 @@ impl ConnectClient {
     {
         ConnectClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }
