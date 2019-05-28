@@ -18,16 +18,19 @@ const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &'static str = concat!(
 );
 
 pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
-    writeln!(
-        writer,
-        "
-            #[cfg(test)]
-            mod protocol_tests {{
-                {tests_body}
-            }}
-            ",
-        tests_body = generate_tests_body(service).unwrap_or_else(|| "".to_string())
-    )
+    match generate_tests_body(service) {
+        Some(test_bodies) => writeln!(
+            writer,
+            "
+                    #[cfg(test)]
+                    mod protocol_tests {{
+                        {tests_body}
+                    }}
+                    ",
+            tests_body = test_bodies
+        ),
+        None => Ok(()),
+    }
 }
 
 fn generate_tests_body(service: &Service) -> Option<String> {
