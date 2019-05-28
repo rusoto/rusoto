@@ -6185,6 +6185,3 @@ impl Ecs for EcsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

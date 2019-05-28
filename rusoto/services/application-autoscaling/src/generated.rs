@@ -1544,6 +1544,3 @@ impl ApplicationAutoScaling for ApplicationAutoScalingClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -8164,6 +8164,3 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

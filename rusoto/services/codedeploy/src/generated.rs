@@ -7227,6 +7227,3 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

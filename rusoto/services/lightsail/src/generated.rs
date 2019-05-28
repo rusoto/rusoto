@@ -14960,6 +14960,3 @@ impl Lightsail for LightsailClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

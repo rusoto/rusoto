@@ -8127,6 +8127,3 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

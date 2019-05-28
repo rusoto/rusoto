@@ -3024,6 +3024,3 @@ impl Ets for EtsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

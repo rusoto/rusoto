@@ -10667,6 +10667,3 @@ impl CloudDirectory for CloudDirectoryClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

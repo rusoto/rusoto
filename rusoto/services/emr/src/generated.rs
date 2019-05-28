@@ -4324,6 +4324,3 @@ impl Emr for EmrClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

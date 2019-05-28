@@ -9153,6 +9153,3 @@ impl GameLift for GameLiftClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

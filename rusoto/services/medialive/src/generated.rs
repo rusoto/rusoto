@@ -7718,6 +7718,3 @@ impl MediaLive for MediaLiveClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

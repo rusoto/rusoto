@@ -760,6 +760,3 @@ impl Translate for TranslateClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

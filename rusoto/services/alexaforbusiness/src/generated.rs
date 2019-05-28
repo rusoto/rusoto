@@ -7842,6 +7842,3 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

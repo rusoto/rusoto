@@ -2607,6 +2607,3 @@ impl ServiceDiscovery for ServiceDiscoveryClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

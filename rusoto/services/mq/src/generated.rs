@@ -3152,6 +3152,3 @@ impl MQ for MQClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

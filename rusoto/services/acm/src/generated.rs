@@ -1510,6 +1510,3 @@ impl Acm for AcmClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

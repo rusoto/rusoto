@@ -1299,6 +1299,3 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

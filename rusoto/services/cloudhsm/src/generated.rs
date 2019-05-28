@@ -2222,6 +2222,3 @@ impl CloudHsm for CloudHsmClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

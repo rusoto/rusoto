@@ -15156,6 +15156,3 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

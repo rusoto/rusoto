@@ -15547,6 +15547,3 @@ impl Neptune for NeptuneClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

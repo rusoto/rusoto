@@ -738,6 +738,3 @@ impl DynamoDbStreams for DynamoDbStreamsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

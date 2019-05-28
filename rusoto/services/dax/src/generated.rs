@@ -3118,6 +3118,3 @@ impl DynamodbAccelerator for DynamodbAcceleratorClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

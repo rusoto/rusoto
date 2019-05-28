@@ -2294,6 +2294,3 @@ impl MigrationHub for MigrationHubClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

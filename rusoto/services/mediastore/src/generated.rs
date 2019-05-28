@@ -1391,6 +1391,3 @@ impl MediaStore for MediaStoreClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

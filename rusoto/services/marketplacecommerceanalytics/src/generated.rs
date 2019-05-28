@@ -286,6 +286,3 @@ impl MarketplaceCommerceAnalytics for MarketplaceCommerceAnalyticsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

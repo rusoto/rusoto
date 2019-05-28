@@ -1832,6 +1832,3 @@ impl Fsx for FsxClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

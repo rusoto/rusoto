@@ -550,6 +550,3 @@ impl KinesisVideoArchivedMedia for KinesisVideoArchivedMediaClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

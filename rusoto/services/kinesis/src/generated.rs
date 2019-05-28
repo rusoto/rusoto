@@ -3537,6 +3537,3 @@ impl Kinesis for KinesisClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

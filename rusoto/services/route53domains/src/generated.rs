@@ -2962,6 +2962,3 @@ impl Route53Domains for Route53DomainsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

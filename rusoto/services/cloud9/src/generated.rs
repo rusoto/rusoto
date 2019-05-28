@@ -1484,6 +1484,3 @@ impl Cloud9 for Cloud9Client {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

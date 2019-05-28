@@ -2349,6 +2349,3 @@ impl DataPipeline for DataPipelineClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

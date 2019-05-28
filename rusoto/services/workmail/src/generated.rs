@@ -4166,6 +4166,3 @@ impl Workmail for WorkmailClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

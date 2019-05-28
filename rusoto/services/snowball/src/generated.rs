@@ -2344,6 +2344,3 @@ impl Snowball for SnowballClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -6048,6 +6048,3 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -2923,6 +2923,3 @@ impl XRay for XRayClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

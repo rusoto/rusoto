@@ -2039,6 +2039,3 @@ impl SimpleDb for SimpleDbClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

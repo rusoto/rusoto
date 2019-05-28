@@ -1975,6 +1975,3 @@ impl Athena for AthenaClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

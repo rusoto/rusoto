@@ -5309,6 +5309,3 @@ impl Lambda for LambdaClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

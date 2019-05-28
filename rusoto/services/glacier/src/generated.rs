@@ -4634,6 +4634,3 @@ impl Glacier for GlacierClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

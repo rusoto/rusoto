@@ -2187,6 +2187,3 @@ impl AcmPca for AcmPcaClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

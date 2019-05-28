@@ -550,6 +550,3 @@ impl LexRuntime for LexRuntimeClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

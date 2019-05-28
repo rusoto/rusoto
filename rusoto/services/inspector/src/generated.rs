@@ -4851,6 +4851,3 @@ impl Inspector for InspectorClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

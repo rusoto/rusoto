@@ -1869,6 +1869,3 @@ impl AWSSupport for AWSSupportClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

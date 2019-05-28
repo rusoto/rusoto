@@ -2282,6 +2282,3 @@ impl LicenseManager for LicenseManagerClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

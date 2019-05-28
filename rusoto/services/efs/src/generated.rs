@@ -1890,6 +1890,3 @@ impl Efs for EfsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

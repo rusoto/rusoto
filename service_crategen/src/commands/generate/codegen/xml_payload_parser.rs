@@ -358,7 +358,9 @@ fn generate_map_deserializer(shape: &Shape) -> String {
 
 fn generate_primitive_deserializer(shape: &Shape, percent_decode: bool) -> String {
     let statement = match shape.shape_type {
-        ShapeType::String if percent_decode => "rusoto_core::signature::decode_uri(&characters(stack)?)",
+        ShapeType::String if percent_decode => {
+            "rusoto_core::signature::decode_uri(&characters(stack)?)"
+        }
         ShapeType::String | ShapeType::Timestamp => "characters(stack)?",
         ShapeType::Integer | ShapeType::Long => {
             "i64::from_str(characters(stack)?.as_ref()).unwrap()"

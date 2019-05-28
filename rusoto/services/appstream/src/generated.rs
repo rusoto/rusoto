@@ -5430,6 +5430,3 @@ impl AppStream for AppStreamClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

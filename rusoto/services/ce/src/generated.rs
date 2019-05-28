@@ -1690,6 +1690,3 @@ impl CostExplorer for CostExplorerClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

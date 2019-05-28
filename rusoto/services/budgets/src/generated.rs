@@ -1871,6 +1871,3 @@ impl Budgets for BudgetsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

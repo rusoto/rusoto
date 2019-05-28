@@ -12133,6 +12133,3 @@ impl ElastiCache for ElastiCacheClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

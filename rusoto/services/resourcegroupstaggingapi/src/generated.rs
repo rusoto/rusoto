@@ -673,6 +673,3 @@ impl ResourceGroupsTaggingApi for ResourceGroupsTaggingApiClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

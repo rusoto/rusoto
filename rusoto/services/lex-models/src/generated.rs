@@ -5329,6 +5329,3 @@ impl LexModels for LexModelsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

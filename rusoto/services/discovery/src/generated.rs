@@ -3501,6 +3501,3 @@ impl Discovery for DiscoveryClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

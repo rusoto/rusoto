@@ -9360,6 +9360,3 @@ impl SageMaker for SageMakerClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

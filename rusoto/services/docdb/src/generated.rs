@@ -10598,6 +10598,3 @@ impl Docdb for DocdbClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -9856,6 +9856,3 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

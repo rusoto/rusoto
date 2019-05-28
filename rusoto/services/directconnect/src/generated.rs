@@ -4935,6 +4935,3 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

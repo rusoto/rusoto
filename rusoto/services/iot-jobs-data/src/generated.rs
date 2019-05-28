@@ -720,6 +720,3 @@ impl IotJobsData for IotJobsDataClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}
