@@ -10,6 +10,7 @@ description = "Generates crates for AWS services for the rusoto project"
 name = "rusoto_service_crategen"
 license = "MIT"
 version = "0.1.0"
+edition = "2018"
 
 [dependencies]
 Inflector = "0.7.0"

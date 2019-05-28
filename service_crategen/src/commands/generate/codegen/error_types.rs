@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 use std::io::Write;
 
 use super::{error_type_name, FileWriter, IoResult};
-use botocore::Operation;
-use Service;
+use crate::botocore::Operation;
+use crate::Service;
 
 /// Examines the error types described in the botocore definition for an operation
 /// and generates a Rust enum of error types that can be used in a `Result` return
@@ -93,7 +93,7 @@ pub trait GenerateErrorTypes {
                 if error.idiomatic_error_name() != "Validation" {
                     enum_types.push(format!(
                         "\n{}\n{}(String)",
-                        ::doco::Item(
+                        crate::doco::Item(
                             error_documentation
                                 .get(&error.shape)
                                 .unwrap_or(&&String::from(""))

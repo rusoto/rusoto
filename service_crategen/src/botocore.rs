@@ -10,7 +10,7 @@ use serde::de::{Error as SerdeError, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
 use serde_json;
 
-use util;
+use crate::util;
 
 const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 

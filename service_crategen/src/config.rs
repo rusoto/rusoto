@@ -7,7 +7,7 @@ use std::path::Path;
 
 use serde_json;
 
-use cargo;
+use crate::cargo;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct ServiceConfig {

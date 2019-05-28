@@ -7,8 +7,8 @@ use super::{
     xml_payload_parser,
 };
 use super::{FileWriter, IoResult};
-use botocore::{Member, Operation, Shape, ShapeType};
-use Service;
+use crate::botocore::{Member, Operation, Shape, ShapeType};
+use crate::Service;
 
 pub struct RestXmlGenerator;
 
@@ -144,7 +144,7 @@ impl GenerateProtocol for RestXmlGenerator {
 
 fn generate_documentation(operation: &Operation, service: &Service) -> String {
     let mut docs = match operation.documentation {
-        Some(ref docs) => ::doco::Item(docs).to_string(),
+        Some(ref docs) => crate::doco::Item(docs).to_string(),
         None => "".to_owned(),
     };
 

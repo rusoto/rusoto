@@ -2,8 +2,8 @@ use inflector::Inflector;
 use std::io::Write;
 
 use super::{error_type_name, FileWriter, GenerateProtocol, IoResult};
-use botocore::Operation;
-use Service;
+use crate::botocore::Operation;
+use crate::Service;
 
 pub struct JsonGenerator;
 
@@ -153,7 +153,7 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
     operation
         .documentation
         .as_ref()
-        .map(|docs| ::doco::Item(docs).to_string())
+        .map(|docs| crate::doco::Item(docs).to_string())
 }
 
 fn generate_ok_response(operation: &Operation, output_type: &str) -> String {

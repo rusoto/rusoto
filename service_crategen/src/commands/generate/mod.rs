@@ -9,8 +9,8 @@ use toml;
 
 mod codegen;
 
-use cargo;
-use {Service, ServiceConfig, ServiceDefinition};
+use crate::cargo;
+use crate::{Service, ServiceConfig, ServiceDefinition};
 
 fn generate_examples(crate_dir_path: &Path) -> Option<String> {
     let examples_dir_path = crate_dir_path.join("examples");
@@ -247,7 +247,7 @@ mod custom;
 pub use crate::generated::*;
 pub use crate::custom::*;
             "#,
-            service_docs = ::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
+            service_docs = crate::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
             client_name = service.client_type_name(),
             trait_name = service.service_type_name(),
             examples = generate_examples(&crate_dir).unwrap_or_else(|| "".to_string()),

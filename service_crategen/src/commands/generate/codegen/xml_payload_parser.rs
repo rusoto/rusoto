@@ -1,8 +1,8 @@
 use inflector::Inflector;
 
 use super::{generate_field_name, mutate_type_name};
-use botocore::{Member, Operation, Shape, ShapeType};
-use Service;
+use crate::botocore::{Member, Operation, Shape, ShapeType};
+use crate::Service;
 
 pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Service) -> String {
     format!(

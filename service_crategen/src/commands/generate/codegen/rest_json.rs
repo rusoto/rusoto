@@ -6,8 +6,8 @@ use super::{
     error_type_name, generate_field_name, rest_request_generator, rest_response_parser, FileWriter,
     GenerateProtocol, IoResult,
 };
-use botocore::{Operation, Shape, ShapeType};
-use Service;
+use crate::botocore::{Operation, Shape, ShapeType};
+use crate::Service;
 
 pub struct RestJsonGenerator;
 
@@ -271,7 +271,7 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
     operation
         .documentation
         .as_ref()
-        .map(|docs| ::doco::Item(docs).to_string())
+        .map(|docs| crate::doco::Item(docs).to_string())
 }
 
 /// Generate code to plumb the response status code into any fields

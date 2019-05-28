@@ -10,9 +10,9 @@ use self::rest_json::RestJsonGenerator;
 use self::rest_xml::RestXmlGenerator;
 use self::tests::generate_tests;
 use self::type_filter::filter_types;
-use botocore::{Member, Shape, ShapeType};
-use util;
-use Service;
+use crate::botocore::{Member, Shape, ShapeType};
+use crate::util;
+use crate::Service;
 
 mod error_types;
 mod json;
@@ -337,7 +337,7 @@ where
         if shape.shape_type == ShapeType::Structure {
             // If botocore includes documentation, clean it up a bit and use it
             if let Some(ref docs) = shape.documentation {
-                writeln!(writer, "{}", ::doco::Item(docs))?;
+                writeln!(writer, "{}", crate::doco::Item(docs))?;
             }
 
             // generate a rust type for the shape
@@ -471,7 +471,7 @@ fn generate_struct_fields<P: GenerateProtocol>(
         let mut lines: Vec<String> = Vec::new();
 
         if let Some(ref docs) = member.documentation {
-            lines.push(::doco::Item(docs).to_string());
+            lines.push(crate::doco::Item(docs).to_string());
         }
 
         if serde_attrs {

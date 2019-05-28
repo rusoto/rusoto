@@ -1,8 +1,8 @@
 use super::generate_field_name;
-use botocore::{Member, Operation, Shape, ShapeType};
+use crate::botocore::{Member, Operation, Shape, ShapeType};
 use inflector::Inflector;
 use regex::Regex;
-use Service;
+use crate::Service;
 
 // Add request headers for any shape members marked as headers
 pub fn generate_headers(service: &Service, operation: &Operation) -> Option<String> {

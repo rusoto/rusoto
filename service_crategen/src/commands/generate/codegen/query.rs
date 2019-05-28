@@ -1,9 +1,9 @@
 use inflector::Inflector;
 use std::io::Write;
 
-use botocore::{Member, Operation, Shape, ShapeType};
-use util;
-use Service;
+use crate::botocore::{Member, Operation, Shape, ShapeType};
+use crate::util;
+use crate::Service;
 
 use super::xml_payload_parser;
 use super::{
@@ -438,7 +438,7 @@ fn optional_complex_field_serializer(
 
 fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
-        Some(ref docs) => ::doco::Item(docs).to_string(),
+        Some(ref docs) => crate::doco::Item(docs).to_string(),
         None => "".to_owned(),
     }
 }

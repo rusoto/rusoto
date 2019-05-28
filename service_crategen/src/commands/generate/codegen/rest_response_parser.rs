@@ -1,7 +1,7 @@
 use inflector::Inflector;
 
-use botocore::{Member, Operation, Shape, ShapeType};
-use Service;
+use crate::botocore::{Member, Operation, Shape, ShapeType};
+use crate::Service;
 
 // Rest Response Parser
 //

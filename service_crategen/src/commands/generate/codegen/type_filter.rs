@@ -1,8 +1,8 @@
 use std::collections::BTreeSet;
 
 use super::mutate_type_name;
-use botocore::{Shape, ShapeType};
-use Service;
+use crate::botocore::{Shape, ShapeType};
+use crate::Service;
 
 pub fn filter_types(service: &Service) -> (BTreeSet<String>, BTreeSet<String>) {
     let mut deserialized_types: BTreeSet<String> = BTreeSet::new();
