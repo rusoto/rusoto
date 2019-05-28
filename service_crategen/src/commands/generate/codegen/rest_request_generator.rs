@@ -6,7 +6,7 @@ use crate::Service;
 use lazy_static::lazy_static;
 
 // Add request headers for any shape members marked as headers
-pub fn generate_headers(service: &Service, operation: &Operation) -> Option<String> {
+pub fn generate_headers(service: &Service<'_>, operation: &Operation) -> Option<String> {
     if operation.input.is_none() {
         return None;
     }
@@ -73,7 +73,7 @@ pub fn generate_headers(service: &Service, operation: &Operation) -> Option<Stri
         .join("\n"))
 }
 
-pub fn generate_params_loading_string(service: &Service, operation: &Operation) -> Option<String> {
+pub fn generate_params_loading_string(service: &Service<'_>, operation: &Operation) -> Option<String> {
     if operation.input.is_none() {
         return None;
     }
@@ -102,7 +102,7 @@ pub fn generate_params_loading_string(service: &Service, operation: &Operation) 
 
 pub fn generate_uri_formatter(
     request_uri: &str,
-    service: &Service,
+    service: &Service<'_>,
     operation: &Operation,
 ) -> Option<String> {
     if operation.input.is_some() {
@@ -216,7 +216,7 @@ fn generate_snake_case_uri(request_uri: &str) -> String {
     snake
 }
 
-fn generate_shape_member_param_strings(service: &Service, shape: &Shape) -> Vec<String> {
+fn generate_shape_member_param_strings(service: &Service<'_>, shape: &Shape) -> Vec<String> {
     shape
         .members
         .as_ref()

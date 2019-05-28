@@ -8,7 +8,7 @@ use crate::Service;
 // Used by rest-json and rest-xml protocol codegen to generate
 // code to parse headers from the http response.
 pub fn generate_response_headers_parser(
-    service: &Service,
+    service: &Service<'_>,
     operation: &Operation,
 ) -> Option<String> {
     // nothing to do if there's no output type
@@ -42,7 +42,7 @@ pub fn generate_response_headers_parser(
 }
 
 fn parse_multiple_headers(
-    service: &Service,
+    service: &Service<'_>,
     shape: &Shape,
     member_name: &str,
     member: &Member,
@@ -100,7 +100,7 @@ fn parse_headers_map(member_name: &str, member: &Member, required: bool) -> Stri
 }
 
 fn parse_single_header(
-    service: &Service,
+    service: &Service<'_>,
     shape: &Shape,
     member_name: &str,
     member: &Member,

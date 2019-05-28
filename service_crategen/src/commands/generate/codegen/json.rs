@@ -8,7 +8,7 @@ use crate::Service;
 pub struct JsonGenerator;
 
 impl GenerateProtocol for JsonGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let output_type = operation.output_shape_or("()");
 
@@ -27,7 +27,7 @@ impl GenerateProtocol for JsonGenerator {
         Ok(())
     }
 
-    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let output_type = operation.output_shape_or("()");
 
@@ -70,7 +70,7 @@ impl GenerateProtocol for JsonGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         let res = writeln!(
             writer,
             "
@@ -96,7 +96,7 @@ impl GenerateProtocol for JsonGenerator {
     }
 }
 
-fn generate_endpoint_modification(service: &Service) -> Option<String> {
+fn generate_endpoint_modification(service: &Service<'_>) -> Option<String> {
     if service.signing_name() == service.endpoint_prefix() {
         None
     } else {
@@ -107,7 +107,7 @@ fn generate_endpoint_modification(service: &Service) -> Option<String> {
     }
 }
 
-fn generate_method_signature(service: &Service, operation: &Operation) -> String {
+fn generate_method_signature(service: &Service<'_>, operation: &Operation) -> String {
     if operation.input.is_some()
         && service
             .get_shape(operation.input_shape())
@@ -129,7 +129,7 @@ fn generate_method_signature(service: &Service, operation: &Operation) -> String
     }
 }
 
-fn generate_payload(service: &Service, operation: &Operation) -> String {
+fn generate_payload(service: &Service<'_>, operation: &Operation) -> String {
     if operation.input.is_some()
         && service
             .get_shape(operation.input_shape())

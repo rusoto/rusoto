@@ -4,7 +4,7 @@ use super::mutate_type_name;
 use crate::botocore::{Shape, ShapeType};
 use crate::Service;
 
-pub fn filter_types(service: &Service) -> (BTreeSet<String>, BTreeSet<String>) {
+pub fn filter_types(service: &Service<'_>) -> (BTreeSet<String>, BTreeSet<String>) {
     let mut deserialized_types: BTreeSet<String> = BTreeSet::new();
     let mut serialized_types: BTreeSet<String> = BTreeSet::new();
     for operation in service.operations().values() {
@@ -25,7 +25,7 @@ pub fn filter_types(service: &Service) -> (BTreeSet<String>, BTreeSet<String>) {
     (serialized_types, deserialized_types)
 }
 
-fn recurse_find_shapes(service: &Service, types: &mut BTreeSet<String>, shape_name: &str) {
+fn recurse_find_shapes(service: &Service<'_>, types: &mut BTreeSet<String>, shape_name: &str) {
     types.insert(mutate_type_name(service, shape_name).to_owned());
     let shape = service
         .get_shape(shape_name)
@@ -55,7 +55,7 @@ fn recurse_find_shapes(service: &Service, types: &mut BTreeSet<String>, shape_na
     }
 }
 
-fn can_skip_deserializer(service: &Service, output_shape: &Shape) -> bool {
+fn can_skip_deserializer(service: &Service<'_>, output_shape: &Shape) -> bool {
     if let Some(ref payload_field) = output_shape.payload {
         let payload_member = output_shape
             .members
