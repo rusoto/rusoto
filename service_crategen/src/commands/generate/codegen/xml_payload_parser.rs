@@ -9,7 +9,7 @@ pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Serv
         "struct {name}Deserializer;
             impl {name}Deserializer {{
                 #[allow(unused_variables)]
-                fn deserialize<'a, T: Peek + Next>(tag_name: &str, stack: &mut T)
+                fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T)
                 -> Result<{ty}, XmlParseError> {{
                     {deserializer_body}
                 }}

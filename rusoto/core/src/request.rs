@@ -377,6 +377,7 @@ pub struct HttpConfig {
     read_buf_size: Option<usize>,
 }
 
+#[allow(clippy::new_without_default)]
 impl HttpConfig {
     /// Create a new HttpConfig
     pub fn new() -> HttpConfig {

@@ -220,7 +220,7 @@ impl XmlErrorTypes {
                     .as_ref()
                     .and_then(|http_error| http_error.code.as_ref())
                     .unwrap_or(&error.shape);
-                type_matchers.push(format!("\"{error_code}\" => return RusotoError::Service({error_type}::{error_name}(String::from(parsed_error.message)))",
+                type_matchers.push(format!("\"{error_code}\" => return RusotoError::Service({error_type}::{error_name}(parsed_error.message))",
                     error_code = error_code,
                     error_type = error_type,
                     error_name = error.idiomatic_error_name()))
