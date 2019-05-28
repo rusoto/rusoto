@@ -215,10 +215,10 @@ pub struct ActionExecution {
 pub struct ActionRevision {
     /// <p>The date and time when the most recent version of the action was created, in timestamp format.</p>
     #[serde(rename = "created")]
-    pub created: f64,
+    pub created: Option<f64>,
     /// <p>The unique identifier of the change that set the state to this revision, for example a deployment ID or timestamp.</p>
     #[serde(rename = "revisionChangeId")]
-    pub revision_change_id: String,
+    pub revision_change_id: Option<String>,
     /// <p>The system-generated unique ID that identifies the revision number of the action.</p>
     #[serde(rename = "revisionId")]
     pub revision_id: String,
