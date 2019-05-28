@@ -3,6 +3,7 @@ use crate::botocore::{Member, Operation, Shape, ShapeType};
 use inflector::Inflector;
 use regex::Regex;
 use crate::Service;
+use lazy_static::lazy_static;
 
 // Add request headers for any shape members marked as headers
 pub fn generate_headers(service: &Service, operation: &Operation) -> Option<String> {

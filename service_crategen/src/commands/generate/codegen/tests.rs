@@ -1,10 +1,10 @@
+use inflector::Inflector;
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use self::util::case_insensitive_btreemap_get;
 use super::{FileWriter, IoResult};
-use crate::inflector::Inflector;
 use crate::util;
 use crate::Service;
 
