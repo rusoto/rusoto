@@ -4448,6 +4448,3 @@ impl AppSync for AppSyncClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

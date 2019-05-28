@@ -228,6 +228,3 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

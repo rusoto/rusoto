@@ -1044,6 +1044,3 @@ impl Eks for EksClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

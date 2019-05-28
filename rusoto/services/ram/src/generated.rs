@@ -2650,6 +2650,3 @@ impl Ram for RamClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

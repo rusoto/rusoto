@@ -2884,6 +2884,3 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

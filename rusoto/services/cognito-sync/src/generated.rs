@@ -2459,6 +2459,3 @@ impl CognitoSync for CognitoSyncClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

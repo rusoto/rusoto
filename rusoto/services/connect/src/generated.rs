@@ -3107,6 +3107,3 @@ impl Connect for ConnectClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

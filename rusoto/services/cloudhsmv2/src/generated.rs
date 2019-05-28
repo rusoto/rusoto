@@ -1776,6 +1776,3 @@ impl CloudHsmv2 for CloudHsmv2Client {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

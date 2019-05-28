@@ -2707,6 +2707,3 @@ impl CodeBuild for CodeBuildClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -5097,6 +5097,3 @@ impl GuardDuty for GuardDutyClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

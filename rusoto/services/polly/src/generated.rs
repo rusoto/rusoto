@@ -1325,6 +1325,3 @@ impl Polly for PollyClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -5163,6 +5163,3 @@ impl Kms for KmsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

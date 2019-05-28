@@ -1598,6 +1598,3 @@ impl Iot1ClickProjects for Iot1ClickProjectsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

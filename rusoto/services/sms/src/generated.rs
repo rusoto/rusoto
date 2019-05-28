@@ -3963,6 +3963,3 @@ impl ServerMigrationService for ServerMigrationServiceClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -6170,6 +6170,3 @@ impl MediaConvert for MediaConvertClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

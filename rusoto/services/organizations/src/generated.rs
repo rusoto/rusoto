@@ -5932,6 +5932,3 @@ impl Organizations for OrganizationsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

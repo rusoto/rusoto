@@ -4543,6 +4543,3 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

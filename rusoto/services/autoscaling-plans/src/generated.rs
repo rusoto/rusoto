@@ -1016,6 +1016,3 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

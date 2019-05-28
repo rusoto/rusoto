@@ -5682,6 +5682,3 @@ impl DynamoDb for DynamoDbClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -1218,6 +1218,3 @@ impl Transcribe for TranscribeClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

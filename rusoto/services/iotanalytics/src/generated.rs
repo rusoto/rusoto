@@ -4905,6 +4905,3 @@ impl IotAnalytics for IotAnalyticsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

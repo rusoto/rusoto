@@ -3914,6 +3914,3 @@ impl MachineLearning for MachineLearningClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

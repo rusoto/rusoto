@@ -2549,6 +2549,3 @@ impl ServerlessRepo for ServerlessRepoClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

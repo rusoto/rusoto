@@ -2316,6 +2316,3 @@ impl Chime for ChimeClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

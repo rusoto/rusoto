@@ -1025,6 +1025,3 @@ impl Kafka for KafkaClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

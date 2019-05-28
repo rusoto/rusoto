@@ -4588,6 +4588,3 @@ impl MechanicalTurk for MechanicalTurkClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -2181,6 +2181,3 @@ impl CodeStar for CodeStarClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

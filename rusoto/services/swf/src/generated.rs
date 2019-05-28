@@ -5337,6 +5337,3 @@ impl Swf for SwfClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

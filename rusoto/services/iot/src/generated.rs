@@ -23844,6 +23844,3 @@ impl Iot for IotClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

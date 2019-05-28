@@ -2374,6 +2374,3 @@ impl MediaPackage for MediaPackageClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

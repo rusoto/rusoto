@@ -3766,6 +3766,3 @@ impl Workspaces for WorkspacesClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -455,6 +455,3 @@ impl PerformanceInsights for PerformanceInsightsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

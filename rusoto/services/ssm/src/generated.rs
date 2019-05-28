@@ -17025,6 +17025,3 @@ impl Ssm for SsmClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

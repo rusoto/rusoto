@@ -8199,6 +8199,3 @@ impl CodeCommit for CodeCommitClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

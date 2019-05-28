@@ -2837,6 +2837,3 @@ impl Amplify for AmplifyClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -8435,6 +8435,3 @@ impl DeviceFarm for DeviceFarmClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

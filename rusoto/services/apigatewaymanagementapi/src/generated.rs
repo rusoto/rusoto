@@ -168,6 +168,3 @@ impl ApiGatewayManagementApi for ApiGatewayManagementApiClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

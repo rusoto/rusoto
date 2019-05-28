@@ -2491,6 +2491,3 @@ impl Batch for BatchClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

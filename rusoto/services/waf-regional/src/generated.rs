@@ -9712,6 +9712,3 @@ impl WAFRegional for WAFRegionalClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

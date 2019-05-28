@@ -1643,6 +1643,3 @@ impl ResourceGroups for ResourceGroupsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

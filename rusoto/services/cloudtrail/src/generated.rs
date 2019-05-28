@@ -2500,6 +2500,3 @@ impl CloudTrail for CloudTrailClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

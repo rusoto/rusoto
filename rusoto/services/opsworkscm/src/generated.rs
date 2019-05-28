@@ -1909,6 +1909,3 @@ impl OpsWorksCM for OpsWorksCMClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

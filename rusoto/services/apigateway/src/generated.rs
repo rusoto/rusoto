@@ -14614,6 +14614,3 @@ impl ApiGateway for ApiGatewayClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

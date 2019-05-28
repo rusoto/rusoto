@@ -11638,6 +11638,3 @@ impl Glue for GlueClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

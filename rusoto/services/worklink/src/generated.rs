@@ -2681,6 +2681,3 @@ impl Worklink for WorklinkClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

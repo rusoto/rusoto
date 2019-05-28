@@ -6680,6 +6680,3 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -6933,6 +6933,3 @@ impl CloudSearch for CloudSearchClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

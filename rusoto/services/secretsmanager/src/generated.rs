@@ -2386,6 +2386,3 @@ impl SecretsManager for SecretsManagerClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

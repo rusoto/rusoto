@@ -2936,6 +2936,3 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

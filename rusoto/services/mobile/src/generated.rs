@@ -1354,6 +1354,3 @@ impl Mobile for MobileClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -8092,6 +8092,3 @@ impl OpsWorks for OpsWorksClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

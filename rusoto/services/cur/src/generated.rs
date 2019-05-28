@@ -367,6 +367,3 @@ impl CostAndUsageReport for CostAndUsageReportClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

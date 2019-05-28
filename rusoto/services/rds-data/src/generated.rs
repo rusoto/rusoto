@@ -358,6 +358,3 @@ impl RdsData for RdsDataClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

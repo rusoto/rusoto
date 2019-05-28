@@ -9154,6 +9154,3 @@ impl Waf for WafClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

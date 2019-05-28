@@ -6089,6 +6089,3 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

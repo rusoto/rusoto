@@ -3361,6 +3361,3 @@ impl Ecr for EcrClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

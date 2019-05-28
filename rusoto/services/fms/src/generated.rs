@@ -1498,6 +1498,3 @@ impl Fms for FmsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

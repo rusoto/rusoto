@@ -5973,6 +5973,3 @@ impl Comprehend for ComprehendClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

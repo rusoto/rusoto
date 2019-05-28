@@ -924,6 +924,3 @@ impl AWSHealth for AWSHealthClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -622,6 +622,3 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

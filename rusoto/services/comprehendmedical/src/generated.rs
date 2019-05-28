@@ -411,6 +411,3 @@ impl ComprehendMedical for ComprehendMedicalClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

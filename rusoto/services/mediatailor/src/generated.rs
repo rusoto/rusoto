@@ -864,6 +864,3 @@ impl MediaTailor for MediaTailorClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -6548,6 +6548,3 @@ impl Workdocs for WorkdocsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

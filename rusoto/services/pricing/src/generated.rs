@@ -486,6 +486,3 @@ impl Pricing for PricingClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -206,6 +206,3 @@ impl KinesisVideoMedia for KinesisVideoMediaClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

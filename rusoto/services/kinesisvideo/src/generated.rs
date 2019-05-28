@@ -1321,6 +1321,3 @@ impl KinesisVideo for KinesisVideoClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -1844,6 +1844,3 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

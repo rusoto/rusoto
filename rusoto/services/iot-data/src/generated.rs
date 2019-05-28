@@ -586,6 +586,3 @@ impl IotData for IotDataClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

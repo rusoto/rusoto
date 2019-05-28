@@ -227,6 +227,3 @@ impl MarketplaceEntitlement for MarketplaceEntitlementClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

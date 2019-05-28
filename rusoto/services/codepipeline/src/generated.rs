@@ -4088,6 +4088,3 @@ impl CodePipeline for CodePipelineClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -5770,6 +5770,3 @@ impl Rekognition for RekognitionClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

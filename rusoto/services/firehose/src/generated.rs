@@ -2451,6 +2451,3 @@ impl KinesisFirehose for KinesisFirehoseClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

@@ -2139,6 +2139,3 @@ impl Shield for ShieldClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

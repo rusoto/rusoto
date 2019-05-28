@@ -645,6 +645,3 @@ impl CloudSearchDomain for CloudSearchDomainClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

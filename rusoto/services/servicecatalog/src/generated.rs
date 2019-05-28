@@ -9672,6 +9672,3 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}

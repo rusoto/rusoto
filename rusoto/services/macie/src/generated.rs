@@ -833,6 +833,3 @@ impl Macie for MacieClient {
         })
     }
 }
-
-#[cfg(test)]
-mod protocol_tests {}
