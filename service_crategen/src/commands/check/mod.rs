@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use {ServiceConfig, ServiceDefinition};
+use crate::{ServiceConfig, ServiceDefinition};
 
 pub fn check(services: BTreeMap<String, ServiceConfig>) {
     let definitions = ServiceDefinition::load_all().unwrap();

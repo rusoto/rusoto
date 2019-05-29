@@ -7,13 +7,13 @@ use super::{
     xml_payload_parser,
 };
 use super::{FileWriter, IoResult};
-use botocore::{Member, Operation, Shape, ShapeType};
-use Service;
+use crate::botocore::{Member, Operation, Shape, ShapeType};
+use crate::Service;
 
 pub struct RestXmlGenerator;
 
 impl GenerateProtocol for RestXmlGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             writeln!(
                 writer,
@@ -28,7 +28,7 @@ impl GenerateProtocol for RestXmlGenerator {
         Ok(())
     }
 
-    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let (request_uri, _) =
                 rest_request_generator::parse_query_string(&operation.http.request_uri);
@@ -81,7 +81,7 @@ impl GenerateProtocol for RestXmlGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
         let imports = "
             use std::str::{FromStr};
             use std::io::Write;
@@ -100,7 +100,7 @@ impl GenerateProtocol for RestXmlGenerator {
         writeln!(writer, "{}", imports)
     }
 
-    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
+    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service<'_>) -> Option<String> {
         if name != "RestoreRequest" && name.ends_with("Request") {
             if used_as_request_payload(shape) {
                 return Some(generate_request_payload_serializer(name, shape));
@@ -129,7 +129,7 @@ impl GenerateProtocol for RestXmlGenerator {
         &self,
         name: &str,
         shape: &Shape,
-        service: &Service,
+        service: &Service<'_>,
     ) -> Option<String> {
         let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(xml_payload_parser::generate_deserializer(
@@ -142,9 +142,9 @@ impl GenerateProtocol for RestXmlGenerator {
     }
 }
 
-fn generate_documentation(operation: &Operation, service: &Service) -> String {
+fn generate_documentation(operation: &Operation, service: &Service<'_>) -> String {
     let mut docs = match operation.documentation {
-        Some(ref docs) => ::doco::Item(docs).to_string(),
+        Some(ref docs) => crate::doco::Item(docs).to_string(),
         None => "".to_owned(),
     };
 
@@ -162,7 +162,7 @@ fn generate_documentation(operation: &Operation, service: &Service) -> String {
     docs
 }
 
-fn generate_payload_serialization(service: &Service, operation: &Operation) -> Option<String> {
+fn generate_payload_serialization(service: &Service<'_>, operation: &Operation) -> Option<String> {
     // nothing to do if there's no input type
     if operation.input.is_none() {
         return None;
@@ -199,7 +199,7 @@ fn generate_payload_serialization(service: &Service, operation: &Operation) -> O
     Some(parts.join("\n"))
 }
 
-fn generate_service_specific_code(service: &Service, operation: &Operation) -> Option<String> {
+fn generate_service_specific_code(service: &Service<'_>, operation: &Operation) -> Option<String> {
     // S3 needs some special handholding.  Others may later.
     // See `handlers.py` in botocore for more details
     match service.service_type_name() {
@@ -254,7 +254,7 @@ fn generate_payload_member_serialization(shape: &Shape) -> String {
 fn generate_method_signature(
     operation_name: &str,
     operation: &Operation,
-    service: &Service,
+    service: &Service<'_>,
 ) -> String {
     if operation.input.is_some() {
         format!(
@@ -274,7 +274,7 @@ fn generate_method_signature(
     }
 }
 
-fn generate_serializer_body(shape: &Shape, service: &Service) -> String {
+fn generate_serializer_body(shape: &Shape, service: &Service<'_>) -> String {
     match shape.shape_type {
         ShapeType::List => generate_list_serializer(shape, service),
         ShapeType::Map => generate_map_serializer(shape),
@@ -302,7 +302,7 @@ fn generate_primitive_serializer(shape: &Shape) -> String {
         ", value_str = value_str)
 }
 
-fn generate_list_serializer(shape: &Shape, service: &Service) -> String {
+fn generate_list_serializer(shape: &Shape, service: &Service<'_>) -> String {
     // flattened lists don't have enclosing <FooList> tags
     // around the list elements
     let flattened = match shape.flattened {
@@ -344,7 +344,7 @@ fn generate_map_serializer(_shape: &Shape) -> String {
     unreachable!()
 }
 
-fn generate_struct_serializer(shape: &Shape, service: &Service) -> String {
+fn generate_struct_serializer(shape: &Shape, service: &Service<'_>) -> String {
     let mut serializer = "writer.write(xml::writer::XmlEvent::start_element(name))?;".to_owned();
 
     for (member_name, member) in shape.members.as_ref().unwrap().iter() {

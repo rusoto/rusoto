@@ -8,9 +8,10 @@ use std::path::Path;
 
 use serde::de::{Error as SerdeError, MapAccess, Visitor};
 use serde::{Deserialize, Deserializer};
+use serde_derive::Deserialize;
 use serde_json;
 
-use util;
+use crate::util;
 
 const BOTOCORE_DIR: &'static str = concat!(env!("CARGO_MANIFEST_DIR"), "/botocore/botocore/data/");
 
@@ -26,7 +27,7 @@ pub struct ServiceDefinition {
 }
 
 impl ServiceDefinition {
-    pub fn load(name: &str, protocol_version: &str) -> Result<Self, Box<error::Error>> {
+    pub fn load(name: &str, protocol_version: &str) -> Result<Self, Box<dyn error::Error>> {
         let input_path =
             Path::new(BOTOCORE_DIR).join(format!("{}/{}/service-2.json", name, protocol_version));
 
@@ -37,7 +38,7 @@ impl ServiceDefinition {
         Ok(service)
     }
 
-    pub fn load_all() -> Result<BTreeMap<String, Self>, Box<error::Error>> {
+    pub fn load_all() -> Result<BTreeMap<String, Self>, Box<dyn error::Error>> {
         fs::read_dir(BOTOCORE_DIR)?
             .filter_map(std::result::Result::ok)
             .map(|e| e.path())
@@ -387,7 +388,7 @@ struct ShapeNameVisitor;
 impl<'de> Visitor<'de> for ShapeNameVisitor {
     type Value = String;
 
-    fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
+    fn expecting(&self, formatter: &mut Formatter<'_>) -> FmtResult {
         write!(formatter, "a shape name")
     }
 
@@ -432,7 +433,7 @@ where
 {
     type Value = BTreeMap<String, V>;
 
-    fn expecting(&self, formatter: &mut Formatter) -> FmtResult {
+    fn expecting(&self, formatter: &mut Formatter<'_>) -> FmtResult {
         write!(formatter, "a shapes map")
     }
 

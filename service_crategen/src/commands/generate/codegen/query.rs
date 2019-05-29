@@ -1,9 +1,9 @@
 use inflector::Inflector;
 use std::io::Write;
 
-use botocore::{Member, Operation, Shape, ShapeType};
-use util;
-use Service;
+use crate::botocore::{Member, Operation, Shape, ShapeType};
+use crate::util;
+use crate::Service;
 
 use super::xml_payload_parser;
 use super::{
@@ -13,7 +13,7 @@ use super::{
 pub struct QueryGenerator;
 
 impl GenerateProtocol for QueryGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             writeln!(
                 writer,
@@ -28,7 +28,7 @@ impl GenerateProtocol for QueryGenerator {
         Ok(())
     }
 
-    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             writeln!(writer,
                      "
@@ -69,7 +69,7 @@ impl GenerateProtocol for QueryGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, _service: &Service<'_>) -> IoResult {
         writeln!(writer,
                  "use std::str::FromStr;
             use xml::EventReader;
@@ -83,7 +83,7 @@ impl GenerateProtocol for QueryGenerator {
             ")
     }
 
-    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
+    fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service<'_>) -> Option<String> {
         if shape.is_primitive() {
             return None;
         }
@@ -109,7 +109,7 @@ impl GenerateProtocol for QueryGenerator {
         &self,
         name: &str,
         shape: &Shape,
-        service: &Service,
+        service: &Service<'_>,
     ) -> Option<String> {
         let ty = get_rust_type(service, name, shape, false, self.timestamp_type());
         Some(xml_payload_parser::generate_deserializer(
@@ -142,7 +142,7 @@ fn generate_set_input_params(operation: &Operation) -> String {
         .to_owned()
 }
 
-fn generate_serializer_body(service: &Service, shape: &Shape) -> String {
+fn generate_serializer_body(service: &Service<'_>, shape: &Shape) -> String {
     match shape.shape_type {
         ShapeType::List => generate_list_serializer(service, shape),
         ShapeType::Map => generate_map_serializer(service, shape),
@@ -165,7 +165,7 @@ fn generate_serializer_signature(name: &str, shape: &Shape) -> String {
     }
 }
 
-fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
+fn generate_list_serializer(service: &Service<'_>, shape: &Shape) -> String {
     let member_shape = service
         .shape_for_member(shape.member.as_ref().unwrap())
         .unwrap();
@@ -200,7 +200,7 @@ fn generate_list_serializer(service: &Service, shape: &Shape) -> String {
     parts.join("\n")
 }
 
-fn list_member_format(service: &Service, flattened: bool) -> String {
+fn list_member_format(service: &Service<'_>, flattened: bool) -> String {
     match service.protocol() {
         "ec2" => "{}.{}".to_owned(),
         "query" => {
@@ -214,7 +214,7 @@ fn list_member_format(service: &Service, flattened: bool) -> String {
     }
 }
 
-fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
+fn generate_map_serializer(service: &Service<'_>, shape: &Shape) -> String {
     let mut parts = Vec::new();
 
     let prefix_snip: String;
@@ -262,7 +262,7 @@ fn generate_map_serializer(service: &Service, shape: &Shape) -> String {
     parts.join("\n")
 }
 
-fn key_name(service: &Service, shape: &Shape) -> String {
+fn key_name(service: &Service<'_>, shape: &Shape) -> String {
     let key_name = shape
         .key
         .as_ref()
@@ -274,7 +274,7 @@ fn key_name(service: &Service, shape: &Shape) -> String {
     capitalize_if_ec2(service, key_name)
 }
 
-fn value_name(service: &Service, shape: &Shape) -> String {
+fn value_name(service: &Service<'_>, shape: &Shape) -> String {
     let value_name = shape
         .value
         .as_ref()
@@ -286,7 +286,7 @@ fn value_name(service: &Service, shape: &Shape) -> String {
     capitalize_if_ec2(service, value_name)
 }
 
-fn member_location(service: &Service, member: &Member, default: &str) -> String {
+fn member_location(service: &Service<'_>, member: &Member, default: &str) -> String {
     // Seems a bit hacky to avoid doing this just for EC2:
     if let Some(ref shape) = service.shape_for_member(member) {
         if service.protocol() != "ec2" && !shape.is_primitive() {
@@ -303,14 +303,14 @@ fn member_location(service: &Service, member: &Member, default: &str) -> String 
     capitalize_if_ec2(service, &member_location)
 }
 
-fn capitalize_if_ec2(service: &Service, name: &str) -> String {
+fn capitalize_if_ec2(service: &Service<'_>, name: &str) -> String {
     match service.protocol() {
         "ec2" => util::capitalize_first(name),
         _ => name.to_owned(),
     }
 }
 
-fn generate_struct_serializer(service: &Service, shape: &Shape) -> String {
+fn generate_struct_serializer(service: &Service<'_>, shape: &Shape) -> String {
     format!(
         "let mut prefix = name.to_string();
         if prefix != \"\" {{
@@ -323,7 +323,7 @@ fn generate_struct_serializer(service: &Service, shape: &Shape) -> String {
     )
 }
 
-fn generate_struct_field_serializers(service: &Service, shape: &Shape) -> String {
+fn generate_struct_field_serializers(service: &Service<'_>, shape: &Shape) -> String {
     shape
         .members
         .as_ref()
@@ -349,7 +349,7 @@ fn generate_struct_field_serializers(service: &Service, shape: &Shape) -> String
 }
 
 fn optional_primitive_field_serializer(
-    service: &Service,
+    service: &Service<'_>,
     member_name: &str,
     member: &Member,
 ) -> String {
@@ -370,7 +370,7 @@ fn optional_primitive_field_serializer(
 }
 
 fn required_primitive_field_serializer(
-    service: &Service,
+    service: &Service<'_>,
     member_name: &str,
     member: &Member,
 ) -> String {
@@ -401,7 +401,7 @@ fn serialize_primitive_expression(shape_type: &ShapeType, var_name: &str) -> Str
 }
 
 fn required_complex_field_serializer(
-    service: &Service,
+    service: &Service<'_>,
     member_name: &str,
     member: &Member,
 ) -> String {
@@ -418,7 +418,7 @@ fn required_complex_field_serializer(
 }
 
 fn optional_complex_field_serializer(
-    service: &Service,
+    service: &Service<'_>,
     member_name: &str,
     member: &Member,
 ) -> String {
@@ -438,7 +438,7 @@ fn optional_complex_field_serializer(
 
 fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
-        Some(ref docs) => ::doco::Item(docs).to_string(),
+        Some(ref docs) => crate::doco::Item(docs).to_string(),
         None => "".to_owned(),
     }
 }
@@ -446,7 +446,7 @@ fn generate_documentation(operation: &Operation) -> String {
 fn generate_method_signature(
     operation_name: &str,
     operation: &Operation,
-    service: &Service,
+    service: &Service<'_>,
 ) -> String {
     if operation.input.is_some() {
         format!(

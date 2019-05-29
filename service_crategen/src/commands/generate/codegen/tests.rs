@@ -1,12 +1,12 @@
+use inflector::Inflector;
 use std::fs;
 use std::io::Write;
 use std::path::{Path, PathBuf};
 
 use self::util::case_insensitive_btreemap_get;
 use super::{FileWriter, IoResult};
-use inflector::Inflector;
-use util;
-use Service;
+use crate::util;
+use crate::Service;
 
 const BOTOCORE_ERROR_RESPONSE_TESTS_DIR: &'static str = concat!(
     env!("CARGO_MANIFEST_DIR"),
@@ -17,7 +17,7 @@ const BOTOCORE_VALID_RESPONSE_TESTS_DIR: &'static str = concat!(
     "/botocore/tests/unit/response_parsing/xml/responses/"
 );
 
-pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
+pub fn generate_tests(writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
     match generate_tests_body(service) {
         Some(test_bodies) => writeln!(
             writer,
@@ -33,7 +33,7 @@ pub fn generate_tests(writer: &mut FileWriter, service: &Service) -> IoResult {
     }
 }
 
-fn generate_tests_body(service: &Service) -> Option<String> {
+fn generate_tests_body(service: &Service<'_>) -> Option<String> {
     let valid_tests = generate_response_tests(
         service,
         find_valid_responses_for_service(service),
@@ -68,7 +68,7 @@ fn generate_tests_body(service: &Service) -> Option<String> {
 }
 
 fn generate_response_tests(
-    service: &Service,
+    service: &Service<'_>,
     responses: Vec<Response>,
     status_code: i32,
     is_ok: bool,
@@ -92,7 +92,7 @@ fn generate_response_tests(
 }
 
 fn generate_response_parse_test(
-    service: &Service,
+    service: &Service<'_>,
     response: &Response,
     status_code: i32,
     is_ok: bool,
@@ -197,7 +197,7 @@ pub fn find_responses_in_dir(dir_path: &Path) -> Vec<Response> {
     responses
 }
 
-pub fn find_error_responses_for_service(service: &Service) -> Vec<Response> {
+pub fn find_error_responses_for_service(service: &Service<'_>) -> Vec<Response> {
     let mut responses = Vec::new();
 
     for r in find_responses_in_dir(Path::new(BOTOCORE_ERROR_RESPONSE_TESTS_DIR)) {
@@ -209,7 +209,7 @@ pub fn find_error_responses_for_service(service: &Service) -> Vec<Response> {
     responses
 }
 
-pub fn find_valid_responses_for_service(service: &Service) -> Vec<Response> {
+pub fn find_valid_responses_for_service(service: &Service<'_>) -> Vec<Response> {
     let mut responses = Vec::new();
 
     for r in find_responses_in_dir(Path::new(BOTOCORE_VALID_RESPONSE_TESTS_DIR)) {

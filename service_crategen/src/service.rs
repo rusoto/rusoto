@@ -1,12 +1,12 @@
 use std::collections::BTreeMap;
 
-use botocore::{Member, Operation, ServiceDefinition, Shape, ShapeType, Value};
-use cargo;
-use config::ServiceConfig;
+use crate::botocore::{Member, Operation, ServiceDefinition, Shape, ShapeType, Value};
+use crate::cargo;
+use crate::config::ServiceConfig;
 
 #[derive(Debug)]
 pub struct Service<'a> {
-    config: &'a ::ServiceConfig,
+    config: &'a crate::ServiceConfig,
     definition: ServiceDefinition,
 }
 

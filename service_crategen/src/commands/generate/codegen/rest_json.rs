@@ -6,13 +6,13 @@ use super::{
     error_type_name, generate_field_name, rest_request_generator, rest_response_parser, FileWriter,
     GenerateProtocol, IoResult,
 };
-use botocore::{Operation, Shape, ShapeType};
-use Service;
+use crate::botocore::{Operation, Shape, ShapeType};
+use crate::Service;
 
 pub struct RestJsonGenerator;
 
 impl GenerateProtocol for RestJsonGenerator {
-    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_signatures(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let input_type = operation.input_shape();
             let output_type = operation.output_shape_or("()");
@@ -36,7 +36,7 @@ impl GenerateProtocol for RestJsonGenerator {
         Ok(())
     }
 
-    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_method_impls(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         for (operation_name, operation) in service.operations().iter() {
             let input_type = operation.input_shape();
             let output_type = operation.output_shape_or("()");
@@ -103,7 +103,7 @@ impl GenerateProtocol for RestJsonGenerator {
         Ok(())
     }
 
-    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_prelude(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         // avoid unused imports when building services that don't use params
         if service_has_query_parameters(service) {
             writeln!(writer, "use rusoto_core::param::{{Params, ServiceParams}};")?;
@@ -144,7 +144,7 @@ fn http_code_expected(code: Option<i32>) -> String {
 
 // Glacier needs a special header added, not included in botocore definition.  See
 // http://docs.aws.amazon.com/amazonglacier/latest/dev/api-common-request-headers.html
-fn generate_headers(service: &Service) -> Option<String> {
+fn generate_headers(service: &Service<'_>) -> Option<String> {
     if service.full_name() == "Amazon Glacier" {
         return Some("request.add_header(\"x-amz-glacier-version\", \"2012-06-01\");".to_string());
     }
@@ -152,7 +152,7 @@ fn generate_headers(service: &Service) -> Option<String> {
 }
 
 // SageMaker Runtime allows to overwrite content-type
-fn generate_default_headers(service: &Service) -> String {
+fn generate_default_headers(service: &Service<'_>) -> String {
     if service.full_name() == "Amazon SageMaker Runtime" {
         return "if input.content_type.is_none() {
                     request.set_content_type(\"application/x-amz-json-1.1\".to_owned());
@@ -163,7 +163,7 @@ fn generate_default_headers(service: &Service) -> String {
 }
 
 // IoT has an endpoint_prefix and a signing_name that differ
-fn generate_endpoint_modification(service: &Service) -> Option<String> {
+fn generate_endpoint_modification(service: &Service<'_>) -> Option<String> {
     if service.signing_name() == service.endpoint_prefix() {
         None
     } else {
@@ -192,7 +192,7 @@ fn generate_method_signature(operation: &Operation, shape: &Shape) -> String {
 }
 
 // Figure out what, if anything, should be sent as the body of the http request
-fn generate_payload(service: &Service, input_shape: &Shape) -> Option<String> {
+fn generate_payload(service: &Service<'_>, input_shape: &Shape) -> Option<String> {
     let declare_payload = match input_shape.payload {
         // if the input shape explicitly specifies a payload field, use that
         Some(ref payload_member_name) => {
@@ -224,7 +224,7 @@ fn generate_payload(service: &Service, input_shape: &Shape) -> Option<String> {
     }
 }
 
-fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Service) -> String {
+fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Service<'_>) -> String {
     let payload_member_shape = &input_shape.members.as_ref().unwrap()[payload_member_name].shape;
     let payload_shape = &service
         .get_shape(payload_member_shape)
@@ -258,7 +258,7 @@ fn declared_payload(input_shape: &Shape, payload_member_name: &str, service: &Se
 }
 
 // Do any input operations in the entire service use query parameters?
-fn service_has_query_parameters(service: &Service) -> bool {
+fn service_has_query_parameters(service: &Service<'_>) -> bool {
     service
         .operations()
         .iter()
@@ -271,12 +271,12 @@ fn generate_documentation(operation: &Operation) -> Option<String> {
     operation
         .documentation
         .as_ref()
-        .map(|docs| ::doco::Item(docs).to_string())
+        .map(|docs| crate::doco::Item(docs).to_string())
 }
 
 /// Generate code to plumb the response status code into any fields
 /// in the output shape that specify it
-fn generate_status_code_parser(operation: &Operation, service: &Service) -> String {
+fn generate_status_code_parser(operation: &Operation, service: &Service<'_>) -> String {
     if operation.output.is_none() {
         return "".to_owned();
     }
@@ -316,7 +316,7 @@ fn generate_status_code_parser(operation: &Operation, service: &Service) -> Stri
 /// Needs to determine whether or not other fields in the result object
 /// will be set later (e.g. from headers), so the compiler won't spit out
 /// warnings about unnecessary mutability
-fn generate_body_parser(operation: &Operation, service: &Service) -> String {
+fn generate_body_parser(operation: &Operation, service: &Service<'_>) -> String {
     if operation.output.is_none() {
         return "let result = ::std::mem::drop(response);".to_string();
     }

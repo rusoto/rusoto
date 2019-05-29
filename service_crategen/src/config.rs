@@ -5,9 +5,10 @@ use std::fs::File;
 use std::io::{self, Read};
 use std::path::Path;
 
+use serde_derive::Deserialize;
 use serde_json;
 
-use cargo;
+use crate::cargo;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct ServiceConfig {
@@ -56,7 +57,7 @@ impl From<serde_json::Error> for ConfigError {
 }
 
 impl fmt::Display for ConfigError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match *self {
             ConfigError::Io(ref e) => e.fmt(f),
             ConfigError::Format(ref e) => e.fmt(f),
@@ -72,7 +73,7 @@ impl Error for ConfigError {
         }
     }
 
-    fn cause(&self) -> Option<&Error> {
+    fn cause(&self) -> Option<&dyn Error> {
         match *self {
             ConfigError::Io(ref e) => Some(e),
             ConfigError::Format(ref e) => Some(e),

@@ -1,10 +1,10 @@
 use inflector::Inflector;
 
 use super::{generate_field_name, mutate_type_name};
-use botocore::{Member, Operation, Shape, ShapeType};
-use Service;
+use crate::botocore::{Member, Operation, Shape, ShapeType};
+use crate::Service;
 
-pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Service) -> String {
+pub fn generate_deserializer(name: &str, ty: &str, shape: &Shape, service: &Service<'_>) -> String {
     format!(
         "struct {name}Deserializer;
             impl {name}Deserializer {{
@@ -37,7 +37,7 @@ fn has_streaming_payload(shape: &Shape) -> bool {
 }
 
 pub fn generate_response_parser(
-    service: &Service,
+    service: &Service<'_>,
     operation: &Operation,
     mutable_result: bool,
     parse_non_payload: &str,
@@ -204,7 +204,7 @@ fn xml_body_parser(
     )
 }
 
-fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> String {
+fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service<'_>) -> String {
     match (service.endpoint_prefix(), name) {
         ("s3", "GetBucketLocationOutput") => {
             // override custom deserializer
@@ -252,7 +252,7 @@ fn generate_deserializer_body(name: &str, shape: &Shape, service: &Service) -> S
     }
 }
 
-fn generate_list_deserializer(shape: &Shape, service: &Service) -> String {
+fn generate_list_deserializer(shape: &Shape, service: &Service<'_>) -> String {
     // flattened lists are just the list elements repeated without
     // an enclosing <FooList></FooList> tag
     if let Some(true) = shape.flattened {
@@ -281,7 +281,7 @@ fn generate_list_deserializer(shape: &Shape, service: &Service) -> String {
     )
 }
 
-fn generate_flat_list_deserializer(shape: &Shape, service: &Service) -> String {
+fn generate_flat_list_deserializer(shape: &Shape, service: &Service<'_>) -> String {
     format!(
         "
         let mut obj = vec![];
@@ -383,7 +383,7 @@ fn generate_primitive_deserializer(shape: &Shape, percent_decode: bool) -> Strin
     )
 }
 
-fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) -> String {
+fn generate_struct_deserializer(name: &str, service: &Service<'_>, shape: &Shape) -> String {
     // Handling of payload delegate deserialization - this is needed for shapes which
     // have a payload representing a single member. An example of this is the member
     // CopyPartResult of the S3 UploadPartCopyOutput shape; the XML itself represents
@@ -457,7 +457,7 @@ fn generate_struct_deserializer(name: &str, service: &Service, shape: &Shape) ->
     )
 }
 
-fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> String {
+fn generate_struct_field_deserializers(service: &Service<'_>, shape: &Shape) -> String {
     shape
         .members
         .as_ref()
@@ -543,7 +543,7 @@ fn generate_struct_field_deserializers(service: &Service, shape: &Shape) -> Stri
 
 fn generate_struct_field_parse_expression(
     shape: &Shape,
-    service: &Service,
+    service: &Service<'_>,
     member_name: &str,
     member: &Member,
     location_name: &str,

@@ -2,8 +2,8 @@ use std::collections::BTreeMap;
 use std::io::Write;
 
 use super::{error_type_name, FileWriter, IoResult};
-use botocore::Operation;
-use Service;
+use crate::botocore::Operation;
+use crate::Service;
 
 /// Examines the error types described in the botocore definition for an operation
 /// and generates a Rust enum of error types that can be used in a `Result` return
@@ -13,7 +13,7 @@ use Service;
 /// `From` implementations (e.g., for `HttpDispatchError`), and the code to parse
 /// the error type from HTTP responses
 pub trait GenerateErrorTypes {
-    fn generate_error_types(&self, writer: &mut FileWriter, service: &Service) -> IoResult {
+    fn generate_error_types(&self, writer: &mut FileWriter, service: &Service<'_>) -> IoResult {
         // grab error type documentation for use with error enums in generated code
         // botocore presents errors as structs.  we filter those out in generate_types.
         let mut error_documentation = BTreeMap::new();
@@ -41,7 +41,7 @@ pub trait GenerateErrorTypes {
         writer: &mut FileWriter,
         operation_name: &str,
         operation: &Operation,
-        service: &Service,
+        service: &Service<'_>,
         error_documentation: &BTreeMap<&String, &String>,
     ) -> IoResult {
         writeln!(
@@ -93,7 +93,7 @@ pub trait GenerateErrorTypes {
                 if error.idiomatic_error_name() != "Validation" {
                     enum_types.push(format!(
                         "\n{}\n{}(String)",
-                        ::doco::Item(
+                        crate::doco::Item(
                             error_documentation
                                 .get(&error.shape)
                                 .unwrap_or(&&String::from(""))
@@ -112,7 +112,7 @@ pub trait GenerateErrorTypes {
         &self,
         operation_name: &str,
         operation: &Operation,
-        service: &Service,
+        service: &Service<'_>,
     ) -> Option<String> {
         let mut type_matchers: Vec<String> = Vec::new();
 
@@ -138,7 +138,7 @@ pub trait GenerateErrorTypes {
         &self,
         operation_name: &str,
         operation: &Operation,
-        service: &Service,
+        service: &Service<'_>,
     ) -> String;
 }
 
@@ -151,7 +151,7 @@ impl GenerateErrorTypes for XmlErrorTypes {
         &self,
         operation_name: &str,
         operation: &Operation,
-        service: &Service,
+        service: &Service<'_>,
     ) -> String {
         format!("
                 impl {type_name} {{
@@ -180,7 +180,7 @@ impl GenerateErrorTypes for XmlErrorTypes {
 }
 
 impl XmlErrorTypes {
-    fn generate_error_deserializer(&self, service: &Service) -> String {
+    fn generate_error_deserializer(&self, service: &Service<'_>) -> String {
         if service.service_id() == Some("EC2") {
             // https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html
             "
@@ -207,7 +207,7 @@ impl XmlErrorTypes {
         &self,
         operation_name: &str,
         operation: &Operation,
-        service: &Service,
+        service: &Service<'_>,
     ) -> String {
         let mut type_matchers: Vec<String> = Vec::new();
         let error_type = error_type_name(service, operation_name);
@@ -237,7 +237,7 @@ impl GenerateErrorTypes for JsonErrorTypes {
         &self,
         operation_name: &str,
         operation: &Operation,
-        service: &Service,
+        service: &Service<'_>,
     ) -> String {
         format!(
             "
@@ -264,7 +264,7 @@ impl JsonErrorTypes {
         &self,
         operation_name: &str,
         operation: &Operation,
-        service: &Service,
+        service: &Service<'_>,
     ) -> String {
         let mut type_matchers: Vec<String> = Vec::new();
         let error_type = error_type_name(service, operation_name);
@@ -292,7 +292,7 @@ impl GenerateErrorTypes for RestJsonErrorTypes {
         &self,
         operation_name: &str,
         operation: &Operation,
-        service: &Service,
+        service: &Service<'_>,
     ) -> String {
         format!(
             "

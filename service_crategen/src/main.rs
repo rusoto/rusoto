@@ -1,20 +1,6 @@
 #![cfg_attr(feature = "nightly-testing", feature(plugin))]
 #![cfg_attr(feature = "nightly-testing", plugin(clippy))]
 
-#[macro_use]
-extern crate clap;
-extern crate hoedown;
-extern crate rayon;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate inflector;
-extern crate serde_json;
-extern crate toml;
-#[macro_use]
-extern crate lazy_static;
-extern crate regex;
-
 mod botocore;
 mod cargo;
 mod commands;
@@ -25,11 +11,11 @@ mod util;
 
 use std::path::Path;
 
-use clap::{App, Arg, SubCommand};
+use clap::{App, Arg, SubCommand, crate_authors, crate_description, crate_version};
 
-use botocore::ServiceDefinition;
-use config::ServiceConfig;
-use service::Service;
+use crate::botocore::ServiceDefinition;
+use crate::config::ServiceConfig;
+use crate::service::Service;
 
 fn main() {
     let matches = App::new("Rusoto Service Crate Generator")
