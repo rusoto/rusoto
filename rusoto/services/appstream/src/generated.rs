@@ -197,7 +197,7 @@ pub struct CreateDirectoryConfigRequest {
     /// <p>The distinguished names of the organizational units for computer accounts.</p>
     #[serde(rename = "OrganizationalUnitDistinguishedNames")]
     pub organizational_unit_distinguished_names: Vec<String>,
-    /// <p>The credentials for the service account used by the streaming instance to connect to the directory.</p>
+    /// <p>The credentials for the service account used by the fleet or image builder to connect to the directory.</p>
     #[serde(rename = "ServiceAccountCredentials")]
     pub service_account_credentials: ServiceAccountCredentials,
 }
@@ -220,7 +220,7 @@ pub struct CreateFleetRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The time after disconnection when a session is considered to have ended, in seconds. If a user who was disconnected reconnects within this time interval, the user is connected to their previous session. Specify a value between 60 and 360000.</p>
+    /// <p>The amount of time that a streaming session remains active after users disconnect. If users try to reconnect to the streaming session after a disconnection or network interruption within this time interval, they are connected to their previous session. Otherwise, they are connected to a new session with a new streaming instance. </p> <p>Specify a value between 60 and 360000.</p>
     #[serde(rename = "DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disconnect_timeout_in_seconds: Option<i64>,
@@ -240,6 +240,10 @@ pub struct CreateFleetRequest {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
+    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If they try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected.</p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 900.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
+    #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idle_disconnect_timeout_in_seconds: Option<i64>,
     /// <p>The ARN of the public, private, or shared image to use.</p>
     #[serde(rename = "ImageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -251,14 +255,14 @@ pub struct CreateFleetRequest {
     /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p>The maximum time that a streaming session can run, in seconds. Specify a value between 600 and 360000.</p>
+    /// <p>The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance.</p> <p>Specify a value between 600 and 360000.</p>
     #[serde(rename = "MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_user_duration_in_seconds: Option<i64>,
     /// <p>A unique name for the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The tags to associate with the fleet. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>The tags to associate with the fleet. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>For more information, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -313,7 +317,7 @@ pub struct CreateImageBuilderRequest {
     /// <p>A unique name for the image builder.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The tags to associate with the image builder. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>The tags to associate with the image builder. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -385,7 +389,7 @@ pub struct CreateStackRequest {
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_connectors: Option<Vec<StorageConnector>>,
-    /// <p>The tags to associate with the stack. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    /// <p>The tags to associate with the stack. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic.html">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -443,6 +447,22 @@ pub struct CreateStreamingURLResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateUsageReportSubscriptionRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateUsageReportSubscriptionResult {
+    /// <p>The Amazon S3 bucket where generated reports are stored. When a usage report subscription is enabled for the first time for an account in an AWS Region, an S3 bucket is created. The bucket is unique to the AWS account and the Region. </p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The schedule for generating usage reports.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserRequest {
     /// <p>The authentication type for the user. You must specify USERPOOL. </p>
     #[serde(rename = "AuthenticationType")]
@@ -459,7 +479,7 @@ pub struct CreateUserRequest {
     #[serde(rename = "MessageAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_action: Option<String>,
-    /// <p>The email address of the user.</p>
+    /// <p><p>The email address of the user.</p> <note> <p>Users&#39; email addresses are case-sensitive. During login, if they specify an email address that doesn&#39;t use the same capitalization as the email address specified when their user pool account was created, a &quot;user does not exist&quot; error message displays.</p> </note></p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -548,11 +568,18 @@ pub struct DeleteStackRequest {
 pub struct DeleteStackResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteUsageReportSubscriptionRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteUsageReportSubscriptionResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserRequest {
     /// <p>The authentication type for the user. You must specify USERPOOL.</p>
     #[serde(rename = "AuthenticationType")]
     pub authentication_type: String,
-    /// <p>The email address of the user.</p>
+    /// <p><p>The email address of the user.</p> <note> <p>Users&#39; email addresses are case-sensitive.</p> </note></p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -719,7 +746,7 @@ pub struct DescribeImagesResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeSessionsRequest {
-    /// <p>The authentication method. Specify <code>API</code> for a user authenticated using a streaming URL, <code>SAML</code> for a SAML 2.0-federated user, or <code>USERPOOL</code> for a user in the AppStream 2.0 user pool. The default is to authenticate users using a streaming URL.</p>
+    /// <p>The authentication method. Specify <code>API</code> for a user authenticated using a streaming URL or <code>SAML</code> for a SAML federated user. The default is to authenticate users using a streaming URL.</p>
     #[serde(rename = "AuthenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_type: Option<String>,
@@ -782,6 +809,31 @@ pub struct DescribeStacksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeUsageReportSubscriptionsRequest {
+    /// <p>The maximum size of each page of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeUsageReportSubscriptionsResult {
+    /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the usage report subscription.</p>
+    #[serde(rename = "UsageReportSubscriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage_report_subscriptions: Option<Vec<UsageReportSubscription>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeUserStackAssociationsRequest {
     /// <p>The authentication type for the user who is associated with the stack. You must specify USERPOOL.</p>
     #[serde(rename = "AuthenticationType")]
@@ -799,7 +851,7 @@ pub struct DescribeUserStackAssociationsRequest {
     #[serde(rename = "StackName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_name: Option<String>,
-    /// <p>The email address of the user who is associated with the stack.</p>
+    /// <p><p>The email address of the user who is associated with the stack.</p> <note> <p>Users&#39; email addresses are case-sensitive.</p> </note></p>
     #[serde(rename = "UserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
@@ -846,7 +898,7 @@ pub struct DescribeUsersResult {
     pub users: Option<Vec<User>>,
 }
 
-/// <p>Describes the configuration information for the directory used to join a streaming instance to a Microsoft Active Directory domain.</p>
+/// <p>Describes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DirectoryConfig {
@@ -861,7 +913,7 @@ pub struct DirectoryConfig {
     #[serde(rename = "OrganizationalUnitDistinguishedNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit_distinguished_names: Option<Vec<String>>,
-    /// <p>The credentials for the service account used by the streaming instance to connect to the directory.</p>
+    /// <p>The credentials for the service account used by the fleet or image builder to connect to the directory.</p>
     #[serde(rename = "ServiceAccountCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_account_credentials: Option<ServiceAccountCredentials>,
@@ -872,7 +924,7 @@ pub struct DisableUserRequest {
     /// <p>The authentication type for the user. You must specify USERPOOL.</p>
     #[serde(rename = "AuthenticationType")]
     pub authentication_type: String,
-    /// <p>The email address of the user.</p>
+    /// <p><p>The email address of the user.</p> <note> <p>Users&#39; email addresses are case-sensitive.</p> </note></p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -913,7 +965,7 @@ pub struct EnableUserRequest {
     /// <p>The authentication type for the user. You must specify USERPOOL.</p>
     #[serde(rename = "AuthenticationType")]
     pub authentication_type: String,
-    /// <p>The email address of the user.</p>
+    /// <p><p>The email address of the user.</p> <note> <p>Users&#39; email addresses are case-sensitive. During login, if they specify an email address that doesn&#39;t use the same capitalization as the email address specified when their user pool account was created, a &quot;user does not exist&quot; error message displays. </p> </note></p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -951,7 +1003,7 @@ pub struct Fleet {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The time after disconnection when a session is considered to have ended, in seconds. If a user who was disconnected reconnects within this time interval, the user is connected to their previous session. Specify a value between 60 and 360000. By default, this value is 900 seconds (15 minutes).</p>
+    /// <p>The amount of time that a streaming session remains active after users disconnect. If they try to reconnect to the streaming session after a disconnection or network interruption within this time interval, they are connected to their previous session. Otherwise, they are connected to a new session with a new streaming instance.</p> <p>Specify a value between 60 and 360000.</p>
     #[serde(rename = "DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disconnect_timeout_in_seconds: Option<i64>,
@@ -975,6 +1027,10 @@ pub struct Fleet {
     #[serde(rename = "FleetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_type: Option<String>,
+    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If users try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected.</p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 900.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
+    #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idle_disconnect_timeout_in_seconds: Option<i64>,
     /// <p>The ARN for the public, private, or shared image.</p>
     #[serde(rename = "ImageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -986,7 +1042,7 @@ pub struct Fleet {
     /// <p>The instance type to use when launching fleet instances.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p>The maximum time that a streaming session can run, in seconds. Specify a value between 600 and 360000.</p>
+    /// <p>The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance. </p> <p>Specify a value between 600 and 360000.</p>
     #[serde(rename = "MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_user_duration_in_seconds: Option<i64>,
@@ -1187,6 +1243,20 @@ pub struct ImageStateChangeReason {
     pub message: Option<String>,
 }
 
+/// <p>Describes the error that is returned when a usage report can't be generated.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LastReportGenerationExecutionError {
+    /// <p>The error code for the error that is returned when a usage report can't be generated.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The error message for the error that is returned when a usage report can't be generated.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListAssociatedFleetsRequest {
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
@@ -1283,7 +1353,7 @@ pub struct ResourceError {
     pub error_timestamp: Option<f64>,
 }
 
-/// <p>Describes the credentials for the service account used by the streaming instance to connect to the directory.</p>
+/// <p>Describes the credentials for the service account used by the fleet or image builder to connect to the directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ServiceAccountCredentials {
     /// <p>The user name of the account. This account must have the following privileges: create computer objects, join computers to the domain, and change/reset the password on descendant computer objects for the organizational units specified.</p>
@@ -1298,11 +1368,11 @@ pub struct ServiceAccountCredentials {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Session {
-    /// <p>The authentication method. The user is authenticated using a streaming URL (<code>API</code>), SAML 2.0 federation (<code>SAML</code>), or the AppStream 2.0 user pool (<code>USERPOOL</code>). The default is to authenticate users using a streaming URL. </p>
+    /// <p>The authentication method. The user is authenticated using a streaming URL (<code>API</code>) or SAML 2.0 federation (<code>SAML</code>).</p>
     #[serde(rename = "AuthenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_type: Option<String>,
-    /// <p>Specifies whether a user is connected to the streaming session. </p>
+    /// <p>Specifies whether a user is connected to the streaming session.</p>
     #[serde(rename = "ConnectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
@@ -1323,7 +1393,7 @@ pub struct Session {
     /// <p>The name of the stack for the streaming session.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
-    /// <p>The time when a streaming instance is dedicated for the user. </p>
+    /// <p>The time when a streaming instance is dedicated for the user.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -1468,7 +1538,7 @@ pub struct StopImageBuilderResult {
     pub image_builder: Option<ImageBuilder>,
 }
 
-/// <p>Describes a connector to enable persistent storage for users.</p>
+/// <p>Describes a connector that enables persistent storage for users.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StorageConnector {
     /// <p>The type of storage connector.</p>
@@ -1489,7 +1559,7 @@ pub struct TagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>The tags to associate. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p>
+    /// <p>The tags to associate. A tag is a key-value pair, and the value is optional. For example, Environment=Test. If you do not specify a value, Environment=. </p> <p>If you do not specify a value, the value is set to an empty string.</p> <p>Generally allowed characters are: letters, numbers, and spaces representable in UTF-8, and the following special characters: </p> <p>_ . : / = + \ - @</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
@@ -1521,7 +1591,7 @@ pub struct UpdateDirectoryConfigRequest {
     #[serde(rename = "OrganizationalUnitDistinguishedNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit_distinguished_names: Option<Vec<String>>,
-    /// <p>The credentials for the service account used by the streaming instance to connect to the directory.</p>
+    /// <p>The credentials for the service account used by the fleet or image builder to connect to the directory.</p>
     #[serde(rename = "ServiceAccountCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_account_credentials: Option<ServiceAccountCredentials>,
@@ -1550,7 +1620,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The time after disconnection when a session is considered to have ended, in seconds. If a user who was disconnected reconnects within this time interval, the user is connected to their previous session. Specify a value between 60 and 360000. By default, the value is 900 seconds (15 minutes).</p>
+    /// <p>The amount of time that a streaming session remains active after users disconnect. If users try to reconnect to the streaming session after a disconnection or network interruption within this time interval, they are connected to their previous session. Otherwise, they are connected to a new session with a new streaming instance. </p> <p>Specify a value between 60 and 360000.</p>
     #[serde(rename = "DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disconnect_timeout_in_seconds: Option<i64>,
@@ -1566,6 +1636,10 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
+    /// <p><p>The amount of time that users can be idle (inactive) before they are disconnected from their streaming session and the <code>DisconnectTimeoutInSeconds</code> time interval begins. Users are notified before they are disconnected due to inactivity. If users try to reconnect to the streaming session before the time interval specified in <code>DisconnectTimeoutInSeconds</code> elapses, they are connected to their previous session. Users are considered idle when they stop providing keyboard or mouse input during their streaming session. File uploads and downloads, audio in, audio out, and pixels changing do not qualify as user activity. If users continue to be idle after the time interval in <code>IdleDisconnectTimeoutInSeconds</code> elapses, they are disconnected. </p> <p>To prevent users from being disconnected due to inactivity, specify a value of 0. Otherwise, specify a value between 60 and 3600. The default value is 900.</p> <note> <p>If you enable this feature, we recommend that you specify a value that corresponds exactly to a whole number of minutes (for example, 60, 120, and 180). If you don&#39;t do this, the value is rounded to the nearest minute. For example, if you specify a value of 70, users are disconnected after 1 minute of inactivity. If you specify a value that is at the midpoint between two different minutes, the value is rounded up. For example, if you specify a value of 90, users are disconnected after 2 minutes of inactivity. </p> </note></p>
+    #[serde(rename = "IdleDisconnectTimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub idle_disconnect_timeout_in_seconds: Option<i64>,
     /// <p>The ARN of the public, private, or shared image to use.</p>
     #[serde(rename = "ImageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1578,7 +1652,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>The maximum time that a streaming session can run, in seconds. Specify a value between 600 and 360000. By default, the value is 900 seconds (15 minutes).</p>
+    /// <p>The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance.</p> <p>Specify a value between 600 and 360000.</p>
     #[serde(rename = "MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_user_duration_in_seconds: Option<i64>,
@@ -1666,6 +1740,28 @@ pub struct UpdateStackResult {
     pub stack: Option<Stack>,
 }
 
+/// <p>Describes information about the usage report subscription.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UsageReportSubscription {
+    /// <p>The time when the last usage report was generated.</p>
+    #[serde(rename = "LastGeneratedReportDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_generated_report_date: Option<f64>,
+    /// <p>The Amazon S3 bucket where generated reports are stored. When a usage report subscription is enabled for the first time for an account in an AWS Region, an S3 bucket is created. The bucket is unique to the AWS account and the Region.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The schedule for generating usage reports.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule: Option<String>,
+    /// <p>The errors that are returned when usage reports can't be generated.</p>
+    #[serde(rename = "SubscriptionErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_errors: Option<Vec<LastReportGenerationExecutionError>>,
+}
+
 /// <p>Describes a user in the user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1697,7 +1793,7 @@ pub struct User {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The email address of the user.</p>
+    /// <p><p>The email address of the user.</p> <note> <p>Users&#39; email addresses are case-sensitive.</p> </note></p>
     #[serde(rename = "UserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
@@ -1727,7 +1823,7 @@ pub struct UserStackAssociation {
     /// <p>The name of the stack that is associated with the user.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
-    /// <p>The email address of the user who is associated with the stack.</p>
+    /// <p><p>The email address of the user who is associated with the stack.</p> <note> <p>Users&#39; email addresses are case-sensitive.</p> </note></p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -2367,6 +2463,43 @@ impl Error for CreateStreamingURLError {
         }
     }
 }
+/// Errors returned by CreateUsageReportSubscription
+#[derive(Debug, PartialEq)]
+pub enum CreateUsageReportSubscriptionError {
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
+}
+
+impl CreateUsageReportSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateUsageReportSubscriptionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidAccountStatusException" => {
+                    return RusotoError::Service(
+                        CreateUsageReportSubscriptionError::InvalidAccountStatus(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateUsageReportSubscriptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateUsageReportSubscriptionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateUsageReportSubscriptionError::InvalidAccountStatus(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -2700,6 +2833,51 @@ impl Error for DeleteStackError {
         }
     }
 }
+/// Errors returned by DeleteUsageReportSubscription
+#[derive(Debug, PartialEq)]
+pub enum DeleteUsageReportSubscriptionError {
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteUsageReportSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteUsageReportSubscriptionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidAccountStatusException" => {
+                    return RusotoError::Service(
+                        DeleteUsageReportSubscriptionError::InvalidAccountStatus(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteUsageReportSubscriptionError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteUsageReportSubscriptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteUsageReportSubscriptionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteUsageReportSubscriptionError::InvalidAccountStatus(ref cause) => cause,
+            DeleteUsageReportSubscriptionError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
@@ -2977,6 +3155,51 @@ impl Error for DescribeStacksError {
     fn description(&self) -> &str {
         match *self {
             DescribeStacksError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeUsageReportSubscriptions
+#[derive(Debug, PartialEq)]
+pub enum DescribeUsageReportSubscriptionsError {
+    /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
+    InvalidAccountStatus(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeUsageReportSubscriptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeUsageReportSubscriptionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidAccountStatusException" => {
+                    return RusotoError::Service(
+                        DescribeUsageReportSubscriptionsError::InvalidAccountStatus(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeUsageReportSubscriptionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeUsageReportSubscriptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeUsageReportSubscriptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeUsageReportSubscriptionsError::InvalidAccountStatus(ref cause) => cause,
+            DescribeUsageReportSubscriptionsError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -3765,6 +3988,8 @@ impl Error for UpdateImagePermissionsError {
 /// Errors returned by UpdateStack
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackError {
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
+    ConcurrentModification(String),
     /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
     /// <p>The resource cannot be created because your AWS account is suspended. For assistance, contact AWS Support. </p>
@@ -3787,6 +4012,9 @@ impl UpdateStackError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateStackError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateStackError::ConcurrentModification(err.msg))
+                }
                 "IncompatibleImageException" => {
                     return RusotoError::Service(UpdateStackError::IncompatibleImage(err.msg))
                 }
@@ -3828,6 +4056,7 @@ impl fmt::Display for UpdateStackError {
 impl Error for UpdateStackError {
     fn description(&self) -> &str {
         match *self {
+            UpdateStackError::ConcurrentModification(ref cause) => cause,
             UpdateStackError::IncompatibleImage(ref cause) => cause,
             UpdateStackError::InvalidAccountStatus(ref cause) => cause,
             UpdateStackError::InvalidParameterCombination(ref cause) => cause,
@@ -3865,7 +4094,7 @@ pub trait AppStream {
         input: CopyImageRequest,
     ) -> RusotoFuture<CopyImageResponse, CopyImageError>;
 
-    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
+    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
     fn create_directory_config(
         &self,
         input: CreateDirectoryConfigRequest,
@@ -3900,6 +4129,11 @@ pub trait AppStream {
         &self,
         input: CreateStreamingURLRequest,
     ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError>;
+
+    /// <p>Creates a usage report subscription. Usage reports are generated daily.</p>
+    fn create_usage_report_subscription(
+        &self,
+    ) -> RusotoFuture<CreateUsageReportSubscriptionResult, CreateUsageReportSubscriptionError>;
 
     /// <p>Creates a new user in the user pool.</p>
     fn create_user(
@@ -3943,13 +4177,18 @@ pub trait AppStream {
         input: DeleteStackRequest,
     ) -> RusotoFuture<DeleteStackResult, DeleteStackError>;
 
+    /// <p>Disables usage report generation.</p>
+    fn delete_usage_report_subscription(
+        &self,
+    ) -> RusotoFuture<DeleteUsageReportSubscriptionResult, DeleteUsageReportSubscriptionError>;
+
     /// <p>Deletes a user from the user pool.</p>
     fn delete_user(
         &self,
         input: DeleteUserRequest,
     ) -> RusotoFuture<DeleteUserResult, DeleteUserError>;
 
-    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the information required to join streaming instances to an Active Directory domain. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
+    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the configuration information required to join fleets and image builders to Microsoft Active Directory domains. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
     fn describe_directory_configs(
         &self,
         input: DescribeDirectoryConfigsRequest,
@@ -3979,7 +4218,7 @@ pub trait AppStream {
         input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError>;
 
-    /// <p>Retrieves a list that describes the active streaming sessions for a specified stack and fleet. If a value for <code>UserId</code> is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
+    /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a UserId is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
@@ -3990,6 +4229,12 @@ pub trait AppStream {
         &self,
         input: DescribeStacksRequest,
     ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError>;
+
+    /// <p>Retrieves a list that describes one or more usage report subscriptions.</p>
+    fn describe_usage_report_subscriptions(
+        &self,
+        input: DescribeUsageReportSubscriptionsRequest,
+    ) -> RusotoFuture<DescribeUsageReportSubscriptionsResult, DescribeUsageReportSubscriptionsError>;
 
     /// <p><p>Retrieves a list that describes the UserStackAssociation objects. You must specify either or both of the following:</p> <ul> <li> <p>The stack name</p> </li> <li> <p>The user name (email address of the user associated with the stack) and the authentication type for the user</p> </li> </ul></p>
     fn describe_user_stack_associations(
@@ -4078,13 +4323,13 @@ pub trait AppStream {
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
-    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
+    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
     fn update_directory_config(
         &self,
         input: UpdateDirectoryConfigRequest,
     ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
 
-    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
+    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
         input: UpdateFleetRequest,
@@ -4255,7 +4500,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
+    /// <p>Creates a Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
     fn create_directory_config(
         &self,
         input: CreateDirectoryConfigRequest,
@@ -4428,6 +4673,33 @@ impl AppStream for AppStreamClient {
                         .from_err()
                         .and_then(|response| Err(CreateStreamingURLError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Creates a usage report subscription. Usage reports are generated daily.</p>
+    fn create_usage_report_subscription(
+        &self,
+    ) -> RusotoFuture<CreateUsageReportSubscriptionResult, CreateUsageReportSubscriptionError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.CreateUsageReportSubscription",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateUsageReportSubscriptionResult, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateUsageReportSubscriptionError::from_response(response))
+                }))
             }
         })
     }
@@ -4639,6 +4911,33 @@ impl AppStream for AppStreamClient {
         })
     }
 
+    /// <p>Disables usage report generation.</p>
+    fn delete_usage_report_subscription(
+        &self,
+    ) -> RusotoFuture<DeleteUsageReportSubscriptionResult, DeleteUsageReportSubscriptionError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.DeleteUsageReportSubscription",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteUsageReportSubscriptionResult, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteUsageReportSubscriptionError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Deletes a user from the user pool.</p>
     fn delete_user(
         &self,
@@ -4668,7 +4967,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the information required to join streaming instances to an Active Directory domain. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
+    /// <p>Retrieves a list that describes one or more specified Directory Config objects for AppStream 2.0, if the names for these objects are provided. Otherwise, all Directory Config objects in the account are described. These objects include the configuration information required to join fleets and image builders to Microsoft Active Directory domains. </p> <p>Although the response syntax in this topic includes the account password, this password is not returned in the actual response.</p>
     fn describe_directory_configs(
         &self,
         input: DescribeDirectoryConfigsRequest,
@@ -4815,7 +5114,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Retrieves a list that describes the active streaming sessions for a specified stack and fleet. If a value for <code>UserId</code> is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
+    /// <p>Retrieves a list that describes the streaming sessions for a specified stack and fleet. If a UserId is provided for the stack and fleet, only streaming sessions for that user are described. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: DescribeSessionsRequest,
@@ -4869,6 +5168,38 @@ impl AppStream for AppStreamClient {
                         .from_err()
                         .and_then(|response| Err(DescribeStacksError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Retrieves a list that describes one or more usage report subscriptions.</p>
+    fn describe_usage_report_subscriptions(
+        &self,
+        input: DescribeUsageReportSubscriptionsRequest,
+    ) -> RusotoFuture<DescribeUsageReportSubscriptionsResult, DescribeUsageReportSubscriptionsError>
+    {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.DescribeUsageReportSubscriptions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeUsageReportSubscriptionsResult, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeUsageReportSubscriptionsError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }
@@ -5310,7 +5641,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the information required to join streaming instances to an Active Directory domain.</p>
+    /// <p>Updates the specified Directory Config object in AppStream 2.0. This object includes the configuration information required to join fleets and image builders to Microsoft Active Directory domains.</p>
     fn update_directory_config(
         &self,
         input: UpdateDirectoryConfigRequest,
@@ -5341,7 +5672,7 @@ impl AppStream for AppStreamClient {
         })
     }
 
-    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
+    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code>, <code>ComputeCapacity</code>, <code>ImageARN</code>, <code>ImageName</code>, and <code>DisconnectTimeoutInSeconds</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
         input: UpdateFleetRequest,

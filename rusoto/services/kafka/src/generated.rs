@@ -86,7 +86,7 @@ pub struct BrokerSoftwareInfo {
     /// <p>The revision of the configuration to use.</p>
     #[serde(rename = "ConfigurationRevision")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub configuration_revision: Option<String>,
+    pub configuration_revision: Option<i64>,
     /// <p>The version of Apache Kafka.</p>
     #[serde(rename = "KafkaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -143,6 +143,57 @@ pub struct ClusterInfo {
     pub zookeeper_connect_string: Option<String>,
 }
 
+/// <p>Represents an MSK Configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Configuration {
+    /// <p>The Amazon Resource Name (ARN) of the configuration.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <p>The time when the configuration was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The description of the configuration.</p>
+    #[serde(rename = "Description")]
+    pub description: String,
+    /// <p>An array of the versions of Apache Kafka with which you can use this MSK configuration. You can use this configuration for an MSK cluster only if the Apache Kafka version specified for the cluster appears in this array.</p>
+    #[serde(rename = "KafkaVersions")]
+    pub kafka_versions: Vec<String>,
+    /// <p>Latest revision of the configuration.</p>
+    #[serde(rename = "LatestRevision")]
+    pub latest_revision: ConfigurationRevision,
+    /// <p>The name of the configuration.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+/// <p>Specifies the Kafka configuration to use for the brokers.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ConfigurationInfo {
+    /// <p>ARN of the configuration to use.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <p>The revision of the configuration to use.</p>
+    #[serde(rename = "Revision")]
+    pub revision: i64,
+}
+
+/// <p>Describes a configuration revision.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ConfigurationRevision {
+    /// <p>The time when the configuration revision was created.</p>
+    #[serde(rename = "CreationTime")]
+    pub creation_time: f64,
+    /// <p>The description of the configuration revision.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The revision number.</p>
+    #[serde(rename = "Revision")]
+    pub revision: i64,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateClusterRequest {
     /// <p>Information about the broker nodes in the cluster.</p>
@@ -151,6 +202,10 @@ pub struct CreateClusterRequest {
     /// <p>The name of the cluster.</p>
     #[serde(rename = "ClusterName")]
     pub cluster_name: String,
+    /// <p>Comprises of the Configuration to be used on Kafka brokers in a cluster.</p>
+    #[serde(rename = "ConfigurationInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_info: Option<ConfigurationInfo>,
     /// <p>Includes all encryption-related information.</p>
     #[serde(rename = "EncryptionInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -182,6 +237,50 @@ pub struct CreateClusterResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateConfigurationRequest {
+    /// <p>The description of the configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The versions of Apache Kafka with which you can use this MSK configuration.</p>
+    #[serde(rename = "KafkaVersions")]
+    pub kafka_versions: Vec<String>,
+    /// <p>The name of the configuration.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Contents of the server.properties file. When using the API, you must ensure that the contents of the file are base64 encoded.
+    /// When using the AWS Management Console, the SDK, or the AWS CLI, the contents of server.properties can be in plaintext.</p>
+    #[serde(rename = "ServerProperties")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    pub server_properties: bytes::Bytes,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateConfigurationResponse {
+    /// <p>The Amazon Resource Name (ARN) of the configuration.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time when the configuration was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>Latest revision of the configuration.</p>
+    #[serde(rename = "LatestRevision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_revision: Option<ConfigurationRevision>,
+    /// <p>The name of the configuration.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -222,6 +321,83 @@ pub struct DescribeClusterResponse {
     #[serde(rename = "ClusterInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_info: Option<ClusterInfo>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeConfigurationRequest {
+    /// <p>The Amazon Resource Name (ARN) that uniquely identifies an MSK configuration and all of its revisions.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeConfigurationResponse {
+    /// <p>The Amazon Resource Name (ARN) of the configuration.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time when the configuration was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The versions of Apache Kafka with which you can use this MSK configuration.</p>
+    #[serde(rename = "KafkaVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kafka_versions: Option<Vec<String>>,
+    /// <p>Latest revision of the configuration.</p>
+    #[serde(rename = "LatestRevision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_revision: Option<ConfigurationRevision>,
+    /// <p>The name of the configuration.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeConfigurationRevisionRequest {
+    /// <p>The Amazon Resource Name (ARN) that uniquely identifies an MSK configuration and all of its revisions.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <p>A string that uniquely identifies a revision of an MSK configuration.</p>
+    #[serde(rename = "Revision")]
+    pub revision: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeConfigurationRevisionResponse {
+    /// <p>The Amazon Resource Name (ARN) of the configuration.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time when the configuration was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the configuration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The revision number.</p>
+    #[serde(rename = "Revision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision: Option<i64>,
+    /// <p>Contents of the server.properties file. When using the API, you must ensure that the contents of the file are base64 encoded.
+    /// When using the AWS Management Console, the SDK, or the AWS CLI, the contents of server.properties can be in plaintext.</p>
+    #[serde(rename = "ServerProperties")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_properties: Option<bytes::Bytes>,
 }
 
 /// <p>Contains information about the EBS storage volumes attached to Kafka broker nodes.</p>
@@ -307,6 +483,33 @@ pub struct ListClustersResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListConfigurationsRequest {
+    /// <p>The maximum number of results to return in the response. If there are more results, the response includes a NextToken parameter.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<String>,
+    /// <p>The paginated results marker. When the result of the operation is truncated, the call returns NextToken in the response.
+    /// To get the next batch, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListConfigurationsResponse {
+    /// <p>An array of MSK configurations.</p>
+    #[serde(rename = "Configurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configurations: Option<Vec<Configuration>>,
+    /// <p>The paginated results marker. When the result of a ListConfigurations operation is truncated, the call returns NextToken in the response.
+    /// To get another batch of configurations, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListNodesRequest {
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the cluster.</p>
     #[serde(rename = "ClusterArn")]
@@ -334,6 +537,22 @@ pub struct ListNodesResponse {
     #[serde(rename = "NodeInfoList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_info_list: Option<Vec<NodeInfo>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) that uniquely identifies the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The key-value pairs for the resource tags</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>The node information object.</p>
@@ -373,6 +592,26 @@ pub struct StorageInfo {
     #[serde(rename = "EbsStorageInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ebs_storage_info: Option<EBSStorageInfo>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) that uniquely identifies the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The key-value pairs for the resource tags</p>
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) that uniquely identifies the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The list of tag keys.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
 }
 
 /// <p>Zookeeper node information.</p>
@@ -463,6 +702,79 @@ impl Error for CreateClusterError {
             CreateClusterError::ServiceUnavailable(ref cause) => cause,
             CreateClusterError::TooManyRequests(ref cause) => cause,
             CreateClusterError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateConfiguration
+#[derive(Debug, PartialEq)]
+pub enum CreateConfigurationError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Conflict(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    ServiceUnavailable(String),
+    /// <p>Returns information about an error.</p>
+    TooManyRequests(String),
+    /// <p>Returns information about an error.</p>
+    Unauthorized(String),
+}
+
+impl CreateConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(CreateConfigurationError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateConfigurationError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreateConfigurationError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreateConfigurationError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateConfigurationError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreateConfigurationError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(CreateConfigurationError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateConfigurationError::BadRequest(ref cause) => cause,
+            CreateConfigurationError::Conflict(ref cause) => cause,
+            CreateConfigurationError::Forbidden(ref cause) => cause,
+            CreateConfigurationError::InternalServerError(ref cause) => cause,
+            CreateConfigurationError::ServiceUnavailable(ref cause) => cause,
+            CreateConfigurationError::TooManyRequests(ref cause) => cause,
+            CreateConfigurationError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -571,6 +883,150 @@ impl Error for DescribeClusterError {
             DescribeClusterError::InternalServerError(ref cause) => cause,
             DescribeClusterError::NotFound(ref cause) => cause,
             DescribeClusterError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DescribeConfigurationError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    NotFound(String),
+    /// <p>Returns information about an error.</p>
+    ServiceUnavailable(String),
+    /// <p>Returns information about an error.</p>
+    Unauthorized(String),
+}
+
+impl DescribeConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeConfigurationError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeConfigurationError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DescribeConfigurationError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeConfigurationError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeConfigurationError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DescribeConfigurationError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeConfigurationError::BadRequest(ref cause) => cause,
+            DescribeConfigurationError::Forbidden(ref cause) => cause,
+            DescribeConfigurationError::InternalServerError(ref cause) => cause,
+            DescribeConfigurationError::NotFound(ref cause) => cause,
+            DescribeConfigurationError::ServiceUnavailable(ref cause) => cause,
+            DescribeConfigurationError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeConfigurationRevision
+#[derive(Debug, PartialEq)]
+pub enum DescribeConfigurationRevisionError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    NotFound(String),
+    /// <p>Returns information about an error.</p>
+    ServiceUnavailable(String),
+    /// <p>Returns information about an error.</p>
+    Unauthorized(String),
+}
+
+impl DescribeConfigurationRevisionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeConfigurationRevisionError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeConfigurationRevisionError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeConfigurationRevisionError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DescribeConfigurationRevisionError::InternalServerError(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DescribeConfigurationRevisionError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DescribeConfigurationRevisionError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(DescribeConfigurationRevisionError::Unauthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeConfigurationRevisionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeConfigurationRevisionError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeConfigurationRevisionError::BadRequest(ref cause) => cause,
+            DescribeConfigurationRevisionError::Forbidden(ref cause) => cause,
+            DescribeConfigurationRevisionError::InternalServerError(ref cause) => cause,
+            DescribeConfigurationRevisionError::NotFound(ref cause) => cause,
+            DescribeConfigurationRevisionError::ServiceUnavailable(ref cause) => cause,
+            DescribeConfigurationRevisionError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -684,6 +1140,67 @@ impl Error for ListClustersError {
         }
     }
 }
+/// Errors returned by ListConfigurations
+#[derive(Debug, PartialEq)]
+pub enum ListConfigurationsError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    ServiceUnavailable(String),
+    /// <p>Returns information about an error.</p>
+    Unauthorized(String),
+}
+
+impl ListConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConfigurationsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListConfigurationsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListConfigurationsError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListConfigurationsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListConfigurationsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListConfigurationsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListConfigurationsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListConfigurationsError::BadRequest(ref cause) => cause,
+            ListConfigurationsError::Forbidden(ref cause) => cause,
+            ListConfigurationsError::InternalServerError(ref cause) => cause,
+            ListConfigurationsError::ServiceUnavailable(ref cause) => cause,
+            ListConfigurationsError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListNodes
 #[derive(Debug, PartialEq)]
 pub enum ListNodesError {
@@ -735,6 +1252,143 @@ impl Error for ListNodesError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    NotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::InternalServerError(ref cause) => cause,
+            ListTagsForResourceError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    NotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(TagResourceError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::InternalServerError(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    NotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UntagResourceError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::InternalServerError(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Kafka API. Kafka clients implement this trait.
 pub trait Kafka {
     /// <p>Creates a new MSK cluster.</p>
@@ -742,6 +1396,12 @@ pub trait Kafka {
         &self,
         input: CreateClusterRequest,
     ) -> RusotoFuture<CreateClusterResponse, CreateClusterError>;
+
+    /// <p>Creates a new MSK configuration.</p>
+    fn create_configuration(
+        &self,
+        input: CreateConfigurationRequest,
+    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError>;
 
     /// <p>Deletes the MSK cluster specified by the Amazon Resource Name (ARN) in the request.</p>
     fn delete_cluster(
@@ -755,6 +1415,18 @@ pub trait Kafka {
         input: DescribeClusterRequest,
     ) -> RusotoFuture<DescribeClusterResponse, DescribeClusterError>;
 
+    /// <p>Returns a description of this MSK configuration.</p>
+    fn describe_configuration(
+        &self,
+        input: DescribeConfigurationRequest,
+    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError>;
+
+    /// <p>Returns a description of this revision of the configuration.</p>
+    fn describe_configuration_revision(
+        &self,
+        input: DescribeConfigurationRevisionRequest,
+    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>;
+
     /// <p>A list of brokers that a client application can use to bootstrap.</p>
     fn get_bootstrap_brokers(
         &self,
@@ -767,11 +1439,29 @@ pub trait Kafka {
         input: ListClustersRequest,
     ) -> RusotoFuture<ListClustersResponse, ListClustersError>;
 
+    /// <p>Returns a list of all the MSK configurations in this Region for this account.</p>
+    fn list_configurations(
+        &self,
+        input: ListConfigurationsRequest,
+    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
+
     /// <p>Returns a list of the broker nodes in the cluster.</p>
     fn list_nodes(
         &self,
         input: ListNodesRequest,
     ) -> RusotoFuture<ListNodesResponse, ListNodesError>;
+
+    /// <p>Returns a list of tags attached to a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
+    /// <p>Tag a resource with given tags.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+
+    /// <p>Remove tags of a resource by given tag keys.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 }
 /// A client for the Kafka API.
 #[derive(Clone)]
@@ -837,6 +1527,37 @@ impl Kafka for KafkaClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateClusterError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a new MSK configuration.</p>
+    fn create_configuration(
+        &self,
+        input: CreateConfigurationRequest,
+    ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError> {
+        let request_uri = "/v1/configurations";
+
+        let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateConfigurationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateConfigurationError::from_response(response))
+                    }),
                 )
             }
         })
@@ -908,6 +1629,65 @@ impl Kafka for KafkaClient {
                         .from_err()
                         .and_then(|response| Err(DescribeClusterError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Returns a description of this MSK configuration.</p>
+    fn describe_configuration(
+        &self,
+        input: DescribeConfigurationRequest,
+    ) -> RusotoFuture<DescribeConfigurationResponse, DescribeConfigurationError> {
+        let request_uri = format!("/v1/configurations/{arn}", arn = input.arn);
+
+        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConfigurationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeConfigurationError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a description of this revision of the configuration.</p>
+    fn describe_configuration_revision(
+        &self,
+        input: DescribeConfigurationRevisionRequest,
+    ) -> RusotoFuture<DescribeConfigurationRevisionResponse, DescribeConfigurationRevisionError>
+    {
+        let request_uri = format!(
+            "/v1/configurations/{arn}/revisions/{revision}",
+            arn = input.arn,
+            revision = input.revision
+        );
+
+        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeConfigurationRevisionResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeConfigurationRevisionError::from_response(response))
+                }))
             }
         })
     }
@@ -984,6 +1764,44 @@ impl Kafka for KafkaClient {
         })
     }
 
+    /// <p>Returns a list of all the MSK configurations in this Region for this account.</p>
+    fn list_configurations(
+        &self,
+        input: ListConfigurationsRequest,
+    ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError> {
+        let request_uri = "/v1/configurations";
+
+        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListConfigurationsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListConfigurationsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Returns a list of the broker nodes in the cluster.</p>
     fn list_nodes(
         &self,
@@ -1020,6 +1838,93 @@ impl Kafka for KafkaClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListNodesError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a list of tags attached to a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Tag a resource with given tags.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Remove tags of a resource by given tag keys.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })

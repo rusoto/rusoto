@@ -124,9 +124,13 @@ pub struct ActivityTimedOutEventDetails {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateActivityInput {
-    /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="http://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the activity to create. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The list of tags to add to a resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -142,7 +146,7 @@ pub struct CreateActivityOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStateMachineInput {
-    /// <p>The Amazon States Language definition of the state machine. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
+    /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
     /// <p><p>The name of the state machine. </p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
@@ -151,6 +155,10 @@ pub struct CreateStateMachineInput {
     /// <p>The Amazon Resource Name (ARN) of the IAM role to use for this state machine.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
+    /// <p>Tags to be added when creating a state machine.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -256,7 +264,7 @@ pub struct DescribeStateMachineForExecutionInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStateMachineForExecutionOutput {
-    /// <p>The Amazon States Language definition of the state machine. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
+    /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
     /// <p>The name of the state machine associated with the execution.</p>
@@ -286,7 +294,7 @@ pub struct DescribeStateMachineOutput {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    /// <p>The Amazon States Language definition of the state machine. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
+    /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
     /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
@@ -522,27 +530,35 @@ pub struct HistoryEvent {
     #[serde(rename = "stateExitedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_exited_event_details: Option<StateExitedEventDetails>,
+    /// <p>Contains details about the failure of a task.</p>
     #[serde(rename = "taskFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_failed_event_details: Option<TaskFailedEventDetails>,
+    /// <p>Contains details about a task that was scheduled.</p>
     #[serde(rename = "taskScheduledEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_scheduled_event_details: Option<TaskScheduledEventDetails>,
+    /// <p>Contains details about a task that failed to start.</p>
     #[serde(rename = "taskStartFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_start_failed_event_details: Option<TaskStartFailedEventDetails>,
+    /// <p>Contains details about a task that was started.</p>
     #[serde(rename = "taskStartedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_started_event_details: Option<TaskStartedEventDetails>,
+    /// <p>Contains details about a task that where the submit failed.</p>
     #[serde(rename = "taskSubmitFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_submit_failed_event_details: Option<TaskSubmitFailedEventDetails>,
+    /// <p>Contains details about a submitted task.</p>
     #[serde(rename = "taskSubmittedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_submitted_event_details: Option<TaskSubmittedEventDetails>,
+    /// <p>Contains details about a task that succeeded.</p>
     #[serde(rename = "taskSucceededEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_succeeded_event_details: Option<TaskSucceededEventDetails>,
+    /// <p>Contains details about a task that timed out.</p>
     #[serde(rename = "taskTimedOutEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_timed_out_event_details: Option<TaskTimedOutEventDetails>,
@@ -781,7 +797,7 @@ pub struct StartExecutionInput {
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    /// <p><p>The name of the execution. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="http://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the execution. This name must be unique for your AWS account, region, and state machine for 90 days. For more information, see <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1054,7 +1070,7 @@ pub struct UntagResourceOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStateMachineInput {
-    /// <p>The Amazon States Language definition of the state machine. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
+    /// <p>The Amazon States Language definition of the state machine. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<String>,
@@ -1082,6 +1098,8 @@ pub enum CreateActivityError {
     ActivityLimitExceeded(String),
     /// <p>The provided name is invalid.</p>
     InvalidName(String),
+    /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
+    TooManyTags(String),
 }
 
 impl CreateActivityError {
@@ -1095,6 +1113,9 @@ impl CreateActivityError {
                 }
                 "InvalidName" => {
                     return RusotoError::Service(CreateActivityError::InvalidName(err.msg))
+                }
+                "TooManyTags" => {
+                    return RusotoError::Service(CreateActivityError::TooManyTags(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -1113,6 +1134,7 @@ impl Error for CreateActivityError {
         match *self {
             CreateActivityError::ActivityLimitExceeded(ref cause) => cause,
             CreateActivityError::InvalidName(ref cause) => cause,
+            CreateActivityError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -1131,6 +1153,8 @@ pub enum CreateStateMachineError {
     StateMachineDeleting(String),
     /// <p>The maximum number of state machines has been reached. Existing state machines must be deleted before a new state machine can be created.</p>
     StateMachineLimitExceeded(String),
+    /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
+    TooManyTags(String),
 }
 
 impl CreateStateMachineError {
@@ -1163,6 +1187,9 @@ impl CreateStateMachineError {
                         CreateStateMachineError::StateMachineLimitExceeded(err.msg),
                     )
                 }
+                "TooManyTags" => {
+                    return RusotoError::Service(CreateStateMachineError::TooManyTags(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1184,6 +1211,7 @@ impl Error for CreateStateMachineError {
             CreateStateMachineError::StateMachineAlreadyExists(ref cause) => cause,
             CreateStateMachineError::StateMachineDeleting(ref cause) => cause,
             CreateStateMachineError::StateMachineLimitExceeded(ref cause) => cause,
+            CreateStateMachineError::TooManyTags(ref cause) => cause,
         }
     }
 }
@@ -1935,7 +1963,7 @@ pub enum TagResourceError {
     InvalidArn(String),
     /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
     ResourceNotFound(String),
-    /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="http://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
+    /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="https://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
     TooManyTags(String),
 }
 
@@ -2077,13 +2105,13 @@ impl Error for UpdateStateMachineError {
 }
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 pub trait StepFunctions {
-    /// <p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
+    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn create_activity(
         &self,
         input: CreateActivityInput,
     ) -> RusotoFuture<CreateActivityOutput, CreateActivityError>;
 
-    /// <p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p>
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
@@ -2125,7 +2153,7 @@ pub trait StepFunctions {
         input: DescribeStateMachineForExecutionInput,
     ) -> RusotoFuture<DescribeStateMachineForExecutionOutput, DescribeStateMachineForExecutionError>;
 
-    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
+    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
     fn get_activity_task(
         &self,
         input: GetActivityTaskInput,
@@ -2246,7 +2274,7 @@ impl StepFunctionsClient {
 }
 
 impl StepFunctions for StepFunctionsClient {
-    /// <p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
+    /// <p><p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn create_activity(
         &self,
         input: CreateActivityInput,
@@ -2275,7 +2303,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p>
+    /// <p><p>Creates a state machine. A state machine consists of a collection of states that can do work (<code>Task</code> states), determine to which states to transition next (<code>Choice</code> states), stop an execution with an error (<code>Fail</code> states), and so on. State machines are specified using a JSON-based, structured language.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn create_state_machine(
         &self,
         input: CreateStateMachineInput,
@@ -2480,7 +2508,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
+    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="https://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
     fn get_activity_task(
         &self,
         input: GetActivityTaskInput,

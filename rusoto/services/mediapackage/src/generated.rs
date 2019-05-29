@@ -44,6 +44,9 @@ pub struct Channel {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Configuration parameters for a new Channel.</p>
@@ -54,6 +57,7 @@ pub struct ChannelCreateParameters {
     /// <p>The ID of the Channel. The ID must be unique within the region and it
     /// cannot be changed after a Channel is created.</p>
     pub id: String,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A collection of Channel records.</p>
@@ -143,6 +147,9 @@ pub struct CreateChannelRequest {
     /// cannot be changed after a Channel is created.</p>
     #[serde(rename = "Id")]
     pub id: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -163,6 +170,9 @@ pub struct CreateChannelResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Configuration parameters used to create a new OriginEndpoint.</p>
@@ -201,6 +211,9 @@ pub struct CreateOriginEndpointRequest {
     #[serde(rename = "StartoverWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub startover_window_seconds: Option<i64>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Amount of delay (seconds) to enforce on the playback of live content.
     /// If not specified, there will be no time delay in effect for the OriginEndpoint.</p>
     #[serde(rename = "TimeDelaySeconds")]
@@ -252,6 +265,9 @@ pub struct CreateOriginEndpointResponse {
     #[serde(rename = "StartoverWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub startover_window_seconds: Option<i64>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Amount of delay (seconds) to enforce on the playback of live content.
     /// If not specified, there will be no time delay in effect for the OriginEndpoint.</p>
     #[serde(rename = "TimeDelaySeconds")]
@@ -316,7 +332,7 @@ pub struct DashPackage {
     #[serde(rename = "SegmentDurationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_duration_seconds: Option<i64>,
-    /// <p>Determines the type of SegmentTimeline included in the Media Presentation Description (MPD).  When set to NUMBER<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Number$ media URLs.  When set to TIME<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Time$ media URLs.</p>
+    /// <p>Determines the type of SegmentTemplate included in the Media Presentation Description (MPD).  When set to NUMBER<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Number$ media URLs.  When set to TIME<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Time$ media URLs. When set to NUMBER<em>WITH</em>DURATION, only a duration is included in each SegmentTemplate, with $Number$ media URLs.</p>
     #[serde(rename = "SegmentTemplateFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_template_format: Option<String>,
@@ -376,6 +392,9 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -425,6 +444,9 @@ pub struct DescribeOriginEndpointResponse {
     #[serde(rename = "StartoverWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub startover_window_seconds: Option<i64>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Amount of delay (seconds) to enforce on the playback of live content.
     /// If not specified, there will be no time delay in effect for the OriginEndpoint.</p>
     #[serde(rename = "TimeDelaySeconds")]
@@ -704,6 +726,20 @@ pub struct ListOriginEndpointsResponse {
     pub origin_endpoints: Option<Vec<OriginEndpoint>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>A Microsoft Smooth Streaming (MSS) encryption configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MssEncryption {
@@ -771,6 +807,9 @@ pub struct OriginEndpoint {
     #[serde(rename = "StartoverWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub startover_window_seconds: Option<i64>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Amount of delay (seconds) to enforce on the playback of live content.
     /// If not specified, there will be no time delay in effect for the OriginEndpoint.</p>
     #[serde(rename = "TimeDelaySeconds")]
@@ -806,6 +845,7 @@ pub struct OriginEndpointCreateParameters {
     /// <p>Maximum duration (seconds) of content to retain for startover playback.
     /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
     pub startover_window_seconds: Option<i64>,
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Amount of delay (seconds) to enforce on the playback of live content.
     /// If not specified, there will be no time delay in effect for the OriginEndpoint.</p>
     pub time_delay_seconds: Option<i64>,
@@ -868,6 +908,9 @@ pub struct RotateChannelCredentialsResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -898,6 +941,9 @@ pub struct RotateIngestEndpointCredentialsResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
@@ -941,6 +987,28 @@ pub struct StreamSelection {
     pub stream_order: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagsModel {
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The key(s) of tag to be deleted</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
 /// <p>Configuration parameters used to update the Channel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateChannelRequest {
@@ -971,6 +1039,9 @@ pub struct UpdateChannelResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Configuration parameters used to update an existing OriginEndpoint.</p>
@@ -1055,6 +1126,9 @@ pub struct UpdateOriginEndpointResponse {
     #[serde(rename = "StartoverWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub startover_window_seconds: Option<i64>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Amount of delay (seconds) to enforce on the playback of live content.
     /// If not specified, there will be no time delay in effect for the OriginEndpoint.</p>
     #[serde(rename = "TimeDelaySeconds")]
@@ -1604,6 +1678,31 @@ impl Error for ListOriginEndpointsError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by RotateChannelCredentials
 #[derive(Debug, PartialEq)]
 pub enum RotateChannelCredentialsError {
@@ -1750,6 +1849,56 @@ impl Error for RotateIngestEndpointCredentialsError {
             RotateIngestEndpointCredentialsError::TooManyRequests(ref cause) => cause,
             RotateIngestEndpointCredentialsError::UnprocessableEntity(ref cause) => cause,
         }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {}
     }
 }
 /// Errors returned by UpdateChannel
@@ -1936,6 +2085,11 @@ pub trait MediaPackage {
         input: ListOriginEndpointsRequest,
     ) -> RusotoFuture<ListOriginEndpointsResponse, ListOriginEndpointsError>;
 
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
     /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
     fn rotate_channel_credentials(
         &self,
@@ -1947,6 +2101,10 @@ pub trait MediaPackage {
         &self,
         input: RotateIngestEndpointCredentialsRequest,
     ) -> RusotoFuture<RotateIngestEndpointCredentialsResponse, RotateIngestEndpointCredentialsError>;
+
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Updates an existing Channel.</p>
     fn update_channel(
@@ -2252,6 +2410,33 @@ impl MediaPackage for MediaPackageClient {
         })
     }
 
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
     fn rotate_channel_credentials(
         &self,
@@ -2307,6 +2492,63 @@ impl MediaPackage for MediaPackageClient {
                         response,
                     ))
                 }))
+            }
+        })
+    }
+
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }

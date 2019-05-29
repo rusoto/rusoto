@@ -25,6 +25,41 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>Name of the availability zone.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AvailabilityZone {
+    /// <p>Id for the availability zone.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Types of broker engines.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BrokerEngineType {
+    /// <p>The type of broker engine.</p>
+    #[serde(rename = "EngineType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_type: Option<String>,
+    /// <p>The list of engine versions.</p>
+    #[serde(rename = "EngineVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_versions: Option<Vec<EngineVersion>>,
+}
+
+/// <p>Returns a list of broker engine type.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BrokerEngineTypeOutput {
+    /// <p>List of available engine types and versions.</p>
+    pub broker_engine_types: Option<Vec<BrokerEngineType>>,
+    /// <p>Required. The maximum number of engine types that can be returned per page (20 by default). This value must be an integer from 5 to 100.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
+    pub next_token: Option<String>,
+}
+
 /// <p>Returns information about all brokers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -41,6 +76,39 @@ pub struct BrokerInstance {
     #[serde(rename = "IpAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
+}
+
+/// <p>Option for host instance type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BrokerInstanceOption {
+    /// <p>The list of available az.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<AvailabilityZone>>,
+    /// <p>The type of broker engine.</p>
+    #[serde(rename = "EngineType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_type: Option<String>,
+    /// <p>The type of broker instance.</p>
+    #[serde(rename = "HostInstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_instance_type: Option<String>,
+    /// <p>The list of supported engine versions.</p>
+    #[serde(rename = "SupportedEngineVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_engine_versions: Option<Vec<String>>,
+}
+
+/// <p>Returns a list of broker instance options.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BrokerInstanceOptionsOutput {
+    /// <p>List of available broker instance options.</p>
+    pub broker_instance_options: Option<Vec<BrokerInstanceOption>>,
+    /// <p>Required. The maximum number of instance options that can be returned per page (20 by default). This value must be an integer from 5 to 100.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
+    pub next_token: Option<String>,
 }
 
 /// <p>The Amazon Resource Name (ARN) of the broker.</p>
@@ -367,7 +435,7 @@ pub struct CreateConfigurationResponse {
 /// <p>A map of the key-value pairs for the resource tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTagsRequest {
-    /// <p>the Amazon Resource Name (ARN)</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource tag.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>The key-value pair for the resource tag.</p>
@@ -439,7 +507,7 @@ pub struct DeleteBrokerResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTagsRequest {
-    /// <p>the Amazon Resource Name (ARN)</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource tag.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>An array of tag keys to delete</p>
@@ -460,6 +528,76 @@ pub struct DeleteUserRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUserResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeBrokerEngineTypesRequest {
+    /// <p>Filter response by engine type.</p>
+    #[serde(rename = "EngineType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_type: Option<String>,
+    /// <p>The maximum number of engine types that Amazon MQ can return per page (20 by default). This value must be an integer from 5 to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeBrokerEngineTypesResponse {
+    /// <p>List of available engine types and versions.</p>
+    #[serde(rename = "BrokerEngineTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub broker_engine_types: Option<Vec<BrokerEngineType>>,
+    /// <p>Required. The maximum number of engine types that can be returned per page (20 by default). This value must be an integer from 5 to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeBrokerInstanceOptionsRequest {
+    /// <p>Filter response by engine type.</p>
+    #[serde(rename = "EngineType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_type: Option<String>,
+    /// <p>Filter response by host instance type.</p>
+    #[serde(rename = "HostInstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host_instance_type: Option<String>,
+    /// <p>The maximum number of instance options that Amazon MQ can return per page (20 by default). This value must be an integer from 5 to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeBrokerInstanceOptionsResponse {
+    /// <p>List of available broker instance options.</p>
+    #[serde(rename = "BrokerInstanceOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub broker_instance_options: Option<Vec<BrokerInstanceOption>>,
+    /// <p>Required. The maximum number of instance options that can be returned per page (20 by default). This value must be an integer from 5 to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
 
 /// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -740,6 +878,16 @@ pub struct DescribeUserResponse {
     pub username: Option<String>,
 }
 
+/// <p>Id of the engine version.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EngineVersion {
+    /// <p>Id for the version.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p>Returns information about an error.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MQError {
@@ -874,7 +1022,7 @@ pub struct ListConfigurationsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsRequest {
-    /// <p>the Amazon Resource Name (ARN)</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource tag.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
@@ -1704,6 +1852,108 @@ impl Error for DescribeBrokerError {
         }
     }
 }
+/// Errors returned by DescribeBrokerEngineTypes
+#[derive(Debug, PartialEq)]
+pub enum DescribeBrokerEngineTypesError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+}
+
+impl DescribeBrokerEngineTypesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeBrokerEngineTypesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeBrokerEngineTypesError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeBrokerEngineTypesError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DescribeBrokerEngineTypesError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeBrokerEngineTypesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeBrokerEngineTypesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeBrokerEngineTypesError::BadRequest(ref cause) => cause,
+            DescribeBrokerEngineTypesError::Forbidden(ref cause) => cause,
+            DescribeBrokerEngineTypesError::InternalServerError(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeBrokerInstanceOptions
+#[derive(Debug, PartialEq)]
+pub enum DescribeBrokerInstanceOptionsError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+}
+
+impl DescribeBrokerInstanceOptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeBrokerInstanceOptionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(DescribeBrokerInstanceOptionsError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DescribeBrokerInstanceOptionsError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(
+                        DescribeBrokerInstanceOptionsError::InternalServerError(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DescribeBrokerInstanceOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeBrokerInstanceOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeBrokerInstanceOptionsError::BadRequest(ref cause) => cause,
+            DescribeBrokerInstanceOptionsError::Forbidden(ref cause) => cause,
+            DescribeBrokerInstanceOptionsError::InternalServerError(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationError {
@@ -2375,7 +2625,7 @@ pub trait MQ {
         input: DeleteBrokerRequest,
     ) -> RusotoFuture<DeleteBrokerResponse, DeleteBrokerError>;
 
-    /// <p>Remove a tag from a resource.</p>
+    /// <p>Removes a tag from a resource.</p>
     fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError>;
 
     /// <p>Deletes an ActiveMQ user.</p>
@@ -2389,6 +2639,18 @@ pub trait MQ {
         &self,
         input: DescribeBrokerRequest,
     ) -> RusotoFuture<DescribeBrokerResponse, DescribeBrokerError>;
+
+    /// <p>Describe available engine types and versions.</p>
+    fn describe_broker_engine_types(
+        &self,
+        input: DescribeBrokerEngineTypesRequest,
+    ) -> RusotoFuture<DescribeBrokerEngineTypesResponse, DescribeBrokerEngineTypesError>;
+
+    /// <p>Describe available broker instance options.</p>
+    fn describe_broker_instance_options(
+        &self,
+        input: DescribeBrokerInstanceOptionsRequest,
+    ) -> RusotoFuture<DescribeBrokerInstanceOptionsResponse, DescribeBrokerInstanceOptionsError>;
 
     /// <p>Returns information about the specified configuration.</p>
     fn describe_configuration(
@@ -2652,7 +2914,7 @@ impl MQ for MQClient {
         })
     }
 
-    /// <p>Remove a tag from a resource.</p>
+    /// <p>Removes a tag from a resource.</p>
     fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError> {
         let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
 
@@ -2741,6 +3003,86 @@ impl MQ for MQClient {
                         .from_err()
                         .and_then(|response| Err(DescribeBrokerError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Describe available engine types and versions.</p>
+    fn describe_broker_engine_types(
+        &self,
+        input: DescribeBrokerEngineTypesRequest,
+    ) -> RusotoFuture<DescribeBrokerEngineTypesResponse, DescribeBrokerEngineTypesError> {
+        let request_uri = "/v1/broker-engine-types";
+
+        let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.engine_type {
+            params.put("engineType", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeBrokerEngineTypesResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeBrokerEngineTypesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Describe available broker instance options.</p>
+    fn describe_broker_instance_options(
+        &self,
+        input: DescribeBrokerInstanceOptionsRequest,
+    ) -> RusotoFuture<DescribeBrokerInstanceOptionsResponse, DescribeBrokerInstanceOptionsError>
+    {
+        let request_uri = "/v1/broker-instance-options";
+
+        let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.engine_type {
+            params.put("engineType", x);
+        }
+        if let Some(ref x) = input.host_instance_type {
+            params.put("hostInstanceType", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DescribeBrokerInstanceOptionsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeBrokerInstanceOptionsError::from_response(response))
+                }))
             }
         })
     }

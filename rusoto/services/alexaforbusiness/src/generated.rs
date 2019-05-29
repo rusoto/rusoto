@@ -86,6 +86,20 @@ pub struct AssociateContactWithAddressBookRequest {
 pub struct AssociateContactWithAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateDeviceWithNetworkProfileRequest {
+    /// <p>The device ARN.</p>
+    #[serde(rename = "DeviceArn")]
+    pub device_arn: String,
+    /// <p>The ARN of the network profile to associate with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    pub network_profile_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateDeviceWithNetworkProfileResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateDeviceWithRoomRequest {
     /// <p>The ARN of the device to associate to a room. Required.</p>
     #[serde(rename = "DeviceArn")]
@@ -134,11 +148,7 @@ pub struct AssociateSkillWithSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateSkillWithUsersRequest {
-    /// <p>The ARN of the organization.</p>
-    #[serde(rename = "OrganizationArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub organization_arn: Option<String>,
-    /// <p>The private skill ID you want to make available to enrolled users.&gt;</p>
+    /// <p>The private skill ID you want to make available to enrolled users.</p>
     #[serde(rename = "SkillId")]
     pub skill_id: String,
 }
@@ -146,6 +156,17 @@ pub struct AssociateSkillWithUsersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AssociateSkillWithUsersResponse {}
+
+/// <p>The audio message. There is a 1 MB limit on the audio file input and the only supported format is MP3. To convert your MP3 audio files to an Alexa-friendly, </p> <p>required codec version (MPEG version 2) and bit rate (48 kbps), you might use converter software. One option for this is a command-line tool, FFmpeg. For more information, see <a href="https://www.ffmpeg.org/">FFmpeg</a>. The following command converts the provided &lt;input-file&gt; to an MP3 file that is played in the announcement:</p> <p> <code>ffmpeg -i &lt;input-file&gt; -ac 2 -codec:a libmp3lame -b:a 48k -ar 16000 &lt;output-file.mp3&gt;</code> </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Audio {
+    /// <p>The locale of the audio message. Currently, en-US is supported.</p>
+    #[serde(rename = "Locale")]
+    pub locale: String,
+    /// <p>The location of the audio file. Currently, S3 URLs are supported. Only S3 locations comprised of safe characters are valid. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#Safe%20Characters">Safe Characters</a>.</p>
+    #[serde(rename = "Location")]
+    pub location: String,
+}
 
 /// <p>Usage report with specified parameters.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -348,6 +369,23 @@ pub struct ContactData {
     pub phone_number: Option<String>,
 }
 
+/// <p>The content definition. This can contain only one text, SSML, or audio list object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Content {
+    /// <p>The list of audio messages.</p>
+    #[serde(rename = "AudioList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_list: Option<Vec<Audio>>,
+    /// <p>The list of SSML messages.</p>
+    #[serde(rename = "SsmlList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssml_list: Option<Vec<Ssml>>,
+    /// <p>The list of text messages.</p>
+    #[serde(rename = "TextList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_list: Option<Vec<Text>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAddressBookRequest {
     /// <p>A unique, user-specified identifier for the request that ensures idempotency.</p>
@@ -384,11 +422,11 @@ pub struct CreateBusinessReportScheduleRequest {
     /// <p>The format of the generated report (individual CSV files or zipped files of individual files).</p>
     #[serde(rename = "Format")]
     pub format: String,
-    /// <p>The recurrence of the reports.</p>
+    /// <p>The recurrence of the reports. If this isn't specified, the report will only be delivered one time when the API is called. </p>
     #[serde(rename = "Recurrence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recurrence: Option<BusinessReportRecurrence>,
-    /// <p>The S3 bucket name of the output reports.</p>
+    /// <p>The S3 bucket name of the output reports. If this isn't specified, the report can be retrieved from a download link by calling ListBusinessReportSchedule. </p>
     #[serde(rename = "S3BucketName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_bucket_name: Option<String>,
@@ -475,6 +513,77 @@ pub struct CreateContactResponse {
     #[serde(rename = "ContactArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateGatewayGroupRequest {
+    /// <p> A unique, user-specified identifier for the request that ensures idempotency.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The description of the gateway group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the gateway group.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateGatewayGroupResponse {
+    /// <p>The ARN of the created gateway group.</p>
+    #[serde(rename = "GatewayGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_group_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateNetworkProfileRequest {
+    /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices. </p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_authority_arn: Option<String>,
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The current password of the Wi-Fi network.</p>
+    #[serde(rename = "CurrentPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_password: Option<String>,
+    /// <p>Detailed information about a device's network profile.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The authentication standard that is used in the EAP framework. Currently, EAP_TLS is supported.</p>
+    #[serde(rename = "EapMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eap_method: Option<String>,
+    /// <p>The name of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileName")]
+    pub network_profile_name: String,
+    /// <p>The next, or subsequent, password of the Wi-Fi network. This password is asynchronously transmitted to the device and is used when the password of the network changes to NextPassword. </p>
+    #[serde(rename = "NextPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_password: Option<String>,
+    /// <p>The security type of the Wi-Fi network. This can be WPA2_ENTERPRISE, WPA2_PSK, WPA_PSK, WEP, or OPEN.</p>
+    #[serde(rename = "SecurityType")]
+    pub security_type: String,
+    /// <p>The SSID of the Wi-Fi network.</p>
+    #[serde(rename = "Ssid")]
+    pub ssid: String,
+    /// <p>The root certificates of your authentication server that is installed on your devices and used to trust your authentication server during EAP negotiation. </p>
+    #[serde(rename = "TrustAnchors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trust_anchors: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateNetworkProfileResponse {
+    /// <p>The ARN of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -676,6 +785,42 @@ pub struct DeleteDeviceRequest {
 pub struct DeleteDeviceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteDeviceUsageDataRequest {
+    /// <p>The ARN of the device.</p>
+    #[serde(rename = "DeviceArn")]
+    pub device_arn: String,
+    /// <p>The type of usage data to delete.</p>
+    #[serde(rename = "DeviceUsageType")]
+    pub device_usage_type: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDeviceUsageDataResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteGatewayGroupRequest {
+    /// <p>The ARN of the gateway group to delete.</p>
+    #[serde(rename = "GatewayGroupArn")]
+    pub gateway_group_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteGatewayGroupResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteNetworkProfileRequest {
+    /// <p>The ARN of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    pub network_profile_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteNetworkProfileResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProfileRequest {
     /// <p>The ARN of the room profile to delete. Required.</p>
     #[serde(rename = "ProfileArn")]
@@ -813,6 +958,10 @@ pub struct Device {
     #[serde(rename = "MacAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mac_address: Option<String>,
+    /// <p>Detailed information about a device's network profile.</p>
+    #[serde(rename = "NetworkProfileInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_info: Option<DeviceNetworkProfileInfo>,
     /// <p>The room ARN of a device.</p>
     #[serde(rename = "RoomArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -855,6 +1004,14 @@ pub struct DeviceData {
     #[serde(rename = "MacAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mac_address: Option<String>,
+    /// <p>The ARN of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_arn: Option<String>,
+    /// <p>The name of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_name: Option<String>,
     /// <p>The room ARN associated with a device.</p>
     #[serde(rename = "RoomArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -887,6 +1044,24 @@ pub struct DeviceEvent {
     pub value: Option<String>,
 }
 
+/// <p>Detailed information about a device's network profile.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeviceNetworkProfileInfo {
+    /// <p>The ARN of the certificate associated with a device.</p>
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
+    /// <p>The time (in epoch) when the certificate expires.</p>
+    #[serde(rename = "CertificateExpirationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_expiration_time: Option<f64>,
+    /// <p>The ARN of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_arn: Option<String>,
+}
+
 /// <p>Details of a device’s status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -895,6 +1070,10 @@ pub struct DeviceStatusDetail {
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
+    /// <p>The list of available features on the device.</p>
+    #[serde(rename = "Feature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feature: Option<String>,
 }
 
 /// <p>Detailed information about a device's status.</p>
@@ -954,10 +1133,6 @@ pub struct DisassociateSkillFromSkillGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateSkillFromUsersRequest {
-    /// <p>The ARN of the organization.</p>
-    #[serde(rename = "OrganizationArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub organization_arn: Option<String>,
     /// <p> The private skill ID you want to make unavailable for enrolled users.</p>
     #[serde(rename = "SkillId")]
     pub skill_id: String,
@@ -1004,6 +1179,94 @@ pub struct ForgetSmartHomeAppliancesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ForgetSmartHomeAppliancesResponse {}
+
+/// <p>The details of the gateway. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Gateway {
+    /// <p>The ARN of the gateway.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The description of the gateway.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the gateway group that the gateway is associated to.</p>
+    #[serde(rename = "GatewayGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_group_arn: Option<String>,
+    /// <p>The name of the gateway.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The software version of the gateway. The gateway automatically updates its software version during normal operation.</p>
+    #[serde(rename = "SoftwareVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_version: Option<String>,
+}
+
+/// <p>The details of the gateway group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GatewayGroup {
+    /// <p>The ARN of the gateway group.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The description of the gateway group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the gateway group.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>The summary of a gateway group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GatewayGroupSummary {
+    /// <p>The ARN of the gateway group.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The description of the gateway group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the gateway group.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>The summary of a gateway.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GatewaySummary {
+    /// <p>The ARN of the gateway.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The description of the gateway.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the gateway group that the gateway is associated to.</p>
+    #[serde(rename = "GatewayGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_group_arn: Option<String>,
+    /// <p>The name of the gateway.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The software version of the gateway. The gateway automatically updates its software version during normal operation.</p>
+    #[serde(rename = "SoftwareVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_version: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAddressBookRequest {
@@ -1080,6 +1343,73 @@ pub struct GetDeviceResponse {
     #[serde(rename = "Device")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device: Option<Device>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetGatewayGroupRequest {
+    /// <p>The ARN of the gateway group to get.</p>
+    #[serde(rename = "GatewayGroupArn")]
+    pub gateway_group_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetGatewayGroupResponse {
+    #[serde(rename = "GatewayGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_group: Option<GatewayGroup>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetGatewayRequest {
+    /// <p>The ARN of the gateway to get.</p>
+    #[serde(rename = "GatewayArn")]
+    pub gateway_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetGatewayResponse {
+    /// <p>The details of the gateway.</p>
+    #[serde(rename = "Gateway")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway: Option<Gateway>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetInvitationConfigurationRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetInvitationConfigurationResponse {
+    /// <p>The email ID of the organization or individual contact that the enrolled user can use. </p>
+    #[serde(rename = "ContactEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_email: Option<String>,
+    /// <p>The name of the organization sending the enrollment invite to a user.</p>
+    #[serde(rename = "OrganizationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_name: Option<String>,
+    /// <p>The list of private skill IDs that you want to recommend to the user to enable in the invitation.</p>
+    #[serde(rename = "PrivateSkillIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_skill_ids: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetNetworkProfileRequest {
+    /// <p>The ARN of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    pub network_profile_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetNetworkProfileResponse {
+    /// <p>The network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile: Option<NetworkProfile>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1250,20 +1580,74 @@ pub struct ListDeviceEventsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListGatewayGroupsRequest {
+    /// <p>The maximum number of gateway group summaries to return. The default is 50.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to paginate though multiple pages of gateway group summaries.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListGatewayGroupsResponse {
+    /// <p>The gateway groups in the list.</p>
+    #[serde(rename = "GatewayGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_groups: Option<Vec<GatewayGroupSummary>>,
+    /// <p>The token used to paginate though multiple pages of gateway group summaries.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListGatewaysRequest {
+    /// <p>The gateway group ARN for which to list gateways.</p>
+    #[serde(rename = "GatewayGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_group_arn: Option<String>,
+    /// <p>The maximum number of gateway summaries to return. The default is 50.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to paginate though multiple pages of gateway summaries.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListGatewaysResponse {
+    /// <p>The gateways in the list.</p>
+    #[serde(rename = "Gateways")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateways: Option<Vec<GatewaySummary>>,
+    /// <p>The token used to paginate though multiple pages of gateway summaries.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSkillsRequest {
     /// <p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>
     #[serde(rename = "EnablementType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enablement_type: Option<String>,
-    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p>
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved. Required.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>. Required.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ARN of the skill group for which to list enabled skills.</p>
+    /// <p>The ARN of the skill group for which to list enabled skills. Required.</p>
     #[serde(rename = "SkillGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skill_group_arn: Option<String>,
@@ -1403,6 +1787,86 @@ pub struct MeetingSetting {
     pub require_pin: String,
 }
 
+/// <p>The network profile associated with a device.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct NetworkProfile {
+    /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices. </p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_authority_arn: Option<String>,
+    /// <p>The current password of the Wi-Fi network.</p>
+    #[serde(rename = "CurrentPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_password: Option<String>,
+    /// <p>Detailed information about a device's network profile.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The authentication standard that is used in the EAP framework. Currently, EAP_TLS is supported. </p>
+    #[serde(rename = "EapMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eap_method: Option<String>,
+    /// <p>The ARN of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_arn: Option<String>,
+    /// <p>The name of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_name: Option<String>,
+    /// <p>The next, or subsequent, password of the Wi-Fi network. This password is asynchronously transmitted to the device and is used when the password of the network changes to NextPassword. </p>
+    #[serde(rename = "NextPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_password: Option<String>,
+    /// <p>The security type of the Wi-Fi network. This can be WPA2_ENTERPRISE, WPA2_PSK, WPA_PSK, WEP, or OPEN.</p>
+    #[serde(rename = "SecurityType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_type: Option<String>,
+    /// <p>The SSID of the Wi-Fi network.</p>
+    #[serde(rename = "Ssid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssid: Option<String>,
+    /// <p>The root certificates of your authentication server, which is installed on your devices and used to trust your authentication server during EAP negotiation.</p>
+    #[serde(rename = "TrustAnchors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trust_anchors: Option<Vec<String>>,
+}
+
+/// <p>The data associated with a network profile.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct NetworkProfileData {
+    /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices.</p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_authority_arn: Option<String>,
+    /// <p>Detailed information about a device's network profile.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The authentication standard that is used in the EAP framework. Currently, EAP_TLS is supported.</p>
+    #[serde(rename = "EapMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eap_method: Option<String>,
+    /// <p>The ARN of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_arn: Option<String>,
+    /// <p>The name of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_name: Option<String>,
+    /// <p>The security type of the Wi-Fi network. This can be WPA2_ENTERPRISE, WPA2_PSK, WPA_PSK, WEP, or OPEN.</p>
+    #[serde(rename = "SecurityType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_type: Option<String>,
+    /// <p>The SSID of the Wi-Fi network.</p>
+    #[serde(rename = "Ssid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssid: Option<String>,
+}
+
 /// <p>The information for public switched telephone network (PSTN) conferencing.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PSTNDialIn {
@@ -1522,6 +1986,25 @@ pub struct PutConferencePreferenceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PutConferencePreferenceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutInvitationConfigurationRequest {
+    /// <p>The email ID of the organization or individual contact that the enrolled user can use. </p>
+    #[serde(rename = "ContactEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contact_email: Option<String>,
+    /// <p>The name of the organization sending the enrollment invite to a user.</p>
+    #[serde(rename = "OrganizationName")]
+    pub organization_name: String,
+    /// <p>The list of private skill IDs that you want to recommend to the user to enable in the invitation.</p>
+    #[serde(rename = "PrivateSkillIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_skill_ids: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutInvitationConfigurationResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutRoomSkillParameterRequest {
@@ -1784,7 +2267,7 @@ pub struct SearchContactsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SearchDevicesRequest {
-    /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, UnassociatedOnly, and ConnectionStatus (ONLINE and OFFLINE).</p>
+    /// <p>The filters to use to list a specified set of devices. Supported filter keys are DeviceName, DeviceStatus, DeviceStatusDetailCode, RoomName, DeviceType, DeviceSerialNumber, UnassociatedOnly, ConnectionStatus (ONLINE and OFFLINE), NetworkProfileName, NetworkProfileArn, Feature, and FailureCode.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1796,7 +2279,7 @@ pub struct SearchDevicesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The sort order to use in listing the specified set of devices. Supported sort keys are DeviceName, DeviceStatus, RoomName, DeviceType, DeviceSerialNumber, and ConnectionStatus.</p>
+    /// <p>The sort order to use in listing the specified set of devices. Supported sort keys are DeviceName, DeviceStatus, RoomName, DeviceType, DeviceSerialNumber, ConnectionStatus, NetworkProfileName, NetworkProfileArn, Feature, and FailureCode.</p>
     #[serde(rename = "SortCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_criteria: Option<Vec<Sort>>,
@@ -1814,6 +2297,43 @@ pub struct SearchDevicesResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
     /// <p>The total number of devices returned.</p>
+    #[serde(rename = "TotalCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_count: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SearchNetworkProfilesRequest {
+    /// <p>The filters to use to list a specified set of network profiles. Valid filters are NetworkProfileName, Ssid, and SecurityType.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by MaxResults. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The sort order to use to list the specified set of network profiles. Valid sort criteria includes NetworkProfileName, Ssid, and SecurityType.</p>
+    #[serde(rename = "SortCriteria")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_criteria: Option<Vec<Sort>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SearchNetworkProfilesResponse {
+    /// <p>The network profiles that meet the specified set of filter criteria, in sort order. It is a list of NetworkProfileData objects. </p>
+    #[serde(rename = "NetworkProfiles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profiles: Option<Vec<NetworkProfileData>>,
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by MaxResults.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The total number of network profiles returned.</p>
     #[serde(rename = "TotalCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_count: Option<i64>,
@@ -1965,6 +2485,32 @@ pub struct SearchUsersResponse {
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub users: Option<Vec<UserData>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SendAnnouncementRequest {
+    /// <p>The unique, user-specified identifier for the request that ensures idempotency.</p>
+    #[serde(rename = "ClientRequestToken")]
+    pub client_request_token: String,
+    /// <p>The announcement content. This can contain only one of the three possible announcement types (text, SSML or audio).</p>
+    #[serde(rename = "Content")]
+    pub content: Content,
+    /// <p>The filters to use to send an announcement to a specified list of rooms. The supported filter keys are RoomName, ProfileName, RoomArn, and ProfileArn. To send to all rooms, specify an empty RoomFilters list.</p>
+    #[serde(rename = "RoomFilters")]
+    pub room_filters: Vec<Filter>,
+    /// <p>The time to live for an announcement. Default is 300. If delivery doesn't occur within this time, the announcement is not delivered.</p>
+    #[serde(rename = "TimeToLiveInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_to_live_in_seconds: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SendAnnouncementResponse {
+    /// <p>The identifier of the announcement.</p>
+    #[serde(rename = "AnnouncementArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub announcement_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2150,6 +2696,17 @@ pub struct Sort {
     pub value: String,
 }
 
+/// <p>The SSML message. For more information, see <a href="https://developer.amazon.com/docs/custom-skills/speech-synthesis-markup-language-ssml-reference.html">SSML Reference</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Ssml {
+    /// <p>The locale of the SSML message. Currently, en-US is supported.</p>
+    #[serde(rename = "Locale")]
+    pub locale: String,
+    /// <p>The value of the SSML message in the correct SSML format. The audio tag is not supported.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartDeviceSyncRequest {
     /// <p>The ARN of the device to sync. Required.</p>
@@ -2204,6 +2761,17 @@ pub struct TagResourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
+
+/// <p>The text message.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Text {
+    /// <p>The locale of the text message. Currently, en-US is supported.</p>
+    #[serde(rename = "Locale")]
+    pub locale: String,
+    /// <p>The value of the text message.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
@@ -2338,6 +2906,83 @@ pub struct UpdateDeviceRequest {
 pub struct UpdateDeviceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateGatewayGroupRequest {
+    /// <p>The updated description of the gateway group.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the gateway group to update.</p>
+    #[serde(rename = "GatewayGroupArn")]
+    pub gateway_group_arn: String,
+    /// <p>The updated name of the gateway group.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateGatewayGroupResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateGatewayRequest {
+    /// <p>The updated description of the gateway.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the gateway to update.</p>
+    #[serde(rename = "GatewayArn")]
+    pub gateway_arn: String,
+    /// <p>The updated name of the gateway.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The updated software version of the gateway. The gateway automatically updates its software version during normal operation.</p>
+    #[serde(rename = "SoftwareVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateGatewayResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateNetworkProfileRequest {
+    /// <p>The ARN of the Private Certificate Authority (PCA) created in AWS Certificate Manager (ACM). This is used to issue certificates to the devices. </p>
+    #[serde(rename = "CertificateAuthorityArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_authority_arn: Option<String>,
+    /// <p>The current password of the Wi-Fi network.</p>
+    #[serde(rename = "CurrentPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_password: Option<String>,
+    /// <p>Detailed information about a device's network profile.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileArn")]
+    pub network_profile_arn: String,
+    /// <p>The name of the network profile associated with a device.</p>
+    #[serde(rename = "NetworkProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_profile_name: Option<String>,
+    /// <p>The next, or subsequent, password of the Wi-Fi network. This password is asynchronously transmitted to the device and is used when the password of the network changes to NextPassword. </p>
+    #[serde(rename = "NextPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_password: Option<String>,
+    /// <p>The root certificate(s) of your authentication server that will be installed on your devices and used to trust your authentication server during EAP negotiation. </p>
+    #[serde(rename = "TrustAnchors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trust_anchors: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateNetworkProfileResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateProfileRequest {
     /// <p>The updated address for the room profile.</p>
     #[serde(rename = "Address")]
@@ -2470,7 +3115,7 @@ pub struct UserData {
 /// Errors returned by ApproveSkill
 #[derive(Debug, PartialEq)]
 pub enum ApproveSkillError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
@@ -2549,10 +3194,63 @@ impl Error for AssociateContactWithAddressBookError {
         }
     }
 }
+/// Errors returned by AssociateDeviceWithNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum AssociateDeviceWithNetworkProfileError {
+    /// <p>There is a concurrent modification of resources.</p>
+    ConcurrentModification(String),
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
+    DeviceNotRegistered(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl AssociateDeviceWithNetworkProfileError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateDeviceWithNetworkProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        AssociateDeviceWithNetworkProfileError::ConcurrentModification(err.msg),
+                    )
+                }
+                "DeviceNotRegisteredException" => {
+                    return RusotoError::Service(
+                        AssociateDeviceWithNetworkProfileError::DeviceNotRegistered(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(AssociateDeviceWithNetworkProfileError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AssociateDeviceWithNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateDeviceWithNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateDeviceWithNetworkProfileError::ConcurrentModification(ref cause) => cause,
+            AssociateDeviceWithNetworkProfileError::DeviceNotRegistered(ref cause) => cause,
+            AssociateDeviceWithNetworkProfileError::NotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by AssociateDeviceWithRoom
 #[derive(Debug, PartialEq)]
 pub enum AssociateDeviceWithRoomError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
     DeviceNotRegistered(String),
@@ -2603,7 +3301,7 @@ impl Error for AssociateDeviceWithRoomError {
 /// Errors returned by AssociateSkillGroupWithRoom
 #[derive(Debug, PartialEq)]
 pub enum AssociateSkillGroupWithRoomError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
 }
 
@@ -2640,7 +3338,7 @@ impl Error for AssociateSkillGroupWithRoomError {
 /// Errors returned by AssociateSkillWithSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum AssociateSkillWithSkillGroupError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -2693,8 +3391,10 @@ impl Error for AssociateSkillWithSkillGroupError {
 /// Errors returned by AssociateSkillWithUsers
 #[derive(Debug, PartialEq)]
 pub enum AssociateSkillWithUsersError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
 }
 
 impl AssociateSkillWithUsersError {
@@ -2705,6 +3405,9 @@ impl AssociateSkillWithUsersError {
                     return RusotoError::Service(
                         AssociateSkillWithUsersError::ConcurrentModification(err.msg),
                     )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(AssociateSkillWithUsersError::NotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -2722,6 +3425,7 @@ impl Error for AssociateSkillWithUsersError {
     fn description(&self) -> &str {
         match *self {
             AssociateSkillWithUsersError::ConcurrentModification(ref cause) => cause,
+            AssociateSkillWithUsersError::NotFound(ref cause) => cause,
         }
     }
 }
@@ -2875,12 +3579,114 @@ impl Error for CreateContactError {
         }
     }
 }
+/// Errors returned by CreateGatewayGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateGatewayGroupError {
+    /// <p>The resource being created already exists.</p>
+    AlreadyExists(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
+    LimitExceeded(String),
+}
+
+impl CreateGatewayGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGatewayGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateGatewayGroupError::AlreadyExists(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateGatewayGroupError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateGatewayGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateGatewayGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateGatewayGroupError::AlreadyExists(ref cause) => cause,
+            CreateGatewayGroupError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum CreateNetworkProfileError {
+    /// <p>The resource being created already exists.</p>
+    AlreadyExists(String),
+    /// <p>There is a concurrent modification of resources.</p>
+    ConcurrentModification(String),
+    /// <p>The Certificate Authority can't issue or revoke a certificate.</p>
+    InvalidCertificateAuthority(String),
+    /// <p>The service linked role is locked for deletion. </p>
+    InvalidServiceLinkedRoleState(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
+    LimitExceeded(String),
+}
+
+impl CreateNetworkProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateNetworkProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(CreateNetworkProfileError::AlreadyExists(err.msg))
+                }
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(CreateNetworkProfileError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InvalidCertificateAuthorityException" => {
+                    return RusotoError::Service(
+                        CreateNetworkProfileError::InvalidCertificateAuthority(err.msg),
+                    )
+                }
+                "InvalidServiceLinkedRoleStateException" => {
+                    return RusotoError::Service(
+                        CreateNetworkProfileError::InvalidServiceLinkedRoleState(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateNetworkProfileError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for CreateNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateNetworkProfileError::AlreadyExists(ref cause) => cause,
+            CreateNetworkProfileError::ConcurrentModification(ref cause) => cause,
+            CreateNetworkProfileError::InvalidCertificateAuthority(ref cause) => cause,
+            CreateNetworkProfileError::InvalidServiceLinkedRoleState(ref cause) => cause,
+            CreateNetworkProfileError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateProfileError {
     /// <p>The resource being created already exists.</p>
     AlreadyExists(String),
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
@@ -2966,7 +3772,7 @@ impl Error for CreateRoomError {
 pub enum CreateSkillGroupError {
     /// <p>The resource being created already exists.</p>
     AlreadyExists(String),
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
@@ -3011,7 +3817,7 @@ impl Error for CreateSkillGroupError {
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
@@ -3056,7 +3862,7 @@ impl Error for CreateUserError {
 /// Errors returned by DeleteAddressBook
 #[derive(Debug, PartialEq)]
 pub enum DeleteAddressBookError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3097,7 +3903,7 @@ impl Error for DeleteAddressBookError {
 /// Errors returned by DeleteBusinessReportSchedule
 #[derive(Debug, PartialEq)]
 pub enum DeleteBusinessReportScheduleError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3175,7 +3981,7 @@ impl Error for DeleteConferenceProviderError {
 /// Errors returned by DeleteContact
 #[derive(Debug, PartialEq)]
 pub enum DeleteContactError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3216,7 +4022,7 @@ impl Error for DeleteContactError {
 /// Errors returned by DeleteDevice
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeviceError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The Certificate Authority can't issue or revoke a certificate.</p>
     InvalidCertificateAuthority(String),
@@ -3260,10 +4066,139 @@ impl Error for DeleteDeviceError {
         }
     }
 }
+/// Errors returned by DeleteDeviceUsageData
+#[derive(Debug, PartialEq)]
+pub enum DeleteDeviceUsageDataError {
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
+    DeviceNotRegistered(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
+    LimitExceeded(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl DeleteDeviceUsageDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteDeviceUsageDataError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DeviceNotRegisteredException" => {
+                    return RusotoError::Service(DeleteDeviceUsageDataError::DeviceNotRegistered(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(DeleteDeviceUsageDataError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteDeviceUsageDataError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteDeviceUsageDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDeviceUsageDataError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDeviceUsageDataError::DeviceNotRegistered(ref cause) => cause,
+            DeleteDeviceUsageDataError::LimitExceeded(ref cause) => cause,
+            DeleteDeviceUsageDataError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteGatewayGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteGatewayGroupError {
+    /// <p>Another resource is associated with the resource in the request.</p>
+    ResourceAssociated(String),
+}
+
+impl DeleteGatewayGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGatewayGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceAssociatedException" => {
+                    return RusotoError::Service(DeleteGatewayGroupError::ResourceAssociated(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteGatewayGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteGatewayGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteGatewayGroupError::ResourceAssociated(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum DeleteNetworkProfileError {
+    /// <p>There is a concurrent modification of resources.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// <p>The resource in the request is already in use.</p>
+    ResourceInUse(String),
+}
+
+impl DeleteNetworkProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteNetworkProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteNetworkProfileError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteNetworkProfileError::NotFound(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteNetworkProfileError::ResourceInUse(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteNetworkProfileError::ConcurrentModification(ref cause) => cause,
+            DeleteNetworkProfileError::NotFound(ref cause) => cause,
+            DeleteNetworkProfileError::ResourceInUse(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteProfileError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3304,7 +4239,7 @@ impl Error for DeleteProfileError {
 /// Errors returned by DeleteRoom
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3343,7 +4278,7 @@ impl Error for DeleteRoomError {
 /// Errors returned by DeleteRoomSkillParameter
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomSkillParameterError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
 }
 
@@ -3378,7 +4313,7 @@ impl Error for DeleteRoomSkillParameterError {
 /// Errors returned by DeleteSkillAuthorization
 #[derive(Debug, PartialEq)]
 pub enum DeleteSkillAuthorizationError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3419,7 +4354,7 @@ impl Error for DeleteSkillAuthorizationError {
 /// Errors returned by DeleteSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteSkillGroupError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3460,7 +4395,7 @@ impl Error for DeleteSkillGroupError {
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3526,7 +4461,7 @@ impl Error for DisassociateContactFromAddressBookError {
 /// Errors returned by DisassociateDeviceFromRoom
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDeviceFromRoomError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
     DeviceNotRegistered(String),
@@ -3571,7 +4506,7 @@ impl Error for DisassociateDeviceFromRoomError {
 /// Errors returned by DisassociateSkillFromSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum DisassociateSkillFromSkillGroupError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -3616,8 +4551,10 @@ impl Error for DisassociateSkillFromSkillGroupError {
 /// Errors returned by DisassociateSkillFromUsers
 #[derive(Debug, PartialEq)]
 pub enum DisassociateSkillFromUsersError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
 }
 
 impl DisassociateSkillFromUsersError {
@@ -3630,6 +4567,9 @@ impl DisassociateSkillFromUsersError {
                     return RusotoError::Service(
                         DisassociateSkillFromUsersError::ConcurrentModification(err.msg),
                     )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DisassociateSkillFromUsersError::NotFound(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3647,13 +4587,14 @@ impl Error for DisassociateSkillFromUsersError {
     fn description(&self) -> &str {
         match *self {
             DisassociateSkillFromUsersError::ConcurrentModification(ref cause) => cause,
+            DisassociateSkillFromUsersError::NotFound(ref cause) => cause,
         }
     }
 }
 /// Errors returned by DisassociateSkillGroupFromRoom
 #[derive(Debug, PartialEq)]
 pub enum DisassociateSkillGroupFromRoomError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
 }
 
@@ -3885,6 +4826,148 @@ impl Error for GetDeviceError {
         }
     }
 }
+/// Errors returned by GetGateway
+#[derive(Debug, PartialEq)]
+pub enum GetGatewayError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl GetGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGatewayError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(GetGatewayError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetGatewayError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetGatewayError {
+    fn description(&self) -> &str {
+        match *self {
+            GetGatewayError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetGatewayGroup
+#[derive(Debug, PartialEq)]
+pub enum GetGatewayGroupError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl GetGatewayGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGatewayGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(GetGatewayGroupError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetGatewayGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetGatewayGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            GetGatewayGroupError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetInvitationConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetInvitationConfigurationError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl GetInvitationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetInvitationConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NotFoundException" => {
+                    return RusotoError::Service(GetInvitationConfigurationError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetInvitationConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetInvitationConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetInvitationConfigurationError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum GetNetworkProfileError {
+    /// <p>A password in SecretsManager is in an invalid state.</p>
+    InvalidSecretsManagerResource(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl GetNetworkProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetNetworkProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidSecretsManagerResourceException" => {
+                    return RusotoError::Service(
+                        GetNetworkProfileError::InvalidSecretsManagerResource(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(GetNetworkProfileError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            GetNetworkProfileError::InvalidSecretsManagerResource(ref cause) => cause,
+            GetNetworkProfileError::NotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetProfile
 #[derive(Debug, PartialEq)]
 pub enum GetProfileError {
@@ -4102,6 +5185,56 @@ impl Error for ListDeviceEventsError {
         }
     }
 }
+/// Errors returned by ListGatewayGroups
+#[derive(Debug, PartialEq)]
+pub enum ListGatewayGroupsError {}
+
+impl ListGatewayGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGatewayGroupsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListGatewayGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListGatewayGroupsError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
+/// Errors returned by ListGateways
+#[derive(Debug, PartialEq)]
+pub enum ListGatewaysError {}
+
+impl ListGatewaysError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListGatewaysError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListGatewaysError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListGatewaysError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by ListSkills
 #[derive(Debug, PartialEq)]
 pub enum ListSkillsError {}
@@ -4278,10 +5411,53 @@ impl Error for PutConferencePreferenceError {
         }
     }
 }
+/// Errors returned by PutInvitationConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutInvitationConfigurationError {
+    /// <p>There is a concurrent modification of resources.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl PutInvitationConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutInvitationConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        PutInvitationConfigurationError::ConcurrentModification(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(PutInvitationConfigurationError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for PutInvitationConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutInvitationConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            PutInvitationConfigurationError::ConcurrentModification(ref cause) => cause,
+            PutInvitationConfigurationError::NotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutRoomSkillParameter
 #[derive(Debug, PartialEq)]
 pub enum PutRoomSkillParameterError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
 }
 
@@ -4316,7 +5492,7 @@ impl Error for PutRoomSkillParameterError {
 /// Errors returned by PutSkillAuthorization
 #[derive(Debug, PartialEq)]
 pub enum PutSkillAuthorizationError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The caller has no permissions to operate on the resource involved in the API call.</p>
     Unauthorized(String),
@@ -4357,7 +5533,7 @@ impl Error for PutSkillAuthorizationError {
 /// Errors returned by RegisterAVSDevice
 #[derive(Debug, PartialEq)]
 pub enum RegisterAVSDeviceError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The device is in an invalid state.</p>
     InvalidDevice(String),
@@ -4404,7 +5580,7 @@ impl Error for RegisterAVSDeviceError {
 /// Errors returned by RejectSkill
 #[derive(Debug, PartialEq)]
 pub enum RejectSkillError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -4476,7 +5652,7 @@ impl Error for ResolveRoomError {
 /// Errors returned by RevokeInvitation
 #[derive(Debug, PartialEq)]
 pub enum RevokeInvitationError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -4589,6 +5765,31 @@ impl Error for SearchDevicesError {
         match *self {}
     }
 }
+/// Errors returned by SearchNetworkProfiles
+#[derive(Debug, PartialEq)]
+pub enum SearchNetworkProfilesError {}
+
+impl SearchNetworkProfilesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchNetworkProfilesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for SearchNetworkProfilesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SearchNetworkProfilesError {
+    fn description(&self) -> &str {
+        match *self {}
+    }
+}
 /// Errors returned by SearchProfiles
 #[derive(Debug, PartialEq)]
 pub enum SearchProfilesError {}
@@ -4689,10 +5890,49 @@ impl Error for SearchUsersError {
         match *self {}
     }
 }
+/// Errors returned by SendAnnouncement
+#[derive(Debug, PartialEq)]
+pub enum SendAnnouncementError {
+    /// <p>The resource being created already exists.</p>
+    AlreadyExists(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
+    LimitExceeded(String),
+}
+
+impl SendAnnouncementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SendAnnouncementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AlreadyExistsException" => {
+                    return RusotoError::Service(SendAnnouncementError::AlreadyExists(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(SendAnnouncementError::LimitExceeded(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for SendAnnouncementError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SendAnnouncementError {
+    fn description(&self) -> &str {
+        match *self {
+            SendAnnouncementError::AlreadyExists(ref cause) => cause,
+            SendAnnouncementError::LimitExceeded(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SendInvitation
 #[derive(Debug, PartialEq)]
 pub enum SendInvitationError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The attempt to update a user is invalid due to the user's current status.</p>
     InvalidUserStatus(String),
@@ -4875,7 +6115,7 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateAddressBook
 #[derive(Debug, PartialEq)]
 pub enum UpdateAddressBookError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The name sent in the request is already in use.</p>
     NameInUse(String),
@@ -4922,7 +6162,7 @@ impl Error for UpdateAddressBookError {
 /// Errors returned by UpdateBusinessReportSchedule
 #[derive(Debug, PartialEq)]
 pub enum UpdateBusinessReportScheduleError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -5000,7 +6240,7 @@ impl Error for UpdateConferenceProviderError {
 /// Errors returned by UpdateContact
 #[derive(Debug, PartialEq)]
 pub enum UpdateContactError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The resource is not found.</p>
     NotFound(String),
@@ -5041,7 +6281,7 @@ impl Error for UpdateContactError {
 /// Errors returned by UpdateDevice
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
     DeviceNotRegistered(String),
@@ -5083,10 +6323,151 @@ impl Error for UpdateDeviceError {
         }
     }
 }
+/// Errors returned by UpdateGateway
+#[derive(Debug, PartialEq)]
+pub enum UpdateGatewayError {
+    /// <p>The name sent in the request is already in use.</p>
+    NameInUse(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl UpdateGatewayError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NameInUseException" => {
+                    return RusotoError::Service(UpdateGatewayError::NameInUse(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateGatewayError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateGatewayError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateGatewayError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateGatewayError::NameInUse(ref cause) => cause,
+            UpdateGatewayError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateGatewayGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateGatewayGroupError {
+    /// <p>The name sent in the request is already in use.</p>
+    NameInUse(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl UpdateGatewayGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGatewayGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "NameInUseException" => {
+                    return RusotoError::Service(UpdateGatewayGroupError::NameInUse(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateGatewayGroupError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateGatewayGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateGatewayGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateGatewayGroupError::NameInUse(ref cause) => cause,
+            UpdateGatewayGroupError::NotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateNetworkProfile
+#[derive(Debug, PartialEq)]
+pub enum UpdateNetworkProfileError {
+    /// <p>There is a concurrent modification of resources.</p>
+    ConcurrentModification(String),
+    /// <p>The Certificate Authority can't issue or revoke a certificate.</p>
+    InvalidCertificateAuthority(String),
+    /// <p>A password in SecretsManager is in an invalid state.</p>
+    InvalidSecretsManagerResource(String),
+    /// <p>The name sent in the request is already in use.</p>
+    NameInUse(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+}
+
+impl UpdateNetworkProfileError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateNetworkProfileError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateNetworkProfileError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InvalidCertificateAuthorityException" => {
+                    return RusotoError::Service(
+                        UpdateNetworkProfileError::InvalidCertificateAuthority(err.msg),
+                    )
+                }
+                "InvalidSecretsManagerResourceException" => {
+                    return RusotoError::Service(
+                        UpdateNetworkProfileError::InvalidSecretsManagerResource(err.msg),
+                    )
+                }
+                "NameInUseException" => {
+                    return RusotoError::Service(UpdateNetworkProfileError::NameInUse(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateNetworkProfileError::NotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateNetworkProfileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateNetworkProfileError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateNetworkProfileError::ConcurrentModification(ref cause) => cause,
+            UpdateNetworkProfileError::InvalidCertificateAuthority(ref cause) => cause,
+            UpdateNetworkProfileError::InvalidSecretsManagerResource(ref cause) => cause,
+            UpdateNetworkProfileError::NameInUse(ref cause) => cause,
+            UpdateNetworkProfileError::NotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateProfileError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The name sent in the request is already in use.</p>
     NameInUse(String),
@@ -5172,7 +6553,7 @@ impl Error for UpdateRoomError {
 /// Errors returned by UpdateSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateSkillGroupError {
-    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    /// <p>There is a concurrent modification of resources.</p>
     ConcurrentModification(String),
     /// <p>The name sent in the request is already in use.</p>
     NameInUse(String),
@@ -5230,6 +6611,15 @@ pub trait AlexaForBusiness {
         input: AssociateContactWithAddressBookRequest,
     ) -> RusotoFuture<AssociateContactWithAddressBookResponse, AssociateContactWithAddressBookError>;
 
+    /// <p>Associates a device with the specified network profile.</p>
+    fn associate_device_with_network_profile(
+        &self,
+        input: AssociateDeviceWithNetworkProfileRequest,
+    ) -> RusotoFuture<
+        AssociateDeviceWithNetworkProfileResponse,
+        AssociateDeviceWithNetworkProfileError,
+    >;
+
     /// <p>Associates a device with a given room. This applies all the settings from the room profile to the device, and all the skills in any skill groups added to that room. This operation requires the device to be online, or else a manual sync is required. </p>
     fn associate_device_with_room(
         &self,
@@ -5277,6 +6667,18 @@ pub trait AlexaForBusiness {
         &self,
         input: CreateContactRequest,
     ) -> RusotoFuture<CreateContactResponse, CreateContactError>;
+
+    /// <p>Creates a gateway group with the specified details.</p>
+    fn create_gateway_group(
+        &self,
+        input: CreateGatewayGroupRequest,
+    ) -> RusotoFuture<CreateGatewayGroupResponse, CreateGatewayGroupError>;
+
+    /// <p>Creates a network profile with the specified details.</p>
+    fn create_network_profile(
+        &self,
+        input: CreateNetworkProfileRequest,
+    ) -> RusotoFuture<CreateNetworkProfileResponse, CreateNetworkProfileError>;
 
     /// <p>Creates a new room profile with the specified details.</p>
     fn create_profile(
@@ -5331,6 +6733,24 @@ pub trait AlexaForBusiness {
         &self,
         input: DeleteDeviceRequest,
     ) -> RusotoFuture<DeleteDeviceResponse, DeleteDeviceError>;
+
+    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
+    fn delete_device_usage_data(
+        &self,
+        input: DeleteDeviceUsageDataRequest,
+    ) -> RusotoFuture<DeleteDeviceUsageDataResponse, DeleteDeviceUsageDataError>;
+
+    /// <p>Deletes a gateway group.</p>
+    fn delete_gateway_group(
+        &self,
+        input: DeleteGatewayGroupRequest,
+    ) -> RusotoFuture<DeleteGatewayGroupResponse, DeleteGatewayGroupError>;
+
+    /// <p>Deletes a network profile by the network profile ARN.</p>
+    fn delete_network_profile(
+        &self,
+        input: DeleteNetworkProfileRequest,
+    ) -> RusotoFuture<DeleteNetworkProfileResponse, DeleteNetworkProfileError>;
 
     /// <p>Deletes a room profile by the profile ARN.</p>
     fn delete_profile(
@@ -5436,6 +6856,29 @@ pub trait AlexaForBusiness {
         input: GetDeviceRequest,
     ) -> RusotoFuture<GetDeviceResponse, GetDeviceError>;
 
+    /// <p>Retrieves the details of a gateway.</p>
+    fn get_gateway(
+        &self,
+        input: GetGatewayRequest,
+    ) -> RusotoFuture<GetGatewayResponse, GetGatewayError>;
+
+    /// <p>Retrieves the details of a gateway group.</p>
+    fn get_gateway_group(
+        &self,
+        input: GetGatewayGroupRequest,
+    ) -> RusotoFuture<GetGatewayGroupResponse, GetGatewayGroupError>;
+
+    /// <p>Retrieves the configured values for the user enrollment invitation email template.</p>
+    fn get_invitation_configuration(
+        &self,
+    ) -> RusotoFuture<GetInvitationConfigurationResponse, GetInvitationConfigurationError>;
+
+    /// <p>Gets the network profile details by the network profile ARN.</p>
+    fn get_network_profile(
+        &self,
+        input: GetNetworkProfileRequest,
+    ) -> RusotoFuture<GetNetworkProfileResponse, GetNetworkProfileError>;
+
     /// <p>Gets the details of a room profile by profile ARN.</p>
     fn get_profile(
         &self,
@@ -5475,6 +6918,18 @@ pub trait AlexaForBusiness {
         input: ListDeviceEventsRequest,
     ) -> RusotoFuture<ListDeviceEventsResponse, ListDeviceEventsError>;
 
+    /// <p>Retrieves a list of gateway group summaries. Use GetGatewayGroup to retrieve details of a specific gateway group.</p>
+    fn list_gateway_groups(
+        &self,
+        input: ListGatewayGroupsRequest,
+    ) -> RusotoFuture<ListGatewayGroupsResponse, ListGatewayGroupsError>;
+
+    /// <p>Retrieves a list of gateway summaries. Use GetGateway to retrieve details of a specific gateway. An optional gateway group ARN can be provided to only retrieve gateway summaries of gateways that are associated with that gateway group ARN.</p>
+    fn list_gateways(
+        &self,
+        input: ListGatewaysRequest,
+    ) -> RusotoFuture<ListGatewaysResponse, ListGatewaysError>;
+
     /// <p>Lists all enabled skills in a specific skill group.</p>
     fn list_skills(
         &self,
@@ -5507,6 +6962,12 @@ pub trait AlexaForBusiness {
         &self,
         input: PutConferencePreferenceRequest,
     ) -> RusotoFuture<PutConferencePreferenceResponse, PutConferencePreferenceError>;
+
+    /// <p>Configures the email template for the user enrollment invitation with the specified attributes.</p>
+    fn put_invitation_configuration(
+        &self,
+        input: PutInvitationConfigurationRequest,
+    ) -> RusotoFuture<PutInvitationConfigurationResponse, PutInvitationConfigurationError>;
 
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
     fn put_room_skill_parameter(
@@ -5562,6 +7023,12 @@ pub trait AlexaForBusiness {
         input: SearchDevicesRequest,
     ) -> RusotoFuture<SearchDevicesResponse, SearchDevicesError>;
 
+    /// <p>Searches network profiles and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_network_profiles(
+        &self,
+        input: SearchNetworkProfilesRequest,
+    ) -> RusotoFuture<SearchNetworkProfilesResponse, SearchNetworkProfilesError>;
+
     /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
     fn search_profiles(
         &self,
@@ -5586,13 +7053,19 @@ pub trait AlexaForBusiness {
         input: SearchUsersRequest,
     ) -> RusotoFuture<SearchUsersResponse, SearchUsersError>;
 
+    /// <p>Triggers an asynchronous flow to send text, SSML, or audio announcements to rooms that are identified by a search or filter. </p>
+    fn send_announcement(
+        &self,
+        input: SendAnnouncementRequest,
+    ) -> RusotoFuture<SendAnnouncementResponse, SendAnnouncementError>;
+
     /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
     fn send_invitation(
         &self,
         input: SendInvitationRequest,
     ) -> RusotoFuture<SendInvitationResponse, SendInvitationError>;
 
-    /// <p>Resets a device and its account to the known default settings, by clearing all information and settings set by previous users.</p>
+    /// <p><p>Resets a device and its account to the known default settings. This clears all information and settings set by previous users in the following ways:</p> <ul> <li> <p>Bluetooth - This unpairs all bluetooth devices paired with your echo device.</p> </li> <li> <p>Volume - This resets the echo device&#39;s volume to the default value.</p> </li> <li> <p>Notifications - This clears all notifications from your echo device.</p> </li> <li> <p>Lists - This clears all to-do items from your echo device.</p> </li> <li> <p>Settings - This internally syncs the room&#39;s profile (if the device is assigned to a room), contacts, address books, delegation access for account linking, and communications (if enabled on the room profile).</p> </li> </ul></p>
     fn start_device_sync(
         &self,
         input: StartDeviceSyncRequest,
@@ -5645,6 +7118,24 @@ pub trait AlexaForBusiness {
         &self,
         input: UpdateDeviceRequest,
     ) -> RusotoFuture<UpdateDeviceResponse, UpdateDeviceError>;
+
+    /// <p>Updates the details of a gateway. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
+    fn update_gateway(
+        &self,
+        input: UpdateGatewayRequest,
+    ) -> RusotoFuture<UpdateGatewayResponse, UpdateGatewayError>;
+
+    /// <p>Updates the details of a gateway group. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
+    fn update_gateway_group(
+        &self,
+        input: UpdateGatewayGroupRequest,
+    ) -> RusotoFuture<UpdateGatewayGroupResponse, UpdateGatewayGroupError>;
+
+    /// <p>Updates a network profile by the network profile ARN.</p>
+    fn update_network_profile(
+        &self,
+        input: UpdateNetworkProfileRequest,
+    ) -> RusotoFuture<UpdateNetworkProfileResponse, UpdateNetworkProfileError>;
 
     /// <p>Updates an existing room profile by room profile ARN.</p>
     fn update_profile(
@@ -5755,6 +7246,40 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateContactWithAddressBookError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Associates a device with the specified network profile.</p>
+    fn associate_device_with_network_profile(
+        &self,
+        input: AssociateDeviceWithNetworkProfileRequest,
+    ) -> RusotoFuture<
+        AssociateDeviceWithNetworkProfileResponse,
+        AssociateDeviceWithNetworkProfileError,
+    > {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.AssociateDeviceWithNetworkProfile",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateDeviceWithNetworkProfileResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateDeviceWithNetworkProfileError::from_response(
                         response,
                     ))
                 }))
@@ -5980,6 +7505,63 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateContactError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a gateway group with the specified details.</p>
+    fn create_gateway_group(
+        &self,
+        input: CreateGatewayGroupRequest,
+    ) -> RusotoFuture<CreateGatewayGroupResponse, CreateGatewayGroupError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.CreateGatewayGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateGatewayGroupResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateGatewayGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a network profile with the specified details.</p>
+    fn create_network_profile(
+        &self,
+        input: CreateNetworkProfileRequest,
+    ) -> RusotoFuture<CreateNetworkProfileResponse, CreateNetworkProfileError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.CreateNetworkProfile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<CreateNetworkProfileResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateNetworkProfileError::from_response(response))
+                    }),
                 )
             }
         })
@@ -6238,6 +7820,91 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteDeviceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>
+    fn delete_device_usage_data(
+        &self,
+        input: DeleteDeviceUsageDataRequest,
+    ) -> RusotoFuture<DeleteDeviceUsageDataResponse, DeleteDeviceUsageDataError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.DeleteDeviceUsageData");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteDeviceUsageDataResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteDeviceUsageDataError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a gateway group.</p>
+    fn delete_gateway_group(
+        &self,
+        input: DeleteGatewayGroupRequest,
+    ) -> RusotoFuture<DeleteGatewayGroupResponse, DeleteGatewayGroupError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.DeleteGatewayGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteGatewayGroupResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteGatewayGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a network profile by the network profile ARN.</p>
+    fn delete_network_profile(
+        &self,
+        input: DeleteNetworkProfileRequest,
+    ) -> RusotoFuture<DeleteNetworkProfileResponse, DeleteNetworkProfileError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.DeleteNetworkProfile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteNetworkProfileResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteNetworkProfileError::from_response(response))
+                    }),
                 )
             }
         })
@@ -6730,6 +8397,120 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Retrieves the details of a gateway.</p>
+    fn get_gateway(
+        &self,
+        input: GetGatewayRequest,
+    ) -> RusotoFuture<GetGatewayResponse, GetGatewayError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.GetGateway");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetGatewayResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGatewayError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the details of a gateway group.</p>
+    fn get_gateway_group(
+        &self,
+        input: GetGatewayGroupRequest,
+    ) -> RusotoFuture<GetGatewayGroupResponse, GetGatewayGroupError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.GetGatewayGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetGatewayGroupResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGatewayGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the configured values for the user enrollment invitation email template.</p>
+    fn get_invitation_configuration(
+        &self,
+    ) -> RusotoFuture<GetInvitationConfigurationResponse, GetInvitationConfigurationError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.GetInvitationConfiguration",
+        );
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetInvitationConfigurationResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetInvitationConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets the network profile details by the network profile ARN.</p>
+    fn get_network_profile(
+        &self,
+        input: GetNetworkProfileRequest,
+    ) -> RusotoFuture<GetNetworkProfileResponse, GetNetworkProfileError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.GetNetworkProfile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetNetworkProfileResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetNetworkProfileError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Gets the details of a room profile by profile ARN.</p>
     fn get_profile(
         &self,
@@ -6925,6 +8706,64 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Retrieves a list of gateway group summaries. Use GetGatewayGroup to retrieve details of a specific gateway group.</p>
+    fn list_gateway_groups(
+        &self,
+        input: ListGatewayGroupsRequest,
+    ) -> RusotoFuture<ListGatewayGroupsResponse, ListGatewayGroupsError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.ListGatewayGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListGatewayGroupsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGatewayGroupsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves a list of gateway summaries. Use GetGateway to retrieve details of a specific gateway. An optional gateway group ARN can be provided to only retrieve gateway summaries of gateways that are associated with that gateway group ARN.</p>
+    fn list_gateways(
+        &self,
+        input: ListGatewaysRequest,
+    ) -> RusotoFuture<ListGatewaysResponse, ListGatewaysError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.ListGateways");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListGatewaysResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListGatewaysError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Lists all enabled skills in a specific skill group.</p>
     fn list_skills(
         &self,
@@ -7085,6 +8924,35 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(PutConferencePreferenceError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Configures the email template for the user enrollment invitation with the specified attributes.</p>
+    fn put_invitation_configuration(
+        &self,
+        input: PutInvitationConfigurationRequest,
+    ) -> RusotoFuture<PutInvitationConfigurationResponse, PutInvitationConfigurationError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.PutInvitationConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<PutInvitationConfigurationResponse, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutInvitationConfigurationError::from_response(response))
                 }))
             }
         })
@@ -7349,6 +9217,34 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Searches network profiles and lists the ones that meet a set of filter and sort criteria.</p>
+    fn search_network_profiles(
+        &self,
+        input: SearchNetworkProfilesRequest,
+    ) -> RusotoFuture<SearchNetworkProfilesResponse, SearchNetworkProfilesError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.SearchNetworkProfiles");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SearchNetworkProfilesResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(SearchNetworkProfilesError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Searches room profiles and lists the ones that meet a set of filter criteria.</p>
     fn search_profiles(
         &self,
@@ -7465,6 +9361,35 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Triggers an asynchronous flow to send text, SSML, or audio announcements to rooms that are identified by a search or filter. </p>
+    fn send_announcement(
+        &self,
+        input: SendAnnouncementRequest,
+    ) -> RusotoFuture<SendAnnouncementResponse, SendAnnouncementError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.SendAnnouncement");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<SendAnnouncementResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SendAnnouncementError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>
     fn send_invitation(
         &self,
@@ -7494,7 +9419,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Resets a device and its account to the known default settings, by clearing all information and settings set by previous users.</p>
+    /// <p><p>Resets a device and its account to the known default settings. This clears all information and settings set by previous users in the following ways:</p> <ul> <li> <p>Bluetooth - This unpairs all bluetooth devices paired with your echo device.</p> </li> <li> <p>Volume - This resets the echo device&#39;s volume to the default value.</p> </li> <li> <p>Notifications - This clears all notifications from your echo device.</p> </li> <li> <p>Lists - This clears all to-do items from your echo device.</p> </li> <li> <p>Settings - This internally syncs the room&#39;s profile (if the device is assigned to a room), contacts, address books, delegation access for account linking, and communications (if enabled on the room profile).</p> </li> </ul></p>
     fn start_device_sync(
         &self,
         input: StartDeviceSyncRequest,
@@ -7750,6 +9675,92 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(UpdateDeviceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates the details of a gateway. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
+    fn update_gateway(
+        &self,
+        input: UpdateGatewayRequest,
+    ) -> RusotoFuture<UpdateGatewayResponse, UpdateGatewayError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.UpdateGateway");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateGatewayResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateGatewayError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates the details of a gateway group. If any optional field is not provided, the existing corresponding value is left unmodified.</p>
+    fn update_gateway_group(
+        &self,
+        input: UpdateGatewayGroupRequest,
+    ) -> RusotoFuture<UpdateGatewayGroupResponse, UpdateGatewayGroupError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.UpdateGatewayGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateGatewayGroupResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateGatewayGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates a network profile by the network profile ARN.</p>
+    fn update_network_profile(
+        &self,
+        input: UpdateNetworkProfileRequest,
+    ) -> RusotoFuture<UpdateNetworkProfileResponse, UpdateNetworkProfileError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.UpdateNetworkProfile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateNetworkProfileResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateNetworkProfileError::from_response(response))
+                    }),
                 )
             }
         })

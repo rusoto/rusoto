@@ -97,6 +97,10 @@ pub struct ApiKey {
     #[serde(rename = "stageKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_keys: Option<Vec<String>>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The value of the API Key.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -286,6 +290,10 @@ pub struct ClientCertificate {
     #[serde(rename = "pemEncodedCertificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pem_encoded_certificate: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p><p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
@@ -328,6 +336,10 @@ pub struct CreateApiKeyRequest {
     #[serde(rename = "stageKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_keys: Option<Vec<StageKey>>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies a value of the API key.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -506,6 +518,10 @@ pub struct CreateDomainNameRequest {
     #[serde(rename = "regionalCertificateName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub regional_certificate_name: Option<String>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>
@@ -598,6 +614,10 @@ pub struct CreateRestApiRequest {
     #[serde(rename = "policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -682,6 +702,10 @@ pub struct CreateUsagePlanRequest {
     #[serde(rename = "quota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota: Option<QuotaSettings>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The throttling limits of the usage plan.</p>
     #[serde(rename = "throttle")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -698,6 +722,10 @@ pub struct CreateVpcLinkRequest {
     /// <p>[Required] The name used to label and identify the VPC link.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>[Required] The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
     #[serde(rename = "targetArns")]
     pub target_arns: Vec<String>,
@@ -1136,6 +1164,10 @@ pub struct DomainName {
     #[serde(rename = "regionalHostedZoneId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub regional_hosted_zone_id: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p><p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
@@ -1239,6 +1271,10 @@ pub struct GenerateClientCertificateRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with <code>aws:</code>. The tag value can be up to 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Requests API Gateway to get information about the current <a>Account</a> resource.</p>
@@ -2587,6 +2623,10 @@ pub struct RestApi {
     #[serde(rename = "policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3347,6 +3387,10 @@ pub struct UsagePlan {
     #[serde(rename = "quota")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quota: Option<QuotaSettings>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The request throttle limits of a usage plan.</p>
     #[serde(rename = "throttle")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3425,6 +3469,10 @@ pub struct VpcLink {
     #[serde(rename = "statusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+    /// <p>The collection of tags. Each tag element is associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
     #[serde(rename = "targetArns")]
     #[serde(skip_serializing_if = "Option::is_none")]

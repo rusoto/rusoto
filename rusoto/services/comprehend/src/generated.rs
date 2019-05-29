@@ -280,6 +280,22 @@ pub struct CreateDocumentClassifierRequest {
     /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
+    /// <p>Enables the addition of output results configuration parameters for custom classifier jobs.</p>
+    #[serde(rename = "OutputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_data_config: Option<DocumentClassifierOutputDataConfig>,
+    /// <p>Tags to be associated with the document classifier being created. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your custom classifier. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -309,6 +325,18 @@ pub struct CreateEntityRecognizerRequest {
     /// <p>The name given to the newly created recognizer. Recognizer names can be a maximum of 256 characters. Alphanumeric characters, hyphens (-) and underscores (_) are allowed. The name must be unique in the account/region.</p>
     #[serde(rename = "RecognizerName")]
     pub recognizer_name: String,
+    /// <p>Tags to be associated with the entity recognizer being created. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your custom entity recognizer. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -631,6 +659,14 @@ pub struct DocumentClassificationJobProperties {
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time: Option<f64>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p> Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your document classification job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 /// <p>Provides information for filtering a list of document classifiers. You can only specify one filtering parameter in a request. For more information, see the operation.</p>
@@ -656,6 +692,19 @@ pub struct DocumentClassifierInputDataConfig {
     /// <p>The Amazon S3 URI for the input data. The S3 bucket must be in the same region as the API endpoint that you are calling. The URI can point to a single input file or it can provide the prefix for a collection of input files.</p> <p>For example, if you use the URI <code>S3://bucketName/prefix</code>, if the prefix is a single file, Amazon Comprehend uses that file as input. If more than one file begins with the prefix, Amazon Comprehend uses all of them as input.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
+}
+
+/// <p>Provides output results configuration parameters for custom classifier jobs. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DocumentClassifierOutputDataConfig {
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt the output results from an analysis job. The KmsKeyId can be one of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>KMS Key Alias: <code>&quot;alias/ExampleAlias&quot;</code> </p> </li> <li> <p>ARN of a KMS Key Alias: <code>&quot;arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>When you use the <code>OutputDataConfig</code> object while creating a custom classifier, you specify the Amazon S3 location where you want to write the confusion matrix. The URI must be in the same region as the API endpoint that you are calling. The location is used as the prefix for the actual location of this output file.</p> <p>When the custom classifier job is finished, the service creates the output file in a directory specific to the job. The <code>S3Uri</code> field contains the location of the output file, called <code>output.tar.gz</code>. It is a compressed archive that contains the confusion matrix.</p>
+    #[serde(rename = "S3Uri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_uri: Option<String>,
 }
 
 /// <p>Provides information about a document classifier.</p>
@@ -690,6 +739,10 @@ pub struct DocumentClassifierProperties {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+    /// <p> Provides output results configuration parameters for custom classifier jobs.</p>
+    #[serde(rename = "OutputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_data_config: Option<DocumentClassifierOutputDataConfig>,
     /// <p>The status of the document classifier. If the status is <code>TRAINED</code> the classifier is ready to use. If the status is <code>FAILED</code> you can see additional information about why the classifier wasn't trained in the <code>Message</code> field.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -706,6 +759,14 @@ pub struct DocumentClassifierProperties {
     #[serde(rename = "TrainingStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_start_time: Option<f64>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p> Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your custom classifier. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 /// <p>Returns the code for the dominant language in the input text and the level of confidence that Amazon Comprehend has in the accuracy of the detection.</p>
@@ -783,6 +844,14 @@ pub struct DominantLanguageDetectionJobProperties {
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time: Option<f64>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p> Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your dominant language detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 /// <p>Provides information for filtering a list of dominant language detection jobs. For more information, see the operation.</p>
@@ -854,6 +923,14 @@ pub struct EntitiesDetectionJobProperties {
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time: Option<f64>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p> Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your entity detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 /// <p>Provides information about an entity. </p> <p> </p>
@@ -1040,6 +1117,14 @@ pub struct EntityRecognizerProperties {
     #[serde(rename = "TrainingStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_start_time: Option<f64>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p> Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your custom entity recognizer. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 /// <p>Information about an individual item on a list of entity types.</p>
@@ -1149,6 +1234,14 @@ pub struct KeyPhrasesDetectionJobProperties {
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time: Option<f64>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p> Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your key phrases detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1357,6 +1450,26 @@ pub struct ListSentimentDetectionJobsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource you are querying. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource you are querying.</p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+    /// <p>Tags associated with the Amazon Comprehend resource being queried. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTopicsDetectionJobsRequest {
     /// <p>Filters the jobs that are returned. Jobs can be filtered on their name, status, or the date and time that they were submitted. You can set only one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -1388,6 +1501,10 @@ pub struct ListTopicsDetectionJobsResponse {
 /// <p><p>Provides configuration parameters for the output of topic detection jobs.</p> <p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OutputDataConfig {
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt the output results from an analysis job. The KmsKeyId can be one of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>KMS Key Alias: <code>&quot;alias/ExampleAlias&quot;</code> </p> </li> <li> <p>ARN of a KMS Key Alias: <code>&quot;arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p>When you use the <code>OutputDataConfig</code> object with asynchronous operations, you specify the Amazon S3 location where you want to write the output data. The URI must be in the same region as the API endpoint that you are calling. The location is used as the prefix for the actual location of the output file.</p> <p>When the topic detection job is finished, the service creates an output file in a directory specific to the job. The <code>S3Uri</code> field contains the location of the output file, called <code>output.tar.gz</code>. It is a compressed archive that contains the ouput of the operation.</p>
     #[serde(rename = "S3Uri")]
     pub s3_uri: String,
@@ -1472,6 +1589,14 @@ pub struct SentimentDetectionJobProperties {
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time: Option<f64>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p> Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your sentiment detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 /// <p>Describes the level of confidence that Amazon Comprehend has in the accuracy of its detection of sentiments.</p>
@@ -1518,6 +1643,14 @@ pub struct StartDocumentClassificationJobRequest {
     /// <p>Specifies where to send the output files.</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your document classification job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1552,6 +1685,14 @@ pub struct StartDominantLanguageDetectionJobRequest {
     /// <p>Specifies where to send the output files.</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your dominant language detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1593,6 +1734,14 @@ pub struct StartEntitiesDetectionJobRequest {
     /// <p>Specifies where to send the output files.</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your entity detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1630,6 +1779,14 @@ pub struct StartKeyPhrasesDetectionJobRequest {
     /// <p>Specifies where to send the output files.</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your key phrases detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1667,6 +1824,14 @@ pub struct StartSentimentDetectionJobRequest {
     /// <p>Specifies where to send the output files. </p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your sentiment detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1705,6 +1870,14 @@ pub struct StartTopicsDetectionJobRequest {
     /// <p>Specifies where to send the output files. The output is a compressed archive with two files, <code>topic-terms.csv</code> that lists the terms associated with each topic, and <code>doc-topics.csv</code> that lists the documents associated with each topic</p>
     #[serde(rename = "OutputDataConfig")]
     pub output_data_config: OutputDataConfig,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for your topic detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1848,6 +2021,32 @@ pub struct SyntaxToken {
     pub token_id: Option<i64>,
 }
 
+/// <p>A key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with the key-value pair ‘Department’:’Sales’ might be added to a resource to indicate its use by a particular department. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The initial part of a key-value pair that forms a tag associated with a given resource. For instance, if you want to show which resources are used by which departments, you might use “Department” as the key portion of the pair, with multiple possible values such as “sales,” “legal,” and “administration.” </p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p> The second part of a key-value pair that forms a tag associated with a given resource. For instance, if you want to show which resources are used by which departments, you might use “Department” as the initial (key) portion of the pair, with a value of “sales” to indicate the sales department. </p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the given Amazon Comprehend resource to which you want to associate the tags. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>Tags being associated with a specific Amazon Comprehend resource. There can be a maximum of 50 tags (both existing and pending) associated with a specific resource. </p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>Provides information for filtering topic detection jobs. For more information, see .</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TopicsDetectionJobFilter {
@@ -1873,6 +2072,10 @@ pub struct TopicsDetectionJobFilter {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TopicsDetectionJobProperties {
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your job data. </p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
     /// <p>The time that the topic detection job was completed.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1909,6 +2112,39 @@ pub struct TopicsDetectionJobProperties {
     #[serde(rename = "SubmitTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submit_time: Option<f64>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt data on the storage volume attached to the ML compute instance(s) that process the analysis job. The VolumeKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "VolumeKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_kms_key_id: Option<String>,
+    /// <p>Configuration parameters for a private Virtual Private Cloud (VPC) containing the resources you are using for your topic detection job. For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p> The Amazon Resource Name (ARN) of the given Amazon Comprehend resource from which you want to remove the tags. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The initial part of a key-value pair that forms a tag being removed from a given resource. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. Keys must be unique and cannot be duplicated for a particular resource. </p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
+
+/// <p> Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html">Amazon VPC</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct VpcConfig {
+    /// <p>The ID number for a security group on an instance of your private VPC. Security groups on your VPC function serve as a virtual firewall to control inbound and outbound traffic and provides security for the resources that you’ll be accessing on the VPC. This ID number is preceded by "sg-", for instance: "sg-03b388029b0a285ea". For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security Groups for your VPC</a>. </p>
+    #[serde(rename = "SecurityGroupIds")]
+    pub security_group_ids: Vec<String>,
+    /// <p>The ID for each subnet being used in your private VPC. This subnet is a subset of the a range of IPv4 addresses used by the VPC and is specific to a given availability zone in the VPC’s region. This ID number is preceded by "subnet-", for instance: "subnet-04ccf456919e69055". For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html">VPCs and Subnets</a>. </p>
+    #[serde(rename = "Subnets")]
+    pub subnets: Vec<String>,
 }
 
 /// Errors returned by BatchDetectDominantLanguage
@@ -2235,12 +2471,16 @@ pub enum CreateDocumentClassifierError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
     /// <p>The specified name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
     /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
+    /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
+    TooManyTags(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
 }
@@ -2259,6 +2499,11 @@ impl CreateDocumentClassifierError {
                         err.msg,
                     ))
                 }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(CreateDocumentClassifierError::KmsKeyValidation(
+                        err.msg,
+                    ))
+                }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::ResourceInUse(
                         err.msg,
@@ -2271,6 +2516,11 @@ impl CreateDocumentClassifierError {
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateDocumentClassifierError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateDocumentClassifierError::TooManyTags(
                         err.msg,
                     ))
                 }
@@ -2296,9 +2546,11 @@ impl Error for CreateDocumentClassifierError {
         match *self {
             CreateDocumentClassifierError::InternalServer(ref cause) => cause,
             CreateDocumentClassifierError::InvalidRequest(ref cause) => cause,
+            CreateDocumentClassifierError::KmsKeyValidation(ref cause) => cause,
             CreateDocumentClassifierError::ResourceInUse(ref cause) => cause,
             CreateDocumentClassifierError::ResourceLimitExceeded(ref cause) => cause,
             CreateDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            CreateDocumentClassifierError::TooManyTags(ref cause) => cause,
             CreateDocumentClassifierError::UnsupportedLanguage(ref cause) => cause,
         }
     }
@@ -2310,12 +2562,16 @@ pub enum CreateEntityRecognizerError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
     /// <p>The specified name is already in use. Use a different name and try your request again.</p>
     ResourceInUse(String),
     /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
     ResourceLimitExceeded(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
+    /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
+    TooManyTags(String),
     /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
 }
@@ -2334,6 +2590,11 @@ impl CreateEntityRecognizerError {
                         err.msg,
                     ))
                 }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(CreateEntityRecognizerError::KmsKeyValidation(
+                        err.msg,
+                    ))
+                }
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::ResourceInUse(
                         err.msg,
@@ -2348,6 +2609,9 @@ impl CreateEntityRecognizerError {
                     return RusotoError::Service(CreateEntityRecognizerError::TooManyRequests(
                         err.msg,
                     ))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateEntityRecognizerError::TooManyTags(err.msg))
                 }
                 "UnsupportedLanguageException" => {
                     return RusotoError::Service(CreateEntityRecognizerError::UnsupportedLanguage(
@@ -2371,9 +2635,11 @@ impl Error for CreateEntityRecognizerError {
         match *self {
             CreateEntityRecognizerError::InternalServer(ref cause) => cause,
             CreateEntityRecognizerError::InvalidRequest(ref cause) => cause,
+            CreateEntityRecognizerError::KmsKeyValidation(ref cause) => cause,
             CreateEntityRecognizerError::ResourceInUse(ref cause) => cause,
             CreateEntityRecognizerError::ResourceLimitExceeded(ref cause) => cause,
             CreateEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            CreateEntityRecognizerError::TooManyTags(ref cause) => cause,
             CreateEntityRecognizerError::UnsupportedLanguage(ref cause) => cause,
         }
     }
@@ -3696,6 +3962,53 @@ impl Error for ListSentimentDetectionJobsError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InternalServer(ref cause) => cause,
+            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTopicsDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTopicsDetectionJobsError {
@@ -3762,6 +4075,8 @@ pub enum StartDocumentClassificationJobError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
     /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
@@ -3784,6 +4099,11 @@ impl StartDocumentClassificationJobError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         StartDocumentClassificationJobError::InvalidRequest(err.msg),
+                    )
+                }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(
+                        StartDocumentClassificationJobError::KmsKeyValidation(err.msg),
                     )
                 }
                 "ResourceNotFoundException" => {
@@ -3818,6 +4138,7 @@ impl Error for StartDocumentClassificationJobError {
         match *self {
             StartDocumentClassificationJobError::InternalServer(ref cause) => cause,
             StartDocumentClassificationJobError::InvalidRequest(ref cause) => cause,
+            StartDocumentClassificationJobError::KmsKeyValidation(ref cause) => cause,
             StartDocumentClassificationJobError::ResourceNotFound(ref cause) => cause,
             StartDocumentClassificationJobError::ResourceUnavailable(ref cause) => cause,
             StartDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
@@ -3831,6 +4152,8 @@ pub enum StartDominantLanguageDetectionJobError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
 }
@@ -3849,6 +4172,11 @@ impl StartDominantLanguageDetectionJobError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(
                         StartDominantLanguageDetectionJobError::InvalidRequest(err.msg),
+                    )
+                }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(
+                        StartDominantLanguageDetectionJobError::KmsKeyValidation(err.msg),
                     )
                 }
                 "TooManyRequestsException" => {
@@ -3873,6 +4201,7 @@ impl Error for StartDominantLanguageDetectionJobError {
         match *self {
             StartDominantLanguageDetectionJobError::InternalServer(ref cause) => cause,
             StartDominantLanguageDetectionJobError::InvalidRequest(ref cause) => cause,
+            StartDominantLanguageDetectionJobError::KmsKeyValidation(ref cause) => cause,
             StartDominantLanguageDetectionJobError::TooManyRequests(ref cause) => cause,
         }
     }
@@ -3884,6 +4213,8 @@ pub enum StartEntitiesDetectionJobError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
     /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
     ResourceNotFound(String),
     /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
@@ -3903,6 +4234,11 @@ impl StartEntitiesDetectionJobError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartEntitiesDetectionJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(StartEntitiesDetectionJobError::KmsKeyValidation(
                         err.msg,
                     ))
                 }
@@ -3938,6 +4274,7 @@ impl Error for StartEntitiesDetectionJobError {
         match *self {
             StartEntitiesDetectionJobError::InternalServer(ref cause) => cause,
             StartEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
+            StartEntitiesDetectionJobError::KmsKeyValidation(ref cause) => cause,
             StartEntitiesDetectionJobError::ResourceNotFound(ref cause) => cause,
             StartEntitiesDetectionJobError::ResourceUnavailable(ref cause) => cause,
             StartEntitiesDetectionJobError::TooManyRequests(ref cause) => cause,
@@ -3951,6 +4288,8 @@ pub enum StartKeyPhrasesDetectionJobError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
 }
@@ -3970,6 +4309,11 @@ impl StartKeyPhrasesDetectionJobError {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::InvalidRequest(
                         err.msg,
                     ))
+                }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(
+                        StartKeyPhrasesDetectionJobError::KmsKeyValidation(err.msg),
+                    )
                 }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(StartKeyPhrasesDetectionJobError::TooManyRequests(
@@ -3993,6 +4337,7 @@ impl Error for StartKeyPhrasesDetectionJobError {
         match *self {
             StartKeyPhrasesDetectionJobError::InternalServer(ref cause) => cause,
             StartKeyPhrasesDetectionJobError::InvalidRequest(ref cause) => cause,
+            StartKeyPhrasesDetectionJobError::KmsKeyValidation(ref cause) => cause,
             StartKeyPhrasesDetectionJobError::TooManyRequests(ref cause) => cause,
         }
     }
@@ -4004,6 +4349,8 @@ pub enum StartSentimentDetectionJobError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
 }
@@ -4021,6 +4368,11 @@ impl StartSentimentDetectionJobError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartSentimentDetectionJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(StartSentimentDetectionJobError::KmsKeyValidation(
                         err.msg,
                     ))
                 }
@@ -4046,6 +4398,7 @@ impl Error for StartSentimentDetectionJobError {
         match *self {
             StartSentimentDetectionJobError::InternalServer(ref cause) => cause,
             StartSentimentDetectionJobError::InvalidRequest(ref cause) => cause,
+            StartSentimentDetectionJobError::KmsKeyValidation(ref cause) => cause,
             StartSentimentDetectionJobError::TooManyRequests(ref cause) => cause,
         }
     }
@@ -4057,6 +4410,8 @@ pub enum StartTopicsDetectionJobError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The KMS customer managed key (CMK) entered cannot be validated. Verify the key and re-enter it.</p>
+    KmsKeyValidation(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
 }
@@ -4072,6 +4427,11 @@ impl StartTopicsDetectionJobError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(StartTopicsDetectionJobError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "KmsKeyValidationException" => {
+                    return RusotoError::Service(StartTopicsDetectionJobError::KmsKeyValidation(
                         err.msg,
                     ))
                 }
@@ -4097,6 +4457,7 @@ impl Error for StartTopicsDetectionJobError {
         match *self {
             StartTopicsDetectionJobError::InternalServer(ref cause) => cause,
             StartTopicsDetectionJobError::InvalidRequest(ref cause) => cause,
+            StartTopicsDetectionJobError::KmsKeyValidation(ref cause) => cause,
             StartTopicsDetectionJobError::TooManyRequests(ref cause) => cause,
         }
     }
@@ -4431,9 +4792,125 @@ impl Error for StopTrainingEntityRecognizerError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>Concurrent modification of the tags associated with an Amazon Comprehend resource is not supported. </p>
+    ConcurrentModification(String),
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(TagResourceError::ConcurrentModification(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(TagResourceError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::ConcurrentModification(ref cause) => cause,
+            TagResourceError::InternalServer(ref cause) => cause,
+            TagResourceError::InvalidRequest(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::TooManyTags(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>Concurrent modification of the tags associated with an Amazon Comprehend resource is not supported. </p>
+    ConcurrentModification(String),
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The request contains more tag keys than can be associated with a resource (50 tag keys per resource).</p>
+    TooManyTagKeys(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UntagResourceError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "TooManyTagKeysException" => {
+                    return RusotoError::Service(UntagResourceError::TooManyTagKeys(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::ConcurrentModification(ref cause) => cause,
+            UntagResourceError::InternalServer(ref cause) => cause,
+            UntagResourceError::InvalidRequest(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::TooManyTagKeys(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon Comprehend API. Amazon Comprehend clients implement this trait.
 pub trait Comprehend {
-    /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="http://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
+    /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
     fn batch_detect_dominant_language(
         &self,
         input: BatchDetectDominantLanguageRequest,
@@ -4541,7 +5018,7 @@ pub trait Comprehend {
         input: DescribeTopicsDetectionJobRequest,
     ) -> RusotoFuture<DescribeTopicsDetectionJobResponse, DescribeTopicsDetectionJobError>;
 
-    /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="http://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
+    /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
     fn detect_dominant_language(
         &self,
         input: DetectDominantLanguageRequest,
@@ -4615,6 +5092,12 @@ pub trait Comprehend {
         &self,
         input: ListSentimentDetectionJobsRequest,
     ) -> RusotoFuture<ListSentimentDetectionJobsResponse, ListSentimentDetectionJobsError>;
+
+    /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
 
     /// <p>Gets a list of the topic detection jobs that you have submitted.</p>
     fn list_topics_detection_jobs(
@@ -4696,6 +5179,18 @@ pub trait Comprehend {
         &self,
         input: StopTrainingEntityRecognizerRequest,
     ) -> RusotoFuture<StopTrainingEntityRecognizerResponse, StopTrainingEntityRecognizerError>;
+
+    /// <p>Associates a specific tag with an Amazon Comprehend resource. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p>Removes a specific tag associated with an Amazon Comprehend resource. </p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 }
 /// A client for the Amazon Comprehend API.
 #[derive(Clone)]
@@ -4734,7 +5229,7 @@ impl ComprehendClient {
 }
 
 impl Comprehend for ComprehendClient {
-    /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="http://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
+    /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
     fn batch_detect_dominant_language(
         &self,
         input: BatchDetectDominantLanguageRequest,
@@ -5234,7 +5729,7 @@ impl Comprehend for ComprehendClient {
         })
     }
 
-    /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="http://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
+    /// <p>Determines the dominant language of the input text. For a list of languages that Amazon Comprehend can detect, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
     fn detect_dominant_language(
         &self,
         input: DetectDominantLanguageRequest,
@@ -5582,6 +6077,34 @@ impl Comprehend for ComprehendClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListSentimentDetectionJobsError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Lists all tags associated with a given Amazon Comprehend resource. </p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5969,6 +6492,64 @@ impl Comprehend for ComprehendClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StopTrainingEntityRecognizerError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Associates a specific tag with an Amazon Comprehend resource. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department. </p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes a specific tag associated with an Amazon Comprehend resource. </p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
             }
         })
     }

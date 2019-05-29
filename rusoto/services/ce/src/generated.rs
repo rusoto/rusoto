@@ -326,8 +326,7 @@ pub struct GetCostAndUsageRequest {
     pub next_page_token: Option<String>,
     /// <p>Sets the start and end dates for retrieving AWS costs. The start date is inclusive, but the end date is exclusive. For example, if <code>start</code> is <code>2017-01-01</code> and <code>end</code> is <code>2017-05-01</code>, then the cost and usage data is retrieved from <code>2017-01-01</code> up to and including <code>2017-04-30</code> but not including <code>2017-05-01</code>.</p>
     #[serde(rename = "TimePeriod")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub time_period: Option<DateInterval>,
+    pub time_period: DateInterval,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -436,6 +435,7 @@ pub struct GetReservationCoverageRequest {
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by: Option<Vec<GroupDefinition>>,
+    /// <p>The measurement that you want your reservation coverage reported in.</p> <p>Valid values are <code>Hour</code>, <code>Unit</code>, and <code>Cost</code>. You can use multiple values in a request.</p>
     #[serde(rename = "Metrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metrics: Option<Vec<String>>,
@@ -845,6 +845,7 @@ pub struct ReservationPurchaseRecommendation {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ReservationPurchaseRecommendationDetail {
+    /// <p>The account that this RI recommendation is for.</p>
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,

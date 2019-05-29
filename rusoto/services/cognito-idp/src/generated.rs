@@ -120,7 +120,7 @@ pub struct AdminCreateUserConfigType {
     #[serde(rename = "InviteMessageTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invite_message_template: Option<MessageTemplateType>,
-    /// <p>The user account expiration limit, in days, after which the account is no longer usable. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>"RESEND"</code> for the <code>MessageAction</code> parameter. The default value for this parameter is 7.</p>
+    /// <p><p>The user account expiration limit, in days, after which the account is no longer usable. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>&quot;RESEND&quot;</code> for the <code>MessageAction</code> parameter. The default value for this parameter is 7. </p> <note> <p>If you set a value for <code>TemporaryPasswordValidityDays</code> in <code>PasswordPolicy</code>, that value will be used and <code>UnusedAccountValidityDays</code> will be deprecated for that user pool. </p> </note></p>
     #[serde(rename = "UnusedAccountValidityDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unused_account_validity_days: Option<i64>,
@@ -327,7 +327,7 @@ pub struct AdminGetUserResponse {
     #[serde(rename = "UserMFASettingList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_mfa_setting_list: Option<Vec<String>>,
-    /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul></p>
+    /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> <li> <p>RESET<em>REQUIRED - User is confirmed, but the user must request a code and reset his or her password before he or she can sign in.</p> </li> <li> <p>FORCE</em>CHANGE_PASSWORD - The user is confirmed and the user can sign in using a temporary password, but on first sign-in, the user must change his or her password to a new value before doing anything else. </p> </li> </ul></p>
     #[serde(rename = "UserStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_status: Option<String>,
@@ -602,6 +602,23 @@ pub struct AdminSetUserMFAPreferenceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AdminSetUserMFAPreferenceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AdminSetUserPasswordRequest {
+    #[serde(rename = "Password")]
+    pub password: String,
+    #[serde(rename = "Permanent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permanent: Option<bool>,
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+    #[serde(rename = "Username")]
+    pub username: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AdminSetUserPasswordResponse {}
 
 /// <p>Represents the request to set user settings as an administrator.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1184,14 +1201,14 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "RefreshTokenValidity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token_validity: Option<i64>,
-    /// <p>A list of provider names for the identity providers that are supported on this client.</p>
+    /// <p>A list of provider names for the identity providers that are supported on this client. The following are supported: <code>COGNITO</code>, <code>Facebook</code>, <code>Google</code> and <code>LoginWithAmazon</code>.</p>
     #[serde(rename = "SupportedIdentityProviders")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_identity_providers: Option<Vec<String>>,
     /// <p>The user pool ID for the user pool where you want to create a user pool client.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    /// <p>The user pool attributes that the app client can write to.</p> <p>If your app client allows users to sign in through an identity provider, this array must include all attributes that are mapped to identity provider attributes. Amazon Cognito updates mapped attributes when users sign in to your application through an identity provider. If your app client lacks write access to a mapped attribute, Amazon Cognito throws an error when it attempts to update the attribute. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html">Specifying Identity Provider Attribute Mappings for Your User Pool</a>.</p>
+    /// <p>The user pool attributes that the app client can write to.</p> <p>If your app client allows users to sign in through an identity provider, this array must include all attributes that are mapped to identity provider attributes. Amazon Cognito updates mapped attributes when users sign in to your application through an identity provider. If your app client lacks write access to a mapped attribute, Amazon Cognito throws an error when it attempts to update the attribute. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html">Specifying Identity Provider Attribute Mappings for Your User Pool</a>.</p>
     #[serde(rename = "WriteAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_attributes: Option<Vec<String>>,
@@ -1209,7 +1226,7 @@ pub struct CreateUserPoolClientResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserPoolDomainRequest {
-    /// <p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p> <p>Provide this parameter only if you want to use a custom domain for your user pool. Otherwise, you can exclude this parameter and use the Amazon Cognito hosted domain instead.</p> <p>For more information about the hosted domain and custom domains, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-assign-domain.html">Configuring a User Pool Domain</a>.</p>
+    /// <p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p> <p>Provide this parameter only if you want to use a custom domain for your user pool. Otherwise, you can exclude this parameter and use the Amazon Cognito hosted domain instead.</p> <p>For more information about the hosted domain and custom domains, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-assign-domain.html">Configuring a User Pool Domain</a>.</p>
     #[serde(rename = "CustomDomainConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_domain_config: Option<CustomDomainConfigType>,
@@ -1296,7 +1313,7 @@ pub struct CreateUserPoolRequest {
     #[serde(rename = "UserPoolAddOns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_add_ons: Option<UserPoolAddOnsType>,
-    /// <p>The cost allocation tags for the user pool. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html">Adding Cost Allocation Tags to Your User Pool</a> </p>
+    /// <p>The tag keys and values to assign to the user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p>
     #[serde(rename = "UserPoolTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
@@ -1610,6 +1627,7 @@ pub struct DomainDescriptionType {
     #[serde(rename = "CloudFrontDistribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_front_distribution: Option<String>,
+    /// <p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p>
     #[serde(rename = "CustomDomainConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_domain_config: Option<CustomDomainConfigType>,
@@ -1638,11 +1656,15 @@ pub struct DomainDescriptionType {
 /// <p>The email configuration type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmailConfigurationType {
+    /// <p><p>Specifies whether Amazon Cognito emails your users by using its built-in email functionality or your Amazon SES email configuration. Specify one of the following values:</p> <dl> <dt>COGNITO_DEFAULT</dt> <dd> <p>When Amazon Cognito emails your users, it uses its built-in email functionality. When you use the default option, Amazon Cognito allows only a limited number of emails each day for your user pool. For typical production environments, the default email limit is below the required delivery volume. To achieve a higher delivery volume, specify DEVELOPER to use your Amazon SES email configuration.</p> <p>To look up the email delivery limit for the default option, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html">Limits in Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <p>The default FROM address is no-reply@verificationemail.com. To customize the FROM address, provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> </dd> <dt>DEVELOPER</dt> <dd> <p>When Amazon Cognito emails your users, it uses your Amazon SES configuration. Amazon Cognito calls Amazon SES on your behalf to send email from your verified email address. When you use this option, the email delivery limits are the same limits that apply to your Amazon SES verified email address in your AWS account.</p> <p>If you use this option, you must provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> <p>Before Amazon Cognito can email your users, it requires additional permissions to call Amazon SES on your behalf. When you update your user pool with this option, Amazon Cognito creates a <i>service-linked role</i>, which is a type of IAM role, in your AWS account. This role contains the permissions that allow Amazon Cognito to access Amazon SES and send email messages with your address. For more information about the service-linked role that Amazon Cognito creates, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> </dd> </dl></p>
+    #[serde(rename = "EmailSendingAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email_sending_account: Option<String>,
     /// <p>The destination to which the receiver of the email should reply to.</p>
     #[serde(rename = "ReplyToEmailAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_to_email_address: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the email source.</p>
+    /// <p><p>The Amazon Resource Name (ARN) of a verified email address in Amazon SES. This email address is used in one of the following ways, depending on the value that you specify for the <code>EmailSendingAccount</code> parameter:</p> <ul> <li> <p>If you specify <code>COGNITO_DEFAULT</code>, Amazon Cognito uses this address as the custom FROM address when it emails your users by using its built-in email account.</p> </li> <li> <p>If you specify <code>DEVELOPER</code>, Amazon Cognito emails your users with this address by calling Amazon SES on your behalf.</p> </li> </ul></p>
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn: Option<String>,
@@ -2247,6 +2269,22 @@ pub struct ListResourceServersResponse {
     pub resource_servers: Vec<ResourceServerType>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the user pool that the tags are assigned to.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags that are assigned to the user pool.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Represents the request to list the user import jobs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListUserImportJobsRequest {
@@ -2525,6 +2563,9 @@ pub struct PasswordPolicyType {
     #[serde(rename = "RequireUppercase")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub require_uppercase: Option<bool>,
+    #[serde(rename = "TemporaryPasswordValidityDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temporary_password_validity_days: Option<i64>,
 }
 
 /// <p>A container for identity provider details.</p>
@@ -2749,7 +2790,7 @@ pub struct SchemaAttributeType {
     #[serde(rename = "DeveloperOnlyAttribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub developer_only_attribute: Option<bool>,
-    /// <p>Specifies whether the value of the attribute can be changed.</p> <p>For any user pool attribute that's mapped to an identity provider attribute, you must set this parameter to <code>true</code>. Amazon Cognito updates mapped attributes when users sign in to your application through an identity provider. If an attribute is immutable, Amazon Cognito throws an error when it attempts to update the attribute. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html">Specifying Identity Provider Attribute Mappings for Your User Pool</a>.</p>
+    /// <p>Specifies whether the value of the attribute can be changed.</p> <p>For any user pool attribute that's mapped to an identity provider attribute, you must set this parameter to <code>true</code>. Amazon Cognito updates mapped attributes when users sign in to your application through an identity provider. If an attribute is immutable, Amazon Cognito throws an error when it attempts to update the attribute. For more information, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html">Specifying Identity Provider Attribute Mappings for Your User Pool</a>.</p>
     #[serde(rename = "Mutable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mutable: Option<bool>,
@@ -3058,6 +3099,21 @@ pub struct StringAttributeConstraintsType {
     pub min_length: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the user pool to assign the tags to.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to assign to the user pool.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>A container for the UI customization information for a user pool's built-in app UI.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -3091,6 +3147,21 @@ pub struct UICustomizationType {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_id: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the user pool that the tags are assigned to.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The keys of the tags to remove from the user pool.</p>
+    #[serde(rename = "TagKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_keys: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAuthEventFeedbackRequest {
@@ -3245,7 +3316,7 @@ pub struct UpdateUserAttributesResponse {
 /// <p>Represents the request to update the user pool client.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserPoolClientRequest {
-    /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>
+    /// <p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p>
     #[serde(rename = "AllowedOAuthFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_flows: Option<Vec<String>>,
@@ -3397,7 +3468,7 @@ pub struct UpdateUserPoolRequest {
     /// <p>The user pool ID for the user pool you want to update.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    /// <p>The cost allocation tags for the user pool. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html">Adding Cost Allocation Tags to Your User Pool</a> </p>
+    /// <p>The tag keys and values to assign to the user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p>
     #[serde(rename = "UserPoolTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
@@ -3646,6 +3717,7 @@ pub struct UserPoolType {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
+    /// <p>A custom domain name that you provide to Amazon Cognito. This parameter applies only if you use a custom domain to host the sign-up and sign-in pages for your application. For example: <code>auth.example.com</code>.</p> <p>For more information about adding a custom domain to your user pool, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
     #[serde(rename = "CustomDomain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_domain: Option<String>,
@@ -3729,7 +3801,7 @@ pub struct UserPoolType {
     #[serde(rename = "UserPoolAddOns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_add_ons: Option<UserPoolAddOnsType>,
-    /// <p>The cost allocation tags for the user pool. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html">Adding Cost Allocation Tags to Your User Pool</a> </p>
+    /// <p>The tags that are assigned to the user pool. A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p>
     #[serde(rename = "UserPoolTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_tags: Option<::std::collections::HashMap<String, String>>,
@@ -3767,7 +3839,7 @@ pub struct UserType {
     #[serde(rename = "UserLastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_last_modified_date: Option<f64>,
-    /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul></p>
+    /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> <li> <p>RESET<em>REQUIRED - User is confirmed, but the user must request a code and reset his or her password before he or she can sign in.</p> </li> <li> <p>FORCE</em>CHANGE_PASSWORD - The user is confirmed and the user can sign in using a temporary password, but on first sign-in, the user must change his or her password to a new value before doing anything else. </p> </li> </ul></p>
     #[serde(rename = "UserStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_status: Option<String>,
@@ -5682,6 +5754,83 @@ impl Error for AdminSetUserMFAPreferenceError {
         }
     }
 }
+/// Errors returned by AdminSetUserPassword
+#[derive(Debug, PartialEq)]
+pub enum AdminSetUserPasswordError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid password.</p>
+    InvalidPassword(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// <p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+}
+
+impl AdminSetUserPasswordError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AdminSetUserPasswordError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(AdminSetUserPasswordError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(AdminSetUserPasswordError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidPasswordException" => {
+                    return RusotoError::Service(AdminSetUserPasswordError::InvalidPassword(
+                        err.msg,
+                    ))
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(AdminSetUserPasswordError::NotAuthorized(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AdminSetUserPasswordError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(AdminSetUserPasswordError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "UserNotFoundException" => {
+                    return RusotoError::Service(AdminSetUserPasswordError::UserNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AdminSetUserPasswordError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AdminSetUserPasswordError {
+    fn description(&self) -> &str {
+        match *self {
+            AdminSetUserPasswordError::InternalError(ref cause) => cause,
+            AdminSetUserPasswordError::InvalidParameter(ref cause) => cause,
+            AdminSetUserPasswordError::InvalidPassword(ref cause) => cause,
+            AdminSetUserPasswordError::NotAuthorized(ref cause) => cause,
+            AdminSetUserPasswordError::ResourceNotFound(ref cause) => cause,
+            AdminSetUserPasswordError::TooManyRequests(ref cause) => cause,
+            AdminSetUserPasswordError::UserNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by AdminSetUserSettings
 #[derive(Debug, PartialEq)]
 pub enum AdminSetUserSettingsError {
@@ -5918,10 +6067,16 @@ pub enum AdminUpdateUserAttributesError {
     AliasExists(String),
     /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    InvalidEmailRoleAccessPolicy(String),
     /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid AWS Lambda response.</p>
     InvalidLambdaResponse(String),
     /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    InvalidSmsRoleAccessPolicy(String),
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    InvalidSmsRoleTrustRelationship(String),
     /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
@@ -5950,6 +6105,11 @@ impl AdminUpdateUserAttributesError {
                         err.msg,
                     ))
                 }
+                "InvalidEmailRoleAccessPolicyException" => {
+                    return RusotoError::Service(
+                        AdminUpdateUserAttributesError::InvalidEmailRoleAccessPolicy(err.msg),
+                    )
+                }
                 "InvalidLambdaResponseException" => {
                     return RusotoError::Service(
                         AdminUpdateUserAttributesError::InvalidLambdaResponse(err.msg),
@@ -5959,6 +6119,16 @@ impl AdminUpdateUserAttributesError {
                     return RusotoError::Service(AdminUpdateUserAttributesError::InvalidParameter(
                         err.msg,
                     ))
+                }
+                "InvalidSmsRoleAccessPolicyException" => {
+                    return RusotoError::Service(
+                        AdminUpdateUserAttributesError::InvalidSmsRoleAccessPolicy(err.msg),
+                    )
+                }
+                "InvalidSmsRoleTrustRelationshipException" => {
+                    return RusotoError::Service(
+                        AdminUpdateUserAttributesError::InvalidSmsRoleTrustRelationship(err.msg),
+                    )
                 }
                 "NotAuthorizedException" => {
                     return RusotoError::Service(AdminUpdateUserAttributesError::NotAuthorized(
@@ -6007,8 +6177,11 @@ impl Error for AdminUpdateUserAttributesError {
         match *self {
             AdminUpdateUserAttributesError::AliasExists(ref cause) => cause,
             AdminUpdateUserAttributesError::InternalError(ref cause) => cause,
+            AdminUpdateUserAttributesError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
             AdminUpdateUserAttributesError::InvalidLambdaResponse(ref cause) => cause,
             AdminUpdateUserAttributesError::InvalidParameter(ref cause) => cause,
+            AdminUpdateUserAttributesError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
+            AdminUpdateUserAttributesError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
             AdminUpdateUserAttributesError::NotAuthorized(ref cause) => cause,
             AdminUpdateUserAttributesError::ResourceNotFound(ref cause) => cause,
             AdminUpdateUserAttributesError::TooManyRequests(ref cause) => cause,
@@ -9427,6 +9600,67 @@ impl Error for ListResourceServersError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(ListTagsForResourceError::NotAuthorized(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ListTagsForResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InternalError(ref cause) => cause,
+            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
+            ListTagsForResourceError::NotAuthorized(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListUserImportJobs
 #[derive(Debug, PartialEq)]
 pub enum ListUserImportJobsError {
@@ -10640,6 +10874,120 @@ impl Error for StopUserImportJobError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(TagResourceError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(TagResourceError::InvalidParameter(err.msg))
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(TagResourceError::NotAuthorized(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InternalError(ref cause) => cause,
+            TagResourceError::InvalidParameter(ref cause) => cause,
+            TagResourceError::NotAuthorized(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(UntagResourceError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(err.msg))
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(UntagResourceError::NotAuthorized(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UntagResourceError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InternalError(ref cause) => cause,
+            UntagResourceError::InvalidParameter(ref cause) => cause,
+            UntagResourceError::NotAuthorized(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateAuthEventFeedback
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthEventFeedbackError {
@@ -11755,6 +12103,11 @@ pub trait CognitoIdentityProvider {
         input: AdminSetUserMFAPreferenceRequest,
     ) -> RusotoFuture<AdminSetUserMFAPreferenceResponse, AdminSetUserMFAPreferenceError>;
 
+    fn admin_set_user_password(
+        &self,
+        input: AdminSetUserPasswordRequest,
+    ) -> RusotoFuture<AdminSetUserPasswordResponse, AdminSetUserPasswordError>;
+
     /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_set_user_settings(
         &self,
@@ -12034,6 +12387,12 @@ pub trait CognitoIdentityProvider {
         input: ListResourceServersRequest,
     ) -> RusotoFuture<ListResourceServersResponse, ListResourceServersError>;
 
+    /// <p>Lists the tags that are assigned to an Amazon Cognito user pool.</p> <p>A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
     /// <p>Lists the user import jobs.</p>
     fn list_user_import_jobs(
         &self,
@@ -12121,6 +12480,18 @@ pub trait CognitoIdentityProvider {
         input: StopUserImportJobRequest,
     ) -> RusotoFuture<StopUserImportJobResponse, StopUserImportJobError>;
 
+    /// <p>Assigns a set of tags to an Amazon Cognito user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of a user pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both user pools. The value of this key might be <code>Test</code> for one user pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your user pools. In an IAM policy, you can constrain permissions for user pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. A user pool can have as many as 50 tags.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p>Removes the specified tags from an Amazon Cognito user pool. You can use this action up to 5 times per second, per account</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+
     /// <p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
     fn update_auth_event_feedback(
         &self,
@@ -12169,7 +12540,7 @@ pub trait CognitoIdentityProvider {
         input: UpdateUserPoolClientRequest,
     ) -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
 
-    /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
+    /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
     fn update_user_pool_domain(
         &self,
         input: UpdateUserPoolDomainRequest,
@@ -12855,6 +13226,36 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AdminSetUserMFAPreferenceError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    fn admin_set_user_password(
+        &self,
+        input: AdminSetUserPasswordRequest,
+    ) -> RusotoFuture<AdminSetUserPasswordResponse, AdminSetUserPasswordError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminSetUserPassword",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AdminSetUserPasswordResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AdminSetUserPasswordError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -14347,6 +14748,37 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
+    /// <p>Lists the tags that are assigned to an Amazon Cognito user pool.</p> <p>A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.ListTagsForResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Lists the user import jobs.</p>
     fn list_user_import_jobs(
         &self,
@@ -14814,6 +15246,70 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
+    /// <p>Assigns a set of tags to an Amazon Cognito user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of a user pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both user pools. The value of this key might be <code>Test</code> for one user pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your user pools. In an IAM policy, you can constrain permissions for user pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. A user pool can have as many as 50 tags.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.TagResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes the specified tags from an Amazon Cognito user pool. You can use this action up to 5 times per second, per account</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UntagResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
     fn update_auth_event_feedback(
         &self,
@@ -15063,7 +15559,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
+    /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
     fn update_user_pool_domain(
         &self,
         input: UpdateUserPoolDomainRequest,

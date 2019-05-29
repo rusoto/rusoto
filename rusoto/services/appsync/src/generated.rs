@@ -25,6 +25,23 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
+/// <p>Describes an additional authentication provider.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AdditionalAuthenticationProvider {
+    /// <p>The authentication type: API key, AWS IAM, OIDC, or Amazon Cognito user pools.</p>
+    #[serde(rename = "authenticationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_type: Option<String>,
+    /// <p>The OpenID Connect configuration.</p>
+    #[serde(rename = "openIDConnectConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub open_id_connect_config: Option<OpenIDConnectConfig>,
+    /// <p>The Amazon Cognito user pool configuration.</p>
+    #[serde(rename = "userPoolConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_pool_config: Option<CognitoUserPoolConfig>,
+}
+
 /// <p><p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL API operations with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The keys ceased to be valid after February 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after February 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds. Key expiration can only be updated while the key has not expired.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as seconds.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -66,6 +83,21 @@ pub struct AwsIamConfig {
     #[serde(rename = "signingServiceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub signing_service_name: Option<String>,
+}
+
+/// <p>Describes an Amazon Cognito user pool configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CognitoUserPoolConfig {
+    /// <p>A regular expression for validating the incoming Amazon Cognito user pool app client ID.</p>
+    #[serde(rename = "appIdClientRegex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_id_client_regex: Option<String>,
+    /// <p>The AWS Region in which the user pool was created.</p>
+    #[serde(rename = "awsRegion")]
+    pub aws_region: String,
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "userPoolId")]
+    pub user_pool_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -180,7 +212,11 @@ pub struct CreateFunctionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGraphqlApiRequest {
-    /// <p>The authentication type: API key, AWS IAM, or Amazon Cognito user pools.</p>
+    /// <p>A list of additional authentication providers for the <code>GraphqlApi</code> API.</p>
+    #[serde(rename = "additionalAuthenticationProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_authentication_providers: Option<Vec<AdditionalAuthenticationProvider>>,
+    /// <p>The authentication type: API key, AWS IAM, OIDC, or Amazon Cognito user pools.</p>
     #[serde(rename = "authenticationType")]
     pub authentication_type: String,
     /// <p>The Amazon CloudWatch Logs configuration.</p>
@@ -194,6 +230,10 @@ pub struct CreateGraphqlApiRequest {
     #[serde(rename = "openIDConnectConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_id_connect_config: Option<OpenIDConnectConfig>,
+    /// <p>A <code>TagMap</code> object.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The Amazon Cognito user pool configuration.</p>
     #[serde(rename = "userPoolConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -528,6 +568,10 @@ pub struct GetIntrospectionSchemaRequest {
     /// <p>The schema format: SDL or JSON.</p>
     #[serde(rename = "format")]
     pub format: String,
+    /// <p>A flag that specifies whether the schema introspection should contain directives.</p>
+    #[serde(rename = "includeDirectives")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_directives: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -572,7 +616,7 @@ pub struct GetSchemaCreationStatusResponse {
     #[serde(rename = "details")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<String>,
-    /// <p>The current state of the schema (PROCESSING, ACTIVE, or DELETING). Once the schema is in the ACTIVE state, you can add data.</p>
+    /// <p>The current state of the schema (PROCESSING, FAILED, SUCCESS, or NOT_APPLICABLE). When the schema is in the ACTIVE state, you can add data.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -604,6 +648,10 @@ pub struct GetTypeResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GraphqlApi {
+    /// <p>A list of additional authentication providers for the <code>GraphqlApi</code> API.</p>
+    #[serde(rename = "additionalAuthenticationProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_authentication_providers: Option<Vec<AdditionalAuthenticationProvider>>,
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -628,6 +676,10 @@ pub struct GraphqlApi {
     #[serde(rename = "openIDConnectConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_id_connect_config: Option<OpenIDConnectConfig>,
+    /// <p>The tags.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The URIs.</p>
     #[serde(rename = "uris")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -831,6 +883,22 @@ pub struct ListResolversResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The <code>GraphqlApi</code> ARN.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A <code>TagMap</code> object.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTypesRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -995,11 +1063,25 @@ pub struct StartSchemaCreationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StartSchemaCreationResponse {
-    /// <p>The current state of the schema (PROCESSING, ACTIVE, or DELETING). When the schema is in the ACTIVE state, you can add data.</p>
+    /// <p>The current state of the schema (PROCESSING, FAILED, SUCCESS, or NOT_APPLICABLE). When the schema is in the ACTIVE state, you can add data.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The <code>GraphqlApi</code> ARN.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>A <code>TagMap</code> object.</p>
+    #[serde(rename = "tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
 
 /// <p>Describes a type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1026,6 +1108,20 @@ pub struct Type {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The <code>GraphqlApi</code> ARN.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>A list of <code>TagKey</code> objects.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApiKeyRequest {
@@ -1145,6 +1241,10 @@ pub struct UpdateFunctionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGraphqlApiRequest {
+    /// <p>A list of additional authentication providers for the <code>GraphqlApi</code> API.</p>
+    #[serde(rename = "additionalAuthenticationProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_authentication_providers: Option<Vec<AdditionalAuthenticationProvider>>,
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
     pub api_id: String,
@@ -1787,6 +1887,8 @@ impl Error for DeleteFunctionError {
 /// Errors returned by DeleteGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum DeleteGraphqlApiError {
+    /// <p>You do not have access to perform this operation on this resource.</p>
+    AccessDenied(String),
     /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
@@ -1803,6 +1905,9 @@ impl DeleteGraphqlApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGraphqlApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteGraphqlApiError::AccessDenied(err.msg))
+                }
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteGraphqlApiError::BadRequest(err.msg))
                 }
@@ -1835,6 +1940,7 @@ impl fmt::Display for DeleteGraphqlApiError {
 impl Error for DeleteGraphqlApiError {
     fn description(&self) -> &str {
         match *self {
+            DeleteGraphqlApiError::AccessDenied(ref cause) => cause,
             DeleteGraphqlApiError::BadRequest(ref cause) => cause,
             DeleteGraphqlApiError::ConcurrentModification(ref cause) => cause,
             DeleteGraphqlApiError::InternalFailure(ref cause) => cause,
@@ -2060,6 +2166,8 @@ impl Error for GetFunctionError {
 /// Errors returned by GetGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum GetGraphqlApiError {
+    /// <p>You do not have access to perform this operation on this resource.</p>
+    AccessDenied(String),
     /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
@@ -2074,6 +2182,9 @@ impl GetGraphqlApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetGraphqlApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetGraphqlApiError::AccessDenied(err.msg))
+                }
                 "BadRequestException" => {
                     return RusotoError::Service(GetGraphqlApiError::BadRequest(err.msg))
                 }
@@ -2101,6 +2212,7 @@ impl fmt::Display for GetGraphqlApiError {
 impl Error for GetGraphqlApiError {
     fn description(&self) -> &str {
         match *self {
+            GetGraphqlApiError::AccessDenied(ref cause) => cause,
             GetGraphqlApiError::BadRequest(ref cause) => cause,
             GetGraphqlApiError::InternalFailure(ref cause) => cause,
             GetGraphqlApiError::NotFound(ref cause) => cause,
@@ -2624,6 +2736,69 @@ impl Error for ListResolversByFunctionError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>You do not have access to perform this operation on this resource.</p>
+    AccessDenied(String),
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The request exceeded a limit. Try your request again.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ListTagsForResourceError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(ListTagsForResourceError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::AccessDenied(ref cause) => cause,
+            ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::InternalFailure(ref cause) => cause,
+            ListTagsForResourceError::LimitExceeded(ref cause) => cause,
+            ListTagsForResourceError::NotFound(ref cause) => cause,
+            ListTagsForResourceError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTypes
 #[derive(Debug, PartialEq)]
 pub enum ListTypesError {
@@ -2737,6 +2912,132 @@ impl Error for StartSchemaCreationError {
             StartSchemaCreationError::InternalFailure(ref cause) => cause,
             StartSchemaCreationError::NotFound(ref cause) => cause,
             StartSchemaCreationError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>You do not have access to perform this operation on this resource.</p>
+    AccessDenied(String),
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The request exceeded a limit. Try your request again.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(TagResourceError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(TagResourceError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(TagResourceError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(TagResourceError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::AccessDenied(ref cause) => cause,
+            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::InternalFailure(ref cause) => cause,
+            TagResourceError::LimitExceeded(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>You do not have access to perform this operation on this resource.</p>
+    AccessDenied(String),
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The request exceeded a limit. Try your request again.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(UntagResourceError::BadRequest(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UntagResourceError::LimitExceeded(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::NotFound(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UntagResourceError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::AccessDenied(ref cause) => cause,
+            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::InternalFailure(ref cause) => cause,
+            UntagResourceError::LimitExceeded(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::Unauthorized(ref cause) => cause,
         }
     }
 }
@@ -2920,6 +3221,8 @@ impl Error for UpdateFunctionError {
 /// Errors returned by UpdateGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum UpdateGraphqlApiError {
+    /// <p>You do not have access to perform this operation on this resource.</p>
+    AccessDenied(String),
     /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
@@ -2936,6 +3239,9 @@ impl UpdateGraphqlApiError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateGraphqlApiError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateGraphqlApiError::AccessDenied(err.msg))
+                }
                 "BadRequestException" => {
                     return RusotoError::Service(UpdateGraphqlApiError::BadRequest(err.msg))
                 }
@@ -2968,6 +3274,7 @@ impl fmt::Display for UpdateGraphqlApiError {
 impl Error for UpdateGraphqlApiError {
     fn description(&self) -> &str {
         match *self {
+            UpdateGraphqlApiError::AccessDenied(ref cause) => cause,
             UpdateGraphqlApiError::BadRequest(ref cause) => cause,
             UpdateGraphqlApiError::ConcurrentModification(ref cause) => cause,
             UpdateGraphqlApiError::InternalFailure(ref cause) => cause,
@@ -3235,6 +3542,12 @@ pub trait AppSync {
         input: ListResolversByFunctionRequest,
     ) -> RusotoFuture<ListResolversByFunctionResponse, ListResolversByFunctionError>;
 
+    /// <p>Lists the tags for a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
     /// <p>Lists the types for a given API.</p>
     fn list_types(
         &self,
@@ -3246,6 +3559,18 @@ pub trait AppSync {
         &self,
         input: StartSchemaCreationRequest,
     ) -> RusotoFuture<StartSchemaCreationResponse, StartSchemaCreationError>;
+
+    /// <p>Tags a resource with user-supplied tags.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p>Untags a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p>Updates an API key.</p>
     fn update_api_key(
@@ -3818,6 +4143,9 @@ impl AppSync for AppSyncClient {
 
         let mut params = Params::new();
         params.put("format", &input.format);
+        if let Some(ref x) = input.include_directives {
+            params.put("includeDirectives", x);
+        }
         request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
@@ -4165,6 +4493,34 @@ impl AppSync for AppSyncClient {
         })
     }
 
+    /// <p>Lists the tags for a resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Lists the types for a given API.</p>
     fn list_types(
         &self,
@@ -4230,6 +4586,73 @@ impl AppSync for AppSyncClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(StartSchemaCreationError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Tags a resource with user-supplied tags.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Untags a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })

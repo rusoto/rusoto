@@ -57,6 +57,20 @@ pub struct AccessLevelFilter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateBudgetWithResourceInput {
+    /// <p>The name of the budget you want to associate.</p>
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    /// <p> The resource identifier. Either a portfolio-id or a product-id.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateBudgetWithResourceOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociatePrincipalWithPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -174,6 +188,16 @@ pub struct BatchDisassociateServiceActionFromProvisioningArtifactOutput {
     pub failed_service_action_associations: Option<Vec<FailedServiceActionAssociation>>,
 }
 
+/// <p>Information about a budget.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BudgetDetail {
+    /// <p>Name of the associated budget.</p>
+    #[serde(rename = "BudgetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budget_name: Option<String>,
+}
+
 /// <p>Information about a CloudWatch dashboard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -273,7 +297,7 @@ pub struct CreateConstraintInput {
     /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    /// <p><p>The constraint parameters, in JSON format. The syntax depends on the constraint type as follows:</p> <dl> <dt>LAUNCH</dt> <dd> <p>Specify the <code>RoleArn</code> property as follows:</p> <p> <code>{&quot;RoleArn&quot; : &quot;arn:aws:iam::123456789012:role/LaunchRole&quot;}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>LAUNCH</code> constraint on a product and portfolio.</p> </dd> <dt>NOTIFICATION</dt> <dd> <p>Specify the <code>NotificationArns</code> property as follows:</p> <p> <code>{&quot;NotificationArns&quot; : [&quot;arn:aws:sns:us-east-1:123456789012:Topic&quot;]}</code> </p> </dd> <dt>STACKSET</dt> <dd> <p>Specify the <code>Parameters</code> property as follows:</p> <p> <code>{&quot;Version&quot;: &quot;String&quot;, &quot;Properties&quot;: {&quot;AccountList&quot;: [ &quot;String&quot; ], &quot;RegionList&quot;: [ &quot;String&quot; ], &quot;AdminRole&quot;: &quot;String&quot;, &quot;ExecutionRole&quot;: &quot;String&quot;}}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>STACKSET</code> constraint on a product and portfolio.</p> <p>Products with a <code>STACKSET</code> constraint will launch an AWS CloudFormation stack set.</p> </dd> <dt>TEMPLATE</dt> <dd> <p>Specify the <code>Rules</code> property. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html">Template Constraint Rules</a>.</p> </dd> </dl></p>
+    /// <p><p>The constraint parameters, in JSON format. The syntax depends on the constraint type as follows:</p> <dl> <dt>LAUNCH</dt> <dd> <p>Specify the <code>RoleArn</code> property as follows:</p> <p> <code>{&quot;RoleArn&quot; : &quot;arn:aws:iam::123456789012:role/LaunchRole&quot;}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>LAUNCH</code> constraint on a product and portfolio.</p> </dd> <dt>NOTIFICATION</dt> <dd> <p>Specify the <code>NotificationArns</code> property as follows:</p> <p> <code>{&quot;NotificationArns&quot; : [&quot;arn:aws:sns:us-east-1:123456789012:Topic&quot;]}</code> </p> </dd> <dt>RESOURCE<em>UPDATE</dt> <dd> <p>Specify the <code>TagUpdatesOnProvisionedProduct</code> property as follows:</p> <p> <code>{&quot;Version&quot;:&quot;2.0&quot;,&quot;Properties&quot;:{&quot;TagUpdateOnProvisionedProduct&quot;:&quot;String&quot;}}</code> </p> <p>The <code>TagUpdatesOnProvisionedProduct</code> property accepts a string value of <code>ALLOWED</code> or <code>NOT</em>ALLOWED</code>.</p> </dd> <dt>STACKSET</dt> <dd> <p>Specify the <code>Parameters</code> property as follows:</p> <p> <code>{&quot;Version&quot;: &quot;String&quot;, &quot;Properties&quot;: {&quot;AccountList&quot;: [ &quot;String&quot; ], &quot;RegionList&quot;: [ &quot;String&quot; ], &quot;AdminRole&quot;: &quot;String&quot;, &quot;ExecutionRole&quot;: &quot;String&quot;}}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>STACKSET</code> constraint on a product and portfolio.</p> <p>Products with a <code>STACKSET</code> constraint will launch an AWS CloudFormation stack set.</p> </dd> <dt>TEMPLATE</dt> <dd> <p>Specify the <code>Rules</code> property. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html">Template Constraint Rules</a>.</p> </dd> </dl></p>
     #[serde(rename = "Parameters")]
     pub parameters: String,
     /// <p>The portfolio identifier.</p>
@@ -282,7 +306,7 @@ pub struct CreateConstraintInput {
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>STACKSET</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
+    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>RESOURCE_UPDATE</code> </p> </li> <li> <p> <code>STACKSET</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -793,6 +817,10 @@ pub struct DescribePortfolioInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribePortfolioOutput {
+    /// <p>Information about the associated budgets.</p>
+    #[serde(rename = "Budgets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budgets: Option<Vec<BudgetDetail>>,
     /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -853,6 +881,10 @@ pub struct DescribeProductAsAdminInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProductAsAdminOutput {
+    /// <p>Information about the associated budgets.</p>
+    #[serde(rename = "Budgets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budgets: Option<Vec<BudgetDetail>>,
     /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -885,6 +917,10 @@ pub struct DescribeProductInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeProductOutput {
+    /// <p>Information about the associated budgets.</p>
+    #[serde(rename = "Budgets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budgets: Option<Vec<BudgetDetail>>,
     /// <p>Summary information about the product view.</p>
     #[serde(rename = "ProductViewSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1137,6 +1173,20 @@ pub struct DisableAWSOrganizationsAccessInput {}
 pub struct DisableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateBudgetFromResourceInput {
+    /// <p>The name of the budget you want to disassociate.</p>
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    /// <p>The resource identifier you want to disassociate from. Either a portfolio-id or a product-id.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateBudgetFromResourceOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociatePrincipalFromPortfolioInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1354,6 +1404,38 @@ pub struct ListAcceptedPortfolioSharesOutput {
     #[serde(rename = "PortfolioDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListBudgetsForResourceInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The resource identifier.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListBudgetsForResourceOutput {
+    /// <p>Information about the associated budgets.</p>
+    #[serde(rename = "Budgets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budgets: Option<Vec<BudgetDetail>>,
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2378,6 +2460,10 @@ pub struct ProvisioningArtifactProperties {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>If set to true, AWS Service Catalog stops validating the specified provisioning artifact even if it is invalid.</p>
+    #[serde(rename = "DisableTemplateValidation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_template_validation: Option<bool>,
     /// <p>The URL of the CloudFormation template in Amazon S3. Specify the URL in JSON format as follows:</p> <p> <code>"LoadTemplateFromURL": "https://s3.amazonaws.com/cf-templates-ozkq9d3hgiq2-us-east-1/..."</code> </p>
     #[serde(rename = "Info")]
     pub info: ::std::collections::HashMap<String, String>,
@@ -3043,6 +3129,10 @@ pub struct UpdateConstraintInput {
     /// <p>The identifier of the constraint.</p>
     #[serde(rename = "Id")]
     pub id: String,
+    /// <p><p>The constraint parameters, in JSON format. The syntax depends on the constraint type as follows:</p> <dl> <dt>LAUNCH</dt> <dd> <p>Specify the <code>RoleArn</code> property as follows:</p> <p> <code>{&quot;RoleArn&quot; : &quot;arn:aws:iam::123456789012:role/LaunchRole&quot;}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>LAUNCH</code> constraint on a product and portfolio.</p> </dd> <dt>NOTIFICATION</dt> <dd> <p>Specify the <code>NotificationArns</code> property as follows:</p> <p> <code>{&quot;NotificationArns&quot; : [&quot;arn:aws:sns:us-east-1:123456789012:Topic&quot;]}</code> </p> </dd> <dt>RESOURCE<em>UPDATE</dt> <dd> <p>Specify the <code>TagUpdatesOnProvisionedProduct</code> property as follows:</p> <p> <code>{&quot;Version&quot;:&quot;2.0&quot;,&quot;Properties&quot;:{&quot;TagUpdateOnProvisionedProduct&quot;:&quot;String&quot;}}</code> </p> <p>The <code>TagUpdatesOnProvisionedProduct</code> property accepts a string value of <code>ALLOWED</code> or <code>NOT</em>ALLOWED</code>.</p> </dd> <dt>STACKSET</dt> <dd> <p>Specify the <code>Parameters</code> property as follows:</p> <p> <code>{&quot;Version&quot;: &quot;String&quot;, &quot;Properties&quot;: {&quot;AccountList&quot;: [ &quot;String&quot; ], &quot;RegionList&quot;: [ &quot;String&quot; ], &quot;AdminRole&quot;: &quot;String&quot;, &quot;ExecutionRole&quot;: &quot;String&quot;}}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>STACKSET</code> constraint on a product and portfolio.</p> <p>Products with a <code>STACKSET</code> constraint will launch an AWS CloudFormation stack set.</p> </dd> <dt>TEMPLATE</dt> <dd> <p>Specify the <code>Rules</code> property. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html">Template Constraint Rules</a>.</p> </dd> </dl></p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3184,7 +3274,7 @@ pub struct UpdateProvisionedProductInput {
     #[serde(rename = "ProvisionedProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_id: Option<String>,
-    /// <p>The updated name of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>
+    /// <p>The name of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>
     #[serde(rename = "ProvisionedProductName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_name: Option<String>,
@@ -3200,6 +3290,10 @@ pub struct UpdateProvisionedProductInput {
     #[serde(rename = "ProvisioningPreferences")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_preferences: Option<UpdateProvisioningPreferences>,
+    /// <p>One or more tags. Requires the product to have <code>RESOURCE_UPDATE</code> constraint with <code>TagUpdatesOnProvisionedProduct</code> set to <code>ALLOWED</code> to allow tag updates.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The idempotency token that uniquely identifies the provisioning update request.</p>
     #[serde(rename = "UpdateToken")]
     pub update_token: String,
@@ -3212,6 +3306,44 @@ pub struct UpdateProvisionedProductOutput {
     #[serde(rename = "RecordDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateProvisionedProductPropertiesInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The idempotency token that uniquely identifies the provisioning product update request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+    /// <p>The identifier of the provisioned product.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    pub provisioned_product_id: String,
+    /// <p>A map that contains the provisioned product properties to be updated.</p> <p>The <code>OWNER</code> key only accepts user ARNs. The owner is the user that is allowed to see, update, terminate, and execute service actions in the provisioned product.</p> <p>The administrator can change the owner of a provisioned product to another IAM user within the same account. Both end user owners and administrators can see ownership history of the provisioned product using the <code>ListRecordHistory</code> API. The new owner can describe all past records for the provisioned product using the <code>DescribeRecord</code> API. The previous owner can no longer use <code>DescribeRecord</code>, but can still see the product's history from when he was an owner using <code>ListRecordHistory</code>.</p> <p>If a provisioned product ownership is assigned to an end user, they can see and perform any action through the API or Service Catalog console such as update, terminate, and execute service actions. If an end user provisions a product and the owner is updated to someone else, they will no longer be able to see or perform any actions through API or the Service Catalog console on that provisioned product.</p>
+    #[serde(rename = "ProvisionedProductProperties")]
+    pub provisioned_product_properties: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateProvisionedProductPropertiesOutput {
+    /// <p>The provisioned product identifier.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_id: Option<String>,
+    /// <p>A map that contains the properties updated.</p>
+    #[serde(rename = "ProvisionedProductProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_product_properties: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The identifier of the record.</p>
+    #[serde(rename = "RecordId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_id: Option<String>,
+    /// <p>The status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3423,6 +3555,67 @@ impl Error for AcceptPortfolioShareError {
             AcceptPortfolioShareError::InvalidParameters(ref cause) => cause,
             AcceptPortfolioShareError::LimitExceeded(ref cause) => cause,
             AcceptPortfolioShareError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssociateBudgetWithResource
+#[derive(Debug, PartialEq)]
+pub enum AssociateBudgetWithResourceError {
+    /// <p>The specified resource is a duplicate.</p>
+    DuplicateResource(String),
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl AssociateBudgetWithResourceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateBudgetWithResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DuplicateResourceException" => {
+                    return RusotoError::Service(
+                        AssociateBudgetWithResourceError::DuplicateResource(err.msg),
+                    )
+                }
+                "InvalidParametersException" => {
+                    return RusotoError::Service(
+                        AssociateBudgetWithResourceError::InvalidParameters(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(AssociateBudgetWithResourceError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateBudgetWithResourceError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for AssociateBudgetWithResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateBudgetWithResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateBudgetWithResourceError::DuplicateResource(ref cause) => cause,
+            AssociateBudgetWithResourceError::InvalidParameters(ref cause) => cause,
+            AssociateBudgetWithResourceError::LimitExceeded(ref cause) => cause,
+            AssociateBudgetWithResourceError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -5160,6 +5353,43 @@ impl Error for DisableAWSOrganizationsAccessError {
         }
     }
 }
+/// Errors returned by DisassociateBudgetFromResource
+#[derive(Debug, PartialEq)]
+pub enum DisassociateBudgetFromResourceError {
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DisassociateBudgetFromResourceError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateBudgetFromResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateBudgetFromResourceError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DisassociateBudgetFromResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateBudgetFromResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateBudgetFromResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DisassociatePrincipalFromPortfolio
 #[derive(Debug, PartialEq)]
 pub enum DisassociatePrincipalFromPortfolioError {
@@ -5590,6 +5820,49 @@ impl Error for ListAcceptedPortfolioSharesError {
         match *self {
             ListAcceptedPortfolioSharesError::InvalidParameters(ref cause) => cause,
             ListAcceptedPortfolioSharesError::OperationNotSupported(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListBudgetsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListBudgetsForResourceError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl ListBudgetsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBudgetsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParametersException" => {
+                    return RusotoError::Service(ListBudgetsForResourceError::InvalidParameters(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListBudgetsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListBudgetsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListBudgetsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListBudgetsForResourceError::InvalidParameters(ref cause) => cause,
+            ListBudgetsForResourceError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -6665,6 +6938,59 @@ impl Error for UpdateProvisionedProductError {
         }
     }
 }
+/// Errors returned by UpdateProvisionedProductProperties
+#[derive(Debug, PartialEq)]
+pub enum UpdateProvisionedProductPropertiesError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+    InvalidState(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateProvisionedProductPropertiesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateProvisionedProductPropertiesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParametersException" => {
+                    return RusotoError::Service(
+                        UpdateProvisionedProductPropertiesError::InvalidParameters(err.msg),
+                    )
+                }
+                "InvalidStateException" => {
+                    return RusotoError::Service(
+                        UpdateProvisionedProductPropertiesError::InvalidState(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateProvisionedProductPropertiesError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateProvisionedProductPropertiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateProvisionedProductPropertiesError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateProvisionedProductPropertiesError::InvalidParameters(ref cause) => cause,
+            UpdateProvisionedProductPropertiesError::InvalidState(ref cause) => cause,
+            UpdateProvisionedProductPropertiesError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum UpdateProvisioningArtifactError {
@@ -6813,6 +7139,12 @@ pub trait ServiceCatalog {
         &self,
         input: AcceptPortfolioShareInput,
     ) -> RusotoFuture<AcceptPortfolioShareOutput, AcceptPortfolioShareError>;
+
+    /// <p>Associates the specified budget with the specified resource.</p>
+    fn associate_budget_with_resource(
+        &self,
+        input: AssociateBudgetWithResourceInput,
+    ) -> RusotoFuture<AssociateBudgetWithResourceOutput, AssociateBudgetWithResourceError>;
 
     /// <p>Associates the specified principal ARN with the specified portfolio.</p>
     fn associate_principal_with_portfolio(
@@ -7027,7 +7359,7 @@ pub trait ServiceCatalog {
         input: DescribeProvisioningParametersInput,
     ) -> RusotoFuture<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
 
-    /// <p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
+    /// <p><p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p> <note> <p>If a provisioned product was transferred to a new owner using <a>UpdateProvisionedProductProperties</a>, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use <a>ListRecordHistory</a> to see the product&#39;s history from when he was the owner.</p> </note></p>
     fn describe_record(
         &self,
         input: DescribeRecordInput,
@@ -7049,6 +7381,12 @@ pub trait ServiceCatalog {
     fn disable_aws_organizations_access(
         &self,
     ) -> RusotoFuture<DisableAWSOrganizationsAccessOutput, DisableAWSOrganizationsAccessError>;
+
+    /// <p>Disassociates the specified budget from the specified resource.</p>
+    fn disassociate_budget_from_resource(
+        &self,
+        input: DisassociateBudgetFromResourceInput,
+    ) -> RusotoFuture<DisassociateBudgetFromResourceOutput, DisassociateBudgetFromResourceError>;
 
     /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
     fn disassociate_principal_from_portfolio(
@@ -7110,6 +7448,12 @@ pub trait ServiceCatalog {
         &self,
         input: ListAcceptedPortfolioSharesInput,
     ) -> RusotoFuture<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
+
+    /// <p>Lists all the budgets associated to the specified resource.</p>
+    fn list_budgets_for_resource(
+        &self,
+        input: ListBudgetsForResourceInput,
+    ) -> RusotoFuture<ListBudgetsForResourceOutput, ListBudgetsForResourceError>;
 
     /// <p>Lists the constraints for the specified portfolio and product.</p>
     fn list_constraints_for_portfolio(
@@ -7273,6 +7617,15 @@ pub trait ServiceCatalog {
         input: UpdateProvisionedProductInput,
     ) -> RusotoFuture<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
 
+    /// <p>Requests updates to the properties of the specified provisioned product.</p>
+    fn update_provisioned_product_properties(
+        &self,
+        input: UpdateProvisionedProductPropertiesInput,
+    ) -> RusotoFuture<
+        UpdateProvisionedProductPropertiesOutput,
+        UpdateProvisionedProductPropertiesError,
+    >;
+
     /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
     fn update_provisioning_artifact(
         &self,
@@ -7355,6 +7708,35 @@ impl ServiceCatalog for ServiceCatalogClient {
                         Err(AcceptPortfolioShareError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Associates the specified budget with the specified resource.</p>
+    fn associate_budget_with_resource(
+        &self,
+        input: AssociateBudgetWithResourceInput,
+    ) -> RusotoFuture<AssociateBudgetWithResourceOutput, AssociateBudgetWithResourceError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.AssociateBudgetWithResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<AssociateBudgetWithResourceOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateBudgetWithResourceError::from_response(response))
+                }))
             }
         })
     }
@@ -8396,7 +8778,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
-    /// <p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
+    /// <p><p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p> <note> <p>If a provisioned product was transferred to a new owner using <a>UpdateProvisionedProductProperties</a>, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use <a>ListRecordHistory</a> to see the product&#39;s history from when he was the owner.</p> </note></p>
     fn describe_record(
         &self,
         input: DescribeRecordInput,
@@ -8510,6 +8892,36 @@ impl ServiceCatalog for ServiceCatalogClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DisableAWSOrganizationsAccessError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Disassociates the specified budget from the specified resource.</p>
+    fn disassociate_budget_from_resource(
+        &self,
+        input: DisassociateBudgetFromResourceInput,
+    ) -> RusotoFuture<DisassociateBudgetFromResourceOutput, DisassociateBudgetFromResourceError>
+    {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DisassociateBudgetFromResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DisassociateBudgetFromResourceOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateBudgetFromResourceError::from_response(response))
                 }))
             }
         })
@@ -8789,6 +9201,37 @@ impl ServiceCatalog for ServiceCatalogClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListAcceptedPortfolioSharesError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Lists all the budgets associated to the specified resource.</p>
+    fn list_budgets_for_resource(
+        &self,
+        input: ListBudgetsForResourceInput,
+    ) -> RusotoFuture<ListBudgetsForResourceOutput, ListBudgetsForResourceError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListBudgetsForResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListBudgetsForResourceOutput, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListBudgetsForResourceError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9575,6 +10018,40 @@ impl ServiceCatalog for ServiceCatalogClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateProvisionedProductError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Requests updates to the properties of the specified provisioned product.</p>
+    fn update_provisioned_product_properties(
+        &self,
+        input: UpdateProvisionedProductPropertiesInput,
+    ) -> RusotoFuture<
+        UpdateProvisionedProductPropertiesOutput,
+        UpdateProvisionedProductPropertiesError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.UpdateProvisionedProductProperties",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateProvisionedProductPropertiesOutput, _>()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateProvisionedProductPropertiesError::from_response(
+                        response,
+                    ))
                 }))
             }
         })

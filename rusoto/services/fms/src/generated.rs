@@ -39,7 +39,7 @@ pub struct ComplianceViolator {
     #[serde(rename = "ResourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_id: Option<String>,
-    /// <p>The resource type. This is in the format shown in <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. Valid values are <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> or <code>AWS::CloudFront::Distribution</code>.</p>
+    /// <p>The resource type. This is in the format shown in <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For example: <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> or <code>AWS::CloudFront::Distribution</code>.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -54,7 +54,7 @@ pub struct DeleteNotificationChannelRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePolicyRequest {
-    /// <p>If <code>True</code>, the request will also delete all web ACLs in this policy. Associated resources will no longer be protected by web ACLs in this policy.</p>
+    /// <p>If <code>True</code>, the request will also perform a clean-up process that will:</p> <ul> <li> <p>Delete rule groups created by AWS Firewall Manager</p> </li> <li> <p>Remove web ACLs from in-scope resources</p> </li> <li> <p>Delete web ACLs that contain no rules or rule groups</p> </li> </ul> <p>After the cleanup, in-scope resources will no longer be protected by web ACLs in this policy. Protection of out-of-scope resources will remain unchanged. Scope is determined by tags and accounts associated with the policy. When creating the policy, if you specified that only resources in specific accounts or with specific tags be protected by the policy, those resources are in-scope. All others are out of scope. If you did not specify tags or accounts, all resources are in-scope. </p>
     #[serde(rename = "DeleteAllPolicyResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_all_policy_resources: Option<bool>,
@@ -153,6 +153,54 @@ pub struct GetPolicyResponse {
     #[serde(rename = "PolicyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetProtectionStatusRequest {
+    /// <p>The end of the time period to query for the attacks. This is a <code>timestamp</code> type. The sample request above indicates a number type because the default used by AWS Firewall Manager is Unix time in seconds. However, any valid <code>timestamp</code> format is allowed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>Specifies the number of objects that you want AWS Firewall Manager to return for this request. If you have more objects than the number that you specify for <code>MaxResults</code>, the response includes a <code>NextToken</code> value that you can use to get another batch of objects.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The AWS account that is in scope of the policy that you want to get the details for.</p>
+    #[serde(rename = "MemberAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_account_id: Option<String>,
+    /// <p>If you specify a value for <code>MaxResults</code> and you have more objects than the number that you specify for <code>MaxResults</code>, AWS Firewall Manager returns a <code>NextToken</code> value in the response that allows you to list another group of objects. For the second and subsequent <code>GetProtectionStatus</code> requests, specify the value of <code>NextToken</code> from the previous response to get information about another batch of objects.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ID of the policy for which you want to get the attack information.</p>
+    #[serde(rename = "PolicyId")]
+    pub policy_id: String,
+    /// <p>The start of the time period to query for the attacks. This is a <code>timestamp</code> type. The sample request above indicates a number type because the default used by AWS Firewall Manager is Unix time in seconds. However, any valid <code>timestamp</code> format is allowed.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetProtectionStatusResponse {
+    /// <p>The ID of the AWS Firewall administrator account for this policy.</p>
+    #[serde(rename = "AdminAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub admin_account_id: Option<String>,
+    /// <p>Details about the attack, including the following:</p> <ul> <li> <p>Attack type</p> </li> <li> <p>Account ID</p> </li> <li> <p>ARN of the resource attacked</p> </li> <li> <p>Start time of the attack</p> </li> <li> <p>End time of the attack (ongoing attacks will not have an end time)</p> </li> </ul> <p>The details are in JSON format. An example is shown in the Examples section below.</p>
+    #[serde(rename = "Data")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<String>,
+    /// <p>If you have more objects than the number that you specified for <code>MaxResults</code> in the request, the response includes a <code>NextToken</code> value. To list more objects, submit another <code>GetProtectionStatus</code> request, and specify the <code>NextToken</code> value from the response in the <code>NextToken</code> value in the next request.</p> <p>AWS SDKs provide auto-pagination that identify <code>NextToken</code> in a response and make subsequent request calls automatically on your behalf. However, this feature is not supported by <code>GetProtectionStatus</code>. You must submit subsequent requests with <code>NextToken</code> using your own processes. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The service type that is protected by the policy. Currently, this is always <code>SHIELD_ADVANCED</code>.</p>
+    #[serde(rename = "ServiceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -265,9 +313,13 @@ pub struct Policy {
     #[serde(rename = "ResourceTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_tags: Option<Vec<ResourceTag>>,
-    /// <p>The type of resource to protect with the policy, either an Application Load Balancer or a CloudFront distribution. This is in the format shown in <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. Valid values are <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> or <code>AWS::CloudFront::Distribution</code>.</p>
+    /// <p>The type of resource to protect with the policy. This is in the format shown in <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For example: <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> or <code>AWS::CloudFront::Distribution</code>.</p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
+    /// <p>An array of <code>ResourceType</code>.</p>
+    #[serde(rename = "ResourceTypeList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type_list: Option<Vec<String>>,
     /// <p>Details about the security service that is being used to protect the resources.</p>
     #[serde(rename = "SecurityServicePolicyData")]
     pub security_service_policy_data: SecurityServicePolicyData,
@@ -361,11 +413,11 @@ pub struct PolicySummary {
     #[serde(rename = "RemediationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remediation_enabled: Option<bool>,
-    /// <p>The type of resource to protect with the policy, either an Application Load Balancer or a CloudFront distribution. This is in the format shown in <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. Valid values are <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> or <code>AWS::CloudFront::Distribution</code>.</p>
+    /// <p>The type of resource to protect with the policy. This is in the format shown in <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a>. For example: <code>AWS::ElasticLoadBalancingV2::LoadBalancer</code> or <code>AWS::CloudFront::Distribution</code>.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    /// <p>The service that the policy is using to protect the resources. This value is <code>WAF</code>.</p>
+    /// <p>The service that the policy is using to protect the resources. This specifies the type of policy that is created, either a WAF policy or Shield Advanced policy.</p>
     #[serde(rename = "SecurityServiceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_service_type: Option<String>,
@@ -416,11 +468,11 @@ pub struct ResourceTag {
 /// <p>Details about the security service that is being used to protect the resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SecurityServicePolicyData {
-    /// <p>Details about the service. This contains <code>WAF</code> data in JSON format, as shown in the following example:</p> <p> <code>ManagedServiceData": "{\"type\": \"WAF\", \"ruleGroups\": [{\"id\": \"12345678-1bcd-9012-efga-0987654321ab\", \"overrideAction\" : {\"type\": \"COUNT\"}}], \"defaultAction\": {\"type\": \"BLOCK\"}}</code> </p>
+    /// <p>Details about the service. This contains <code>WAF</code> data in JSON format, as shown in the following example:</p> <p> <code>ManagedServiceData": "{\"type\": \"WAF\", \"ruleGroups\": [{\"id\": \"12345678-1bcd-9012-efga-0987654321ab\", \"overrideAction\" : {\"type\": \"COUNT\"}}], \"defaultAction\": {\"type\": \"BLOCK\"}}</code> </p> <p>If this is a Shield Advanced policy, this string will be empty.</p>
     #[serde(rename = "ManagedServiceData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub managed_service_data: Option<String>,
-    /// <p>The service that the policy is using to protect the resources. This value is <code>WAF</code>.</p>
+    /// <p>The service that the policy is using to protect the resources. This specifies the type of policy that is created, either a WAF policy or Shield Advanced policy.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -815,6 +867,53 @@ impl Error for GetPolicyError {
         }
     }
 }
+/// Errors returned by GetProtectionStatus
+#[derive(Debug, PartialEq)]
+pub enum GetProtectionStatusError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The parameters of the request were invalid.</p>
+    InvalidInput(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetProtectionStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetProtectionStatusError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(GetProtectionStatusError::InternalError(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetProtectionStatusError::InvalidInput(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetProtectionStatusError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetProtectionStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetProtectionStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            GetProtectionStatusError::InternalError(ref cause) => cause,
+            GetProtectionStatusError::InvalidInput(ref cause) => cause,
+            GetProtectionStatusError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListComplianceStatus
 #[derive(Debug, PartialEq)]
 pub enum ListComplianceStatusError {
@@ -902,7 +1001,7 @@ pub enum ListPoliciesError {
     InternalError(String),
     /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
     InvalidOperation(String),
-    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -1008,7 +1107,7 @@ pub enum PutPolicyError {
     InvalidOperation(String),
     /// <p>The value of the <code>Type</code> parameter is invalid.</p>
     InvalidType(String),
-    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -1097,6 +1196,12 @@ pub trait Fms {
         input: GetPolicyRequest,
     ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
 
+    /// <p>If you created a Shield Advanced policy, returns policy-level attack summary information in the event of a potential DDoS attack.</p>
+    fn get_protection_status(
+        &self,
+        input: GetProtectionStatusRequest,
+    ) -> RusotoFuture<GetProtectionStatusResponse, GetProtectionStatusError>;
+
     /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects in the response. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
     fn list_compliance_status(
         &self,
@@ -1121,7 +1226,7 @@ pub trait Fms {
         input: PutNotificationChannelRequest,
     ) -> RusotoFuture<(), PutNotificationChannelError>;
 
-    /// <p>Creates an AWS Firewall Manager policy.</p>
+    /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides two types of policies: A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources, or a WAF policy, which contains a rule group and defines which resources are to be protected by that rule group. A policy is specific to either WAF or Shield Advanced. If you want to enforce both WAF rules and Shield Advanced protection across accounts, you can create multiple policies. You can create one or more policies for WAF rules, and one or more policies for Shield Advanced.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information on subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
     fn put_policy(
         &self,
         input: PutPolicyRequest,
@@ -1358,6 +1463,34 @@ impl Fms for FmsClient {
         })
     }
 
+    /// <p>If you created a Shield Advanced policy, returns policy-level attack summary information in the event of a potential DDoS attack.</p>
+    fn get_protection_status(
+        &self,
+        input: GetProtectionStatusRequest,
+    ) -> RusotoFuture<GetProtectionStatusResponse, GetProtectionStatusError> {
+        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSFMS_20180101.GetProtectionStatus");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetProtectionStatusResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetProtectionStatusError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Returns an array of <code>PolicyComplianceStatus</code> objects in the response. Use <code>PolicyComplianceStatus</code> to get a summary of which member accounts are protected by the specified policy. </p>
     fn list_compliance_status(
         &self,
@@ -1469,7 +1602,7 @@ impl Fms for FmsClient {
         })
     }
 
-    /// <p>Creates an AWS Firewall Manager policy.</p>
+    /// <p>Creates an AWS Firewall Manager policy.</p> <p>Firewall Manager provides two types of policies: A Shield Advanced policy, which applies Shield Advanced protection to specified accounts and resources, or a WAF policy, which contains a rule group and defines which resources are to be protected by that rule group. A policy is specific to either WAF or Shield Advanced. If you want to enforce both WAF rules and Shield Advanced protection across accounts, you can create multiple policies. You can create one or more policies for WAF rules, and one or more policies for Shield Advanced.</p> <p>You must be subscribed to Shield Advanced to create a Shield Advanced policy. For more information on subscribing to Shield Advanced, see <a href="https://docs.aws.amazon.com/waf/latest/DDOSAPIReference/API_CreateSubscription.html">CreateSubscription</a>.</p>
     fn put_policy(
         &self,
         input: PutPolicyRequest,

@@ -51,21 +51,23 @@ pub struct BatchMeterUsageResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct MeterUsageRequest {
-    /// <p>Checks whether you have the permissions required for the action, but does not make the request. If you have the permissions, the request returns DryRunOperation; otherwise, it returns UnauthorizedException.</p>
+    /// <p>Checks whether you have the permissions required for the action, but does not make the request. If you have the permissions, the request returns DryRunOperation; otherwise, it returns UnauthorizedException. Defaults to <code>false</code> if not specified.</p>
     #[serde(rename = "DryRun")]
-    pub dry_run: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dry_run: Option<bool>,
     /// <p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>
     #[serde(rename = "ProductCode")]
     pub product_code: String,
-    /// <p>Timestamp of the hour, recorded in UTC. The seconds and milliseconds portions of the timestamp will be ignored.</p>
+    /// <p>Timestamp, in UTC, for which the usage is being reported. Your application can meter usage for up to one hour in the past. Make sure the timestamp value is not before the start of the software usage.</p>
     #[serde(rename = "Timestamp")]
     pub timestamp: f64,
     /// <p>It will be one of the fcp dimension name provided during the publishing of the product.</p>
     #[serde(rename = "UsageDimension")]
     pub usage_dimension: String,
-    /// <p>Consumption value for the hour.</p>
+    /// <p>Consumption value for the hour. Defaults to <code>0</code> if not specified.</p>
     #[serde(rename = "UsageQuantity")]
-    pub usage_quantity: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub usage_quantity: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -135,10 +137,11 @@ pub struct UsageRecord {
     /// <p>During the process of registering a product on AWS Marketplace, up to eight dimensions are specified. These represent different units of value in your application.</p>
     #[serde(rename = "Dimension")]
     pub dimension: String,
-    /// <p>The quantity of usage consumed by the customer for the given dimension and time.</p>
+    /// <p>The quantity of usage consumed by the customer for the given dimension and time. Defaults to <code>0</code> if not specified.</p>
     #[serde(rename = "Quantity")]
-    pub quantity: i64,
-    /// <p>Timestamp of the hour, recorded in UTC. The seconds and milliseconds portions of the timestamp will be ignored.</p> <p>Your application can meter usage for up to one hour in the past.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quantity: Option<i64>,
+    /// <p>Timestamp, in UTC, for which the usage is being reported.</p> <p>Your application can meter usage for up to one hour in the past. Make sure the timestamp value is not before the start of the software usage.</p>
     #[serde(rename = "Timestamp")]
     pub timestamp: f64,
 }

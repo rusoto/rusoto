@@ -43,8 +43,8 @@ pub struct ClaimDevicesByClaimCodeResponse {
     #[serde(rename = "ClaimCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub claim_code: Option<String>,
-    /// <p>The total number of devices associated with the claim code that has been processed
-    /// in the claim request.</p>
+    /// <p>The total number of devices associated with the claim code that has been processed in
+    /// the claim request.</p>
     #[serde(rename = "Total")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total: Option<i64>,
@@ -92,8 +92,12 @@ pub struct DeviceClaimResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeviceDescription {
-    /// <p>An array of zero or more elements of DeviceAttribute objects
-    /// providing user specified device attributes.</p>
+    /// <p>The ARN of the device.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>An array of zero or more elements of DeviceAttribute objects providing
+    /// user specified device attributes.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -105,11 +109,15 @@ pub struct DeviceDescription {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>A value between 0 and 1 inclusive, representing the fraction of life remaining for
-    /// the device.</p>
+    /// <p>A value between 0 and 1 inclusive, representing the fraction of life remaining for the
+    /// device.</p>
     #[serde(rename = "RemainingLife")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remaining_life: Option<f64>,
+    /// <p>The tags currently associated with the AWS IoT 1-Click device.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of the device, such as "button".</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -159,6 +167,14 @@ pub struct FinalizeDeviceClaimRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
     pub device_id: String,
+    /// <p>A collection of key/value pairs defining the resource tags. For example, {
+    /// "tags": {"key1": "value1", "key2": "value2"} }. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS
+    /// Tagging Strategies</a>.</p><p>
+    ///
+    /// </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -236,8 +252,8 @@ pub struct ListDeviceEventsRequest {
     /// </p>
     #[serde(rename = "FromTimeStamp")]
     pub from_time_stamp: f64,
-    /// <p>The maximum number of results to return per request. If not set, a default value
-    /// of 100 is used.</p>
+    /// <p>The maximum number of results to return per request. If not set, a default value of
+    /// 100 is used.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -272,8 +288,8 @@ pub struct ListDevicesRequest {
     #[serde(rename = "DeviceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_type: Option<String>,
-    /// <p>The maximum number of results to return per request. If not set, a default value
-    /// of 100 is used.</p>
+    /// <p>The maximum number of results to return per request. If not set, a default value of
+    /// 100 is used.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -297,6 +313,40 @@ pub struct ListDevicesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The ARN of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A collection of key/value pairs defining the resource tags. For example, {
+    /// "tags": {"key1": "value1", "key2": "value2"} }. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS
+    /// Tagging Strategies</a>.</p><p>
+    ///
+    /// </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The ARN of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>A collection of key/value pairs defining the resource tags. For example, {
+    /// "tags": {"key1": "value1", "key2": "value2"} }. For more information, see <a href="https://aws.amazon.com/answers/account-management/aws-tagging-strategies/">AWS
+    /// Tagging Strategies</a>.</p><p>
+    ///
+    /// </p>
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnclaimDeviceRequest {
     /// <p>The unique identifier of the device.</p>
     #[serde(rename = "DeviceId")]
@@ -310,6 +360,16 @@ pub struct UnclaimDeviceResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The ARN of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>A collections of tag keys. For example, {"key1","key2"}</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -742,6 +802,90 @@ impl Error for ListDevicesError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    InternalFailure(String),
+
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalFailure(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InternalFailure(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    InternalFailure(String),
+
+    InvalidRequest(String),
+
+    ResourceNotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(TagResourceError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InternalFailure(ref cause) => cause,
+            TagResourceError::InvalidRequest(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UnclaimDevice
 #[derive(Debug, PartialEq)]
 pub enum UnclaimDeviceError {
@@ -783,6 +927,50 @@ impl Error for UnclaimDeviceError {
             UnclaimDeviceError::InternalFailure(ref cause) => cause,
             UnclaimDeviceError::InvalidRequest(ref cause) => cause,
             UnclaimDeviceError::ResourceNotFound(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    InternalFailure(String),
+
+    InvalidRequest(String),
+
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(UntagResourceError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InternalFailure(ref cause) => cause,
+            UntagResourceError::InvalidRequest(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
         }
     }
 }
@@ -832,24 +1020,24 @@ impl Error for UpdateDeviceStateError {
 }
 /// Trait representing the capabilities of the AWS IoT 1-Click Devices Service API. AWS IoT 1-Click Devices Service clients implement this trait.
 pub trait Iot1ClickDevices {
-    /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if
-    /// you received a claim code with the device(s).</p>
+    /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if you
+    /// received a claim code with the device(s).</p>
     fn claim_devices_by_claim_code(
         &self,
         input: ClaimDevicesByClaimCodeRequest,
     ) -> RusotoFuture<ClaimDevicesByClaimCodeResponse, ClaimDevicesByClaimCodeError>;
 
-    /// <p>Given a device ID, returns a DescribeDeviceResponse object describing
-    /// the details of the device.</p>
+    /// <p>Given a device ID, returns a DescribeDeviceResponse object describing the
+    /// details of the device.</p>
     fn describe_device(
         &self,
         input: DescribeDeviceRequest,
     ) -> RusotoFuture<DescribeDeviceResponse, DescribeDeviceError>;
 
     /// <p>Given a device ID, finalizes the claim request for the associated device.</p><note>
-    /// <p>Claiming a device consists of initiating a claim, then publishing a device
-    /// event, and finalizing the claim. For a device of type button, a
-    /// device event can be published by simply clicking the device.</p>
+    /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
+    /// and finalizing the claim. For a device of type button, a device event can
+    /// be published by simply clicking the device.</p>
     ///
     /// <p></note></p>
     fn finalize_device_claim(
@@ -857,17 +1045,16 @@ pub trait Iot1ClickDevices {
         input: FinalizeDeviceClaimRequest,
     ) -> RusotoFuture<FinalizeDeviceClaimResponse, FinalizeDeviceClaimError>;
 
-    /// <p>Given a device ID, returns the invokable methods associated with the
-    /// device.</p>
+    /// <p>Given a device ID, returns the invokable methods associated with the device.</p>
     fn get_device_methods(
         &self,
         input: GetDeviceMethodsRequest,
     ) -> RusotoFuture<GetDeviceMethodsResponse, GetDeviceMethodsError>;
 
     /// <p>Given a device ID, initiates a claim request for the associated device.</p><note>
-    /// <p>Claiming a device consists of initiating a claim, then publishing a device
-    /// event, and finalizing the claim. For a device of type button, a
-    /// device event can be published by simply clicking the device.</p>
+    /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
+    /// and finalizing the claim. For a device of type button, a device event can
+    /// be published by simply clicking the device.</p>
     ///
     /// <p></note></p>
     fn initiate_device_claim(
@@ -882,8 +1069,8 @@ pub trait Iot1ClickDevices {
         input: InvokeDeviceMethodRequest,
     ) -> RusotoFuture<InvokeDeviceMethodResponse, InvokeDeviceMethodError>;
 
-    /// <p>Using a device ID, returns a DeviceEventsResponse object containing
-    /// an array of events for the device.</p>
+    /// <p>Using a device ID, returns a DeviceEventsResponse object containing an
+    /// array of events for the device.</p>
     fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
@@ -895,11 +1082,25 @@ pub trait Iot1ClickDevices {
         input: ListDevicesRequest,
     ) -> RusotoFuture<ListDevicesResponse, ListDevicesError>;
 
+    /// <p>Lists the tags associated with the specified resource ARN.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
+    /// <p>Adds or updates the tags associated with the resource ARN. See <a href="https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per
+    /// resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
+
     /// <p>Disassociates a device from your AWS account using its device ID.</p>
     fn unclaim_device(
         &self,
         input: UnclaimDeviceRequest,
     ) -> RusotoFuture<UnclaimDeviceResponse, UnclaimDeviceError>;
+
+    /// <p>Using tag keys, deletes the tags (key/value pairs) associated with the specified
+    /// resource ARN.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Using a Boolean value (true or false), this operation
     /// enables or disables the device given a device ID.</p>
@@ -945,8 +1146,8 @@ impl Iot1ClickDevicesClient {
 }
 
 impl Iot1ClickDevices for Iot1ClickDevicesClient {
-    /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if
-    /// you received a claim code with the device(s).</p>
+    /// <p>Adds device(s) to your account (i.e., claim one or more devices) if and only if you
+    /// received a claim code with the device(s).</p>
     fn claim_devices_by_claim_code(
         &self,
         input: ClaimDevicesByClaimCodeRequest,
@@ -974,8 +1175,8 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         })
     }
 
-    /// <p>Given a device ID, returns a DescribeDeviceResponse object describing
-    /// the details of the device.</p>
+    /// <p>Given a device ID, returns a DescribeDeviceResponse object describing the
+    /// details of the device.</p>
     fn describe_device(
         &self,
         input: DescribeDeviceRequest,
@@ -1007,9 +1208,9 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Given a device ID, finalizes the claim request for the associated device.</p><note>
-    /// <p>Claiming a device consists of initiating a claim, then publishing a device
-    /// event, and finalizing the claim. For a device of type button, a
-    /// device event can be published by simply clicking the device.</p>
+    /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
+    /// and finalizing the claim. For a device of type button, a device event can
+    /// be published by simply clicking the device.</p>
     ///
     /// <p></note></p>
     fn finalize_device_claim(
@@ -1025,6 +1226,8 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("devices.iot1click".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
@@ -1044,8 +1247,7 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         })
     }
 
-    /// <p>Given a device ID, returns the invokable methods associated with the
-    /// device.</p>
+    /// <p>Given a device ID, returns the invokable methods associated with the device.</p>
     fn get_device_methods(
         &self,
         input: GetDeviceMethodsRequest,
@@ -1077,9 +1279,9 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
     }
 
     /// <p>Given a device ID, initiates a claim request for the associated device.</p><note>
-    /// <p>Claiming a device consists of initiating a claim, then publishing a device
-    /// event, and finalizing the claim. For a device of type button, a
-    /// device event can be published by simply clicking the device.</p>
+    /// <p>Claiming a device consists of initiating a claim, then publishing a device event,
+    /// and finalizing the claim. For a device of type button, a device event can
+    /// be published by simply clicking the device.</p>
     ///
     /// <p></note></p>
     fn initiate_device_claim(
@@ -1148,8 +1350,8 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         })
     }
 
-    /// <p>Using a device ID, returns a DeviceEventsResponse object containing
-    /// an array of events for the device.</p>
+    /// <p>Using a device ID, returns a DeviceEventsResponse object containing an
+    /// array of events for the device.</p>
     fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
@@ -1234,6 +1436,66 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
         })
     }
 
+    /// <p>Lists the tags associated with the specified resource ARN.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "iot1click", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("devices.iot1click".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTagsForResourceResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Adds or updates the tags associated with the resource ARN. See <a href="https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per
+    /// resource.</p>
+    fn tag_resource(&self, input: TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "iot1click", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("devices.iot1click".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Disassociates a device from your AWS account using its device ID.</p>
     fn unclaim_device(
         &self,
@@ -1260,6 +1522,40 @@ impl Iot1ClickDevices for Iot1ClickDevicesClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(UnclaimDeviceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Using tag keys, deletes the tags (key/value pairs) associated with the specified
+    /// resource ARN.</p>
+    fn untag_resource(&self, input: UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "iot1click", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("devices.iot1click".to_string());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
                 )
             }
         })

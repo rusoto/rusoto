@@ -27,7 +27,7 @@ use serde_json;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Action {
-    /// <p>Arguments to be passed to the job run.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The job arguments used when this trigger fires. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -77,7 +77,7 @@ pub struct BatchCreatePartitionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchDeleteConnectionRequest {
-    /// <p>The ID of the Data Catalog in which the connections reside. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which the connections reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -175,6 +175,66 @@ pub struct BatchDeleteTableVersionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetCrawlersRequest {
+    /// <p>A list of crawler names, which might be the names returned from the <code>ListCrawlers</code> operation.</p>
+    #[serde(rename = "CrawlerNames")]
+    pub crawler_names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetCrawlersResponse {
+    /// <p>A list of crawler definitions.</p>
+    #[serde(rename = "Crawlers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawlers: Option<Vec<Crawler>>,
+    /// <p>A list of names of crawlers that were not found.</p>
+    #[serde(rename = "CrawlersNotFound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawlers_not_found: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetDevEndpointsRequest {
+    /// <p>The list of DevEndpoint names, which may be the names returned from the <code>ListDevEndpoint</code> operation.</p>
+    #[serde(rename = "DevEndpointNames")]
+    pub dev_endpoint_names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetDevEndpointsResponse {
+    /// <p>A list of DevEndpoint definitions.</p>
+    #[serde(rename = "DevEndpoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dev_endpoints: Option<Vec<DevEndpoint>>,
+    /// <p>A list of DevEndpoints not found.</p>
+    #[serde(rename = "DevEndpointsNotFound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dev_endpoints_not_found: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetJobsRequest {
+    /// <p>A list of job names, which may be the names returned from the <code>ListJobs</code> operation.</p>
+    #[serde(rename = "JobNames")]
+    pub job_names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetJobsResponse {
+    /// <p>A list of job definitions.</p>
+    #[serde(rename = "Jobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jobs: Option<Vec<Job>>,
+    /// <p>A list of names of jobs not found.</p>
+    #[serde(rename = "JobsNotFound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jobs_not_found: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetPartitionRequest {
     /// <p>The ID of the Data Catalog where the partitions in question reside. If none is supplied, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -202,6 +262,26 @@ pub struct BatchGetPartitionResponse {
     #[serde(rename = "UnprocessedKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_keys: Option<Vec<PartitionValueList>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetTriggersRequest {
+    /// <p>A list of trigger names, which may be the names returned from the <code>ListTriggers</code> operation.</p>
+    #[serde(rename = "TriggerNames")]
+    pub trigger_names: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetTriggersResponse {
+    /// <p>A list of trigger definitions.</p>
+    #[serde(rename = "Triggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub triggers: Option<Vec<Trigger>>,
+    /// <p>A list of names of triggers not found.</p>
+    #[serde(rename = "TriggersNotFound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub triggers_not_found: Option<Vec<String>>,
 }
 
 /// <p>Records an error that occurred when attempting to stop a specified job run.</p>
@@ -259,7 +339,7 @@ pub struct BatchStopJobRunSuccessfulSubmission {
     pub job_run_id: Option<String>,
 }
 
-/// <p>Specifies a table definition in the Data Catalog.</p>
+/// <p>Specifies a table definition in the AWS Glue Data Catalog.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CatalogEntry {
     /// <p>The database in which the table metadata resides.</p>
@@ -288,19 +368,34 @@ pub struct CatalogImportStatus {
     pub imported_by: Option<String>,
 }
 
-/// <p>Classifiers are triggered during a crawl task. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>You can use the standard classifiers that AWS Glue supplies, or you can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier can be a <code>grok</code> classifier, an <code>XML</code> classifier, or a <code>JSON</code> classifier, as specified in one of the fields in the <code>Classifier</code> object.</p>
+/// <p>Specifies an AWS Glue Data Catalog target.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CatalogTarget {
+    /// <p>The name of the database to be synchronized.</p>
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
+    /// <p>A list of the tables to be synchronized.</p>
+    #[serde(rename = "Tables")]
+    pub tables: Vec<String>,
+}
+
+/// <p>Classifiers are triggered during a crawl task. A classifier checks whether a given file is in a format it can handle. If it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>You can use the standard classifiers that AWS Glue provides, or you can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier can be a <code>grok</code> classifier, an <code>XML</code> classifier, a <code>JSON</code> classifier, or a custom <code>CSV</code> classifier, as specified in one of the fields in the <code>Classifier</code> object.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Classifier {
-    /// <p>A <code>GrokClassifier</code> object.</p>
+    /// <p>A classifier for comma-separated values (CSV).</p>
+    #[serde(rename = "CsvClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub csv_classifier: Option<CsvClassifier>,
+    /// <p>A classifier that uses <code>grok</code>.</p>
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<GrokClassifier>,
-    /// <p>A <code>JsonClassifier</code> object.</p>
+    /// <p>A classifier for JSON content.</p>
     #[serde(rename = "JsonClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub json_classifier: Option<JsonClassifier>,
-    /// <p>An <code>XMLClassifier</code> object.</p>
+    /// <p>A classifier for XML content.</p>
     #[serde(rename = "XMLClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub xml_classifier: Option<XMLClassifier>,
@@ -347,7 +442,7 @@ pub struct CodeGenNode {
     #[serde(rename = "LineNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub line_number: Option<i64>,
-    /// <p>The type of node this is.</p>
+    /// <p>The type of node that this is.</p>
     #[serde(rename = "NodeType")]
     pub node_type: String,
 }
@@ -404,7 +499,7 @@ pub struct Condition {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Connection {
-    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the key you designate to encrypt the password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The S3 path of the a jar file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use).</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether SSL with hostname matching will be enforced for the JDBC connection on the client. The default is false.</p> </li> </ul></p>
+    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the encrypted password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The Amazon S3 path of the JAR file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use).</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether Secure Sockets Layer (SSL) with hostname matching will be enforced for the JDBC connection on the client. The default is false.</p> </li> </ul></p>
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
@@ -412,19 +507,19 @@ pub struct Connection {
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>The time this connection definition was created.</p>
+    /// <p>The time that this connection definition was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>Description of the connection.</p>
+    /// <p>The description of the connection.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The user, group or role that last updated this connection definition.</p>
+    /// <p>The user, group, or role that last updated this connection definition.</p>
     #[serde(rename = "LastUpdatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_by: Option<String>,
-    /// <p>The last time this connection definition was updated.</p>
+    /// <p>The last time that this connection definition was updated.</p>
     #[serde(rename = "LastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<f64>,
@@ -436,13 +531,13 @@ pub struct Connection {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A map of physical connection requirements, such as VPC and SecurityGroup, needed for making this connection successfully.</p>
+    /// <p>A map of physical connection requirements, such as virtual private cloud (VPC) and <code>SecurityGroup</code>, that are needed to make this connection successfully.</p>
     #[serde(rename = "PhysicalConnectionRequirements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub physical_connection_requirements: Option<PhysicalConnectionRequirements>,
 }
 
-/// <p>A structure used to specify a connection to create or update.</p>
+/// <p>A structure that is used to specify a connection to create or update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ConnectionInput {
     /// <p>These key-value pairs define parameters for the connection.</p>
@@ -451,7 +546,7 @@ pub struct ConnectionInput {
     /// <p>The type of the connection. Currently, only JDBC is supported; SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     pub connection_type: String,
-    /// <p>Description of the connection.</p>
+    /// <p>The description of the connection.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -462,16 +557,16 @@ pub struct ConnectionInput {
     /// <p>The name of the connection.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>A map of physical connection requirements, such as VPC and SecurityGroup, needed for making this connection successfully.</p>
+    /// <p>A map of physical connection requirements, such as virtual private cloud (VPC) and <code>SecurityGroup</code>, that are needed to successfully make this connection.</p>
     #[serde(rename = "PhysicalConnectionRequirements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub physical_connection_requirements: Option<PhysicalConnectionRequirements>,
 }
 
-/// <p>The data structure used by the Data Catalog to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p> <p>When a <code>CreationConnection</code> request arrives containing a password, the Data Catalog first encrypts the password using your KMS key, and then encrypts the whole connection object again if catalog encryption is also enabled.</p> <p>This encryption requires that you set KMS key permissions to enable or restrict access on the password key according to your security requirements. For example, you may want only admin users to have decrypt permission on the password key.</p>
+/// <p>The data structure used by the Data Catalog to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p> <p>When a <code>CreationConnection</code> request arrives containing a password, the Data Catalog first encrypts the password using your AWS KMS key. It then encrypts the whole connection object again if catalog encryption is also enabled.</p> <p>This encryption requires that you set AWS KMS key permissions to enable or restrict access on the password key according to your security requirements. For example, you might want only admin users to have decrypt permission on the password key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConnectionPasswordEncryption {
-    /// <p>A KMS key used to protect access to the JDBC source. </p> <p>All users in your account should be granted the <code>kms:encrypt</code> permission to encrypt passwords before storing them in the Data Catalog (through the AWS Glue <code>CreateConnection</code> operation).</p> <p>The decrypt permission should be granted only to KMS key admins and IAM roles designated for AWS Glue crawlers.</p>
+    /// <p>An AWS KMS key that is used to encrypt the connection password. </p> <p>If connection password protection is enabled, the caller of <code>CreateConnection</code> and <code>UpdateConnection</code> needs at least <code>kms:Encrypt</code> permission on the specified AWS KMS key, to encrypt passwords before storing them in the Data Catalog. </p> <p>You can set the decrypt permission to enable or restrict access on the password key according to your security requirements.</p>
     #[serde(rename = "AwsKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_kms_key_id: Option<String>,
@@ -493,7 +588,7 @@ pub struct ConnectionsList {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Crawler {
-    /// <p>A list of custom classifiers associated with the crawler.</p>
+    /// <p>A list of UTF-8 strings that specify the custom classifiers that are associated with the crawler.</p>
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
@@ -505,15 +600,15 @@ pub struct Crawler {
     #[serde(rename = "CrawlElapsedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crawl_elapsed_time: Option<i64>,
-    /// <p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used by this crawler.</p>
     #[serde(rename = "CrawlerSecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crawler_security_configuration: Option<String>,
-    /// <p>The time when the crawler was created.</p>
+    /// <p>The time that the crawler was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The database where metadata is written by this crawler.</p>
+    /// <p>The name of the database in which the crawler's output is stored.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
@@ -525,15 +620,15 @@ pub struct Crawler {
     #[serde(rename = "LastCrawl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_crawl: Option<LastCrawlInfo>,
-    /// <p>The time the crawler was last updated.</p>
+    /// <p>The time that the crawler was last updated.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
-    /// <p>The crawler name.</p>
+    /// <p>The name of the crawler.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The IAM role (or ARN of an IAM role) used to access customer resources, such as data in Amazon S3.</p>
+    /// <p>The Amazon Resource Name (ARN) of an IAM role that's used to access customer resources, such as Amazon Simple Storage Service (Amazon S3) data.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -541,7 +636,7 @@ pub struct Crawler {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<Schedule>,
-    /// <p>Sets the behavior when the crawler finds a changed or deleted object.</p>
+    /// <p>The policy that specifies update and delete behaviors for the crawler.</p>
     #[serde(rename = "SchemaChangePolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
@@ -604,7 +699,11 @@ pub struct CrawlerMetrics {
 /// <p>Specifies data stores to crawl.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CrawlerTargets {
-    /// <p>Specifies DynamoDB targets.</p>
+    /// <p>Specifies AWS Glue Data Catalog targets.</p>
+    #[serde(rename = "CatalogTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_targets: Option<Vec<CatalogTarget>>,
+    /// <p>Specifies Amazon DynamoDB targets.</p>
     #[serde(rename = "DynamoDBTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_targets: Option<Vec<DynamoDBTarget>>,
@@ -612,7 +711,7 @@ pub struct CrawlerTargets {
     #[serde(rename = "JdbcTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jdbc_targets: Option<Vec<JdbcTarget>>,
-    /// <p>Specifies Amazon S3 targets.</p>
+    /// <p>Specifies Amazon Simple Storage Service (Amazon S3) targets.</p>
     #[serde(rename = "S3Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_targets: Option<Vec<S3Target>>,
@@ -620,6 +719,10 @@ pub struct CrawlerTargets {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateClassifierRequest {
+    /// <p>A <code>CsvClassifier</code> object specifying the classifier to create.</p>
+    #[serde(rename = "CsvClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub csv_classifier: Option<CreateCsvClassifierRequest>,
     /// <p>A <code>GrokClassifier</code> object specifying the classifier to create.</p>
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -640,7 +743,7 @@ pub struct CreateClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateConnectionRequest {
-    /// <p>The ID of the Data Catalog in which to create the connection. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which to create the connection. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -659,17 +762,18 @@ pub struct CreateCrawlerRequest {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
+    /// <p>The crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
-    /// <p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used by this crawler.</p>
     #[serde(rename = "CrawlerSecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crawler_security_configuration: Option<String>,
     /// <p>The AWS Glue database where results are written, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
     #[serde(rename = "DatabaseName")]
-    pub database_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_name: Option<String>,
     /// <p>A description of the new crawler.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -677,14 +781,14 @@ pub struct CreateCrawlerRequest {
     /// <p>Name of the new crawler.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The IAM role (or ARN of an IAM role) used by the new crawler to access customer resources.</p>
+    /// <p>The IAM role or Amazon Resource Name (ARN) of an IAM role used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>Policy for the crawler's update and deletion behavior.</p>
+    /// <p>The policy for the crawler's update and deletion behavior.</p>
     #[serde(rename = "SchemaChangePolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
@@ -692,6 +796,10 @@ pub struct CreateCrawlerRequest {
     #[serde(rename = "TablePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_prefix: Option<String>,
+    /// <p>The tags to use with this crawler request. You can use tags to limit access to the crawler. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A list of collection of targets to crawl.</p>
     #[serde(rename = "Targets")]
     pub targets: CrawlerTargets,
@@ -700,6 +808,38 @@ pub struct CreateCrawlerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateCrawlerResponse {}
+
+/// <p>Specifies a custom CSV classifier for <code>CreateClassifier</code> to create.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateCsvClassifierRequest {
+    /// <p>Enables the processing of files that contain only one column.</p>
+    #[serde(rename = "AllowSingleColumn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_single_column: Option<bool>,
+    /// <p>Indicates whether the CSV file contains a header.</p>
+    #[serde(rename = "ContainsHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contains_header: Option<String>,
+    /// <p>A custom symbol to denote what separates each column entry in the row.</p>
+    #[serde(rename = "Delimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delimiter: Option<String>,
+    /// <p>Specifies not to trim values before identifying the type of column values. The default value is true.</p>
+    #[serde(rename = "DisableValueTrimming")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_value_trimming: Option<bool>,
+    /// <p>A list of strings representing column names.</p>
+    #[serde(rename = "Header")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub header: Option<Vec<String>>,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A custom symbol to denote what combines content into a single column value. Must be different from the column delimiter.</p>
+    #[serde(rename = "QuoteSymbol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_symbol: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDatabaseRequest {
@@ -718,6 +858,10 @@ pub struct CreateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDevEndpointRequest {
+    /// <p>A map of arguments used to configure the DevEndpoint.</p>
+    #[serde(rename = "Arguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>The name to be assigned to the new DevEndpoint.</p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
@@ -756,11 +900,19 @@ pub struct CreateDevEndpointRequest {
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
+    /// <p>The tags to use with this DevEndpoint. You may use tags to limit access to the DevEndpoint. For more information about tags in AWS Glue, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateDevEndpointResponse {
+    /// <p>The map of arguments used to configure this DevEndpoint.</p>
+    #[serde(rename = "Arguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>The AWS availability zone where this DevEndpoint is located.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -866,7 +1018,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -881,6 +1033,10 @@ pub struct CreateJobRequest {
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when a job runs.</p> <p>The maximum number of workers you can define are 299 for <code>G.1X</code>, and 149 for <code>G.2X</code>. </p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
     /// <p>The name or ARN of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     pub role: String,
@@ -888,10 +1044,18 @@ pub struct CreateJobRequest {
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_configuration: Option<String>,
+    /// <p>The tags to use with this job. You may use tags to limit access to the job. For more information about tags in AWS Glue, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The job timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -906,7 +1070,7 @@ pub struct CreateJobResponse {
 /// <p>Specifies a JSON classifier for <code>CreateClassifier</code> to create.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateJsonClassifierRequest {
-    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
     #[serde(rename = "JsonPath")]
     pub json_path: String,
     /// <p>The name of the classifier.</p>
@@ -1029,6 +1193,10 @@ pub struct CreateTriggerRequest {
     #[serde(rename = "StartOnCreation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_on_creation: Option<bool>,
+    /// <p>The tags to use with this trigger. You may use tags to limit access to the trigger. For more information about tags in AWS Glue, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a> in the developer guide. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of the new trigger.</p>
     #[serde(rename = "Type")]
     pub type_: String,
@@ -1070,20 +1238,65 @@ pub struct CreateXMLClassifierRequest {
     /// <p>The name of the classifier.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. This can't identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
     #[serde(rename = "RowTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_tag: Option<String>,
 }
 
+/// <p>A classifier for custom <code>CSV</code> content.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CsvClassifier {
+    /// <p>Enables the processing of files that contain only one column.</p>
+    #[serde(rename = "AllowSingleColumn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_single_column: Option<bool>,
+    /// <p>Indicates whether the CSV file contains a header.</p>
+    #[serde(rename = "ContainsHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contains_header: Option<String>,
+    /// <p>The time that this classifier was registered.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A custom symbol to denote what separates each column entry in the row.</p>
+    #[serde(rename = "Delimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delimiter: Option<String>,
+    /// <p>Specifies not to trim values before identifying the type of column values. The default value is <code>true</code>.</p>
+    #[serde(rename = "DisableValueTrimming")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_value_trimming: Option<bool>,
+    /// <p>A list of strings representing column names.</p>
+    #[serde(rename = "Header")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub header: Option<Vec<String>>,
+    /// <p>The time that this classifier was last updated.</p>
+    #[serde(rename = "LastUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated: Option<f64>,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A custom symbol to denote what combines content into a single column value. It must be different from the column delimiter.</p>
+    #[serde(rename = "QuoteSymbol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_symbol: Option<String>,
+    /// <p>The version of this classifier.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
 /// <p>Contains configuration information for maintaining Data Catalog security.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DataCatalogEncryptionSettings {
-    /// <p>When password protection is enabled, the Data Catalog uses a customer-provided key to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p>
+    /// <p>When connection password protection is enabled, the Data Catalog uses a customer-provided key to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p>
     #[serde(rename = "ConnectionPasswordEncryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_password_encryption: Option<ConnectionPasswordEncryption>,
-    /// <p>Specifies encryption-at-rest configuration for the Data Catalog.</p>
+    /// <p>Specifies the encryption-at-rest configuration for the Data Catalog.</p>
     #[serde(rename = "EncryptionAtRest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_at_rest: Option<EncryptionAtRest>,
@@ -1147,7 +1360,7 @@ pub struct DeleteClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteConnectionRequest {
-    /// <p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -1162,7 +1375,7 @@ pub struct DeleteConnectionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCrawlerRequest {
-    /// <p>Name of the crawler to remove.</p>
+    /// <p>The name of the crawler to remove.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -1334,6 +1547,10 @@ pub struct DeleteUserDefinedFunctionResponse {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DevEndpoint {
+    /// <p>A map of arguments used to configure the DevEndpoint.</p> <p>Note that currently, we only support "--enable-glue-datacatalog": "" as a valid argument.</p>
+    #[serde(rename = "Arguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>The AWS availability zone where this DevEndpoint is located.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1433,7 +1650,7 @@ pub struct DevEndpointCustomLibraries {
     pub extra_python_libs_s3_path: Option<String>,
 }
 
-/// <p>Specifies a DynamoDB table to crawl.</p>
+/// <p>Specifies an Amazon DynamoDB table to crawl.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamoDBTarget {
     /// <p>The name of the DynamoDB table to crawl.</p>
@@ -1442,7 +1659,7 @@ pub struct DynamoDBTarget {
     pub path: Option<String>,
 }
 
-/// <p>Specifies encryption-at-rest configuration for the Data Catalog.</p>
+/// <p>Specifies the encryption-at-rest configuration for the Data Catalog.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EncryptionAtRest {
     /// <p>The encryption-at-rest mode for encrypting Data Catalog data.</p>
@@ -1529,7 +1746,7 @@ pub struct GetClassifierResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetClassifiersRequest {
-    /// <p>Size of the list to return (optional).</p>
+    /// <p>The size of the list to return (optional).</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1554,11 +1771,11 @@ pub struct GetClassifiersResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetConnectionRequest {
-    /// <p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
-    /// <p>Allow you to retrieve the connection metadata without displaying the password. For instance, the AWS Glue console uses this flag to retrieve connections, since the console does not display passwords. Set this parameter where the caller may not have permission to use the KMS key to decrypt the password, but does have permission to access the rest of the connection metadata (that is, the other connection properties).</p>
+    /// <p>Allows you to retrieve the connection metadata without returning the password. For instance, the AWS Glue console uses this flag to retrieve the connection, and does not display the password. Set this parameter when the caller might not have permission to use the AWS KMS key to decrypt the password, but does have permission to access the rest of the connection properties.</p>
     #[serde(rename = "HidePassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_password: Option<bool>,
@@ -1576,7 +1793,7 @@ pub struct GetConnectionResponse {
     pub connection: Option<Connection>,
 }
 
-/// <p>Filters the connection definitions returned by the <code>GetConnections</code> API.</p>
+/// <p>Filters the connection definitions that are returned by the <code>GetConnections</code> API operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetConnectionsFilter {
     /// <p>The type of connections to return. Currently, only JDBC is supported; SFTP is not supported.</p>
@@ -1591,7 +1808,7 @@ pub struct GetConnectionsFilter {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetConnectionsRequest {
-    /// <p>The ID of the Data Catalog in which the connections reside. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which the connections reside. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -1599,7 +1816,7 @@ pub struct GetConnectionsRequest {
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<GetConnectionsFilter>,
-    /// <p>Allow you to retrieve the connection metadata without displaying the password. For instance, the AWS Glue console uses this flag to retrieve connections, since the console does not display passwords. Set this parameter where the caller may not have permission to use the KMS key to decrypt the password, but does have permission to access the rest of the connection metadata (that is, the other connection properties).</p>
+    /// <p>Allows you to retrieve the connection metadata without returning the password. For instance, the AWS Glue console uses this flag to retrieve the connection, and does not display the password. Set this parameter when the caller might not have permission to use the AWS KMS key to decrypt the password, but does have permission to access the rest of the connection properties.</p>
     #[serde(rename = "HidePassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hide_password: Option<bool>,
@@ -1657,7 +1874,7 @@ pub struct GetCrawlerMetricsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetCrawlerRequest {
-    /// <p>Name of the crawler to retrieve metadata for.</p>
+    /// <p>The name of the crawler to retrieve metadata for.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -1698,7 +1915,7 @@ pub struct GetCrawlersResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDataCatalogEncryptionSettingsRequest {
-    /// <p>The ID of the Data Catalog for which to retrieve the security configuration. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog for which to retrieve the security configuration. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2013,7 +2230,7 @@ pub struct GetPlanRequest {
     #[serde(rename = "Language")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
-    /// <p>Parameters for the mapping.</p>
+    /// <p>The parameters for the mapping.</p>
     #[serde(rename = "Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<Location>,
@@ -2036,7 +2253,7 @@ pub struct GetPlanResponse {
     #[serde(rename = "PythonScript")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub python_script: Option<String>,
-    /// <p>Scala code to perform the mapping.</p>
+    /// <p>The Scala code to perform the mapping.</p>
     #[serde(rename = "ScalaCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scala_code: Option<String>,
@@ -2229,6 +2446,22 @@ pub struct GetTablesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetTagsRequest {
+    /// <p>The Amazon ARN of the resource for which to retrieve tags.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetTagsResponse {
+    /// <p>The requested tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTriggerRequest {
     /// <p>The name of the trigger to retrieve.</p>
     #[serde(rename = "Name")]
@@ -2338,18 +2571,18 @@ pub struct GrokClassifier {
     /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, and so on.</p>
     #[serde(rename = "Classification")]
     pub classification: String,
-    /// <p>The time this classifier was registered.</p>
+    /// <p>The time that this classifier was registered.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>Optional custom grok patterns defined by this classifier. For more information, see custom patterns in <a href="http://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifers</a>.</p>
+    /// <p>Optional custom grok patterns defined by this classifier. For more information, see custom patterns in <a href="http://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifiers</a>.</p>
     #[serde(rename = "CustomPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_patterns: Option<String>,
-    /// <p>The grok pattern applied to a data store by this classifier. For more information, see built-in patterns in <a href="http://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifers</a>.</p>
+    /// <p>The grok pattern applied to a data store by this classifier. For more information, see built-in patterns in <a href="http://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifiers</a>.</p>
     #[serde(rename = "GrokPattern")]
     pub grok_pattern: String,
-    /// <p>The time this classifier was last updated.</p>
+    /// <p>The time that this classifier was last updated.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
@@ -2427,7 +2660,7 @@ pub struct Job {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -2443,6 +2676,10 @@ pub struct Job {
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when a job runs.</p> <p>The maximum number of workers you can define are 299 for <code>G.1X</code>, and 149 for <code>G.2X</code>. </p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
     /// <p>The name or ARN of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2455,6 +2692,10 @@ pub struct Job {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
 }
 
 /// <p>Defines a point which a job can resume processing.</p>
@@ -2513,7 +2754,7 @@ pub struct JobCommand {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobRun {
-    /// <p>The job arguments associated with this run. These override equivalent default arguments set for the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The job arguments associated with this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -2553,7 +2794,7 @@ pub struct JobRun {
     #[serde(rename = "LogGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
-    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -2561,6 +2802,10 @@ pub struct JobRun {
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when a job runs.</p> <p>The maximum number of workers you can define are 299 for <code>G.1X</code>, and 149 for <code>G.2X</code>. </p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
     /// <p>A list of predecessors to this job run.</p>
     #[serde(rename = "PredecessorRuns")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2585,6 +2830,10 @@ pub struct JobRun {
     #[serde(rename = "TriggerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_name: Option<String>,
+    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
 }
 
 /// <p>Specifies information used to update an existing job definition. Note that the previous job definition will be completely overwritten by this information.</p>
@@ -2614,7 +2863,7 @@ pub struct JobUpdate {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
-    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -2626,6 +2875,10 @@ pub struct JobUpdate {
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when a job runs.</p> <p>The maximum number of workers you can define are 299 for <code>G.1X</code>, and 149 for <code>G.2X</code>. </p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
     /// <p>The name or ARN of the IAM role associated with this job (required).</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2638,20 +2891,24 @@ pub struct JobUpdate {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
 }
 
 /// <p>A classifier for <code>JSON</code> content.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JsonClassifier {
-    /// <p>The time this classifier was registered.</p>
+    /// <p>The time that this classifier was registered.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
     #[serde(rename = "JsonPath")]
     pub json_path: String,
-    /// <p>The time this classifier was last updated.</p>
+    /// <p>The time that this classifier was last updated.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
@@ -2694,10 +2951,130 @@ pub struct LastCrawlInfo {
     pub status: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListCrawlersRequest {
+    /// <p>The maximum size of a list to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specifies to return only these tagged resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListCrawlersResponse {
+    /// <p>The names of all crawlers in the account, or the crawlers with the specified tags.</p>
+    #[serde(rename = "CrawlerNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawler_names: Option<Vec<String>>,
+    /// <p>A continuation token, if the returned list does not contain the last metric available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListDevEndpointsRequest {
+    /// <p>The maximum size of a list to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specifies to return only these tagged resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListDevEndpointsResponse {
+    /// <p>The names of all DevEndpoints in the account, or the DevEndpoints with the specified tags.</p>
+    #[serde(rename = "DevEndpointNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dev_endpoint_names: Option<Vec<String>>,
+    /// <p>A continuation token, if the returned list does not contain the last metric available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListJobsRequest {
+    /// <p>The maximum size of a list to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specifies to return only these tagged resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListJobsResponse {
+    /// <p>The names of all jobs in the account, or the jobs with the specified tags.</p>
+    #[serde(rename = "JobNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_names: Option<Vec<String>>,
+    /// <p>A continuation token, if the returned list does not contain the last metric available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTriggersRequest {
+    /// <p> The name of the job for which to retrieve triggers. The trigger that can start this job will be returned, and if there is no such trigger, all triggers will be returned.</p>
+    #[serde(rename = "DependentJobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dependent_job_name: Option<String>,
+    /// <p>The maximum size of a list to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Specifies to return only these tagged resources.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTriggersResponse {
+    /// <p>A continuation token, if the returned list does not contain the last metric available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The names of all triggers in the account, or the triggers with the specified tags.</p>
+    #[serde(rename = "TriggerNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trigger_names: Option<Vec<String>>,
+}
+
 /// <p>The location of resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Location {
-    /// <p>A DynamoDB Table location.</p>
+    /// <p>An Amazon DynamoDB table location.</p>
     #[serde(rename = "DynamoDB")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db: Option<Vec<CodeGenNodeArg>>,
@@ -2705,7 +3082,7 @@ pub struct Location {
     #[serde(rename = "Jdbc")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jdbc: Option<Vec<CodeGenNodeArg>>,
-    /// <p>An Amazon S3 location.</p>
+    /// <p>An Amazon Simple Storage Service (Amazon S3) location.</p>
     #[serde(rename = "S3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3: Option<Vec<CodeGenNodeArg>>,
@@ -2831,7 +3208,7 @@ pub struct PartitionInput {
     #[serde(rename = "StorageDescriptor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_descriptor: Option<StorageDescriptor>,
-    /// <p>The values of the partition.</p>
+    /// <p>The values of the partition. Although this parameter is not required by the SDK, you must specify this parameter for a valid input.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -2848,7 +3225,7 @@ pub struct PartitionValueList {
 /// <p>Specifies the physical requirements for a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PhysicalConnectionRequirements {
-    /// <p>The connection's availability zone. This field is redundant, since the specified subnet implies the availability zone to be used. The field must be populated now, but will be deprecated in the future.</p>
+    /// <p>The connection's Availability Zone. This field is redundant because the specified subnet implies the Availability Zone to be used. Currently the field must be populated, but it will be deprecated in the future.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -2891,7 +3268,7 @@ pub struct Predicate {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutDataCatalogEncryptionSettingsRequest {
-    /// <p>The ID of the Data Catalog for which to set the security configuration. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog for which to set the security configuration. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -2910,7 +3287,7 @@ pub struct PutResourcePolicyRequest {
     #[serde(rename = "PolicyExistsCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_exists_condition: Option<String>,
-    /// <p>This is the hash value returned when the previous policy was set using PutResourcePolicy. Its purpose is to prevent concurrent modifications of a policy. Do not use this parameter if no previous policy has been set.</p>
+    /// <p>The hash value returned when the previous policy was set using <code>PutResourcePolicy</code>. Its purpose is to prevent concurrent modifications of a policy. Do not use this parameter if no previous policy has been set.</p>
     #[serde(rename = "PolicyHashCondition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_hash_condition: Option<String>,
@@ -2970,7 +3347,7 @@ pub struct S3Encryption {
     pub s3_encryption_mode: Option<String>,
 }
 
-/// <p>Specifies a data store in Amazon S3.</p>
+/// <p>Specifies a data store in Amazon Simple Storage Service (Amazon S3).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Target {
     /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
@@ -2987,7 +3364,7 @@ pub struct S3Target {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Schedule {
-    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "ScheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
@@ -2997,7 +3374,7 @@ pub struct Schedule {
     pub state: Option<String>,
 }
 
-/// <p>Crawler policy for update and deletion behavior.</p>
+/// <p>A policy that specifies update and deletion behaviors for the crawler.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SchemaChangePolicy {
     /// <p>The deletion behavior when the crawler finds a deleted object.</p>
@@ -3097,7 +3474,7 @@ pub struct StartCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartJobRunRequest {
-    /// <p>The job arguments specifically for this run. They override the equivalent default arguments set for in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>The job arguments specifically for this run. For this job run, they replace the default arguments set in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -3108,7 +3485,7 @@ pub struct StartJobRunRequest {
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
-    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    /// <p><p>The number of AWS Glue data processing units (DPUs) that can be allocated when this job runs. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p> <p>Do not set <code>Max Capacity</code> if using <code>WorkerType</code> and <code>NumberOfWorkers</code>.</p> <p>The value that can be allocated for <code>MaxCapacity</code> depends on whether you are running a python shell job, or an Apache Spark ETL job:</p> <ul> <li> <p>When you specify a python shell job (<code>JobCommand.Name</code>=&quot;pythonshell&quot;), you can allocate either 0.0625 or 1 DPU. The default is 0.0625 DPU.</p> </li> <li> <p>When you specify an Apache Spark ETL job (<code>JobCommand.Name</code>=&quot;glueetl&quot;), you can allocate from 2 to 100 DPUs. The default is 10 DPUs. This job type cannot have a fractional DPU allocation.</p> </li> </ul></p>
     #[serde(rename = "MaxCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_capacity: Option<f64>,
@@ -3116,6 +3493,10 @@ pub struct StartJobRunRequest {
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
+    /// <p>The number of workers of a defined <code>workerType</code> that are allocated when a job runs.</p> <p>The maximum number of workers you can define are 299 for <code>G.1X</code>, and 149 for <code>G.2X</code>. </p>
+    #[serde(rename = "NumberOfWorkers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_workers: Option<i64>,
     /// <p>The name of the SecurityConfiguration structure to be used with this job run.</p>
     #[serde(rename = "SecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3124,6 +3505,10 @@ pub struct StartJobRunRequest {
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
+    /// <p><p>The type of predefined worker that is allocated when a job runs. Accepts a value of Standard, G.1X, or G.2X.</p> <ul> <li> <p>For the <code>Standard</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 50GB disk, and 2 executors per worker.</p> </li> <li> <p>For the <code>G.1X</code> worker type, each worker provides 4 vCPU, 16 GB of memory and a 64GB disk, and 1 executor per worker.</p> </li> <li> <p>For the <code>G.2X</code> worker type, each worker provides 8 vCPU, 32 GB of memory and a 128GB disk, and 1 executor per worker.</p> </li> </ul></p>
+    #[serde(rename = "WorkerType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub worker_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -3409,6 +3794,20 @@ pub struct TableVersionError {
     pub version_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The ARN of the AWS Glue resource to which to add the tags. For more information about AWS Glue resource ARNs, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-common.html#aws-glue-api-regex-aws-glue-arn-id">AWS Glue ARN string pattern</a>.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>Tags to add to this resource.</p>
+    #[serde(rename = "TagsToAdd")]
+    pub tags_to_add: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>Information about a specific trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -3473,7 +3872,25 @@ pub struct TriggerUpdate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The ARN of the resource from which to remove the tags.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>Tags to remove from this resource.</p>
+    #[serde(rename = "TagsToRemove")]
+    pub tags_to_remove: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateClassifierRequest {
+    /// <p>A <code>CsvClassifier</code> object with updated fields.</p>
+    #[serde(rename = "CsvClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub csv_classifier: Option<UpdateCsvClassifierRequest>,
     /// <p>A <code>GrokClassifier</code> object with updated fields.</p>
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3494,7 +3911,7 @@ pub struct UpdateClassifierResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateConnectionRequest {
-    /// <p>The ID of the Data Catalog in which the connection resides. If none is supplied, the AWS account ID is used by default.</p>
+    /// <p>The ID of the Data Catalog in which the connection resides. If none is provided, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
@@ -3516,11 +3933,11 @@ pub struct UpdateCrawlerRequest {
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
+    /// <p>The crawler configuration information. This versioned JSON string allows users to specify aspects of a crawler's behavior. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/crawler-configuration.html">Configuring a Crawler</a>.</p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
-    /// <p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>
+    /// <p>The name of the <code>SecurityConfiguration</code> structure to be used by this crawler.</p>
     #[serde(rename = "CrawlerSecurityConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crawler_security_configuration: Option<String>,
@@ -3535,15 +3952,15 @@ pub struct UpdateCrawlerRequest {
     /// <p>Name of the new crawler.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The IAM role (or ARN of an IAM role) used by the new crawler to access customer resources.</p>
+    /// <p>The IAM role or Amazon Resource Name (ARN) of an IAM role that is used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
-    /// <p>Policy for the crawler's update and deletion behavior.</p>
+    /// <p>The policy for the crawler's update and deletion behavior.</p>
     #[serde(rename = "SchemaChangePolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
@@ -3563,10 +3980,10 @@ pub struct UpdateCrawlerResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCrawlerScheduleRequest {
-    /// <p>Name of the crawler whose schedule to update.</p>
+    /// <p>The name of the crawler whose schedule to update.</p>
     #[serde(rename = "CrawlerName")]
     pub crawler_name: String,
-    /// <p>The updated <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>The updated <code>cron</code> expression used to specify the schedule. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, specify <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -3575,6 +3992,38 @@ pub struct UpdateCrawlerScheduleRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateCrawlerScheduleResponse {}
+
+/// <p>Specifies a custom CSV classifier to be updated.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateCsvClassifierRequest {
+    /// <p>Enables the processing of files that contain only one column.</p>
+    #[serde(rename = "AllowSingleColumn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allow_single_column: Option<bool>,
+    /// <p>Indicates whether the CSV file contains a header.</p>
+    #[serde(rename = "ContainsHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contains_header: Option<String>,
+    /// <p>A custom symbol to denote what separates each column entry in the row.</p>
+    #[serde(rename = "Delimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delimiter: Option<String>,
+    /// <p>Specifies not to trim values before identifying the type of column values. The default value is true.</p>
+    #[serde(rename = "DisableValueTrimming")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_value_trimming: Option<bool>,
+    /// <p>A list of strings representing column names.</p>
+    #[serde(rename = "Header")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub header: Option<Vec<String>>,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A custom symbol to denote what combines content into a single column value. It must be different from the column delimiter.</p>
+    #[serde(rename = "QuoteSymbol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_symbol: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDatabaseRequest {
@@ -3596,6 +4045,10 @@ pub struct UpdateDatabaseResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDevEndpointRequest {
+    /// <p>The map of arguments to add the map of arguments used to configure the DevEndpoint.</p>
+    #[serde(rename = "AddArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_arguments: Option<::std::collections::HashMap<String, String>>,
     /// <p>The list of public keys for the DevEndpoint to use.</p>
     #[serde(rename = "AddPublicKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3604,6 +4057,10 @@ pub struct UpdateDevEndpointRequest {
     #[serde(rename = "CustomLibraries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_libraries: Option<DevEndpointCustomLibraries>,
+    /// <p>The list of argument keys to be deleted from the map of arguments used to configure the DevEndpoint.</p>
+    #[serde(rename = "DeleteArguments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_arguments: Option<Vec<String>>,
     /// <p>The list of public keys to be deleted from the DevEndpoint.</p>
     #[serde(rename = "DeletePublicKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3667,7 +4124,7 @@ pub struct UpdateJobResponse {
 /// <p>Specifies a JSON classifier to be updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateJsonClassifierRequest {
-    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of JsonPath, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
+    /// <p>A <code>JsonPath</code> string defining the JSON data for the classifier to classify. AWS Glue supports a subset of <code>JsonPath</code>, as described in <a href="https://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html#custom-classifier-json">Writing JsonPath Custom Classifiers</a>.</p>
     #[serde(rename = "JsonPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub json_path: Option<String>,
@@ -3772,7 +4229,7 @@ pub struct UpdateXMLClassifierRequest {
     /// <p>The name of the classifier.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. This cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
     #[serde(rename = "RowTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_tag: Option<String>,
@@ -3840,18 +4297,18 @@ pub struct XMLClassifier {
     /// <p>An identifier of the data format that the classifier matches.</p>
     #[serde(rename = "Classification")]
     pub classification: String,
-    /// <p>The time this classifier was registered.</p>
+    /// <p>The time that this classifier was registered.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The time this classifier was last updated.</p>
+    /// <p>The time that this classifier was last updated.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
     /// <p>The name of the classifier.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. This can't identify a self-closing element (closed by <code>/&gt;</code>). An empty row element that contains only attributes can be parsed as long as it ends with a closing tag (for example, <code>&lt;row item_a="A" item_b="B"&gt;&lt;/row&gt;</code> is okay, but <code>&lt;row item_a="A" item_b="B" /&gt;</code> is not).</p>
     #[serde(rename = "RowTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub row_tag: Option<String>,
@@ -4144,6 +4601,145 @@ impl Error for BatchDeleteTableVersionError {
         }
     }
 }
+/// Errors returned by BatchGetCrawlers
+#[derive(Debug, PartialEq)]
+pub enum BatchGetCrawlersError {
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl BatchGetCrawlersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetCrawlersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchGetCrawlersError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchGetCrawlersError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for BatchGetCrawlersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetCrawlersError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetCrawlersError::InvalidInput(ref cause) => cause,
+            BatchGetCrawlersError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by BatchGetDevEndpoints
+#[derive(Debug, PartialEq)]
+pub enum BatchGetDevEndpointsError {
+    /// <p>Access to a resource was denied.</p>
+    AccessDenied(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl BatchGetDevEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDevEndpointsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(BatchGetDevEndpointsError::AccessDenied(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(BatchGetDevEndpointsError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchGetDevEndpointsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchGetDevEndpointsError::OperationTimeout(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for BatchGetDevEndpointsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetDevEndpointsError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetDevEndpointsError::AccessDenied(ref cause) => cause,
+            BatchGetDevEndpointsError::InternalService(ref cause) => cause,
+            BatchGetDevEndpointsError::InvalidInput(ref cause) => cause,
+            BatchGetDevEndpointsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by BatchGetJobs
+#[derive(Debug, PartialEq)]
+pub enum BatchGetJobsError {
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl BatchGetJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(BatchGetJobsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchGetJobsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchGetJobsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for BatchGetJobsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetJobsError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetJobsError::InternalService(ref cause) => cause,
+            BatchGetJobsError::InvalidInput(ref cause) => cause,
+            BatchGetJobsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by BatchGetPartition
 #[derive(Debug, PartialEq)]
 pub enum BatchGetPartitionError {
@@ -4198,6 +4794,51 @@ impl Error for BatchGetPartitionError {
             BatchGetPartitionError::InternalService(ref cause) => cause,
             BatchGetPartitionError::InvalidInput(ref cause) => cause,
             BatchGetPartitionError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by BatchGetTriggers
+#[derive(Debug, PartialEq)]
+pub enum BatchGetTriggersError {
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl BatchGetTriggersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetTriggersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(BatchGetTriggersError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(BatchGetTriggersError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(BatchGetTriggersError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for BatchGetTriggersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetTriggersError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetTriggersError::InternalService(ref cause) => cause,
+            BatchGetTriggersError::InvalidInput(ref cause) => cause,
+            BatchGetTriggersError::OperationTimeout(ref cause) => cause,
         }
     }
 }
@@ -7138,6 +7779,57 @@ impl Error for GetTablesError {
         }
     }
 }
+/// Errors returned by GetTags
+#[derive(Debug, PartialEq)]
+pub enum GetTagsError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl GetTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetTagsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(GetTagsError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(GetTagsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(GetTagsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(GetTagsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTagsError::EntityNotFound(ref cause) => cause,
+            GetTagsError::InternalService(ref cause) => cause,
+            GetTagsError::InvalidInput(ref cause) => cause,
+            GetTagsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetTrigger
 #[derive(Debug, PartialEq)]
 pub enum GetTriggerError {
@@ -7410,6 +8102,192 @@ impl Error for ImportCatalogToGlueError {
         match *self {
             ImportCatalogToGlueError::InternalService(ref cause) => cause,
             ImportCatalogToGlueError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListCrawlers
+#[derive(Debug, PartialEq)]
+pub enum ListCrawlersError {
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl ListCrawlersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListCrawlersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(ListCrawlersError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListCrawlersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListCrawlersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListCrawlersError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListDevEndpoints
+#[derive(Debug, PartialEq)]
+pub enum ListDevEndpointsError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl ListDevEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDevEndpointsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(ListDevEndpointsError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListDevEndpointsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListDevEndpointsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(ListDevEndpointsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListDevEndpointsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDevEndpointsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDevEndpointsError::EntityNotFound(ref cause) => cause,
+            ListDevEndpointsError::InternalService(ref cause) => cause,
+            ListDevEndpointsError::InvalidInput(ref cause) => cause,
+            ListDevEndpointsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListJobs
+#[derive(Debug, PartialEq)]
+pub enum ListJobsError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl ListJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(ListJobsError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListJobsError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListJobsError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(ListJobsError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListJobsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListJobsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListJobsError::EntityNotFound(ref cause) => cause,
+            ListJobsError::InternalService(ref cause) => cause,
+            ListJobsError::InvalidInput(ref cause) => cause,
+            ListJobsError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListTriggers
+#[derive(Debug, PartialEq)]
+pub enum ListTriggersError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl ListTriggersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTriggersError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(ListTriggersError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListTriggersError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListTriggersError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(ListTriggersError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for ListTriggersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTriggersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTriggersError::EntityNotFound(ref cause) => cause,
+            ListTriggersError::InternalService(ref cause) => cause,
+            ListTriggersError::InvalidInput(ref cause) => cause,
+            ListTriggersError::OperationTimeout(ref cause) => cause,
         }
     }
 }
@@ -7976,6 +8854,108 @@ impl Error for StopTriggerError {
             StopTriggerError::InternalService(ref cause) => cause,
             StopTriggerError::InvalidInput(ref cause) => cause,
             StopTriggerError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(TagResourceError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(TagResourceError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(TagResourceError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::EntityNotFound(ref cause) => cause,
+            TagResourceError::InternalService(ref cause) => cause,
+            TagResourceError::InvalidInput(ref cause) => cause,
+            TagResourceError::OperationTimeout(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::EntityNotFound(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UntagResourceError::InternalService(err.msg))
+                }
+                "InvalidInputException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidInput(err.msg))
+                }
+                "OperationTimeoutException" => {
+                    return RusotoError::Service(UntagResourceError::OperationTimeout(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::EntityNotFound(ref cause) => cause,
+            UntagResourceError::InternalService(ref cause) => cause,
+            UntagResourceError::InvalidInput(ref cause) => cause,
+            UntagResourceError::OperationTimeout(ref cause) => cause,
         }
     }
 }
@@ -8654,11 +9634,35 @@ pub trait Glue {
         input: BatchDeleteTableVersionRequest,
     ) -> RusotoFuture<BatchDeleteTableVersionResponse, BatchDeleteTableVersionError>;
 
+    /// <p>Returns a list of resource metadata for a given list of crawler names. After calling the <code>ListCrawlers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_crawlers(
+        &self,
+        input: BatchGetCrawlersRequest,
+    ) -> RusotoFuture<BatchGetCrawlersResponse, BatchGetCrawlersError>;
+
+    /// <p>Returns a list of resource metadata for a given list of DevEndpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_dev_endpoints(
+        &self,
+        input: BatchGetDevEndpointsRequest,
+    ) -> RusotoFuture<BatchGetDevEndpointsResponse, BatchGetDevEndpointsError>;
+
+    /// <p>Returns a list of resource metadata for a given list of job names. After calling the <code>ListJobs</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags. </p>
+    fn batch_get_jobs(
+        &self,
+        input: BatchGetJobsRequest,
+    ) -> RusotoFuture<BatchGetJobsResponse, BatchGetJobsError>;
+
     /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
         input: BatchGetPartitionRequest,
     ) -> RusotoFuture<BatchGetPartitionResponse, BatchGetPartitionError>;
+
+    /// <p>Returns a list of resource metadata for a given list of trigger names. After calling the <code>ListTriggers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_triggers(
+        &self,
+        input: BatchGetTriggersRequest,
+    ) -> RusotoFuture<BatchGetTriggersResponse, BatchGetTriggersError>;
 
     /// <p>Stops one or more job runs for a specified job definition.</p>
     fn batch_stop_job_run(
@@ -8666,7 +9670,7 @@ pub trait Glue {
         input: BatchStopJobRunRequest,
     ) -> RusotoFuture<BatchStopJobRunResponse, GlueBatchStopJobRunError>;
 
-    /// <p>Creates a classifier in the user's account. This may be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, or abbrev <code>JsonClassifier</code>, depending on which field of the request is present.</p>
+    /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
     fn create_classifier(
         &self,
         input: CreateClassifierRequest,
@@ -8678,7 +9682,7 @@ pub trait Glue {
         input: CreateConnectionRequest,
     ) -> RusotoFuture<CreateConnectionResponse, CreateConnectionError>;
 
-    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <i>s3Targets</i> field, the <i>jdbcTargets</i> field, or the <i>DynamoDBTargets</i> field.</p>
+    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <code>s3Targets</code> field, the <code>jdbcTargets</code> field, or the <code>DynamoDBTargets</code> field.</p>
     fn create_crawler(
         &self,
         input: CreateCrawlerRequest,
@@ -8750,7 +9754,7 @@ pub trait Glue {
         input: DeleteConnectionRequest,
     ) -> RusotoFuture<DeleteConnectionResponse, DeleteConnectionError>;
 
-    /// <p>Removes a specified crawler from the Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
+    /// <p>Removes a specified crawler from the AWS Glue Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
     fn delete_crawler(
         &self,
         input: DeleteCrawlerRequest,
@@ -8977,6 +9981,9 @@ pub trait Glue {
         input: GetTablesRequest,
     ) -> RusotoFuture<GetTablesResponse, GetTablesError>;
 
+    /// <p>Retrieves a list of tags associated with a resource.</p>
+    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError>;
+
     /// <p>Retrieves the definition of a trigger.</p>
     fn get_trigger(
         &self,
@@ -9007,7 +10014,28 @@ pub trait Glue {
         input: ImportCatalogToGlueRequest,
     ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError>;
 
-    /// <p>Sets the security configuration for a specified catalog. Once the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
+    /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_crawlers(
+        &self,
+        input: ListCrawlersRequest,
+    ) -> RusotoFuture<ListCrawlersResponse, ListCrawlersError>;
+
+    /// <p>Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_dev_endpoints(
+        &self,
+        input: ListDevEndpointsRequest,
+    ) -> RusotoFuture<ListDevEndpointsResponse, ListDevEndpointsError>;
+
+    /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
+
+    /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_triggers(
+        &self,
+        input: ListTriggersRequest,
+    ) -> RusotoFuture<ListTriggersResponse, ListTriggersError>;
+
+    /// <p>Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
     fn put_data_catalog_encryption_settings(
         &self,
         input: PutDataCatalogEncryptionSettingsRequest,
@@ -9067,7 +10095,19 @@ pub trait Glue {
         input: StopTriggerRequest,
     ) -> RusotoFuture<StopTriggerResponse, StopTriggerError>;
 
-    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, <code>XMLClassifier</code>, or <code>JsonClassifier</code>, depending on which field is present).</p>
+    /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p>Removes tags from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+
+    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field is present).</p>
     fn update_classifier(
         &self,
         input: UpdateClassifierRequest,
@@ -9309,6 +10349,92 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Returns a list of resource metadata for a given list of crawler names. After calling the <code>ListCrawlers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_crawlers(
+        &self,
+        input: BatchGetCrawlersRequest,
+    ) -> RusotoFuture<BatchGetCrawlersResponse, BatchGetCrawlersError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.BatchGetCrawlers");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetCrawlersResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchGetCrawlersError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a list of resource metadata for a given list of DevEndpoint names. After calling the <code>ListDevEndpoints</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_dev_endpoints(
+        &self,
+        input: BatchGetDevEndpointsRequest,
+    ) -> RusotoFuture<BatchGetDevEndpointsResponse, BatchGetDevEndpointsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.BatchGetDevEndpoints");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetDevEndpointsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchGetDevEndpointsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a list of resource metadata for a given list of job names. After calling the <code>ListJobs</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags. </p>
+    fn batch_get_jobs(
+        &self,
+        input: BatchGetJobsRequest,
+    ) -> RusotoFuture<BatchGetJobsResponse, BatchGetJobsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.BatchGetJobs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetJobsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchGetJobsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Retrieves partitions in a batch request.</p>
     fn batch_get_partition(
         &self,
@@ -9333,6 +10459,35 @@ impl Glue for GlueClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(BatchGetPartitionError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a list of resource metadata for a given list of trigger names. After calling the <code>ListTriggers</code> operation, you can call this operation to access the data to which you have been granted permissions. This operation supports all IAM permissions, including permission conditions that uses tags.</p>
+    fn batch_get_triggers(
+        &self,
+        input: BatchGetTriggersRequest,
+    ) -> RusotoFuture<BatchGetTriggersResponse, BatchGetTriggersError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.BatchGetTriggers");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<BatchGetTriggersResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(BatchGetTriggersError::from_response(response))),
                 )
             }
         })
@@ -9366,7 +10521,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Creates a classifier in the user's account. This may be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, or abbrev <code>JsonClassifier</code>, depending on which field of the request is present.</p>
+    /// <p>Creates a classifier in the user's account. This can be a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field of the request is present.</p>
     fn create_classifier(
         &self,
         input: CreateClassifierRequest,
@@ -9424,7 +10579,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <i>s3Targets</i> field, the <i>jdbcTargets</i> field, or the <i>DynamoDBTargets</i> field.</p>
+    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in the <code>s3Targets</code> field, the <code>jdbcTargets</code> field, or the <code>DynamoDBTargets</code> field.</p>
     fn create_crawler(
         &self,
         input: CreateCrawlerRequest,
@@ -9766,7 +10921,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Removes a specified crawler from the Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
+    /// <p>Removes a specified crawler from the AWS Glue Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
     fn delete_crawler(
         &self,
         input: DeleteCrawlerRequest,
@@ -10895,6 +12050,31 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Retrieves a list of tags associated with a resource.</p>
+    fn get_tags(&self, input: GetTagsRequest) -> RusotoFuture<GetTagsResponse, GetTagsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetTags");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response).deserialize::<GetTagsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetTagsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Retrieves the definition of a trigger.</p>
     fn get_trigger(
         &self,
@@ -11035,7 +12215,120 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Sets the security configuration for a specified catalog. Once the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
+    /// <p>Retrieves the names of all crawler resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_crawlers(
+        &self,
+        input: ListCrawlersRequest,
+    ) -> RusotoFuture<ListCrawlersResponse, ListCrawlersError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.ListCrawlers");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListCrawlersResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListCrawlersError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the names of all DevEndpoint resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_dev_endpoints(
+        &self,
+        input: ListDevEndpointsRequest,
+    ) -> RusotoFuture<ListDevEndpointsResponse, ListDevEndpointsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.ListDevEndpoints");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListDevEndpointsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListDevEndpointsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the names of all job resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.ListJobs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListJobsResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListJobsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the names of all trigger resources in this AWS account, or the resources with the specified tag. This operation allows you to see which resources are available in your account, and their names.</p> <p>This operation takes the optional <code>Tags</code> field which you can use as a filter on the response so that tagged resources can be retrieved as a group. If you choose to use tags filtering, only resources with the tag will be retrieved.</p>
+    fn list_triggers(
+        &self,
+        input: ListTriggersRequest,
+    ) -> RusotoFuture<ListTriggersResponse, ListTriggersError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.ListTriggers");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<ListTriggersResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTriggersError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Sets the security configuration for a specified catalog. After the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
     fn put_data_catalog_encryption_settings(
         &self,
         input: PutDataCatalogEncryptionSettingsRequest,
@@ -11323,7 +12616,65 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, <code>XMLClassifier</code>, or <code>JsonClassifier</code>, depending on which field is present).</p>
+    /// <p>Adds tags to a resource. A tag is a label you can assign to an AWS resource. In AWS Glue, you can tag only certain resources. For information about what resources you can tag, see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-tags.html">AWS Tags in AWS Glue</a>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<TagResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes tags from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UntagResourceResponse, _>()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Modifies an existing classifier (a <code>GrokClassifier</code>, an <code>XMLClassifier</code>, a <code>JsonClassifier</code>, or a <code>CsvClassifier</code>, depending on which field is present).</p>
     fn update_classifier(
         &self,
         input: UpdateClassifierRequest,

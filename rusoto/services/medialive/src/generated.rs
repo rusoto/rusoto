@@ -25,7 +25,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-/// <p>Placeholder documentation for AacSettings</p>
+/// <p>Aac Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AacSettings {
     /// <p>Average bitrate in bits/second. Valid values depend on rate control mode and profile.</p>
@@ -68,7 +68,7 @@ pub struct AacSettings {
     pub vbr_quality: Option<String>,
 }
 
-/// <p>Placeholder documentation for Ac3Settings</p>
+/// <p>Ac3 Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Ac3Settings {
     /// <p>Average bitrate in bits/second. Valid bitrates depend on the coding mode.</p>
@@ -107,7 +107,7 @@ pub struct AccessDenied {
     pub message: Option<String>,
 }
 
-/// <p>Placeholder documentation for ArchiveContainerSettings</p>
+/// <p>Archive Container Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArchiveContainerSettings {
     #[serde(rename = "M2tsSettings")]
@@ -115,7 +115,7 @@ pub struct ArchiveContainerSettings {
     pub m_2ts_settings: Option<M2tsSettings>,
 }
 
-/// <p>Placeholder documentation for ArchiveGroupSettings</p>
+/// <p>Archive Group Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArchiveGroupSettings {
     /// <p>A directory and base filename where archive files should be written.</p>
@@ -127,7 +127,7 @@ pub struct ArchiveGroupSettings {
     pub rollover_interval: Option<i64>,
 }
 
-/// <p>Placeholder documentation for ArchiveOutputSettings</p>
+/// <p>Archive Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArchiveOutputSettings {
     /// <p>Settings specific to the container type of the file.</p>
@@ -143,15 +143,15 @@ pub struct ArchiveOutputSettings {
     pub name_modifier: Option<String>,
 }
 
-/// <p>Placeholder documentation for AribDestinationSettings</p>
+/// <p>Arib Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AribDestinationSettings {}
 
-/// <p>Placeholder documentation for AribSourceSettings</p>
+/// <p>Arib Source Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AribSourceSettings {}
 
-/// <p>Placeholder documentation for AudioChannelMapping</p>
+/// <p>Audio Channel Mapping</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioChannelMapping {
     /// <p>Indices and gain values for each input channel that should be remixed into this output channel.</p>
@@ -162,7 +162,7 @@ pub struct AudioChannelMapping {
     pub output_channel: i64,
 }
 
-/// <p>Placeholder documentation for AudioCodecSettings</p>
+/// <p>Audio Codec Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioCodecSettings {
     #[serde(rename = "AacSettings")]
@@ -182,7 +182,7 @@ pub struct AudioCodecSettings {
     pub pass_through_settings: Option<PassThroughSettings>,
 }
 
-/// <p>Placeholder documentation for AudioDescription</p>
+/// <p>Audio Description</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioDescription {
     /// <p>Advanced audio normalization settings.</p>
@@ -228,7 +228,7 @@ pub struct AudioDescription {
     pub stream_name: Option<String>,
 }
 
-/// <p>Placeholder documentation for AudioLanguageSelection</p>
+/// <p>Audio Language Selection</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioLanguageSelection {
     /// <p>Selects a specific three-letter language code from within an audio source.</p>
@@ -240,7 +240,7 @@ pub struct AudioLanguageSelection {
     pub language_selection_policy: Option<String>,
 }
 
-/// <p>Placeholder documentation for AudioNormalizationSettings</p>
+/// <p>Audio Normalization Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioNormalizationSettings {
     /// <p>Audio normalization algorithm to use. itu17701 conforms to the CALM Act specification, itu17702 conforms to the EBU R-128 specification.</p>
@@ -257,7 +257,7 @@ pub struct AudioNormalizationSettings {
     pub target_lkfs: Option<f64>,
 }
 
-/// <p>Placeholder documentation for AudioOnlyHlsSettings</p>
+/// <p>Audio Only Hls Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioOnlyHlsSettings {
     /// <p>Specifies the group to which the audio Rendition belongs.</p>
@@ -286,7 +286,7 @@ pub struct AudioOnlyHlsSettings {
     pub audio_track_type: Option<String>,
 }
 
-/// <p>Placeholder documentation for AudioPidSelection</p>
+/// <p>Audio Pid Selection</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioPidSelection {
     /// <p>Selects a specific PID from within a source.</p>
@@ -294,7 +294,7 @@ pub struct AudioPidSelection {
     pub pid: i64,
 }
 
-/// <p>Placeholder documentation for AudioSelector</p>
+/// <p>Audio Selector</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioSelector {
     /// <p>The name of this AudioSelector. AudioDescriptions will use this name to uniquely identify this Selector.  Selector names should be unique per input.</p>
@@ -306,7 +306,7 @@ pub struct AudioSelector {
     pub selector_settings: Option<AudioSelectorSettings>,
 }
 
-/// <p>Placeholder documentation for AudioSelectorSettings</p>
+/// <p>Audio Selector Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioSelectorSettings {
     #[serde(rename = "AudioLanguageSelection")]
@@ -317,7 +317,7 @@ pub struct AudioSelectorSettings {
     pub audio_pid_selection: Option<AudioPidSelection>,
 }
 
-/// <p>Placeholder documentation for AvailBlanking</p>
+/// <p>Avail Blanking</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AvailBlanking {
     /// <p>Blanking image to be used. Leave empty for solid black. Only bmp and png images are supported.</p>
@@ -330,7 +330,7 @@ pub struct AvailBlanking {
     pub state: Option<String>,
 }
 
-/// <p>Placeholder documentation for AvailConfiguration</p>
+/// <p>Avail Configuration</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AvailConfiguration {
     /// <p>Ad avail settings.</p>
@@ -339,7 +339,7 @@ pub struct AvailConfiguration {
     pub avail_settings: Option<AvailSettings>,
 }
 
-/// <p>Placeholder documentation for AvailSettings</p>
+/// <p>Avail Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AvailSettings {
     #[serde(rename = "Scte35SpliceInsert")]
@@ -423,7 +423,7 @@ pub struct BatchUpdateScheduleResult {
     pub deletes: Option<BatchScheduleActionDeleteResult>,
 }
 
-/// <p>Placeholder documentation for BlackoutSlate</p>
+/// <p>Blackout Slate</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlackoutSlate {
     /// <p>Blackout slate image to be used. Leave empty for solid black. Only bmp and png images are supported.</p>
@@ -448,7 +448,7 @@ pub struct BlackoutSlate {
     pub state: Option<String>,
 }
 
-/// <p>Placeholder documentation for BurnInDestinationSettings</p>
+/// <p>Burn In Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BurnInDestinationSettings {
     /// <p>If no explicit xPosition or yPosition is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. Selecting &quot;smart&quot; justification will left-justify live subtitles and center-justify pre-recorded subtitles.  All burn-in and DVB-Sub font settings must match.</p>
@@ -544,7 +544,7 @@ pub struct CaptionDescription {
     pub name: String,
 }
 
-/// <p>Placeholder documentation for CaptionDestinationSettings</p>
+/// <p>Caption Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptionDestinationSettings {
     #[serde(rename = "AribDestinationSettings")]
@@ -615,7 +615,7 @@ pub struct CaptionSelector {
     pub selector_settings: Option<CaptionSelectorSettings>,
 }
 
-/// <p>Placeholder documentation for CaptionSelectorSettings</p>
+/// <p>Caption Selector Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptionSelectorSettings {
     #[serde(rename = "AribSourceSettings")]
@@ -646,6 +646,10 @@ pub struct Channel {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -721,6 +725,10 @@ pub struct ChannelSummary {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -761,11 +769,17 @@ pub struct ChannelSummary {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for CreateChannel</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateChannel {
+    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
+    pub channel_class: Option<String>,
     pub destinations: Option<Vec<OutputDestination>>,
     pub encoder_settings: Option<EncoderSettings>,
     /// <p>List of input attachments for channel.</p>
@@ -788,6 +802,10 @@ pub struct CreateChannel {
 /// <p>A request to create a channel</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateChannelRequest {
+    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     #[serde(rename = "Destinations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destinations: Option<Vec<OutputDestination>>,
@@ -985,6 +1003,10 @@ pub struct DeleteChannelResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -1136,11 +1158,28 @@ pub struct DeleteReservationResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Recurring usage charge for each reserved resource, e.g. &#39;157.0&#39;</p>
     #[serde(rename = "UsagePrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_price: Option<f64>,
 }
+
+/// <p>Placeholder documentation for DeleteScheduleRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteScheduleRequest {
+    /// <p>Id of the channel whose schedule is being deleted.</p>
+    #[serde(rename = "ChannelId")]
+    pub channel_id: String,
+}
+
+/// <p>Placeholder documentation for DeleteScheduleResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteScheduleResponse {}
 
 /// <p>Placeholder documentation for DeleteTagsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1168,6 +1207,10 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -1245,6 +1288,11 @@ pub struct DescribeInputResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>STANDARD - MediaLive expects two sources to be connected to this input. If the channel is also STANDARD, both sources will be ingested. If the channel is SINGLE<em>PIPELINE, only the first source will be ingested; the second source will always be ignored, even if the first source fails.
+    /// SINGLE</em>PIPELINE - You can connect only one source to this input. If the ChannelClass is also  SINGLE_PIPELINE, this value is valid. If the ChannelClass is STANDARD, this value is not valid because the channel requires two sources in the input.</p>
+    #[serde(rename = "InputClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_class: Option<String>,
     /// <p>A list of MediaConnect Flows for this input.</p>
     #[serde(rename = "MediaConnectFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1449,6 +1497,10 @@ pub struct DescribeReservationResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Recurring usage charge for each reserved resource, e.g. &#39;157.0&#39;</p>
     #[serde(rename = "UsagePrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1519,7 +1571,7 @@ pub struct DvbSdtSettings {
     pub service_provider_name: Option<String>,
 }
 
-/// <p>Placeholder documentation for DvbSubDestinationSettings</p>
+/// <p>Dvb Sub Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DvbSubDestinationSettings {
     /// <p>If no explicit xPosition or yPosition is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. Selecting &quot;smart&quot; justification will left-justify live subtitles and center-justify pre-recorded subtitles.  This option is not valid for source captions that are STL or 608/embedded.  These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match.</p>
@@ -1592,7 +1644,7 @@ pub struct DvbSubDestinationSettings {
     pub y_position: Option<i64>,
 }
 
-/// <p>Placeholder documentation for DvbSubSourceSettings</p>
+/// <p>Dvb Sub Source Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DvbSubSourceSettings {
     /// <p>When using DVB-Sub with Burn-In or SMPTE-TT, use this PID for the source content. Unused for DVB-Sub passthrough. All DVB-Sub content is passed through, regardless of selectors.</p>
@@ -1610,7 +1662,7 @@ pub struct DvbTdtSettings {
     pub rep_interval: Option<i64>,
 }
 
-/// <p>Placeholder documentation for Eac3Settings</p>
+/// <p>Eac3 Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Eac3Settings {
     /// <p>When set to attenuate3Db, applies a 3 dB attenuation to the surround channels. Only used for 3/2 coding mode.</p>
@@ -1695,15 +1747,15 @@ pub struct Eac3Settings {
     pub surround_mode: Option<String>,
 }
 
-/// <p>Placeholder documentation for EmbeddedDestinationSettings</p>
+/// <p>Embedded Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmbeddedDestinationSettings {}
 
-/// <p>Placeholder documentation for EmbeddedPlusScte20DestinationSettings</p>
+/// <p>Embedded Plus Scte20 Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmbeddedPlusScte20DestinationSettings {}
 
-/// <p>Placeholder documentation for EmbeddedSourceSettings</p>
+/// <p>Embedded Source Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmbeddedSourceSettings {
     /// <p>If upconvert, 608 data is both passed through via the &quot;608 compatibility bytes&quot; fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded.</p>
@@ -1728,7 +1780,7 @@ pub struct EmbeddedSourceSettings {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Empty {}
 
-/// <p>Placeholder documentation for EncoderSettings</p>
+/// <p>Encoder Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EncoderSettings {
     #[serde(rename = "AudioDescriptions")]
@@ -1762,7 +1814,7 @@ pub struct EncoderSettings {
     pub video_descriptions: Vec<VideoDescription>,
 }
 
-/// <p>Placeholder documentation for FecOutputSettings</p>
+/// <p>Fec Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FecOutputSettings {
     /// <p>Parameter D from SMPTE 2022-1. The height of the FEC protection matrix.  The number of transport stream packets per column error correction packet. Must be between 4 and 20, inclusive.</p>
@@ -1823,7 +1875,7 @@ pub struct FrameCaptureSettings {
     pub capture_interval: i64,
 }
 
-/// <p>Placeholder documentation for GlobalConfiguration</p>
+/// <p>Global Configuration</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GlobalConfiguration {
     /// <p>Value to set the initial audio gain for the Live Event.</p>
@@ -1838,6 +1890,13 @@ pub struct GlobalConfiguration {
     #[serde(rename = "InputLossBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_loss_behavior: Option<InputLossBehavior>,
+    /// <p>Indicates how MediaLive pipelines are synchronized.</p>
+    ///
+    /// <p>PIPELINELOCKING - MediaLive will attempt to synchronize the output of each pipeline to the other.
+    /// EPOCHLOCKING - MediaLive will attempt to synchronize the output of each pipeline to the Unix epoch.</p>
+    #[serde(rename = "OutputLockingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_locking_mode: Option<String>,
     /// <p>Indicates whether the rate of frames emitted by the Live encoder should be paced by its system clock (which optionally may be locked to another source via NTP) or should be locked to the clock of the source that is providing the input stream.</p>
     #[serde(rename = "OutputTimingSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1848,7 +1907,7 @@ pub struct GlobalConfiguration {
     pub support_low_framerate_inputs: Option<String>,
 }
 
-/// <p>Placeholder documentation for H264Settings</p>
+/// <p>H264 Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct H264Settings {
     /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
@@ -2023,7 +2082,7 @@ pub struct H264Settings {
     pub timecode_insertion: Option<String>,
 }
 
-/// <p>Placeholder documentation for HlsAkamaiSettings</p>
+/// <p>Hls Akamai Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsAkamaiSettings {
     /// <p>Number of seconds to wait before retrying connection to the CDN if the connection is lost.</p>
@@ -2056,7 +2115,7 @@ pub struct HlsAkamaiSettings {
     pub token: Option<String>,
 }
 
-/// <p>Placeholder documentation for HlsBasicPutSettings</p>
+/// <p>Hls Basic Put Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsBasicPutSettings {
     /// <p>Number of seconds to wait before retrying connection to the CDN if the connection is lost.</p>
@@ -2077,7 +2136,7 @@ pub struct HlsBasicPutSettings {
     pub restart_delay: Option<i64>,
 }
 
-/// <p>Placeholder documentation for HlsCdnSettings</p>
+/// <p>Hls Cdn Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsCdnSettings {
     #[serde(rename = "HlsAkamaiSettings")]
@@ -2094,7 +2153,7 @@ pub struct HlsCdnSettings {
     pub hls_webdav_settings: Option<HlsWebdavSettings>,
 }
 
-/// <p>Placeholder documentation for HlsGroupSettings</p>
+/// <p>Hls Group Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsGroupSettings {
     /// <p>Choose one or more ad marker types to pass SCTE35 signals through to this group of Apple HLS outputs.</p>
@@ -2147,11 +2206,13 @@ pub struct HlsGroupSettings {
     #[serde(rename = "HlsCdnSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_cdn_settings: Option<HlsCdnSettings>,
-    /// <p>If enabled, writes out I-Frame only playlists in addition to media playlists.</p>
+    /// <p>DISABLED: Do not create an I-frame-only manifest, but do create the master and media manifests (according to the Output Selection field).</p>
+    ///
+    /// <p>STANDARD: Create an I-frame-only manifest for each output that contains video, as well as the other manifests (according to the Output Selection field). The I-frame manifest contains a #EXT-X-I-FRAMES-ONLY tag to indicate it is I-frame only, and one or more #EXT-X-BYTERANGE entries identifying the I-frame position. For example, #EXT-X-BYTERANGE:160364@1461888&quot;</p>
     #[serde(rename = "IFrameOnlyPlaylists")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i_frame_only_playlists: Option<String>,
-    /// <p>If mode is &quot;live&quot;, the number of segments to retain in the manifest (.m3u8) file. This number must be less than or equal to keepSegments. If mode is &quot;vod&quot;, this parameter has no effect.</p>
+    /// <p>Applies only if Mode field is LIVE. Specifies the maximum number of segments in the media manifest file. After this maximum, older segments are removed from the media manifest. This number must be less than or equal to the Keep Segments field.</p>
     #[serde(rename = "IndexNSegments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_n_segments: Option<i64>,
@@ -2167,7 +2228,7 @@ pub struct HlsGroupSettings {
     #[serde(rename = "IvSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iv_source: Option<String>,
-    /// <p>If mode is &quot;live&quot;, the number of TS segments to retain in the destination directory. If mode is &quot;vod&quot;, this parameter has no effect.</p>
+    /// <p>Applies only if Mode field is LIVE. Specifies the number of media segments (.ts files) to retain in the destination directory.</p>
     #[serde(rename = "KeepSegments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub keep_segments: Option<i64>,
@@ -2201,7 +2262,9 @@ pub struct HlsGroupSettings {
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
-    /// <p>Generates the .m3u8 playlist file for this HLS output group. The segmentsOnly option will output segments without the .m3u8 file.</p>
+    /// <p>MANIFESTSANDSEGMENTS: Generates manifests (master manifest, if applicable, and media manifests) for this output group.</p>
+    ///
+    /// <p>SEGMENTSONLY: Does not generate any manifests for this output group.</p>
     #[serde(rename = "OutputSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_selection: Option<String>,
@@ -2213,7 +2276,11 @@ pub struct HlsGroupSettings {
     #[serde(rename = "ProgramDateTimePeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub program_date_time_period: Option<i64>,
-    /// <p>When set to &quot;enabled&quot;, includes the media playlists from both pipelines in the master manifest (.m3u8) file.</p>
+    /// <p>ENABLED: The master manifest (.m3u8 file) for each pipeline includes information about both pipelines: first its own media files, then the media files of the other pipeline. This feature allows playout device that support stale manifest detection to switch from one manifest to the other, when the current manifest seems to be stale. There are still two destinations and two master manifests, but both master manifests reference the media files from both pipelines.</p>
+    ///
+    /// <p>DISABLED: The master manifest (.m3u8 file) for each pipeline includes information about its own pipeline only.</p>
+    ///
+    /// <p>For an HLS output group with MediaPackage as the destination, the DISABLED behavior is always followed. MediaPackage regenerates the manifests it serves to players so a redundant manifest from MediaLive is irrelevant.</p>
     #[serde(rename = "RedundantManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redundant_manifest: Option<String>,
@@ -2245,13 +2312,15 @@ pub struct HlsGroupSettings {
     #[serde(rename = "TimestampDeltaMilliseconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp_delta_milliseconds: Option<i64>,
-    /// <p>When set to &quot;singleFile&quot;, emits the program as a single media resource (.ts) file, and uses #EXT-X-BYTERANGE tags to index segment for playback. Playback of VOD mode content during event is not guaranteed due to HTTP server caching.</p>
+    /// <p>SEGMENTEDFILES: Emit the program as segments - multiple .ts media files.</p>
+    ///
+    /// <p>SINGLEFILE: Applies only if Mode field is VOD. Emit the program as a single .ts media file. The media manifest includes #EXT-X-BYTERANGE tags to index segments for playback. A typical use for this value is when sending the output to AWS Elemental MediaConvert, which can accept only a single media file. Playback while the channel is running is not guaranteed due to HTTP server caching.</p>
     #[serde(rename = "TsFileMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ts_file_mode: Option<String>,
 }
 
-/// <p>Placeholder documentation for HlsInputSettings</p>
+/// <p>Hls Input Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsInputSettings {
     /// <p>When specified the HLS stream with the m3u8 BANDWIDTH that most closely matches this value will be chosen, otherwise the highest bandwidth stream in the m3u8 will be chosen.  The bitrate is specified in bits per second, as in an HLS manifest.</p>
@@ -2272,7 +2341,7 @@ pub struct HlsInputSettings {
     pub retry_interval: Option<i64>,
 }
 
-/// <p>Placeholder documentation for HlsMediaStoreSettings</p>
+/// <p>Hls Media Store Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsMediaStoreSettings {
     /// <p>Number of seconds to wait before retrying connection to the CDN if the connection is lost.</p>
@@ -2297,7 +2366,7 @@ pub struct HlsMediaStoreSettings {
     pub restart_delay: Option<i64>,
 }
 
-/// <p>Placeholder documentation for HlsOutputSettings</p>
+/// <p>Hls Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsOutputSettings {
     /// <p>Settings regarding the underlying stream. These settings are different for audio-only outputs.</p>
@@ -2313,7 +2382,7 @@ pub struct HlsOutputSettings {
     pub segment_modifier: Option<String>,
 }
 
-/// <p>Placeholder documentation for HlsSettings</p>
+/// <p>Hls Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsSettings {
     #[serde(rename = "AudioOnlyHlsSettings")]
@@ -2332,7 +2401,7 @@ pub struct HlsTimedMetadataScheduleActionSettings {
     pub id_3: String,
 }
 
-/// <p>Placeholder documentation for HlsWebdavSettings</p>
+/// <p>Hls Webdav Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsWebdavSettings {
     /// <p>Number of seconds to wait before retrying connection to the CDN if the connection is lost.</p>
@@ -2377,6 +2446,11 @@ pub struct Input {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>STANDARD - MediaLive expects two sources to be connected to this input. If the channel is also STANDARD, both sources will be ingested. If the channel is SINGLE<em>PIPELINE, only the first source will be ingested; the second source will always be ignored, even if the first source fails.
+    /// SINGLE</em>PIPELINE - You can connect only one source to this input. If the ChannelClass is also  SINGLE_PIPELINE, this value is valid. If the ChannelClass is STANDARD, this value is not valid because the channel requires two sources in the input.</p>
+    #[serde(rename = "InputClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_class: Option<String>,
     /// <p>A list of MediaConnect Flows for this input.</p>
     #[serde(rename = "MediaConnectFlows")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2426,7 +2500,7 @@ pub struct InputAttachment {
     pub input_settings: Option<InputSettings>,
 }
 
-/// <p>Placeholder documentation for InputChannelLevel</p>
+/// <p>Input Channel Level</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputChannelLevel {
     /// <p>Remixing value. Units are in dB and acceptable values are within the range from -60 (mute) and 6 dB.</p>
@@ -2484,7 +2558,7 @@ pub struct InputDestinationVpc {
     pub network_interface_id: Option<String>,
 }
 
-/// <p>Placeholder documentation for InputLocation</p>
+/// <p>Input Location</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputLocation {
     /// <p>key used to extract the password from EC2 Parameter store</p>
@@ -2500,7 +2574,7 @@ pub struct InputLocation {
     pub username: Option<String>,
 }
 
-/// <p>Placeholder documentation for InputLossBehavior</p>
+/// <p>Input Loss Behavior</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputLossBehavior {
     /// <p>Documentation update needed</p>
@@ -2718,7 +2792,7 @@ pub struct InvalidRequest {
     pub message: Option<String>,
 }
 
-/// <p>Placeholder documentation for KeyProviderSettings</p>
+/// <p>Key Provider Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeyProviderSettings {
     #[serde(rename = "StaticKeySettings")]
@@ -2827,6 +2901,10 @@ pub struct ListInputsResultModel {
 /// <p>Placeholder documentation for ListOfferingsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListOfferingsRequest {
+    /// <p>Filter by channel class, &#39;STANDARD&#39; or &#39;SINGLE_PIPELINE&#39;</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>Filter to offerings that match the configuration of an existing channel, e.g. &#39;2345678&#39; (a channel ID)</p>
     #[serde(rename = "ChannelConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2893,6 +2971,10 @@ pub struct ListOfferingsResultModel {
 /// <p>Placeholder documentation for ListReservationsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListReservationsRequest {
+    /// <p>Filter by channel class, &#39;STANDARD&#39; or &#39;SINGLE_PIPELINE&#39;</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>Filter by codec, &#39;AVC&#39;, &#39;HEVC&#39;, &#39;MPEG2&#39;, or &#39;AUDIO&#39;</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2968,7 +3050,7 @@ pub struct ListTagsForResourceResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Placeholder documentation for M2tsSettings</p>
+/// <p>M2ts Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct M2tsSettings {
     /// <p>When set to drop, output audio streams will be removed from the program if the selected input audio stream is removed from the input. This allows the output audio configuration to dynamically change based on input configuration. If this is set to encodeSilence, all output audio streams will output encoded silence when not connected to an active input stream.</p>
@@ -3249,7 +3331,28 @@ pub struct MediaConnectFlowRequest {
     pub flow_arn: Option<String>,
 }
 
-/// <p>Placeholder documentation for Mp2Settings</p>
+/// <p>Media Package Group Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MediaPackageGroupSettings {
+    /// <p>MediaPackage channel destination.</p>
+    #[serde(rename = "Destination")]
+    pub destination: OutputLocationRef,
+}
+
+/// <p>Media Package Output Destination Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MediaPackageOutputDestinationSettings {
+    /// <p>ID of the channel in MediaPackage that is the destination for this output group. You do not need to specify the individual inputs in MediaPackage; MediaLive will handle the connection of the two MediaLive pipelines to the two MediaPackage inputs. The MediaPackage channel and MediaLive channel must be in the same region.</p>
+    #[serde(rename = "ChannelId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_id: Option<String>,
+}
+
+/// <p>Media Package Output Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MediaPackageOutputSettings {}
+
+/// <p>Mp2 Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Mp2Settings {
     /// <p>Average bitrate in bits/second.</p>
@@ -3266,7 +3369,7 @@ pub struct Mp2Settings {
     pub sample_rate: Option<f64>,
 }
 
-/// <p>Placeholder documentation for MsSmoothGroupSettings</p>
+/// <p>Ms Smooth Group Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MsSmoothGroupSettings {
     /// <p>The value of the &quot;Acquisition Point Identity&quot; element used in each message placed in the sparse track.  Only enabled if sparseTrackType is not &quot;none&quot;.</p>
@@ -3355,7 +3458,7 @@ pub struct MsSmoothGroupSettings {
     pub timestamp_offset_mode: Option<String>,
 }
 
-/// <p>Placeholder documentation for MsSmoothOutputSettings</p>
+/// <p>Ms Smooth Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MsSmoothOutputSettings {
     /// <p>String concatenated to the end of the destination filename.  Required for multiple outputs of the same type.</p>
@@ -3458,7 +3561,11 @@ pub struct OutputDestination {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>Destination settings for output; one for each redundant encoder.</p>
+    /// <p>Destination settings for a MediaPackage output; one destination for both encoders.</p>
+    #[serde(rename = "MediaPackageSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_package_settings: Option<Vec<MediaPackageOutputDestinationSettings>>,
+    /// <p>Destination settings for a standard output; one destination for each redundant encoder.</p>
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settings: Option<Vec<OutputDestinationSettings>>,
@@ -3499,7 +3606,7 @@ pub struct OutputGroup {
     pub outputs: Vec<Output>,
 }
 
-/// <p>Placeholder documentation for OutputGroupSettings</p>
+/// <p>Output Group Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OutputGroupSettings {
     #[serde(rename = "ArchiveGroupSettings")]
@@ -3511,6 +3618,9 @@ pub struct OutputGroupSettings {
     #[serde(rename = "HlsGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_group_settings: Option<HlsGroupSettings>,
+    #[serde(rename = "MediaPackageGroupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_package_group_settings: Option<MediaPackageGroupSettings>,
     #[serde(rename = "MsSmoothGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ms_smooth_group_settings: Option<MsSmoothGroupSettings>,
@@ -3530,7 +3640,7 @@ pub struct OutputLocationRef {
     pub destination_ref_id: Option<String>,
 }
 
-/// <p>Placeholder documentation for OutputSettings</p>
+/// <p>Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OutputSettings {
     #[serde(rename = "ArchiveOutputSettings")]
@@ -3542,6 +3652,9 @@ pub struct OutputSettings {
     #[serde(rename = "HlsOutputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_output_settings: Option<HlsOutputSettings>,
+    #[serde(rename = "MediaPackageOutputSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_package_output_settings: Option<MediaPackageOutputSettings>,
     #[serde(rename = "MsSmoothOutputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ms_smooth_output_settings: Option<MsSmoothOutputSettings>,
@@ -3553,9 +3666,25 @@ pub struct OutputSettings {
     pub udp_output_settings: Option<UdpOutputSettings>,
 }
 
-/// <p>Placeholder documentation for PassThroughSettings</p>
+/// <p>Pass Through Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PassThroughSettings {}
+
+/// <p>Settings for the action to set pause state of a channel.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PauseStateScheduleActionSettings {
+    #[serde(rename = "Pipelines")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipelines: Option<Vec<PipelinePauseStateSettings>>,
+}
+
+/// <p>Settings for pausing a pipeline.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PipelinePauseStateSettings {
+    /// <p>Pipeline ID to pause (&quot;PIPELINE<em>0&quot; or &quot;PIPELINE</em>1&quot;).</p>
+    #[serde(rename = "PipelineId")]
+    pub pipeline_id: String,
+}
 
 /// <p>PurchaseOffering request</p>
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3568,6 +3697,8 @@ pub struct PurchaseOffering {
     pub request_id: Option<String>,
     /// <p>Requested reservation start time (UTC) in ISO-8601 format. The specified time must be between the first day of the current month and one year from now. If no value is given, the default is now.</p>
     pub start: Option<String>,
+    /// <p>A collection of key-value pairs</p>
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingRequest</p>
@@ -3591,6 +3722,10 @@ pub struct PurchaseOfferingRequest {
     #[serde(rename = "Start")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<String>,
+    /// <p>A collection of key-value pairs</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingResponse</p>
@@ -3608,7 +3743,7 @@ pub struct PurchaseOfferingResultModel {
     pub reservation: Option<Reservation>,
 }
 
-/// <p>Placeholder documentation for RemixSettings</p>
+/// <p>Remix Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemixSettings {
     /// <p>Mapping of input channels to output channels, with appropriate gain adjustments.</p>
@@ -3693,6 +3828,10 @@ pub struct Reservation {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Recurring usage charge for each reserved resource, e.g. &#39;157.0&#39;</p>
     #[serde(rename = "UsagePrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3703,6 +3842,10 @@ pub struct Reservation {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ReservationResourceSpecification {
+    /// <p>Channel class, e.g. &#39;STANDARD&#39;</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>Codec, e.g. &#39;AVC&#39;</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3745,11 +3888,11 @@ pub struct ResourceNotFound {
     pub message: Option<String>,
 }
 
-/// <p>Placeholder documentation for RtmpCaptionInfoDestinationSettings</p>
+/// <p>Rtmp Caption Info Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RtmpCaptionInfoDestinationSettings {}
 
-/// <p>Placeholder documentation for RtmpGroupSettings</p>
+/// <p>Rtmp Group Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RtmpGroupSettings {
     /// <p>Authentication scheme to use when connecting with CDN</p>
@@ -3783,7 +3926,7 @@ pub struct RtmpGroupSettings {
     pub restart_delay: Option<i64>,
 }
 
-/// <p>Placeholder documentation for RtmpOutputSettings</p>
+/// <p>Rtmp Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RtmpOutputSettings {
     /// <p>If set to verifyAuthenticity, verify the tls certificate chain to a trusted Certificate Authority (CA).  This will cause rtmps outputs with self-signed certificates to fail.</p>
@@ -3820,31 +3963,35 @@ pub struct ScheduleAction {
 /// <p>Holds the settings for a single schedule action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScheduleActionSettings {
-    /// <p>Settings to emit HLS metadata</p>
+    /// <p>Action to insert HLS metadata</p>
     #[serde(rename = "HlsTimedMetadataSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_timed_metadata_settings: Option<HlsTimedMetadataScheduleActionSettings>,
-    /// <p>Settings to switch an input</p>
+    /// <p>Action to switch the input</p>
     #[serde(rename = "InputSwitchSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_switch_settings: Option<InputSwitchScheduleActionSettings>,
-    /// <p>Settings for SCTE-35 return<em>to</em>network message</p>
+    /// <p>Action to pause or unpause one or both channel pipelines</p>
+    #[serde(rename = "PauseStateSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pause_state_settings: Option<PauseStateScheduleActionSettings>,
+    /// <p>Action to insert SCTE-35 return<em>to</em>network message</p>
     #[serde(rename = "Scte35ReturnToNetworkSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scte_35_return_to_network_settings: Option<Scte35ReturnToNetworkScheduleActionSettings>,
-    /// <p>Settings for SCTE-35 splice_insert message</p>
+    /// <p>Action to insert SCTE-35 splice_insert message</p>
     #[serde(rename = "Scte35SpliceInsertSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scte_35_splice_insert_settings: Option<Scte35SpliceInsertScheduleActionSettings>,
-    /// <p>Settings for SCTE-35 time_signal message</p>
+    /// <p>Action to insert SCTE-35 time_signal message</p>
     #[serde(rename = "Scte35TimeSignalSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scte_35_time_signal_settings: Option<Scte35TimeSignalScheduleActionSettings>,
-    /// <p>Settings to activate a static image overlay</p>
+    /// <p>Action to activate a static image overlay</p>
     #[serde(rename = "StaticImageActivateSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_image_activate_settings: Option<StaticImageActivateScheduleActionSettings>,
-    /// <p>Settings to deactivate a static image overlay</p>
+    /// <p>Action to deactivate a static image overlay</p>
     #[serde(rename = "StaticImageDeactivateSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_image_deactivate_settings: Option<StaticImageDeactivateScheduleActionSettings>,
@@ -3863,6 +4010,10 @@ pub struct ScheduleActionStartSettings {
     pub follow_mode_schedule_action_start_settings: Option<FollowModeScheduleActionStartSettings>,
 }
 
+/// <p>Result of a schedule deletion.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ScheduleDeleteResultModel {}
+
 /// <p>Results of a schedule describe.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ScheduleDescribeResultModel {
@@ -3872,11 +4023,11 @@ pub struct ScheduleDescribeResultModel {
     pub schedule_actions: Vec<ScheduleAction>,
 }
 
-/// <p>Placeholder documentation for Scte20PlusEmbeddedDestinationSettings</p>
+/// <p>Scte20 Plus Embedded Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scte20PlusEmbeddedDestinationSettings {}
 
-/// <p>Placeholder documentation for Scte20SourceSettings</p>
+/// <p>Scte20 Source Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scte20SourceSettings {
     /// <p>If upconvert, 608 data is both passed through via the &quot;608 compatibility bytes&quot; fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded.</p>
@@ -3889,11 +4040,11 @@ pub struct Scte20SourceSettings {
     pub source_608_channel_number: Option<i64>,
 }
 
-/// <p>Placeholder documentation for Scte27DestinationSettings</p>
+/// <p>Scte27 Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scte27DestinationSettings {}
 
-/// <p>Placeholder documentation for Scte27SourceSettings</p>
+/// <p>Scte27 Source Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scte27SourceSettings {
     /// <p>The pid field is used in conjunction with the caption selector languageCode field as follows:
@@ -3994,7 +4145,7 @@ pub struct Scte35SegmentationDescriptor {
     pub sub_segments_expected: Option<i64>,
 }
 
-/// <p>Placeholder documentation for Scte35SpliceInsert</p>
+/// <p>Scte35 Splice Insert</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scte35SpliceInsert {
     /// <p>When specified, this offset (in milliseconds) is added to the input Ad Avail PTS time. This only applies to embedded SCTE 104/35 messages and does not apply to OOB messages.</p>
@@ -4023,7 +4174,7 @@ pub struct Scte35SpliceInsertScheduleActionSettings {
     pub splice_event_id: i64,
 }
 
-/// <p>Placeholder documentation for Scte35TimeSignalApos</p>
+/// <p>Scte35 Time Signal Apos</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scte35TimeSignalApos {
     /// <p>When specified, this offset (in milliseconds) is added to the input Ad Avail PTS time. This only applies to embedded SCTE 104/35 messages and does not apply to OOB messages.</p>
@@ -4048,11 +4199,11 @@ pub struct Scte35TimeSignalScheduleActionSettings {
     pub scte_35_descriptors: Vec<Scte35Descriptor>,
 }
 
-/// <p>Placeholder documentation for SmpteTtDestinationSettings</p>
+/// <p>Smpte Tt Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SmpteTtDestinationSettings {}
 
-/// <p>Placeholder documentation for StandardHlsSettings</p>
+/// <p>Standard Hls Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StandardHlsSettings {
     /// <p>List all the audio groups that are used with the video output stream. Input all the audio GROUP-IDs that are associated to the video, separate by &#39;,&#39;.</p>
@@ -4079,6 +4230,10 @@ pub struct StartChannelResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -4185,7 +4340,7 @@ pub struct StaticImageDeactivateScheduleActionSettings {
     pub layer: Option<i64>,
 }
 
-/// <p>Placeholder documentation for StaticKeySettings</p>
+/// <p>Static Key Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StaticKeySettings {
     /// <p>The URL of the license server used for protecting content.</p>
@@ -4213,6 +4368,10 @@ pub struct StopChannelResponse {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
+    #[serde(rename = "ChannelClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_class: Option<String>,
     /// <p>A list of destinations of the channel. For UDP outputs, there is one
     /// destination per output. For other types (HLS, for example), there is
     /// one destination per packager.</p>
@@ -4268,11 +4427,11 @@ pub struct TagsModel {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Placeholder documentation for TeletextDestinationSettings</p>
+/// <p>Teletext Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TeletextDestinationSettings {}
 
-/// <p>Placeholder documentation for TeletextSourceSettings</p>
+/// <p>Teletext Source Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TeletextSourceSettings {
     /// <p>Specifies the teletext page number within the data stream from which to extract captions. Range of 0x100 (256) to 0x8FF (2303). Unused for passthrough. Should be specified as a hexadecimal string with no &quot;0x&quot; prefix.</p>
@@ -4281,7 +4440,7 @@ pub struct TeletextSourceSettings {
     pub page_number: Option<String>,
 }
 
-/// <p>Placeholder documentation for TimecodeConfig</p>
+/// <p>Timecode Config</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimecodeConfig {
     /// <p>Identifies the source for the timecode that will be associated with the events outputs.
@@ -4296,7 +4455,7 @@ pub struct TimecodeConfig {
     pub sync_threshold: Option<i64>,
 }
 
-/// <p>Placeholder documentation for TtmlDestinationSettings</p>
+/// <p>Ttml Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TtmlDestinationSettings {
     /// <p>When set to passthrough, passes through style and position information from a TTML-like input source (TTML, SMPTE-TT, CFF-TT) to the CFF-TT output or TTML output.</p>
@@ -4305,7 +4464,7 @@ pub struct TtmlDestinationSettings {
     pub style_control: Option<String>,
 }
 
-/// <p>Placeholder documentation for UdpContainerSettings</p>
+/// <p>Udp Container Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UdpContainerSettings {
     #[serde(rename = "M2tsSettings")]
@@ -4313,7 +4472,7 @@ pub struct UdpContainerSettings {
     pub m_2ts_settings: Option<M2tsSettings>,
 }
 
-/// <p>Placeholder documentation for UdpGroupSettings</p>
+/// <p>Udp Group Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UdpGroupSettings {
     /// <p>Specifies behavior of last resort when input video is lost, and no more backup inputs are available. When dropTs is selected the entire transport stream will stop being emitted.  When dropProgram is selected the program can be dropped from the transport stream (and replaced with null packets to meet the TS bitrate requirement).  Or, when emitProgram is chosen the transport stream will continue to be produced normally with repeat frames, black frames, or slate frames substituted for the absent input video.</p>
@@ -4330,7 +4489,7 @@ pub struct UdpGroupSettings {
     pub timed_metadata_id_3_period: Option<i64>,
 }
 
-/// <p>Placeholder documentation for UdpOutputSettings</p>
+/// <p>Udp Output Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UdpOutputSettings {
     /// <p>UDP output buffering in milliseconds. Larger values increase latency through the transcoder but simultaneously assist the transcoder in maintaining a constant, low-jitter UDP/RTP output while accommodating clock recovery, input switching, input disruptions, picture reordering, etc.</p>
@@ -4364,6 +4523,39 @@ pub struct UpdateChannel {
     pub name: Option<String>,
     /// <p>An optional Amazon Resource Name (ARN) of the role to assume when running the Channel. If you do not specify this on an update call but the role was previously set that role will be removed.</p>
     pub role_arn: Option<String>,
+}
+
+/// <p>Placeholder documentation for UpdateChannelClass</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateChannelClass {
+    /// <p>The channel class that you wish to update this channel to use.</p>
+    pub channel_class: String,
+    /// <p>A list of output destinations for this channel.</p>
+    pub destinations: Option<Vec<OutputDestination>>,
+}
+
+/// <p>Channel class that the channel should be updated to.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateChannelClassRequest {
+    /// <p>The channel class that you wish to update this channel to use.</p>
+    #[serde(rename = "ChannelClass")]
+    pub channel_class: String,
+    /// <p>Channel Id of the channel whose class should be updated.</p>
+    #[serde(rename = "ChannelId")]
+    pub channel_id: String,
+    /// <p>A list of output destinations for this channel.</p>
+    #[serde(rename = "Destinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destinations: Option<Vec<OutputDestination>>,
+}
+
+/// <p>Placeholder documentation for UpdateChannelClassResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateChannelClassResponse {
+    #[serde(rename = "Channel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel: Option<Channel>,
 }
 
 /// <p>A request to update a channel.</p>
@@ -4519,6 +4711,40 @@ pub struct UpdateInputSecurityGroupResultModel {
     pub security_group: Option<InputSecurityGroup>,
 }
 
+/// <p>UpdateReservation request</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateReservation {
+    /// <p>Name of the reservation</p>
+    pub name: Option<String>,
+}
+
+/// <p>Request to update a reservation</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateReservationRequest {
+    /// <p>Name of the reservation</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Unique reservation ID, e.g. &#39;1234567&#39;</p>
+    #[serde(rename = "ReservationId")]
+    pub reservation_id: String,
+}
+
+/// <p>Placeholder documentation for UpdateReservationResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateReservationResponse {
+    #[serde(rename = "Reservation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservation: Option<Reservation>,
+}
+
+/// <p>UpdateReservation response</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateReservationResultModel {
+    pub reservation: Option<Reservation>,
+}
+
 /// <p>Placeholder documentation for ValidationError</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ValidationError {
@@ -4526,7 +4752,7 @@ pub struct ValidationError {
     pub error_message: Option<String>,
 }
 
-/// <p>Placeholder documentation for VideoCodecSettings</p>
+/// <p>Video Codec Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoCodecSettings {
     #[serde(rename = "FrameCaptureSettings")]
@@ -4586,7 +4812,7 @@ pub struct VideoSelector {
     pub selector_settings: Option<VideoSelectorSettings>,
 }
 
-/// <p>Placeholder documentation for VideoSelectorPid</p>
+/// <p>Video Selector Pid</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoSelectorPid {
     /// <p>Selects a specific PID from within a video source.</p>
@@ -4595,7 +4821,7 @@ pub struct VideoSelectorPid {
     pub pid: Option<i64>,
 }
 
-/// <p>Placeholder documentation for VideoSelectorProgramId</p>
+/// <p>Video Selector Program Id</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoSelectorProgramId {
     /// <p>Selects a specific program from within a multi-program transport stream. If the program doesn&#39;t exist, the first program within the transport stream will be selected by default.</p>
@@ -4604,7 +4830,7 @@ pub struct VideoSelectorProgramId {
     pub program_id: Option<i64>,
 }
 
-/// <p>Placeholder documentation for VideoSelectorSettings</p>
+/// <p>Video Selector Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoSelectorSettings {
     #[serde(rename = "VideoSelectorPid")]
@@ -4615,7 +4841,7 @@ pub struct VideoSelectorSettings {
     pub video_selector_program_id: Option<VideoSelectorProgramId>,
 }
 
-/// <p>Placeholder documentation for WebvttDestinationSettings</p>
+/// <p>Webvtt Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebvttDestinationSettings {}
 
@@ -5255,6 +5481,75 @@ impl Error for DeleteReservationError {
             DeleteReservationError::InternalServerError(ref cause) => cause,
             DeleteReservationError::NotFound(ref cause) => cause,
             DeleteReservationError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteSchedule
+#[derive(Debug, PartialEq)]
+pub enum DeleteScheduleError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl DeleteScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteScheduleError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(DeleteScheduleError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(DeleteScheduleError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(DeleteScheduleError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(DeleteScheduleError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(DeleteScheduleError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(DeleteScheduleError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(DeleteScheduleError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for DeleteScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteScheduleError::BadGateway(ref cause) => cause,
+            DeleteScheduleError::BadRequest(ref cause) => cause,
+            DeleteScheduleError::Forbidden(ref cause) => cause,
+            DeleteScheduleError::GatewayTimeout(ref cause) => cause,
+            DeleteScheduleError::InternalServerError(ref cause) => cause,
+            DeleteScheduleError::NotFound(ref cause) => cause,
+            DeleteScheduleError::TooManyRequests(ref cause) => cause,
         }
     }
 }
@@ -6415,6 +6710,91 @@ impl Error for UpdateChannelError {
         }
     }
 }
+/// Errors returned by UpdateChannelClass
+#[derive(Debug, PartialEq)]
+pub enum UpdateChannelClassError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+}
+
+impl UpdateChannelClassError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateChannelClassError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(UpdateChannelClassError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateChannelClassError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateChannelClassError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateChannelClassError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(UpdateChannelClassError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateChannelClassError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateChannelClassError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateChannelClassError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(UpdateChannelClassError::UnprocessableEntity(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateChannelClassError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateChannelClassError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateChannelClassError::BadGateway(ref cause) => cause,
+            UpdateChannelClassError::BadRequest(ref cause) => cause,
+            UpdateChannelClassError::Conflict(ref cause) => cause,
+            UpdateChannelClassError::Forbidden(ref cause) => cause,
+            UpdateChannelClassError::GatewayTimeout(ref cause) => cause,
+            UpdateChannelClassError::InternalServerError(ref cause) => cause,
+            UpdateChannelClassError::NotFound(ref cause) => cause,
+            UpdateChannelClassError::TooManyRequests(ref cause) => cause,
+            UpdateChannelClassError::UnprocessableEntity(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateInput
 #[derive(Debug, PartialEq)]
 pub enum UpdateInputError {
@@ -6557,6 +6937,83 @@ impl Error for UpdateInputSecurityGroupError {
         }
     }
 }
+/// Errors returned by UpdateReservation
+#[derive(Debug, PartialEq)]
+pub enum UpdateReservationError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ConflictException</p>
+    Conflict(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl UpdateReservationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateReservationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(UpdateReservationError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateReservationError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateReservationError::Conflict(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateReservationError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(UpdateReservationError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateReservationError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateReservationError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateReservationError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for UpdateReservationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateReservationError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateReservationError::BadGateway(ref cause) => cause,
+            UpdateReservationError::BadRequest(ref cause) => cause,
+            UpdateReservationError::Conflict(ref cause) => cause,
+            UpdateReservationError::Forbidden(ref cause) => cause,
+            UpdateReservationError::GatewayTimeout(ref cause) => cause,
+            UpdateReservationError::InternalServerError(ref cause) => cause,
+            UpdateReservationError::NotFound(ref cause) => cause,
+            UpdateReservationError::TooManyRequests(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the MediaLive API. MediaLive clients implement this trait.
 pub trait MediaLive {
     /// <p>Update a channel schedule</p>
@@ -6609,6 +7066,12 @@ pub trait MediaLive {
         &self,
         input: DeleteReservationRequest,
     ) -> RusotoFuture<DeleteReservationResponse, DeleteReservationError>;
+
+    /// <p>Delete all schedule actions on a channel.</p>
+    fn delete_schedule(
+        &self,
+        input: DeleteScheduleRequest,
+    ) -> RusotoFuture<DeleteScheduleResponse, DeleteScheduleError>;
 
     /// <p>Removes tags for a resource</p>
     fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError>;
@@ -6709,6 +7172,12 @@ pub trait MediaLive {
         input: UpdateChannelRequest,
     ) -> RusotoFuture<UpdateChannelResponse, UpdateChannelError>;
 
+    /// <p>Changes the class of the channel.</p>
+    fn update_channel_class(
+        &self,
+        input: UpdateChannelClassRequest,
+    ) -> RusotoFuture<UpdateChannelClassResponse, UpdateChannelClassError>;
+
     /// <p>Updates an input.</p>
     fn update_input(
         &self,
@@ -6720,6 +7189,12 @@ pub trait MediaLive {
         &self,
         input: UpdateInputSecurityGroupRequest,
     ) -> RusotoFuture<UpdateInputSecurityGroupResponse, UpdateInputSecurityGroupError>;
+
+    /// <p>Update reservation.</p>
+    fn update_reservation(
+        &self,
+        input: UpdateReservationRequest,
+    ) -> RusotoFuture<UpdateReservationResponse, UpdateReservationError>;
 }
 /// A client for the MediaLive API.
 #[derive(Clone)]
@@ -7030,6 +7505,38 @@ impl MediaLive for MediaLiveClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteReservationError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Delete all schedule actions on a channel.</p>
+    fn delete_schedule(
+        &self,
+        input: DeleteScheduleRequest,
+    ) -> RusotoFuture<DeleteScheduleResponse, DeleteScheduleError> {
+        let request_uri = format!(
+            "/prod/channels/{channel_id}/schedule",
+            channel_id = input.channel_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<DeleteScheduleResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteScheduleError::from_response(response))),
                 )
             }
         })
@@ -7382,6 +7889,9 @@ impl MediaLive for MediaLiveClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.channel_class {
+            params.put("channelClass", x);
+        }
         if let Some(ref x) = input.channel_configuration {
             params.put("channelConfiguration", x);
         }
@@ -7444,6 +7954,9 @@ impl MediaLive for MediaLiveClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.channel_class {
+            params.put("channelClass", x);
+        }
         if let Some(ref x) = input.codec {
             params.put("codec", x);
         }
@@ -7654,6 +8167,41 @@ impl MediaLive for MediaLiveClient {
         })
     }
 
+    /// <p>Changes the class of the channel.</p>
+    fn update_channel_class(
+        &self,
+        input: UpdateChannelClassRequest,
+    ) -> RusotoFuture<UpdateChannelClassResponse, UpdateChannelClassError> {
+        let request_uri = format!(
+            "/prod/channels/{channel_id}/channelClass",
+            channel_id = input.channel_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateChannelClassResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateChannelClassError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Updates an input.</p>
     fn update_input(
         &self,
@@ -7714,6 +8262,41 @@ impl MediaLive for MediaLiveClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateInputSecurityGroupError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Update reservation.</p>
+    fn update_reservation(
+        &self,
+        input: UpdateReservationRequest,
+    ) -> RusotoFuture<UpdateReservationResponse, UpdateReservationError> {
+        let request_uri = format!(
+            "/prod/reservations/{reservation_id}",
+            reservation_id = input.reservation_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<UpdateReservationResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateReservationError::from_response(response))),
+                )
             }
         })
     }

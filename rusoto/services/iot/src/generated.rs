@@ -1224,6 +1224,10 @@ pub struct CreateOTAUpdateRequest {
     /// <p>The IAM role that allows access to the AWS IoT Jobs service.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
+    /// <p>Metadata which can be used to manage updates.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>Specifies whether the update will continue to run (CONTINUOUS), or will be complete after all the things specified as targets have completed the update (SNAPSHOT). If continuous, the update may also be run on a thing when a change is detected in a target. For example, an update will run on a thing when the thing is added to a target group, even after the update was completed by all things originally in the group. Valid values: CONTINUOUS | SNAPSHOT.</p>
     #[serde(rename = "targetSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1444,6 +1448,10 @@ pub struct CreateStreamRequest {
     /// <p>The stream ID.</p>
     #[serde(rename = "streamId")]
     pub stream_id: String,
+    /// <p>Metadata which can be used to manage streams.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2125,7 +2133,7 @@ pub struct DescribeIndexResponse {
     #[serde(rename = "indexStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_status: Option<String>,
-    /// <p><p>Contains a value that specifies the type of indexing performed. Valid values are:</p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry data and shadow data.</p> </li> <li> <p>REGISTRY<em>AND</em>CONNECTIVITY<em>STATUS - Your thing index will contain registry data and thing connectivity status data.</p> </li> <li> <p>REGISTRY</em>AND<em>SHADOW</em>AND<em>CONNECTIVITY</em>STATUS - Your thing index will contain registry data, shadow data, and thing connectivity status data.</p> </li> </ul></p>
+    /// <p><p>Contains a value that specifies the type of indexing performed. Valid values are:</p> <ul> <li> <p>REGISTRY – Your thing index contains only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index contains registry data and shadow data.</p> </li> <li> <p>REGISTRY<em>AND</em>CONNECTIVITY<em>STATUS - Your thing index contains registry data and thing connectivity status data.</p> </li> <li> <p>REGISTRY</em>AND<em>SHADOW</em>AND<em>CONNECTIVITY</em>STATUS - Your thing index contains registry data, shadow data, and thing connectivity status data.</p> </li> </ul></p>
     #[serde(rename = "schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -2910,6 +2918,34 @@ pub struct GetRegistrationCodeResponse {
     pub registration_code: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetStatisticsRequest {
+    /// <p>The aggregation field name. Currently not supported.</p>
+    #[serde(rename = "aggregationField")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregation_field: Option<String>,
+    /// <p>The name of the index to search. The default value is <code>AWS_Things</code>.</p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The query used to search. You can specify "*" for the query string to get the count of all indexed things in your AWS account.</p>
+    #[serde(rename = "queryString")]
+    pub query_string: String,
+    /// <p>The version of the query used to search.</p>
+    #[serde(rename = "queryVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetStatisticsResponse {
+    /// <p>The statistics returned by the Fleet Indexing service based on the query and aggregation field.</p>
+    #[serde(rename = "statistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistics: Option<Statistics>,
+}
+
 /// <p>The input for the GetTopicRule operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTopicRuleRequest {
@@ -3639,7 +3675,7 @@ pub struct ListIndicesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -3652,7 +3688,7 @@ pub struct ListIndicesResponse {
     #[serde(rename = "indexNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_names: Option<Vec<String>>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5219,7 +5255,7 @@ pub struct SearchIndexRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5235,7 +5271,7 @@ pub struct SearchIndexRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct SearchIndexResponse {
-    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or null if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -5461,6 +5497,16 @@ pub struct StatisticalThreshold {
     #[serde(rename = "statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistic: Option<String>,
+}
+
+/// <p>A map of key-value pairs for all supported statistics. Currently, only count is supported.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Statistics {
+    /// <p>The count of things that match the query.</p>
+    #[serde(rename = "count")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count: Option<i64>,
 }
 
 /// <p>Starts execution of a Step Functions state machine.</p>
@@ -5740,11 +5786,11 @@ pub struct ThingAttribute {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ThingConnectivity {
-    /// <p>True if the thing is connected to the AWS IoT service, false if it is not connected.</p>
+    /// <p>True if the thing is connected to the AWS IoT service; false if it is not connected.</p>
     #[serde(rename = "connected")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connected: Option<bool>,
-    /// <p>The epoch time (in milliseconds) when the thing last connected or disconnected. Note that if the thing has been disconnected for more than a few weeks, the time value can be missing.</p>
+    /// <p>The epoch time (in milliseconds) when the thing last connected or disconnected. If the thing has been disconnected for more than a few weeks, the time value might be missing.</p>
     #[serde(rename = "timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
@@ -5758,7 +5804,7 @@ pub struct ThingDocument {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Indicates whether or not the thing is connected to the AWS IoT service.</p>
+    /// <p>Indicates whether the thing is connected to the AWS IoT service.</p>
     #[serde(rename = "connectivity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connectivity: Option<ThingConnectivity>,
@@ -5852,11 +5898,11 @@ pub struct ThingGroupProperties {
 /// <p>The thing indexing configuration. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/managing-index.html">Managing Thing Indexing</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingIndexingConfiguration {
-    /// <p><p>Thing connectivity indexing mode. Valid values are: </p> <ul> <li> <p>STATUS – Your thing index will contain connectivity status. In order to enable thing connectivity indexing, thingIndexMode must not be set to OFF.</p> </li> <li> <p>OFF - Thing connectivity status indexing is disabled.</p> </li> </ul></p>
+    /// <p><p>Thing connectivity indexing mode. Valid values are: </p> <ul> <li> <p>STATUS – Your thing index contains connectivity status. To enable thing connectivity indexing, thingIndexMode must not be set to OFF.</p> </li> <li> <p>OFF - Thing connectivity status indexing is disabled.</p> </li> </ul></p>
     #[serde(rename = "thingConnectivityIndexingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_connectivity_indexing_mode: Option<String>,
-    /// <p><p>Thing indexing mode. Valid values are:</p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry and shadow data.</p> </li> <li> <p>OFF - Thing indexing is disabled.</p> </li> </ul></p>
+    /// <p><p>Thing indexing mode. Valid values are:</p> <ul> <li> <p>REGISTRY – Your thing index contains registry data only.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index contains registry and shadow data.</p> </li> <li> <p>OFF - Thing indexing is disabled.</p> </li> </ul></p>
     #[serde(rename = "thingIndexingMode")]
     pub thing_indexing_mode: String,
 }
@@ -12049,6 +12095,87 @@ impl Error for GetRegistrationCodeError {
         }
     }
 }
+/// Errors returned by GetStatistics
+#[derive(Debug, PartialEq)]
+pub enum GetStatisticsError {
+    /// <p>The index is not ready.</p>
+    IndexNotReady(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The aggregation is invalid.</p>
+    InvalidAggregation(String),
+    /// <p>The query is invalid.</p>
+    InvalidQuery(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+}
+
+impl GetStatisticsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetStatisticsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "IndexNotReadyException" => {
+                    return RusotoError::Service(GetStatisticsError::IndexNotReady(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(GetStatisticsError::InternalFailure(err.msg))
+                }
+                "InvalidAggregationException" => {
+                    return RusotoError::Service(GetStatisticsError::InvalidAggregation(err.msg))
+                }
+                "InvalidQueryException" => {
+                    return RusotoError::Service(GetStatisticsError::InvalidQuery(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetStatisticsError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetStatisticsError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(GetStatisticsError::ServiceUnavailable(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetStatisticsError::Throttling(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(GetStatisticsError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        return RusotoError::Unknown(res);
+    }
+}
+impl fmt::Display for GetStatisticsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetStatisticsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetStatisticsError::IndexNotReady(ref cause) => cause,
+            GetStatisticsError::InternalFailure(ref cause) => cause,
+            GetStatisticsError::InvalidAggregation(ref cause) => cause,
+            GetStatisticsError::InvalidQuery(ref cause) => cause,
+            GetStatisticsError::InvalidRequest(ref cause) => cause,
+            GetStatisticsError::ResourceNotFound(ref cause) => cause,
+            GetStatisticsError::ServiceUnavailable(ref cause) => cause,
+            GetStatisticsError::Throttling(ref cause) => cause,
+            GetStatisticsError::Unauthorized(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetTopicRule
 #[derive(Debug, PartialEq)]
 pub enum GetTopicRuleError {
@@ -17053,7 +17180,7 @@ pub trait Iot {
         input: CreateStreamRequest,
     ) -> RusotoFuture<CreateStreamResponse, CreateStreamError>;
 
-    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing(
         &self,
         input: CreateThingRequest,
@@ -17399,6 +17526,12 @@ pub trait Iot {
     fn get_registration_code(
         &self,
     ) -> RusotoFuture<GetRegistrationCodeResponse, GetRegistrationCodeError>;
+
+    /// <p>Gets statistics about things that match the specified query.</p>
+    fn get_statistics(
+        &self,
+        input: GetStatisticsRequest,
+    ) -> RusotoFuture<GetStatisticsResponse, GetStatisticsError>;
 
     /// <p>Gets information about the rule.</p>
     fn get_topic_rule(
@@ -18806,7 +18939,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Creates a thing record in the registry. If this call is made multiple times using the same thing name and configuration, the call will succeed. If this call is made with the same thing name but different configuration a <code>ResourceAlreadyExistsException</code> is thrown.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing(
         &self,
         input: CreateThingRequest,
@@ -20815,6 +20948,39 @@ impl Iot for IotClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(GetRegistrationCodeError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets statistics about things that match the specified query.</p>
+    fn get_statistics(
+        &self,
+        input: GetStatisticsRequest,
+    ) -> RusotoFuture<GetStatisticsResponse, GetStatisticsError> {
+        let request_uri = "/indices/statistics";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    let result = proto::json::ResponsePayload::new(&response)
+                        .deserialize::<GetStatisticsResponse, _>()?;
+
+                    Ok(result)
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetStatisticsError::from_response(response))),
                 )
             }
         })

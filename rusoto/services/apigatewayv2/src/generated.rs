@@ -32,7 +32,8 @@ pub struct AccessLogSettings {
     #[serde(rename = "DestinationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_arn: Option<String>,
-    /// <p>A single line format of the access logs of data, as specified by selected $context variables. The format must include at least $context.requestId.</p>
+    /// <p>A single line format of the access logs of data, as specified by selected $context
+    /// variables. The format must include at least $context.requestId.</p>
     #[serde(rename = "Format")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub format: Option<String>,
@@ -42,7 +43,9 @@ pub struct AccessLogSettings {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Api {
-    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
+    /// stage name is typically appended to this URI to form a complete path to a deployed
+    /// API stage.</p>
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
@@ -69,7 +72,7 @@ pub struct Api {
     /// <p>The name of the API.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The API protocol: HTTP or WEBSOCKET.</p>
+    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
     #[serde(rename = "ProtocolType")]
     pub protocol_type: String,
     /// <p>The route selection expression for the API.</p>
@@ -79,23 +82,41 @@ pub struct Api {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
+    /// <p>The warning messages reported when failonwarnings is turned on during
+    /// API import.</p>
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
 }
 
 /// <p>Represents an API mapping.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
 pub struct ApiMapping {
     /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
     pub api_id: String,
     /// <p>The API mapping identifier.</p>
+    #[serde(rename = "ApiMappingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub api_mapping_id: Option<String>,
     /// <p>The API mapping key.</p>
+    #[serde(rename = "ApiMappingKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub api_mapping_key: Option<String>,
     /// <p>The API stage.</p>
+    #[serde(rename = "Stage")]
     pub stage: String,
+}
+
+/// <p>Represents a collection of ApiMappings resources.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ApiMappings {
+    /// <p>The elements from this collection.</p>
+    pub items: Option<Vec<ApiMapping>>,
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
+    pub next_token: Option<String>,
 }
 
 /// <p>Represents a collection of APIs.</p>
@@ -103,7 +124,8 @@ pub struct ApiMapping {
 pub struct Apis {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<Api>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
@@ -111,7 +133,10 @@ pub struct Apis {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Authorizer {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
+    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
+    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
+    /// specify null.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -119,30 +144,60 @@ pub struct Authorizer {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
+    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
+    /// authorizer responses. If this field is not set, the default value is 300. The maximum
+    /// value is 3600, or 1 hour.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
+    /// Lambda function using incoming request parameters.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations. In general, the URI has this form: arn:aws:apigateway:{region}:lambda:path/{service_api} , where {region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI).
+    /// ForREQUEST authorizers, this must be a
+    /// well-formed Lambda function URI, for example,
+    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
+    /// In general, the URI has this form:
+    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
+    /// , where {region} is the same as the region hosting the Lambda
+    /// function, path indicates that the remaining substring in the URI should be treated as
+    /// the path to the resource, including the initial /. For Lambda functions,
+    /// this is usually of the form
+    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an Auth header and a Name query string parameters are defined as identity sources, this value is method.request.header.Auth, method.request.querystring.Name. These parameters will be used to derive the authorization caching key and to perform runtime validation of the REQUEST authorizer by verifying all of the identity-related request parameters are present, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</p>
+    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
+    /// caching is enabled. The value is a comma-separated string of one or more mapping
+    /// expressions of the specified request parameters. For example, if an Auth
+    /// header and a Name query string parameters are defined as identity
+    /// sources, this value is method.request.header.Auth,
+    /// method.request.querystring.Name. These parameters will be used to
+    /// derive the authorization caching key and to perform runtime validation of the
+    /// REQUEST authorizer by verifying all of the identity-related request
+    /// parameters are present, not null, and non-empty. Only when this is true does the
+    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
+    /// Unauthorized response without calling the Lambda function. The valid value
+    /// is a string of comma-separated mapping expressions of the specified request
+    /// parameters. When the authorization caching is not enabled, this property is
+    /// optional.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The
+    /// validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>For REQUEST authorizer, this is not defined.</p>
+    /// <p>For
+    /// REQUEST authorizer, this is not
+    /// defined.</p>
     #[serde(rename = "ProviderArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_arns: Option<Vec<String>>,
@@ -153,7 +208,8 @@ pub struct Authorizer {
 pub struct Authorizers {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<Authorizer>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
@@ -168,7 +224,7 @@ pub struct CreateApiInput {
     pub disable_schema_validation: Option<bool>,
     /// <p>The name of the API.</p>
     pub name: String,
-    /// <p>The API protocol: HTTP or WEBSOCKET.</p>
+    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
     pub protocol_type: String,
     /// <p>The route selection expression for the API.</p>
     pub route_selection_expression: String,
@@ -176,7 +232,8 @@ pub struct CreateApiInput {
     pub version: Option<String>,
 }
 
-/// <p>Represents the input parameters for a CreateApiMapping request.</p>
+/// <p>Represents the input parameters for a CreateApiMapping
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateApiMappingInput {
     /// <p>The API identifier.</p>
@@ -242,7 +299,7 @@ pub struct CreateApiRequest {
     /// <p>The name of the API.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The API protocol: HTTP or WEBSOCKET.</p>
+    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
     #[serde(rename = "ProtocolType")]
     pub protocol_type: String,
     /// <p>The route selection expression for the API.</p>
@@ -257,7 +314,9 @@ pub struct CreateApiRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateApiResponse {
-    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
+    /// stage name is typically appended to this URI to form a complete path to a deployed
+    /// API stage.</p>
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
@@ -285,7 +344,7 @@ pub struct CreateApiResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The API protocol: HTTP or WEBSOCKET.</p>
+    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol_type: Option<String>,
@@ -297,30 +356,65 @@ pub struct CreateApiResponse {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
+    /// <p>The warning messages reported when failonwarnings is turned on during
+    /// API import.</p>
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
 }
 
-/// <p>Represents the input parameters for a CreateAuthorizer request.</p>
+/// <p>Represents the input parameters for a CreateAuthorizer
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateAuthorizerInput {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
+    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
+    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
+    /// specify null.</p>
     pub authorizer_credentials_arn: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
+    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
+    /// authorizer responses. If this field is not set, the default value is 300. The maximum
+    /// value is 3600, or 1 hour.</p>
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
+    /// Lambda function using incoming request parameters.</p>
     pub authorizer_type: String,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations. In general, the URI has this form: arn:aws:apigateway:{region}:lambda:path/{service_api} , where {region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For
+    /// REQUEST authorizers, this must be a
+    /// well-formed Lambda function URI, for example,
+    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
+    /// In general, the URI has this form:
+    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
+    /// , where {region} is the same as the region hosting the Lambda
+    /// function, path indicates that the remaining substring in the URI should be treated as
+    /// the path to the resource, including the initial /. For Lambda functions,
+    /// this is usually of the form
+    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
     pub authorizer_uri: String,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an Auth header and a Name query string parameters are defined as identity sources, this value is method.request.header.Auth, method.request.querystring.Name. These parameters will be used to derive the authorization caching key and to perform runtime validation of the REQUEST authorizer by verifying all of the identity-related request parameters are present, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</p>
+    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
+    /// caching is enabled. The value is a comma-separated string of one or more mapping
+    /// expressions of the specified request parameters. For example, if an Auth
+    /// header and a Name query string parameters are defined as identity
+    /// sources, this value is method.request.header.Auth,
+    /// method.request.querystring.Name. These parameters will be used to
+    /// derive the authorization caching key and to perform runtime validation of the
+    /// REQUEST authorizer by verifying all of the identity-related request
+    /// parameters are present, not null, and non-empty. Only when this is true does the
+    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
+    /// Unauthorized response without calling the Lambda function. The valid value
+    /// is a string of comma-separated mapping expressions of the specified request
+    /// parameters. When the authorization caching is not enabled, this property is
+    /// optional.</p>
     pub identity_source: Vec<String>,
-    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The
+    /// validation expression does not apply to the REQUEST authorizer.</p>
     pub identity_validation_expression: Option<String>,
     /// <p>The name of the authorizer.</p>
     pub name: String,
-    /// <p>For REQUEST authorizer, this is not defined.</p>
+    /// <p>For
+    /// REQUEST authorizer, this is not
+    /// defined.</p>
     pub provider_arns: Option<Vec<String>>,
 }
 
@@ -329,31 +423,64 @@ pub struct CreateAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
+    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
+    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
+    /// specify null.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
+    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
+    /// authorizer responses. If this field is not set, the default value is 300. The maximum
+    /// value is 3600, or 1 hour.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
+    /// Lambda function using incoming request parameters.</p>
     #[serde(rename = "AuthorizerType")]
     pub authorizer_type: String,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations. In general, the URI has this form: arn:aws:apigateway:{region}:lambda:path/{service_api} , where {region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For
+    /// REQUEST authorizers, this must be a
+    /// well-formed Lambda function URI, for example,
+    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
+    /// In general, the URI has this form:
+    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
+    /// , where {region} is the same as the region hosting the Lambda
+    /// function, path indicates that the remaining substring in the URI should be treated as
+    /// the path to the resource, including the initial /. For Lambda functions,
+    /// this is usually of the form
+    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
     #[serde(rename = "AuthorizerUri")]
     pub authorizer_uri: String,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an Auth header and a Name query string parameters are defined as identity sources, this value is method.request.header.Auth, method.request.querystring.Name. These parameters will be used to derive the authorization caching key and to perform runtime validation of the REQUEST authorizer by verifying all of the identity-related request parameters are present, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</p>
+    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
+    /// caching is enabled. The value is a comma-separated string of one or more mapping
+    /// expressions of the specified request parameters. For example, if an Auth
+    /// header and a Name query string parameters are defined as identity
+    /// sources, this value is method.request.header.Auth,
+    /// method.request.querystring.Name. These parameters will be used to
+    /// derive the authorization caching key and to perform runtime validation of the
+    /// REQUEST authorizer by verifying all of the identity-related request
+    /// parameters are present, not null, and non-empty. Only when this is true does the
+    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
+    /// Unauthorized response without calling the Lambda function. The valid value
+    /// is a string of comma-separated mapping expressions of the specified request
+    /// parameters. When the authorization caching is not enabled, this property is
+    /// optional.</p>
     #[serde(rename = "IdentitySource")]
     pub identity_source: Vec<String>,
-    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The
+    /// validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
     /// <p>The name of the authorizer.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>For REQUEST authorizer, this is not defined.</p>
+    /// <p>For
+    /// REQUEST authorizer, this is not
+    /// defined.</p>
     #[serde(rename = "ProviderArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_arns: Option<Vec<String>>,
@@ -362,7 +489,10 @@ pub struct CreateAuthorizerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
+    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
+    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
+    /// specify null.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -370,23 +500,51 @@ pub struct CreateAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
+    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
+    /// authorizer responses. If this field is not set, the default value is 300. The maximum
+    /// value is 3600, or 1 hour.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
+    /// Lambda function using incoming request parameters.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations. In general, the URI has this form: arn:aws:apigateway:{region}:lambda:path/{service_api} , where {region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI).
+    /// ForREQUEST authorizers, this must be a
+    /// well-formed Lambda function URI, for example,
+    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
+    /// In general, the URI has this form:
+    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
+    /// , where {region} is the same as the region hosting the Lambda
+    /// function, path indicates that the remaining substring in the URI should be treated as
+    /// the path to the resource, including the initial /. For Lambda functions,
+    /// this is usually of the form
+    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an Auth header and a Name query string parameters are defined as identity sources, this value is method.request.header.Auth, method.request.querystring.Name. These parameters will be used to derive the authorization caching key and to perform runtime validation of the REQUEST authorizer by verifying all of the identity-related request parameters are present, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</p>
+    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
+    /// caching is enabled. The value is a comma-separated string of one or more mapping
+    /// expressions of the specified request parameters. For example, if an Auth
+    /// header and a Name query string parameters are defined as identity
+    /// sources, this value is method.request.header.Auth,
+    /// method.request.querystring.Name. These parameters will be used to
+    /// derive the authorization caching key and to perform runtime validation of the
+    /// REQUEST authorizer by verifying all of the identity-related request
+    /// parameters are present, not null, and non-empty. Only when this is true does the
+    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
+    /// Unauthorized response without calling the Lambda function. The valid value
+    /// is a string of comma-separated mapping expressions of the specified request
+    /// parameters. When the authorization caching is not enabled, this property is
+    /// optional.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The
+    /// validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -394,18 +552,22 @@ pub struct CreateAuthorizerResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>For REQUEST authorizer, this is not defined.</p>
+    /// <p>For
+    /// REQUEST authorizer, this is not
+    /// defined.</p>
     #[serde(rename = "ProviderArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_arns: Option<Vec<String>>,
 }
 
-/// <p>Represents the input parameters for a CreateDeployment request.</p>
+/// <p>Represents the input parameters for a CreateDeployment
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDeploymentInput {
     /// <p>The description for the deployment resource.</p>
     pub description: Option<String>,
-    /// <p>The name of the Stage resource for the Deployment resource to create.</p>
+    /// <p>The name of the Stage resource for the Deployment
+    /// resource to create.</p>
     pub stage_name: Option<String>,
 }
 
@@ -418,7 +580,8 @@ pub struct CreateDeploymentRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the Stage resource for the Deployment resource to create.</p>
+    /// <p>The name of the Stage resource for the Deployment
+    /// resource to create.</p>
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
@@ -435,7 +598,8 @@ pub struct CreateDeploymentResponse {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
+    /// <p>The status of the deployment: PENDING, FAILED, or
+    /// SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -449,7 +613,8 @@ pub struct CreateDeploymentResponse {
     pub description: Option<String>,
 }
 
-/// <p>Represents the input parameters for a CreateDomainName request.</p>
+/// <p>Represents the input parameters for a CreateDomainName
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateDomainNameInput {
     /// <p>The domain name.</p>
@@ -486,34 +651,92 @@ pub struct CreateDomainNameResponse {
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
 }
 
-/// <p>Represents the input parameters for a CreateIntegration request.</p>
+/// <p>Represents the input parameters for a CreateIntegration
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateIntegrationInput {
-    /// <p>The identifier of the VpcLink used for the integration when the connectionType is VPC_LINK; otherwise undefined.</p>
+    /// <p>The connection ID.</p>
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. The valid value is INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and a network load balancer in a VPC. The default value is INTERNET.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only
+    /// valid value is INTERNET, for connections through the public routable
+    /// internet.</p>
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS
+    /// integrations, three options are available. To specify an IAM Role for API Gateway to
+    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
+    /// identity be passed through from the request, specify the string
+    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
+    /// AWS services, specify null.</p>
     pub credentials_arn: Option<String>,
     /// <p>The description of the integration.</p>
     pub description: Option<String>,
     /// <p>Specifies the integration's HTTP method type.</p>
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p> AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</p><p> AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p><p> HTTP: for integrating the route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</p><p> HTTP_PROXY: for integrating route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p><p> MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend.</p>
-    pub integration_type: Option<String>,
-    /// <p>Specifies the Uniform Resource Identifier (URI) of the integration endpoint.</p><p>For HTTP or HTTP_PROXY integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">RFC-3986 specification</a>, for either standard integration, where connectionType is not VPC_LINK, or private integration, where connectionType is VPC_LINK. For a private HTTP integration, the URI is not used for routing.</p><p>For AWS or AWS_PROXY integrations, the URI is of the form arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}. Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the URI can be either arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key} or arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</p>
+    /// <p>The integration type of an integration. One of the following:</p><p>
+    /// AWS: for integrating the route or method request with an AWS service
+    /// action, including the Lambda function-invoking action. With the Lambda
+    /// function-invoking action, this is referred to as the Lambda custom integration. With
+    /// any other AWS service action, this is known as AWS integration.</p><p>
+    /// AWS_PROXY: for integrating the route or method request with the Lambda
+    /// function-invoking action with the client request passed through as-is. This
+    /// integration is also referred to as Lambda proxy integration.</p><p>
+    /// HTTP: for integrating the route or method request with an HTTP
+    /// endpoint. This
+    /// integration is also referred to as HTTP custom integration.</p><p>
+    /// HTTP_PROXY: for integrating route or method request with an HTTP
+    /// endpoint, with the client
+    /// request passed through as-is. This is also referred to as HTTP proxy
+    /// integration.</p><p>
+    /// MOCK: for integrating the route or method request with API Gateway as a
+    /// "loopback" endpoint without invoking any backend.</p>
+    pub integration_type: String,
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.</p><p> WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p><p> NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p><p> WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the
+    /// Content-Type header in the request, and the available mapping
+    /// templates specified as the requestTemplates property on the
+    /// Integration resource. There are three valid values:
+    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
+    /// NEVER.</p><p>
+    /// WHEN_NO_MATCH passes the request body for unmapped content types through
+    /// to the integration backend without transformation.</p><p>
+    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
+    /// Media Type response.</p><p>
+    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
+    /// content types mapped to templates. However, if there is at least one content type
+    /// defined, unmapped content types will be rejected with the same HTTP 415
+    /// Unsupported Media Type response.</p>
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.{location}.{name} , where  {location}  is querystring, path, or header; and  {name}  must be a valid and unique method request parameter name.</p>
+    /// <p>A key-value map specifying request parameters that are passed from the method
+    /// request to the backend. The key is an integration request parameter name and the
+    /// associated value is a method request parameter value or static value that must be
+    /// enclosed within single quotes and pre-encoded as required by the backend. The method
+    /// request parameter value must match the pattern of
+    /// method.request.{location}.{name}
+    /// , where
+    /// {location}
+    /// is querystring, path, or header; and
+    /// {name}
+    /// must be a valid and unique method request parameter name.</p>
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload
+    /// based on the value of the Content-Type header sent by the client. The content type
+    /// value is the key in this map, and the template (as a String) is the value.</p>
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
     /// <p>The template selection expression for the integration.</p>
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
+    /// milliseconds or 29 seconds.</p>
     pub timeout_in_millis: Option<i64>,
 }
 
@@ -522,19 +745,34 @@ pub struct CreateIntegrationRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The identifier of the VpcLink used for the integration when the connectionType is VPC_LINK; otherwise undefined.</p>
+    /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. The valid value is INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and a network load balancer in a VPC. The default value is INTERNET.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only
+    /// valid value is INTERNET, for connections through the public routable
+    /// internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS
+    /// integrations, three options are available. To specify an IAM Role for API Gateway to
+    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
+    /// identity be passed through from the request, specify the string
+    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
+    /// AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -546,23 +784,63 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p> AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</p><p> AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p><p> HTTP: for integrating the route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</p><p> HTTP_PROXY: for integrating route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p><p> MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p><p>
+    /// AWS: for integrating the route or method request with an AWS service
+    /// action, including the Lambda function-invoking action. With the Lambda
+    /// function-invoking action, this is referred to as the Lambda custom integration. With
+    /// any other AWS service action, this is known as AWS integration.</p><p>
+    /// AWS_PROXY: for integrating the route or method request with the Lambda
+    /// function-invoking action with the client request passed through as-is. This
+    /// integration is also referred to as Lambda proxy integration.</p><p>
+    /// HTTP: for integrating the route or method request with an HTTP
+    /// endpoint. This
+    /// integration is also referred to as HTTP custom integration.</p><p>
+    /// HTTP_PROXY: for integrating route or method request with an HTTP
+    /// endpoint, with the client
+    /// request passed through as-is. This is also referred to as HTTP proxy
+    /// integration.</p><p>
+    /// MOCK: for integrating the route or method request with API Gateway as a
+    /// "loopback" endpoint without invoking any backend.</p>
     #[serde(rename = "IntegrationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
-    /// <p>Specifies the Uniform Resource Identifier (URI) of the integration endpoint.</p><p>For HTTP or HTTP_PROXY integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">RFC-3986 specification</a>, for either standard integration, where connectionType is not VPC_LINK, or private integration, where connectionType is VPC_LINK. For a private HTTP integration, the URI is not used for routing.</p><p>For AWS or AWS_PROXY integrations, the URI is of the form arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}. Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the URI can be either arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key} or arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</p>
+    pub integration_type: String,
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.</p><p> WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p><p> NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p><p> WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the
+    /// Content-Type header in the request, and the available mapping
+    /// templates specified as the requestTemplates property on the
+    /// Integration resource. There are three valid values:
+    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
+    /// NEVER.</p><p>
+    /// WHEN_NO_MATCH passes the request body for unmapped content types through
+    /// to the integration backend without transformation.</p><p>
+    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
+    /// Media Type response.</p><p>
+    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
+    /// content types mapped to templates. However, if there is at least one content type
+    /// defined, unmapped content types will be rejected with the same HTTP 415
+    /// Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.{location}.{name} , where  {location}  is querystring, path, or header; and  {name}  must be a valid and unique method request parameter name.</p>
+    /// <p>A key-value map specifying request parameters that are passed from the method
+    /// request to the backend. The key is an integration request parameter name and the
+    /// associated value is a method request parameter value or static value that must be
+    /// enclosed within single quotes and pre-encoded as required by the backend. The method
+    /// request parameter value must match the pattern of
+    /// method.request.{location}.{name}
+    /// , where
+    /// {location}
+    /// is querystring, path, or header; and
+    /// {name}
+    /// must be a valid and unique method request parameter name.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload
+    /// based on the value of the Content-Type header sent by the client. The content type
+    /// value is the key in this map, and the template (as a String) is the value.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
@@ -570,101 +848,44 @@ pub struct CreateIntegrationRequest {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
+    /// milliseconds or 29 seconds.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
 }
 
-/// <p>Represents the input parameters for a CreateIntegrationResponse request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateIntegrationResponseInput {
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration response key.</p>
-    pub integration_response_key: String,
-    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where {name} is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where {name} is a valid and unique response header name and {JSON-expression} is a valid JSON expression without the $ prefix.</p>
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration response.</p>
-    pub template_selection_expression: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct CreateIntegrationResponseRequest {
-    /// <p>The API identifier.</p>
-    #[serde(rename = "ApiId")]
-    pub api_id: String,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration ID.</p>
-    #[serde(rename = "IntegrationId")]
-    pub integration_id: String,
-    /// <p>The integration response key.</p>
-    #[serde(rename = "IntegrationResponseKey")]
-    pub integration_response_key: String,
-    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where {name} is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where {name} is a valid and unique response header name and {JSON-expression} is a valid JSON expression without the $ prefix.</p>
-    #[serde(rename = "ResponseParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
-    #[serde(rename = "ResponseTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration response.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateIntegrationResponseResponse {
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration response ID.</p>
-    #[serde(rename = "IntegrationResponseId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_id: Option<String>,
-    /// <p>The integration response key.</p>
-    #[serde(rename = "IntegrationResponseKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where name is a valid and unique response header name and JSON-expression is a valid JSON expression without the $ prefix.</p>
-    #[serde(rename = "ResponseParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
-    #[serde(rename = "ResponseTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expressions for the integration response.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct CreateIntegrationResult {
-    /// <p>The identifier of the VpcLink used for the integration when the connectionType is VPC_LINK; otherwise undefined.</p>
+pub struct CreateIntegrationResponse {
+    /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. The valid value is INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and a network load balancer in a VPC. The default value is INTERNET.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only
+    /// valid value is INTERNET, for connections through the public routable
+    /// internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS
+    /// integrations, three options are available. To specify an IAM Role for API Gateway to
+    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
+    /// identity be passed through from the request, specify the string
+    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
+    /// AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -680,27 +901,68 @@ pub struct CreateIntegrationResult {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-
+    /// <p>The integration response selection expression for the integration. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p> AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</p><p> AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p><p> HTTP: for integrating the route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</p><p> HTTP_PROXY: for integrating route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p><p> MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p><p>
+    /// AWS: for integrating the route or method request with an AWS service
+    /// action, including the Lambda function-invoking action. With the Lambda
+    /// function-invoking action, this is referred to as the Lambda custom integration. With
+    /// any other AWS service action, this is known as AWS integration.</p><p>
+    /// AWS_PROXY: for integrating the route or method request with the Lambda
+    /// function-invoking action with the client request passed through as-is. This
+    /// integration is also referred to as Lambda proxy integration.</p><p>
+    /// HTTP: for integrating the route or method request with an HTTP
+    /// endpoint. This
+    /// integration is also referred to as the HTTP custom integration.</p><p>
+    /// HTTP_PROXY: for integrating route or method request with an HTTP
+    /// endpoint, with the client
+    /// request passed through as-is. This is also referred to as HTTP proxy
+    /// integration.</p><p>
+    /// MOCK: for integrating the route or method request with API Gateway as a
+    /// "loopback" endpoint without invoking any backend.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>Specifies the Uniform Resource Identifier (URI) of the integration endpoint.</p><p>For HTTP or HTTP_PROXY integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">RFC-3986 specification</a>, for either standard integration, where connectionType is not VPC_LINK, or private integration, where connectionType is VPC_LINK. For a private HTTP integration, the URI is not used for routing.</p><p>For AWS or AWS_PROXY integrations, the URI is of the form arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}. Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the URI can be either arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key} or arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</p>
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.</p><p> WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p><p> NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p><p> WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the
+    /// Content-Type header in the request, and the available mapping
+    /// templates specified as the requestTemplates property on the
+    /// Integration resource. There are three valid values:
+    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
+    /// NEVER.</p><p>
+    /// WHEN_NO_MATCH passes the request body for unmapped content types through
+    /// to the integration backend without transformation.</p><p>
+    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
+    /// Media Type response.</p><p>
+    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
+    /// content types mapped to templates. However, if there is at least one content type
+    /// defined, unmapped content types will be rejected with the same HTTP 415
+    /// Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.{location}.{name} , where  {location}  is querystring, path, or header; and  {name}  must be a valid and unique method request parameter name.</p>
+    /// <p>A key-value map specifying request parameters that are passed from the method
+    /// request to the backend. The key is an integration request parameter name and the
+    /// associated value is a method request parameter value or static value that must be
+    /// enclosed within single quotes and pre-encoded as required by the backend. The method
+    /// request parameter value must match the pattern of
+    /// method.request.{location}.{name}
+    /// , where
+    /// {location}
+    /// is querystring, path, or header; and
+    /// {name}
+    /// must be a valid and unique method request parameter name.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload
+    /// based on the value of the Content-Type header sent by the client. The content type
+    /// value is the key in this map, and the template (as a String) is the value.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
@@ -708,10 +970,143 @@ pub struct CreateIntegrationResult {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
+    /// milliseconds or 29 seconds.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+}
+
+/// <p>Represents the input parameters for a CreateIntegrationResponse
+/// request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateIntegrationResponseInput {
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration response key.</p>
+    pub integration_response_key: String,
+    /// <p>A key-value map specifying response parameters that are passed to the method
+    /// response from the backend. The key is a method response header parameter name and the
+    /// mapped value is an integration response header value, a static value enclosed within
+    /// a pair of single quotes, or a JSON expression from the integration response body. The
+    /// mapping key must match the pattern of method.response.header.{name},
+    /// where {name} is a valid and unique header name. The mapped non-static
+    /// value must match the pattern of integration.response.header.{name} or
+    /// integration.response.body.{JSON-expression}, where
+    /// {name} is a valid and unique response header name and
+    /// {JSON-expression} is a valid JSON expression without the $
+    /// prefix.</p>
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a
+    /// string-to-string map of key-value pairs. Response templates are represented as a
+    /// key/value map, with a content-type as the key and a template as the value.</p>
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expression for the integration response.</p>
+    pub template_selection_expression: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateIntegrationResponseRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration ID.</p>
+    #[serde(rename = "IntegrationId")]
+    pub integration_id: String,
+    /// <p>The integration response key.</p>
+    #[serde(rename = "IntegrationResponseKey")]
+    pub integration_response_key: String,
+    /// <p>A key-value map specifying response parameters that are passed to the method
+    /// response from the backend. The key is a method response header parameter name and the
+    /// mapped value is an integration response header value, a static value enclosed within
+    /// a pair of single quotes, or a JSON expression from the integration response body. The
+    /// mapping key must match the pattern of method.response.header.{name},
+    /// where {name} is a valid and unique header name. The mapped non-static
+    /// value must match the pattern of integration.response.header.{name} or
+    /// integration.response.body.{JSON-expression}, where
+    /// {name} is a valid and unique response header name and
+    /// {JSON-expression} is a valid JSON expression without the $
+    /// prefix.</p>
+    #[serde(rename = "ResponseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a
+    /// string-to-string map of key-value pairs. Response templates are represented as a
+    /// key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "ResponseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expression for the integration response.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateIntegrationResponseResponse {
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration response ID.</p>
+    #[serde(rename = "IntegrationResponseId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_id: Option<String>,
+    /// <p>The integration response key.</p>
+    #[serde(rename = "IntegrationResponseKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_key: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method
+    /// response from the backend. The key is a method response header parameter name and the
+    /// mapped value is an integration response header value, a static value enclosed within
+    /// a pair of single quotes, or a JSON expression from the integration response body. The
+    /// mapping key must match the pattern of method.response.header.{name}, where name is a
+    /// valid and unique header name. The mapped non-static value must match the pattern of
+    /// integration.response.header.{name} or integration.response.body.{JSON-expression},
+    /// where name is a valid and unique response header name and JSON-expression is a valid
+    /// JSON expression without the $ prefix.</p>
+    #[serde(rename = "ResponseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a
+    /// string-to-string map of key-value pairs. Response templates are represented as a
+    /// key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "ResponseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expressions for the integration response.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
 }
 
 /// <p>Represents the input parameters for a CreateModel request.</p>
@@ -723,8 +1118,9 @@ pub struct CreateModelInput {
     pub description: Option<String>,
     /// <p>The name of the model. Must be alphanumeric.</p>
     pub name: String,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
-    pub schema: Option<String>,
+    /// <p>The schema for the model. For application/json models, this should be JSON schema
+    /// draft 4 model.</p>
+    pub schema: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -743,10 +1139,10 @@ pub struct CreateModelRequest {
     /// <p>The name of the model. Must be alphanumeric.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema
+    /// draft 4 model.</p>
     #[serde(rename = "Schema")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub schema: Option<String>,
+    pub schema: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -768,7 +1164,8 @@ pub struct CreateModelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema
+    /// draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -779,11 +1176,18 @@ pub struct CreateModelResponse {
 pub struct CreateRouteInput {
     /// <p>Specifies whether an API key is required for the route.</p>
     pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this route.</p>
+    /// <p>The authorization scopes supported by this
+    /// route.</p>
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open access, AWS_IAM for using AWS IAM permissions.</p>
+    /// <p>The authorization type for the route. Valid values are NONE for open
+    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
+    /// for using a Lambda
+    /// authorizer.</p>
     pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this route.</p>
+    /// <p>The identifier of the Authorizer resource to be associated with this
+    /// route, if the authorizationType is CUSTOM
+    /// . The authorizer identifier is generated by API Gateway
+    /// when you created the authorizer.</p>
     pub authorizer_id: Option<String>,
     /// <p>The model selection expression for the route.</p>
     pub model_selection_expression: Option<String>,
@@ -810,15 +1214,22 @@ pub struct CreateRouteRequest {
     #[serde(rename = "ApiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this route.</p>
+    /// <p>The authorization scopes supported by this
+    /// route.</p>
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open access, AWS_IAM for using AWS IAM permissions.</p>
+    /// <p>The authorization type for the route. Valid values are NONE for open
+    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
+    /// for using a Lambda
+    /// authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this route.</p>
+    /// <p>The identifier of the Authorizer resource to be associated with this
+    /// route, if the authorizationType is CUSTOM
+    /// . The authorizer identifier is generated by API Gateway
+    /// when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
@@ -851,7 +1262,73 @@ pub struct CreateRouteRequest {
     pub target: Option<String>,
 }
 
-/// <p>Represents the input parameters for an CreateRouteResponse request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateRouteResponse {
+    /// <p>Specifies whether an API key is required for this route.</p>
+    #[serde(rename = "ApiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on a route. The scopes are used with a
+    /// COGNITO_USER_POOLS authorizer to authorize the method invocation. The authorization
+    /// works by matching the route scopes against the scopes parsed from the access token in
+    /// the incoming request. The method invocation is authorized if any route scope matches
+    /// a claimed scope in the access token. Otherwise, the invocation is not authorized.
+    /// When the route scope is configured, the client must provide an access token instead
+    /// of an identity token for authorization purposes.</p>
+    #[serde(rename = "AuthorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The authorization type for the route. Valid values are NONE for open
+    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
+    /// for using a Lambda
+    /// authorizer</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of the Authorizer resource to be associated with this
+    /// route, if the authorizationType is CUSTOM
+    /// . The authorizer identifier is generated by API Gateway
+    /// when you created the authorizer.</p>
+    #[serde(rename = "AuthorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The model selection expression for the route.</p>
+    #[serde(rename = "ModelSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_selection_expression: Option<String>,
+    /// <p>The operation name for the route.</p>
+    #[serde(rename = "OperationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>The request models for the route.</p>
+    #[serde(rename = "RequestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request parameters for the route.</p>
+    #[serde(rename = "RequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
+    /// <p>The route ID.</p>
+    #[serde(rename = "RouteId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_id: Option<String>,
+    /// <p>The route key for the route.</p>
+    #[serde(rename = "RouteKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_key: Option<String>,
+    /// <p>The route response selection expression for the route.</p>
+    #[serde(rename = "RouteResponseSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_response_selection_expression: Option<String>,
+    /// <p>The target for the route.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+}
+
+/// <p>Represents the input parameters for an CreateRouteResponse
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateRouteResponseInput {
     /// <p>The model selection expression for the route response.</p>
@@ -914,59 +1391,6 @@ pub struct CreateRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct CreateRouteResult {
-    /// <p>Specifies whether an API key is required for this route.</p>
-    #[serde(rename = "ApiKeyRequired")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this route. </p>
-    #[serde(rename = "AuthorizationScopes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open access, AWS_IAM for using AWS IAM permissions.</p>
-    #[serde(rename = "AuthorizationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this route.</p>
-    #[serde(rename = "AuthorizerId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
-    #[serde(rename = "ModelSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_selection_expression: Option<String>,
-    /// <p>The operation name for the route.</p>
-    #[serde(rename = "OperationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
-    #[serde(rename = "RequestModels")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
-    #[serde(rename = "RequestParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
-    /// <p>The route ID.</p>
-    #[serde(rename = "RouteId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_id: Option<String>,
-    /// <p>The route key for the route.</p>
-    #[serde(rename = "RouteKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_key: Option<String>,
-    /// <p>The route response selection expression for the route.</p>
-    #[serde(rename = "RouteResponseSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_response_selection_expression: Option<String>,
-    /// <p>The target for the route.</p>
-    #[serde(rename = "Target")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<String>,
-}
-
 /// <p>Represents the input parameters for a CreateStage request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateStageInput {
@@ -984,7 +1408,9 @@ pub struct CreateStageInput {
     pub route_settings: Option<::std::collections::HashMap<String, RouteSettings>>,
     /// <p>The name of the stage.</p>
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a Stage. Variable names
+    /// can have alphanumeric and underscore characters, and the values must match
+    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -1020,7 +1446,9 @@ pub struct CreateStageRequest {
     /// <p>The name of the stage.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a Stage. Variable names
+    /// can have alphanumeric and underscore characters, and the values must match
+    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -1045,7 +1473,8 @@ pub struct CreateStageResponse {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The identifier of the Deployment that the Stage is associated with.</p>
+    /// <p>The identifier of the Deployment that the Stage is
+    /// associated with.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -1065,7 +1494,9 @@ pub struct CreateStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can
+    /// have alphanumeric and underscore characters, and the values must match
+    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -1073,9 +1504,6 @@ pub struct CreateStageResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteApiMappingRequest {
-    /// <p>The identifier of the API.</p>
-    #[serde(rename = "ApiId")]
-    pub api_id: String,
     /// <p>The API mapping identifier.</p>
     #[serde(rename = "ApiMappingId")]
     pub api_mapping_id: String,
@@ -1184,7 +1612,9 @@ pub struct DeleteStageRequest {
     pub stage_name: String,
 }
 
-/// <p>An immutable representation of an API that can be called by users. A Deployment must be associated with a Stage for it to be callable over the internet.</p>
+/// <p>An immutable representation of an API that can be called by users. A
+/// Deployment must be associated with a Stage for it to be
+/// callable over the internet.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Deployment {
@@ -1196,7 +1626,8 @@ pub struct Deployment {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
+    /// <p>The status of the deployment: PENDING, FAILED, or
+    /// SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -1210,12 +1641,15 @@ pub struct Deployment {
     pub description: Option<String>,
 }
 
-/// <p>A collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p>
+/// <p>A collection resource that contains zero or more references to your existing
+/// deployments, and links that guide you on how to interact with your collection. The
+/// collection offers a paginated view of the contained deployments.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Deployments {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<Deployment>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
@@ -1243,15 +1677,18 @@ pub struct DomainNameConfiguration {
     #[serde(rename = "ApiGatewayDomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_gateway_domain_name: Option<String>,
-    /// <p>An AWS-managed certificate that will be used by the edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
+    /// <p>An AWS-managed certificate that will be used by the edge-optimized endpoint for
+    /// this domain name. AWS Certificate Manager is the only supported source.</p>
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    /// <p>The user-friendly name of the certificate that will be used by the edge-optimized endpoint for this domain name.</p>
+    /// <p>The user-friendly name of the certificate that will be used by the edge-optimized
+    /// endpoint for this domain name.</p>
     #[serde(rename = "CertificateName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_name: Option<String>,
-    /// <p>The timestamp when the certificate that was used by edge-optimized endpoint for this domain name was uploaded.</p>
+    /// <p>The timestamp when the certificate that was used by edge-optimized endpoint for
+    /// this domain name was uploaded.</p>
     #[serde(rename = "CertificateUploadDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_upload_date: Option<f64>,
@@ -1259,7 +1696,7 @@ pub struct DomainNameConfiguration {
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The Amazon Route 53 Hosted Zone ID of the endpoint. See <a href="docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>.</p>
+    /// <p>The Amazon Route 53 Hosted Zone ID of the endpoint.</p>
     #[serde(rename = "HostedZoneId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hosted_zone_id: Option<String>,
@@ -1270,15 +1707,13 @@ pub struct DomainNameConfiguration {
 pub struct DomainNames {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<DomainName>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetApiMappingRequest {
-    /// <p>The identifier of the API.</p>
-    #[serde(rename = "ApiId")]
-    pub api_id: String,
     /// <p>The API mapping identifier.</p>
     #[serde(rename = "ApiMappingId")]
     pub api_mapping_id: String,
@@ -1317,7 +1752,8 @@ pub struct GetApiMappingsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1326,22 +1762,15 @@ pub struct GetApiMappingsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetApiMappingsResponse {
-    /// <p>The API identifier.</p>
-    #[serde(rename = "ApiId")]
+    /// <p>The elements from this collection.</p>
+    #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_id: Option<String>,
-    /// <p>The API mapping identifier.</p>
-    #[serde(rename = "ApiMappingId")]
+    pub items: Option<Vec<ApiMapping>>,
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
+    #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_mapping_id: Option<String>,
-    /// <p>The API mapping key.</p>
-    #[serde(rename = "ApiMappingKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_mapping_key: Option<String>,
-    /// <p>The API stage.</p>
-    #[serde(rename = "Stage")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub stage: Option<String>,
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1354,7 +1783,9 @@ pub struct GetApiRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetApiResponse {
-    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
+    /// stage name is typically appended to this URI to form a complete path to a deployed
+    /// API stage.</p>
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
@@ -1382,7 +1813,7 @@ pub struct GetApiResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The API protocol: HTTP or WEBSOCKET.</p>
+    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol_type: Option<String>,
@@ -1394,7 +1825,8 @@ pub struct GetApiResponse {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
+    /// <p>The warning messages reported when failonwarnings is turned on during
+    /// API import.</p>
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
@@ -1406,7 +1838,8 @@ pub struct GetApisRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1419,7 +1852,8 @@ pub struct GetApisResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Api>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1438,7 +1872,10 @@ pub struct GetAuthorizerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
+    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
+    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
+    /// specify null.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -1446,23 +1883,51 @@ pub struct GetAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
+    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
+    /// authorizer responses. If this field is not set, the default value is 300. The maximum
+    /// value is 3600, or 1 hour.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
+    /// Lambda function using incoming request parameters.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations. In general, the URI has this form: arn:aws:apigateway:{region}:lambda:path/{service_api} , where {region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI).
+    /// ForREQUEST authorizers, this must be a
+    /// well-formed Lambda function URI, for example,
+    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
+    /// In general, the URI has this form:
+    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
+    /// , where {region} is the same as the region hosting the Lambda
+    /// function, path indicates that the remaining substring in the URI should be treated as
+    /// the path to the resource, including the initial /. For Lambda functions,
+    /// this is usually of the form
+    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an Auth header and a Name query string parameters are defined as identity sources, this value is method.request.header.Auth, method.request.querystring.Name. These parameters will be used to derive the authorization caching key and to perform runtime validation of the REQUEST authorizer by verifying all of the identity-related request parameters are present, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</p>
+    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
+    /// caching is enabled. The value is a comma-separated string of one or more mapping
+    /// expressions of the specified request parameters. For example, if an Auth
+    /// header and a Name query string parameters are defined as identity
+    /// sources, this value is method.request.header.Auth,
+    /// method.request.querystring.Name. These parameters will be used to
+    /// derive the authorization caching key and to perform runtime validation of the
+    /// REQUEST authorizer by verifying all of the identity-related request
+    /// parameters are present, not null, and non-empty. Only when this is true does the
+    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
+    /// Unauthorized response without calling the Lambda function. The valid value
+    /// is a string of comma-separated mapping expressions of the specified request
+    /// parameters. When the authorization caching is not enabled, this property is
+    /// optional.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The
+    /// validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -1470,7 +1935,9 @@ pub struct GetAuthorizerResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>For REQUEST authorizer, this is not defined.</p>
+    /// <p>For
+    /// REQUEST authorizer, this is not
+    /// defined.</p>
     #[serde(rename = "ProviderArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_arns: Option<Vec<String>>,
@@ -1485,7 +1952,8 @@ pub struct GetAuthorizersRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1498,7 +1966,8 @@ pub struct GetAuthorizersResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Authorizer>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1525,7 +1994,8 @@ pub struct GetDeploymentResponse {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
+    /// <p>The status of the deployment: PENDING, FAILED, or
+    /// SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -1548,7 +2018,8 @@ pub struct GetDeploymentsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1561,7 +2032,8 @@ pub struct GetDeploymentsResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Deployment>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1597,7 +2069,8 @@ pub struct GetDomainNamesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1610,7 +2083,8 @@ pub struct GetDomainNamesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<DomainName>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1624,6 +2098,128 @@ pub struct GetIntegrationRequest {
     /// <p>The integration ID.</p>
     #[serde(rename = "IntegrationId")]
     pub integration_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetIntegrationResponse {
+    /// <p>The connection ID.</p>
+    #[serde(rename = "ConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The type of the network connection to the integration endpoint. Currently the only
+    /// valid value is INTERNET, for connections through the public routable
+    /// internet.</p>
+    #[serde(rename = "ConnectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>Specifies the credentials required for the integration, if any. For AWS
+    /// integrations, three options are available. To specify an IAM Role for API Gateway to
+    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
+    /// identity be passed through from the request, specify the string
+    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
+    /// AWS services, specify null.</p>
+    #[serde(rename = "CredentialsArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials_arn: Option<String>,
+    /// <p>Represents the description of an integration.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Represents the identifier of an integration.</p>
+    #[serde(rename = "IntegrationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_id: Option<String>,
+    /// <p>Specifies the integration's HTTP method type.</p>
+    #[serde(rename = "IntegrationMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_method: Option<String>,
+    /// <p>The integration response selection expression for the integration. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
+    #[serde(rename = "IntegrationResponseSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_selection_expression: Option<String>,
+    /// <p>The integration type of an integration. One of the following:</p><p>
+    /// AWS: for integrating the route or method request with an AWS service
+    /// action, including the Lambda function-invoking action. With the Lambda
+    /// function-invoking action, this is referred to as the Lambda custom integration. With
+    /// any other AWS service action, this is known as AWS integration.</p><p>
+    /// AWS_PROXY: for integrating the route or method request with the Lambda
+    /// function-invoking action with the client request passed through as-is. This
+    /// integration is also referred to as Lambda proxy integration.</p><p>
+    /// HTTP: for integrating the route or method request with an HTTP
+    /// endpoint. This
+    /// integration is also referred to as the HTTP custom integration.</p><p>
+    /// HTTP_PROXY: for integrating route or method request with an HTTP
+    /// endpoint, with the client
+    /// request passed through as-is. This is also referred to as HTTP proxy
+    /// integration.</p><p>
+    /// MOCK: for integrating the route or method request with API Gateway as a
+    /// "loopback" endpoint without invoking any backend.</p>
+    #[serde(rename = "IntegrationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_type: Option<String>,
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
+    #[serde(rename = "IntegrationUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_uri: Option<String>,
+    /// <p>Specifies the pass-through behavior for incoming requests based on the
+    /// Content-Type header in the request, and the available mapping
+    /// templates specified as the requestTemplates property on the
+    /// Integration resource. There are three valid values:
+    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
+    /// NEVER.</p><p>
+    /// WHEN_NO_MATCH passes the request body for unmapped content types through
+    /// to the integration backend without transformation.</p><p>
+    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
+    /// Media Type response.</p><p>
+    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
+    /// content types mapped to templates. However, if there is at least one content type
+    /// defined, unmapped content types will be rejected with the same HTTP 415
+    /// Unsupported Media Type response.</p>
+    #[serde(rename = "PassthroughBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub passthrough_behavior: Option<String>,
+    /// <p>A key-value map specifying request parameters that are passed from the method
+    /// request to the backend. The key is an integration request parameter name and the
+    /// associated value is a method request parameter value or static value that must be
+    /// enclosed within single quotes and pre-encoded as required by the backend. The method
+    /// request parameter value must match the pattern of
+    /// method.request.{location}.{name}
+    /// , where
+    /// {location}
+    /// is querystring, path, or header; and
+    /// {name}
+    /// must be a valid and unique method request parameter name.</p>
+    #[serde(rename = "RequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Represents a map of Velocity templates that are applied on the request payload
+    /// based on the value of the Content-Type header sent by the client. The content type
+    /// value is the key in this map, and the template (as a String) is the value.</p>
+    #[serde(rename = "RequestTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expression for the integration.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
+    /// milliseconds or 29 seconds.</p>
+    #[serde(rename = "TimeoutInMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_millis: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1642,7 +2238,15 @@ pub struct GetIntegrationResponseRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetIntegrationResponseResponse {
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
@@ -1654,11 +2258,21 @@ pub struct GetIntegrationResponseResponse {
     #[serde(rename = "IntegrationResponseKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where name is a valid and unique response header name and JSON-expression is a valid JSON expression without the $ prefix.</p>
+    /// <p>A key-value map specifying response parameters that are passed to the method
+    /// response from the backend. The key is a method response header parameter name and the
+    /// mapped value is an integration response header value, a static value enclosed within
+    /// a pair of single quotes, or a JSON expression from the integration response body. The
+    /// mapping key must match the pattern of method.response.header.{name}, where name is a
+    /// valid and unique header name. The mapped non-static value must match the pattern of
+    /// integration.response.header.{name} or integration.response.body.{JSON-expression},
+    /// where name is a valid and unique response header name and JSON-expression is a valid
+    /// JSON expression without the $ prefix.</p>
     #[serde(rename = "ResponseParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    /// <p>The collection of response templates for the integration response as a
+    /// string-to-string map of key-value pairs. Response templates are represented as a
+    /// key/value map, with a content-type as the key and a template as the value.</p>
     #[serde(rename = "ResponseTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
@@ -1680,7 +2294,8 @@ pub struct GetIntegrationResponsesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1693,75 +2308,11 @@ pub struct GetIntegrationResponsesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<IntegrationResponse>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct GetIntegrationResult {
-    /// <p>The identifier of the VpcLink used for the integration when the connectionType is VPC_LINK; otherwise undefined.</p>
-    #[serde(rename = "ConnectionId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. The valid value is INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and a network load balancer in a VPC. The default value is INTERNET.</p>
-    #[serde(rename = "ConnectionType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
-    #[serde(rename = "CredentialsArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub credentials_arn: Option<String>,
-    /// <p>Represents the description of an integration.</p>
-    #[serde(rename = "Description")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub description: Option<String>,
-    /// <p>Represents the identifier of an integration.</p>
-    #[serde(rename = "IntegrationId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_id: Option<String>,
-    /// <p>Specifies the integration's HTTP method type.</p>
-    #[serde(rename = "IntegrationMethod")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_method: Option<String>,
-
-    #[serde(rename = "IntegrationResponseSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p> AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</p><p> AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p><p> HTTP: for integrating the route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</p><p> HTTP_PROXY: for integrating route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p><p> MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend.</p>
-    #[serde(rename = "IntegrationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_type: Option<String>,
-    /// <p>Specifies the Uniform Resource Identifier (URI) of the integration endpoint.</p><p>For HTTP or HTTP_PROXY integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">RFC-3986 specification</a>, for either standard integration, where connectionType is not VPC_LINK, or private integration, where connectionType is VPC_LINK. For a private HTTP integration, the URI is not used for routing.</p><p>For AWS or AWS_PROXY integrations, the URI is of the form arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}. Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the URI can be either arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key} or arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</p>
-    #[serde(rename = "IntegrationUri")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.</p><p> WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p><p> NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p><p> WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
-    #[serde(rename = "PassthroughBehavior")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.{location}.{name} , where  {location}  is querystring, path, or header; and  {name}  must be a valid and unique method request parameter name.</p>
-    #[serde(rename = "RequestParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
-    #[serde(rename = "RequestTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
-    #[serde(rename = "TimeoutInMillis")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub timeout_in_millis: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1773,7 +2324,8 @@ pub struct GetIntegrationsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1786,7 +2338,8 @@ pub struct GetIntegrationsResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Integration>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1821,7 +2374,8 @@ pub struct GetModelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema
+    /// draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -1855,7 +2409,8 @@ pub struct GetModelsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1868,7 +2423,8 @@ pub struct GetModelsResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Model>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1882,6 +2438,71 @@ pub struct GetRouteRequest {
     /// <p>The route ID.</p>
     #[serde(rename = "RouteId")]
     pub route_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRouteResponse {
+    /// <p>Specifies whether an API key is required for this route.</p>
+    #[serde(rename = "ApiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on a route. The scopes are used with a
+    /// COGNITO_USER_POOLS authorizer to authorize the method invocation. The authorization
+    /// works by matching the route scopes against the scopes parsed from the access token in
+    /// the incoming request. The method invocation is authorized if any route scope matches
+    /// a claimed scope in the access token. Otherwise, the invocation is not authorized.
+    /// When the route scope is configured, the client must provide an access token instead
+    /// of an identity token for authorization purposes.</p>
+    #[serde(rename = "AuthorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The authorization type for the route. Valid values are NONE for open
+    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
+    /// for using a Lambda
+    /// authorizer</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of the Authorizer resource to be associated with this
+    /// route, if the authorizationType is CUSTOM
+    /// . The authorizer identifier is generated by API Gateway
+    /// when you created the authorizer.</p>
+    #[serde(rename = "AuthorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The model selection expression for the route.</p>
+    #[serde(rename = "ModelSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_selection_expression: Option<String>,
+    /// <p>The operation name for the route.</p>
+    #[serde(rename = "OperationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>The request models for the route.</p>
+    #[serde(rename = "RequestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request parameters for the route.</p>
+    #[serde(rename = "RequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
+    /// <p>The route ID.</p>
+    #[serde(rename = "RouteId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_id: Option<String>,
+    /// <p>The route key for the route.</p>
+    #[serde(rename = "RouteKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_key: Option<String>,
+    /// <p>The route response selection expression for the route.</p>
+    #[serde(rename = "RouteResponseSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_response_selection_expression: Option<String>,
+    /// <p>The target for the route.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1931,7 +2552,8 @@ pub struct GetRouteResponsesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1947,63 +2569,11 @@ pub struct GetRouteResponsesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<RouteResponse>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct GetRouteResult {
-    /// <p>Specifies whether an API key is required for this route.</p>
-    #[serde(rename = "ApiKeyRequired")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this route. </p>
-    #[serde(rename = "AuthorizationScopes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open access, AWS_IAM for using AWS IAM permissions.</p>
-    #[serde(rename = "AuthorizationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this route.</p>
-    #[serde(rename = "AuthorizerId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
-    #[serde(rename = "ModelSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_selection_expression: Option<String>,
-    /// <p>The operation name for the route.</p>
-    #[serde(rename = "OperationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
-    #[serde(rename = "RequestModels")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
-    #[serde(rename = "RequestParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
-    /// <p>The route ID.</p>
-    #[serde(rename = "RouteId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_id: Option<String>,
-    /// <p>The route key for the route.</p>
-    #[serde(rename = "RouteKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_key: Option<String>,
-    /// <p>The route response selection expression for the route.</p>
-    #[serde(rename = "RouteResponseSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_response_selection_expression: Option<String>,
-    /// <p>The target for the route.</p>
-    #[serde(rename = "Target")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2015,7 +2585,8 @@ pub struct GetRoutesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2028,7 +2599,8 @@ pub struct GetRoutesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Route>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2063,7 +2635,8 @@ pub struct GetStageResponse {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The identifier of the Deployment that the Stage is associated with.</p>
+    /// <p>The identifier of the Deployment that the Stage is
+    /// associated with.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -2083,7 +2656,9 @@ pub struct GetStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can
+    /// have alphanumeric and underscore characters, and the values must match
+    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -2098,7 +2673,8 @@ pub struct GetStagesRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<String>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2111,7 +2687,8 @@ pub struct GetStagesResponse {
     #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Stage>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2121,19 +2698,34 @@ pub struct GetStagesResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Integration {
-    /// <p>The identifier of the VpcLink used for the integration when the connectionType is VPC_LINK; otherwise undefined.</p>
+    /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. The valid value is INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and a network load balancer in a VPC. The default value is INTERNET.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only
+    /// valid value is INTERNET, for connections through the public routable
+    /// internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS
+    /// integrations, three options are available. To specify an IAM Role for API Gateway to
+    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
+    /// identity be passed through from the request, specify the string
+    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
+    /// AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -2149,27 +2741,68 @@ pub struct Integration {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-
+    /// <p>The integration response selection expression for the integration. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p> AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</p><p> AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p><p> HTTP: for integrating the route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</p><p> HTTP_PROXY: for integrating route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p><p> MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p><p>
+    /// AWS: for integrating the route or method request with an AWS service
+    /// action, including the Lambda function-invoking action. With the Lambda
+    /// function-invoking action, this is referred to as the Lambda custom integration. With
+    /// any other AWS service action, this is known as AWS integration.</p><p>
+    /// AWS_PROXY: for integrating the route or method request with the Lambda
+    /// function-invoking action with the client request passed through as-is. This
+    /// integration is also referred to as Lambda proxy integration.</p><p>
+    /// HTTP: for integrating the route or method request with an HTTP
+    /// endpoint. This
+    /// integration is also referred to as the HTTP custom integration.</p><p>
+    /// HTTP_PROXY: for integrating route or method request with an HTTP
+    /// endpoint, with the client
+    /// request passed through as-is. This is also referred to as HTTP proxy
+    /// integration.</p><p>
+    /// MOCK: for integrating the route or method request with API Gateway as a
+    /// "loopback" endpoint without invoking any backend.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>Specifies the Uniform Resource Identifier (URI) of the integration endpoint.</p><p>For HTTP or HTTP_PROXY integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">RFC-3986 specification</a>, for either standard integration, where connectionType is not VPC_LINK, or private integration, where connectionType is VPC_LINK. For a private HTTP integration, the URI is not used for routing.</p><p>For AWS or AWS_PROXY integrations, the URI is of the form arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}. Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the URI can be either arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key} or arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</p>
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.</p><p> WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p><p> NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p><p> WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the
+    /// Content-Type header in the request, and the available mapping
+    /// templates specified as the requestTemplates property on the
+    /// Integration resource. There are three valid values:
+    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
+    /// NEVER.</p><p>
+    /// WHEN_NO_MATCH passes the request body for unmapped content types through
+    /// to the integration backend without transformation.</p><p>
+    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
+    /// Media Type response.</p><p>
+    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
+    /// content types mapped to templates. However, if there is at least one content type
+    /// defined, unmapped content types will be rejected with the same HTTP 415
+    /// Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.{location}.{name} , where  {location}  is querystring, path, or header; and  {name}  must be a valid and unique method request parameter name.</p>
+    /// <p>A key-value map specifying request parameters that are passed from the method
+    /// request to the backend. The key is an integration request parameter name and the
+    /// associated value is a method request parameter value or static value that must be
+    /// enclosed within single quotes and pre-encoded as required by the backend. The method
+    /// request parameter value must match the pattern of
+    /// method.request.{location}.{name}
+    /// , where
+    /// {location}
+    /// is querystring, path, or header; and
+    /// {name}
+    /// must be a valid and unique method request parameter name.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload
+    /// based on the value of the Content-Type header sent by the client. The content type
+    /// value is the key in this map, and the template (as a String) is the value.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
@@ -2177,7 +2810,8 @@ pub struct Integration {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
+    /// milliseconds or 29 seconds.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
@@ -2187,7 +2821,15 @@ pub struct Integration {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct IntegrationResponse {
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
@@ -2198,11 +2840,21 @@ pub struct IntegrationResponse {
     /// <p>The integration response key.</p>
     #[serde(rename = "IntegrationResponseKey")]
     pub integration_response_key: String,
-    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where name is a valid and unique response header name and JSON-expression is a valid JSON expression without the $ prefix.</p>
+    /// <p>A key-value map specifying response parameters that are passed to the method
+    /// response from the backend. The key is a method response header parameter name and the
+    /// mapped value is an integration response header value, a static value enclosed within
+    /// a pair of single quotes, or a JSON expression from the integration response body. The
+    /// mapping key must match the pattern of method.response.header.{name}, where name is a
+    /// valid and unique header name. The mapped non-static value must match the pattern of
+    /// integration.response.header.{name} or integration.response.body.{JSON-expression},
+    /// where name is a valid and unique response header name and JSON-expression is a valid
+    /// JSON expression without the $ prefix.</p>
     #[serde(rename = "ResponseParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
+    /// <p>The collection of response templates for the integration response as a
+    /// string-to-string map of key-value pairs. Response templates are represented as a
+    /// key/value map, with a content-type as the key and a template as the value.</p>
     #[serde(rename = "ResponseTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_templates: Option<::std::collections::HashMap<String, String>>,
@@ -2217,7 +2869,8 @@ pub struct IntegrationResponse {
 pub struct IntegrationResponses {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<IntegrationResponse>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
@@ -2226,7 +2879,8 @@ pub struct IntegrationResponses {
 pub struct Integrations {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<Integration>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
@@ -2239,7 +2893,8 @@ pub struct LimitExceededException {
     pub message: Option<String>,
 }
 
-/// <p>Represents a data model for an API. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response Mappings</a>.</p>
+/// <p>Represents a data model for an API. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response
+/// Mappings</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Model {
@@ -2258,22 +2913,26 @@ pub struct Model {
     /// <p>The name of the model. Must be alphanumeric.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema
+    /// draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
 }
 
-/// <p>Represents a collection of data models. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response Mappings</a>.</p>
+/// <p>Represents a collection of data models. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Create Models and Mapping Templates for Request and Response
+/// Mappings</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Models {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<Model>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
-/// <p>Validation constraints imposed on parameters of a request (path, query string, headers).</p>
+/// <p>Validation constraints imposed on parameters of a request (path, query string,
+/// headers).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ParameterConstraints {
     /// <p>Whether or not the parameter is required.</p>
@@ -2290,15 +2949,27 @@ pub struct Route {
     #[serde(rename = "ApiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this route. </p>
+    /// <p>A list of authorization scopes configured on a route. The scopes are used with a
+    /// COGNITO_USER_POOLS authorizer to authorize the method invocation. The authorization
+    /// works by matching the route scopes against the scopes parsed from the access token in
+    /// the incoming request. The method invocation is authorized if any route scope matches
+    /// a claimed scope in the access token. Otherwise, the invocation is not authorized.
+    /// When the route scope is configured, the client must provide an access token instead
+    /// of an identity token for authorization purposes.</p>
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open access, AWS_IAM for using AWS IAM permissions.</p>
+    /// <p>The authorization type for the route. Valid values are NONE for open
+    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
+    /// for using a Lambda
+    /// authorizer</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this route.</p>
+    /// <p>The identifier of the Authorizer resource to be associated with this
+    /// route, if the authorizationType is CUSTOM
+    /// . The authorizer identifier is generated by API Gateway
+    /// when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
@@ -2365,14 +3036,17 @@ pub struct RouteResponse {
 pub struct RouteResponses {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<RouteResponse>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
 /// <p>Represents a collection of route settings.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RouteSettings {
-    /// <p>Specifies whether (true) or not (false) data trace logging is enabled for this route. This property affects the log entries pushed to Amazon CloudWatch Logs.</p>
+    /// <p>Specifies whether (true) or not (false) data trace
+    /// logging is enabled for this route. This property affects the log entries pushed to
+    /// Amazon CloudWatch Logs.</p>
     #[serde(rename = "DataTraceEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_trace_enabled: Option<bool>,
@@ -2380,7 +3054,9 @@ pub struct RouteSettings {
     #[serde(rename = "DetailedMetricsEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detailed_metrics_enabled: Option<bool>,
-    /// <p>Specifies the logging level for this route: DEBUG, INFO, or WARN. This property affects the log entries pushed to Amazon CloudWatch Logs.</p>
+    /// <p>Specifies the logging level for this route: DEBUG, INFO,
+    /// or WARN. This property affects the log entries pushed to Amazon
+    /// CloudWatch Logs.</p>
     #[serde(rename = "LoggingLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_level: Option<String>,
@@ -2399,7 +3075,8 @@ pub struct RouteSettings {
 pub struct Routes {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<Route>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
@@ -2423,7 +3100,8 @@ pub struct Stage {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The identifier of the Deployment that the Stage is associated with.</p>
+    /// <p>The identifier of the Deployment that the Stage is
+    /// associated with.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -2442,18 +3120,22 @@ pub struct Stage {
     /// <p>The name of the stage.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can
+    /// have alphanumeric and underscore characters, and the values must match
+    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>A collection of Stage resources that are associated with the ApiKey resource.</p>
+/// <p>A collection of Stage resources that are associated with the ApiKey
+/// resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Stages {
     /// <p>The elements from this collection.</p>
     pub items: Option<Vec<Stage>>,
-    /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
+    /// <p>The next page of elements from this collection. Not valid for the last element of
+    /// the collection.</p>
     pub next_token: Option<String>,
 }
 
@@ -2481,7 +3163,8 @@ pub struct UpdateApiInput {
     pub version: Option<String>,
 }
 
-/// <p>Represents the input parameters for an UpdateApiMapping request.</p>
+/// <p>Represents the input parameters for an UpdateApiMapping
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateApiMappingInput {
     /// <p>The API identifier.</p>
@@ -2568,7 +3251,9 @@ pub struct UpdateApiRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateApiResponse {
-    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
+    /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The
+    /// stage name is typically appended to this URI to form a complete path to a deployed
+    /// API stage.</p>
     #[serde(rename = "ApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
@@ -2596,7 +3281,7 @@ pub struct UpdateApiResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The API protocol: HTTP or WEBSOCKET.</p>
+    /// <p>The API protocol: Currently only WEBSOCKET is supported.</p>
     #[serde(rename = "ProtocolType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol_type: Option<String>,
@@ -2608,7 +3293,8 @@ pub struct UpdateApiResponse {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
-    /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
+    /// <p>The warning messages reported when failonwarnings is turned on during
+    /// API import.</p>
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
@@ -2617,21 +3303,53 @@ pub struct UpdateApiResponse {
 /// <p>The input parameters for an UpdateAuthorizer request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAuthorizerInput {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
+    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
+    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
+    /// specify null.</p>
     pub authorizer_credentials_arn: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it is zero, authorization caching is disabled. If it is greater than zero, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it is zero,
+    /// authorization caching is disabled. If it is greater than zero, API Gateway will cache
+    /// authorizer responses. If this field is not set, the default value is 300. The maximum
+    /// value is 3600, or 1 hour.</p>
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
+    /// Lambda function using incoming request parameters.</p>
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations. In general, the URI has this form: arn:aws:apigateway:{region}:lambda:path/{service_api} , where {region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For
+    /// REQUEST authorizers, this must be a
+    /// well-formed Lambda function URI, for example,
+    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
+    /// In general, the URI has this form:
+    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
+    /// , where {region} is the same as the region hosting the Lambda
+    /// function, path indicates that the remaining substring in the URI should be treated as
+    /// the path to the resource, including the initial /. For Lambda functions,
+    /// this is usually of the form
+    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an Auth header, a Name query string parameter are defined as identity sources, this value is $method.request.header.Auth, $method.request.querystring.Name. These parameters will be used to derive the authorization caching key and to perform runtime validation of the REQUEST authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</p>
+    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
+    /// caching is enabled. The value is a comma-separated string of one or more mapping
+    /// expressions of the specified request parameters. For example, if an Auth header, a
+    /// Name query string parameter are defined as identity sources, this value is
+    /// $method.request.header.Auth, $method.request.querystring.Name. These
+    /// parameters will be used to derive the authorization caching key and to perform
+    /// runtime validation of the REQUEST authorizer by verifying all of the
+    /// identity-related request parameters are present, not null and non-empty. Only when
+    /// this is true does the authorizer invoke the authorizer Lambda function, otherwise, it
+    /// returns a 401 Unauthorized response without calling the Lambda function.
+    /// The valid value is a string of comma-separated mapping expressions of the specified
+    /// request parameters. When the authorization caching is not enabled, this property is
+    /// optional.</p>
     pub identity_source: Option<Vec<String>>,
-    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The
+    /// validation expression does not apply to the REQUEST authorizer.</p>
     pub identity_validation_expression: Option<String>,
     /// <p>The name of the authorizer.</p>
     pub name: Option<String>,
-    /// <p>For REQUEST authorizer, this is not defined.</p>
+    /// <p>For
+    /// REQUEST authorizer, this is not
+    /// defined.</p>
     pub provider_arns: Option<Vec<String>>,
 }
 
@@ -2640,30 +3358,60 @@ pub struct UpdateAuthorizerRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
+    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
+    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
+    /// specify null.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
     /// <p>The authorizer identifier.</p>
     #[serde(rename = "AuthorizerId")]
     pub authorizer_id: String,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it is zero, authorization caching is disabled. If it is greater than zero, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it is zero,
+    /// authorization caching is disabled. If it is greater than zero, API Gateway will cache
+    /// authorizer responses. If this field is not set, the default value is 300. The maximum
+    /// value is 3600, or 1 hour.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
+    /// Lambda function using incoming request parameters.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). For REQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations. In general, the URI has this form: arn:aws:apigateway:{region}:lambda:path/{service_api} , where {region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI). For
+    /// REQUEST authorizers, this must be a
+    /// well-formed Lambda function URI, for example,
+    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
+    /// In general, the URI has this form:
+    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
+    /// , where {region} is the same as the region hosting the Lambda
+    /// function, path indicates that the remaining substring in the URI should be treated as
+    /// the path to the resource, including the initial /. For Lambda functions,
+    /// this is usually of the form
+    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an Auth header, a Name query string parameter are defined as identity sources, this value is $method.request.header.Auth, $method.request.querystring.Name. These parameters will be used to derive the authorization caching key and to perform runtime validation of the REQUEST authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</p>
+    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
+    /// caching is enabled. The value is a comma-separated string of one or more mapping
+    /// expressions of the specified request parameters. For example, if an Auth header, a
+    /// Name query string parameter are defined as identity sources, this value is
+    /// $method.request.header.Auth, $method.request.querystring.Name. These
+    /// parameters will be used to derive the authorization caching key and to perform
+    /// runtime validation of the REQUEST authorizer by verifying all of the
+    /// identity-related request parameters are present, not null and non-empty. Only when
+    /// this is true does the authorizer invoke the authorizer Lambda function, otherwise, it
+    /// returns a 401 Unauthorized response without calling the Lambda function.
+    /// The valid value is a string of comma-separated mapping expressions of the specified
+    /// request parameters. When the authorization caching is not enabled, this property is
+    /// optional.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The
+    /// validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -2671,7 +3419,9 @@ pub struct UpdateAuthorizerRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>For REQUEST authorizer, this is not defined.</p>
+    /// <p>For
+    /// REQUEST authorizer, this is not
+    /// defined.</p>
     #[serde(rename = "ProviderArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_arns: Option<Vec<String>>,
@@ -2680,7 +3430,10 @@ pub struct UpdateAuthorizerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAuthorizerResponse {
-    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the
+    /// authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon
+    /// Resource Name (ARN). To use resource-based permissions on the Lambda function,
+    /// specify null.</p>
     #[serde(rename = "AuthorizerCredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials_arn: Option<String>,
@@ -2688,23 +3441,51 @@ pub struct UpdateAuthorizerResponse {
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
-    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The time to live (TTL), in seconds, of cached authorizer results. If it equals 0,
+    /// authorization caching is disabled. If it is greater than 0, API Gateway will cache
+    /// authorizer responses. If this field is not set, the default value is 300. The maximum
+    /// value is 3600, or 1 hour.</p>
     #[serde(rename = "AuthorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a Lambda function using incoming request parameters.</p>
+    /// <p>The authorizer type. Currently the only valid value is REQUEST, for a
+    /// Lambda function using incoming request parameters.</p>
     #[serde(rename = "AuthorizerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_type: Option<String>,
-    /// <p>The authorizer's Uniform Resource Identifier (URI). ForREQUEST authorizers, this must be a well-formed Lambda function URI, for example, arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations. In general, the URI has this form: arn:aws:apigateway:{region}:lambda:path/{service_api} , where {region} is the same as the region hosting the Lambda function, path indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial /. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>The authorizer's Uniform Resource Identifier (URI).
+    /// ForREQUEST authorizers, this must be a
+    /// well-formed Lambda function URI, for example,
+    /// arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations.
+    /// In general, the URI has this form:
+    /// arn:aws:apigateway:{region}:lambda:path/{service_api}
+    /// , where {region} is the same as the region hosting the Lambda
+    /// function, path indicates that the remaining substring in the URI should be treated as
+    /// the path to the resource, including the initial /. For Lambda functions,
+    /// this is usually of the form
+    /// /2015-03-31/functions/[FunctionARN]/invocations.</p>
     #[serde(rename = "AuthorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an Auth header and a Name query string parameters are defined as identity sources, this value is method.request.header.Auth, method.request.querystring.Name. These parameters will be used to derive the authorization caching key and to perform runtime validation of the REQUEST authorizer by verifying all of the identity-related request parameters are present, not null, and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</p>
+    /// <p>The identity source for which authorization is requested.</p><p>For the REQUEST authorizer, this is required when authorization
+    /// caching is enabled. The value is a comma-separated string of one or more mapping
+    /// expressions of the specified request parameters. For example, if an Auth
+    /// header and a Name query string parameters are defined as identity
+    /// sources, this value is method.request.header.Auth,
+    /// method.request.querystring.Name. These parameters will be used to
+    /// derive the authorization caching key and to perform runtime validation of the
+    /// REQUEST authorizer by verifying all of the identity-related request
+    /// parameters are present, not null, and non-empty. Only when this is true does the
+    /// authorizer invoke the authorizer Lambda function, otherwise, it returns a 401
+    /// Unauthorized response without calling the Lambda function. The valid value
+    /// is a string of comma-separated mapping expressions of the specified request
+    /// parameters. When the authorization caching is not enabled, this property is
+    /// optional.</p>
     #[serde(rename = "IdentitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<Vec<String>>,
-    /// <p>The validation expression does not apply to the REQUEST authorizer.</p>
+    /// <p>The
+    /// validation expression does not apply to the REQUEST authorizer.</p>
     #[serde(rename = "IdentityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -2712,13 +3493,16 @@ pub struct UpdateAuthorizerResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>For REQUEST authorizer, this is not defined.</p>
+    /// <p>For
+    /// REQUEST authorizer, this is not
+    /// defined.</p>
     #[serde(rename = "ProviderArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_arns: Option<Vec<String>>,
 }
 
-/// <p>Represents the input parameters for an UpdateDeployment request.</p>
+/// <p>Represents the input parameters for an UpdateDeployment
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateDeploymentInput {
     /// <p>The description for the deployment resource.</p>
@@ -2750,7 +3534,8 @@ pub struct UpdateDeploymentResponse {
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The status of the deployment: PENDING, FAILED, or SUCCEEDED.</p>
+    /// <p>The status of the deployment: PENDING, FAILED, or
+    /// SUCCEEDED.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -2764,7 +3549,8 @@ pub struct UpdateDeploymentResponse {
     pub description: Option<String>,
 }
 
-/// <p>Represents the input parameters for an UpdateDomainName request.</p>
+/// <p>Represents the input parameters for an UpdateDomainName
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateDomainNameInput {
     /// <p>The domain name configurations.</p>
@@ -2799,34 +3585,92 @@ pub struct UpdateDomainNameResponse {
     pub domain_name_configurations: Option<Vec<DomainNameConfiguration>>,
 }
 
-/// <p>Represents the input parameters for an UpdateIntegration request.</p>
+/// <p>Represents the input parameters for an UpdateIntegration
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateIntegrationInput {
-    /// <p>The identifier of the VpcLink used for the integration when the connectionType is VPC_LINK; otherwise undefined.</p>
+    /// <p>The connection ID.</p>
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. The valid value is INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and a network load balancer in a VPC. The default value is INTERNET.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only
+    /// valid value is INTERNET, for connections through the public routable
+    /// internet.</p>
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS
+    /// integrations, three options are available. To specify an IAM Role for API Gateway to
+    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
+    /// identity be passed through from the request, specify the string
+    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
+    /// AWS services, specify null.</p>
     pub credentials_arn: Option<String>,
     /// <p>The description of the integration</p>
     pub description: Option<String>,
     /// <p>Specifies the integration's HTTP method type.</p>
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p> AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</p><p> AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p><p> HTTP: for integrating the route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</p><p> HTTP_PROXY: for integrating route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p><p> MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p><p>
+    /// AWS: for integrating the route or method request with an AWS service
+    /// action, including the Lambda function-invoking action. With the Lambda
+    /// function-invoking action, this is referred to as the Lambda custom integration. With
+    /// any other AWS service action, this is known as AWS integration.</p><p>
+    /// AWS_PROXY: for integrating the route or method request with the Lambda
+    /// function-invoking action with the client request passed through as-is. This
+    /// integration is also referred to as Lambda proxy integration.</p><p>
+    /// HTTP: for integrating the route or method request with an HTTP
+    /// endpoint. This
+    /// integration is also referred to as the HTTP custom integration.</p><p>
+    /// HTTP_PROXY: for integrating route or method request with an HTTP
+    /// endpoint, with the client
+    /// request passed through as-is. This is also referred to as HTTP proxy
+    /// integration.</p><p>
+    /// MOCK: for integrating the route or method request with API Gateway as a
+    /// "loopback" endpoint without invoking any backend.</p>
     pub integration_type: Option<String>,
-    /// <p>Specifies the Uniform Resource Identifier (URI) of the integration endpoint.</p><p>For HTTP or HTTP_PROXY integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">RFC-3986 specification</a>, for either standard integration, where connectionType is not VPC_LINK, or private integration, where connectionType is VPC_LINK. For a private HTTP integration, the URI is not used for routing.</p><p>For AWS or AWS_PROXY integrations, the URI is of the form arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}. Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the URI can be either arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key} or arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</p>
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.</p><p> WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p><p> NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p><p> WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the
+    /// Content-Type header in the request, and the available mapping
+    /// templates specified as the requestTemplates property on the
+    /// Integration resource. There are three valid values:
+    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
+    /// NEVER.</p><p>
+    /// WHEN_NO_MATCH passes the request body for unmapped content types through
+    /// to the integration backend without transformation.</p><p>
+    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
+    /// Media Type response.</p><p>
+    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
+    /// content types mapped to templates. However, if there is at least one content type
+    /// defined, unmapped content types will be rejected with the same HTTP 415
+    /// Unsupported Media Type response.</p>
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.{location}.{name} , where  {location}  is querystring, path, or header; and  {name}  must be a valid and unique method request parameter name.</p>
+    /// <p>A key-value map specifying request parameters that are passed from the method
+    /// request to the backend. The key is an integration request parameter name and the
+    /// associated value is a method request parameter value or static value that must be
+    /// enclosed within single quotes and pre-encoded as required by the backend. The method
+    /// request parameter value must match the pattern of
+    /// method.request.{location}.{name}
+    /// , where
+    /// {location}
+    /// is querystring, path, or header; and
+    /// {name}
+    /// must be a valid and unique method request parameter name.</p>
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload
+    /// based on the value of the Content-Type header sent by the client. The content type
+    /// value is the key in this map, and the template (as a String) is the value.</p>
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
     /// <p>The template selection expression for the integration.</p>
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
+    /// milliseconds or 29 seconds.</p>
     pub timeout_in_millis: Option<i64>,
 }
 
@@ -2835,19 +3679,34 @@ pub struct UpdateIntegrationRequest {
     /// <p>The API identifier.</p>
     #[serde(rename = "ApiId")]
     pub api_id: String,
-    /// <p>The identifier of the VpcLink used for the integration when the connectionType is VPC_LINK; otherwise undefined.</p>
+    /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. The valid value is INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and a network load balancer in a VPC. The default value is INTERNET.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only
+    /// valid value is INTERNET, for connections through the public routable
+    /// internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS
+    /// integrations, three options are available. To specify an IAM Role for API Gateway to
+    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
+    /// identity be passed through from the request, specify the string
+    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
+    /// AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -2862,23 +3721,64 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p> AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</p><p> AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p><p> HTTP: for integrating the route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</p><p> HTTP_PROXY: for integrating route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p><p> MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p><p>
+    /// AWS: for integrating the route or method request with an AWS service
+    /// action, including the Lambda function-invoking action. With the Lambda
+    /// function-invoking action, this is referred to as the Lambda custom integration. With
+    /// any other AWS service action, this is known as AWS integration.</p><p>
+    /// AWS_PROXY: for integrating the route or method request with the Lambda
+    /// function-invoking action with the client request passed through as-is. This
+    /// integration is also referred to as Lambda proxy integration.</p><p>
+    /// HTTP: for integrating the route or method request with an HTTP
+    /// endpoint. This
+    /// integration is also referred to as the HTTP custom integration.</p><p>
+    /// HTTP_PROXY: for integrating route or method request with an HTTP
+    /// endpoint, with the client
+    /// request passed through as-is. This is also referred to as HTTP proxy
+    /// integration.</p><p>
+    /// MOCK: for integrating the route or method request with API Gateway as a
+    /// "loopback" endpoint without invoking any backend.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>Specifies the Uniform Resource Identifier (URI) of the integration endpoint.</p><p>For HTTP or HTTP_PROXY integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">RFC-3986 specification</a>, for either standard integration, where connectionType is not VPC_LINK, or private integration, where connectionType is VPC_LINK. For a private HTTP integration, the URI is not used for routing.</p><p>For AWS or AWS_PROXY integrations, the URI is of the form arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}. Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the URI can be either arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key} or arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</p>
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.</p><p> WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p><p> NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p><p> WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the
+    /// Content-Type header in the request, and the available mapping
+    /// templates specified as the requestTemplates property on the
+    /// Integration resource. There are three valid values:
+    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
+    /// NEVER.</p><p>
+    /// WHEN_NO_MATCH passes the request body for unmapped content types through
+    /// to the integration backend without transformation.</p><p>
+    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
+    /// Media Type response.</p><p>
+    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
+    /// content types mapped to templates. However, if there is at least one content type
+    /// defined, unmapped content types will be rejected with the same HTTP 415
+    /// Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.{location}.{name} , where  {location}  is querystring, path, or header; and  {name}  must be a valid and unique method request parameter name.</p>
+    /// <p>A key-value map specifying request parameters that are passed from the method
+    /// request to the backend. The key is an integration request parameter name and the
+    /// associated value is a method request parameter value or static value that must be
+    /// enclosed within single quotes and pre-encoded as required by the backend. The method
+    /// request parameter value must match the pattern of
+    /// method.request.{location}.{name}
+    /// , where
+    /// {location}
+    /// is querystring, path, or header; and
+    /// {name}
+    /// must be a valid and unique method request parameter name.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload
+    /// based on the value of the Content-Type header sent by the client. The content type
+    /// value is the key in this map, and the template (as a String) is the value.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
@@ -2886,105 +3786,44 @@ pub struct UpdateIntegrationRequest {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
+    /// milliseconds or 29 seconds.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
 }
 
-/// <p>Represents the input parameters for an UpdateIntegrationResponse request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateIntegrationResponseInput {
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration response key.</p>
-    pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name} , where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name}  or integration.response.body.{JSON-expression} , where  {name}  is a valid and unique response header name and  {JSON-expression}  is a valid JSON expression without the $ prefix.</p>
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration response.</p>
-    pub template_selection_expression: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct UpdateIntegrationResponseRequest {
-    /// <p>The API identifier.</p>
-    #[serde(rename = "ApiId")]
-    pub api_id: String,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration ID.</p>
-    #[serde(rename = "IntegrationId")]
-    pub integration_id: String,
-    /// <p>The integration response ID.</p>
-    #[serde(rename = "IntegrationResponseId")]
-    pub integration_response_id: String,
-    /// <p>The integration response key.</p>
-    #[serde(rename = "IntegrationResponseKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name} , where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name}  or integration.response.body.{JSON-expression} , where  {name}  is a valid and unique response header name and  {JSON-expression}  is a valid JSON expression without the $ prefix.</p>
-    #[serde(rename = "ResponseParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
-    #[serde(rename = "ResponseTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expression for the integration response.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct UpdateIntegrationResponseResponse {
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
-    #[serde(rename = "ContentHandlingStrategy")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub content_handling_strategy: Option<String>,
-    /// <p>The integration response ID.</p>
-    #[serde(rename = "IntegrationResponseId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_id: Option<String>,
-    /// <p>The integration response key.</p>
-    #[serde(rename = "IntegrationResponseKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub integration_response_key: Option<String>,
-    /// <p>A key-value map specifying response parameters that are passed to the method response from the backend. The key is a method response header parameter name and the mapped value is an integration response header value, a static value enclosed within a pair of single quotes, or a JSON expression from the integration response body. The mapping key must match the pattern of method.response.header.{name}, where name is a valid and unique header name. The mapped non-static value must match the pattern of integration.response.header.{name} or integration.response.body.{JSON-expression}, where name is a valid and unique response header name and JSON-expression is a valid JSON expression without the $ prefix.</p>
-    #[serde(rename = "ResponseParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The collection of response templates for the integration response as a string-to-string map of key-value pairs. Response templates are represented as a key/value map, with a content-type as the key and a template as the value.</p>
-    #[serde(rename = "ResponseTemplates")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub response_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The template selection expressions for the integration response.</p>
-    #[serde(rename = "TemplateSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub template_selection_expression: Option<String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct UpdateIntegrationResult {
-    /// <p>The identifier of the VpcLink used for the integration when the connectionType is VPC_LINK; otherwise undefined.</p>
+pub struct UpdateIntegrationResponse {
+    /// <p>The connection ID.</p>
     #[serde(rename = "ConnectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The type of the network connection to the integration endpoint. The valid value is INTERNET for connections through the public routable internet or VPC_LINK for private connections between API Gateway and a network load balancer in a VPC. The default value is INTERNET.</p>
+    /// <p>The type of the network connection to the integration endpoint. Currently the only
+    /// valid value is INTERNET, for connections through the public routable
+    /// internet.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
-    /// <p>Specifies how to handle response payload content type conversions. Supported values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the following behaviors:</p><p> CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p><p> CONVERT_TO_TEXT: Converts a response payload from a binary blob to a Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from the integration response to the route response or method response without modification.</p>
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
     #[serde(rename = "ContentHandlingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling_strategy: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string arn:aws:iam::*:user/*. To use resource-based permissions on supported AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS
+    /// integrations, three options are available. To specify an IAM Role for API Gateway to
+    /// assume, use the role's Amazon Resource Name (ARN). To require that the caller's
+    /// identity be passed through from the request, specify the string
+    /// arn:aws:iam::*:user/*. To use resource-based permissions on supported
+    /// AWS services, specify null.</p>
     #[serde(rename = "CredentialsArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials_arn: Option<String>,
@@ -3000,27 +3839,68 @@ pub struct UpdateIntegrationResult {
     #[serde(rename = "IntegrationMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_method: Option<String>,
-
+    /// <p>The integration response selection expression for the integration. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-integration-response-selection-expressions">Integration Response Selection Expressions</a>.</p>
     #[serde(rename = "IntegrationResponseSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_response_selection_expression: Option<String>,
-    /// <p>The integration type of an integration. One of the following:</p><p> AWS: for integrating the route or method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</p><p> AWS_PROXY: for integrating the route or method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as Lambda proxy integration.</p><p> HTTP: for integrating the route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</p><p> HTTP_PROXY: for integrating route or method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as HTTP proxy integration.</p><p> MOCK: for integrating the route or method request with API Gateway as a "loopback" endpoint without invoking any backend.</p>
+    /// <p>The integration type of an integration. One of the following:</p><p>
+    /// AWS: for integrating the route or method request with an AWS service
+    /// action, including the Lambda function-invoking action. With the Lambda
+    /// function-invoking action, this is referred to as the Lambda custom integration. With
+    /// any other AWS service action, this is known as AWS integration.</p><p>
+    /// AWS_PROXY: for integrating the route or method request with the Lambda
+    /// function-invoking action with the client request passed through as-is. This
+    /// integration is also referred to as Lambda proxy integration.</p><p>
+    /// HTTP: for integrating the route or method request with an HTTP
+    /// endpoint. This
+    /// integration is also referred to as the HTTP custom integration.</p><p>
+    /// HTTP_PROXY: for integrating route or method request with an HTTP
+    /// endpoint, with the client
+    /// request passed through as-is. This is also referred to as HTTP proxy
+    /// integration.</p><p>
+    /// MOCK: for integrating the route or method request with API Gateway as a
+    /// "loopback" endpoint without invoking any backend.</p>
     #[serde(rename = "IntegrationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_type: Option<String>,
-    /// <p>Specifies the Uniform Resource Identifier (URI) of the integration endpoint.</p><p>For HTTP or HTTP_PROXY integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">RFC-3986 specification</a>, for either standard integration, where connectionType is not VPC_LINK, or private integration, where connectionType is VPC_LINK. For a private HTTP integration, the URI is not used for routing.</p><p>For AWS or AWS_PROXY integrations, the URI is of the form arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}. Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the URI can be either arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key} or arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</p>
+    /// <p>For a Lambda proxy integration, this is the URI of the Lambda function.</p>
     #[serde(rename = "IntegrationUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_uri: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.</p><p> WHEN_NO_MATCH passes the request body for unmapped content types through to the integration backend without transformation.</p><p> NEVER rejects unmapped content types with an HTTP 415 Unsupported Media Type response.</p><p> WHEN_NO_TEMPLATES allows pass-through when the integration has no content types mapped to templates. However, if there is at least one content type defined, unmapped content types will be rejected with the same HTTP 415 Unsupported Media Type response.</p>
+    /// <p>Specifies the pass-through behavior for incoming requests based on the
+    /// Content-Type header in the request, and the available mapping
+    /// templates specified as the requestTemplates property on the
+    /// Integration resource. There are three valid values:
+    /// WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and
+    /// NEVER.</p><p>
+    /// WHEN_NO_MATCH passes the request body for unmapped content types through
+    /// to the integration backend without transformation.</p><p>
+    /// NEVER rejects unmapped content types with an HTTP 415 Unsupported
+    /// Media Type response.</p><p>
+    /// WHEN_NO_TEMPLATES allows pass-through when the integration has no
+    /// content types mapped to templates. However, if there is at least one content type
+    /// defined, unmapped content types will be rejected with the same HTTP 415
+    /// Unsupported Media Type response.</p>
     #[serde(rename = "PassthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
-    /// <p>A key-value map specifying request parameters that are passed from the method request to the backend. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the backend. The method request parameter value must match the pattern of method.request.{location}.{name} , where  {location}  is querystring, path, or header; and  {name}  must be a valid and unique method request parameter name.</p>
+    /// <p>A key-value map specifying request parameters that are passed from the method
+    /// request to the backend. The key is an integration request parameter name and the
+    /// associated value is a method request parameter value or static value that must be
+    /// enclosed within single quotes and pre-encoded as required by the backend. The method
+    /// request parameter value must match the pattern of
+    /// method.request.{location}.{name}
+    /// , where
+    /// {location}
+    /// is querystring, path, or header; and
+    /// {name}
+    /// must be a valid and unique method request parameter name.</p>
     #[serde(rename = "RequestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.</p>
+    /// <p>Represents a map of Velocity templates that are applied on the request payload
+    /// based on the value of the Content-Type header sent by the client. The content type
+    /// value is the key in this map, and the template (as a String) is the value.</p>
     #[serde(rename = "RequestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
@@ -3028,10 +3908,157 @@ pub struct UpdateIntegrationResult {
     #[serde(rename = "TemplateSelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_selection_expression: Option<String>,
-    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000
+    /// milliseconds or 29 seconds.</p>
     #[serde(rename = "TimeoutInMillis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_millis: Option<i64>,
+}
+
+/// <p>Represents the input parameters for an UpdateIntegrationResponse
+/// request.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UpdateIntegrationResponseInput {
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration response key.</p>
+    pub integration_response_key: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method
+    /// response from the backend. The key is a method response header parameter name and the
+    /// mapped value is an integration response header value, a static value enclosed within
+    /// a pair of single quotes, or a JSON expression from the integration response body. The
+    /// mapping key must match the pattern of
+    /// method.response.header.{name}
+    /// , where name is a valid and unique header name. The mapped non-static value
+    /// must match the pattern of
+    /// integration.response.header.{name}
+    /// or
+    /// integration.response.body.{JSON-expression}
+    /// , where
+    /// {name}
+    /// is a valid and unique response header name and
+    /// {JSON-expression}
+    /// is a valid JSON expression without the $ prefix.</p>
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a
+    /// string-to-string map of key-value pairs. Response templates are represented as a
+    /// key/value map, with a content-type as the key and a template as the value.</p>
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expression for the integration response.</p>
+    pub template_selection_expression: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateIntegrationResponseRequest {
+    /// <p>The API identifier.</p>
+    #[serde(rename = "ApiId")]
+    pub api_id: String,
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration ID.</p>
+    #[serde(rename = "IntegrationId")]
+    pub integration_id: String,
+    /// <p>The integration response ID.</p>
+    #[serde(rename = "IntegrationResponseId")]
+    pub integration_response_id: String,
+    /// <p>The integration response key.</p>
+    #[serde(rename = "IntegrationResponseKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_key: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method
+    /// response from the backend. The key is a method response header parameter name and the
+    /// mapped value is an integration response header value, a static value enclosed within
+    /// a pair of single quotes, or a JSON expression from the integration response body. The
+    /// mapping key must match the pattern of
+    /// method.response.header.{name}
+    /// , where name is a valid and unique header name. The mapped non-static value
+    /// must match the pattern of
+    /// integration.response.header.{name}
+    /// or
+    /// integration.response.body.{JSON-expression}
+    /// , where
+    /// {name}
+    /// is a valid and unique response header name and
+    /// {JSON-expression}
+    /// is a valid JSON expression without the $ prefix.</p>
+    #[serde(rename = "ResponseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a
+    /// string-to-string map of key-value pairs. Response templates are represented as a
+    /// key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "ResponseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expression for the integration response.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateIntegrationResponseResponse {
+    /// <p>Specifies how to handle response payload content type conversions. Supported
+    /// values are CONVERT_TO_BINARY and CONVERT_TO_TEXT, with the
+    /// following behaviors:</p><p>
+    /// CONVERT_TO_BINARY: Converts a response payload from a Base64-encoded
+    /// string to the corresponding binary blob.</p><p>
+    /// CONVERT_TO_TEXT: Converts a response payload from a binary blob to a
+    /// Base64-encoded string.</p><p>If this property is not defined, the response payload will be passed through from
+    /// the integration response to the route response or method response without
+    /// modification.</p>
+    #[serde(rename = "ContentHandlingStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_handling_strategy: Option<String>,
+    /// <p>The integration response ID.</p>
+    #[serde(rename = "IntegrationResponseId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_id: Option<String>,
+    /// <p>The integration response key.</p>
+    #[serde(rename = "IntegrationResponseKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub integration_response_key: Option<String>,
+    /// <p>A key-value map specifying response parameters that are passed to the method
+    /// response from the backend. The key is a method response header parameter name and the
+    /// mapped value is an integration response header value, a static value enclosed within
+    /// a pair of single quotes, or a JSON expression from the integration response body. The
+    /// mapping key must match the pattern of method.response.header.{name}, where name is a
+    /// valid and unique header name. The mapped non-static value must match the pattern of
+    /// integration.response.header.{name} or integration.response.body.{JSON-expression},
+    /// where name is a valid and unique response header name and JSON-expression is a valid
+    /// JSON expression without the $ prefix.</p>
+    #[serde(rename = "ResponseParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The collection of response templates for the integration response as a
+    /// string-to-string map of key-value pairs. Response templates are represented as a
+    /// key/value map, with a content-type as the key and a template as the value.</p>
+    #[serde(rename = "ResponseTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_templates: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The template selection expressions for the integration response.</p>
+    #[serde(rename = "TemplateSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_selection_expression: Option<String>,
 }
 
 /// <p>Represents the input parameters for an UpdateModel request.</p>
@@ -3043,7 +4070,8 @@ pub struct UpdateModelInput {
     pub description: Option<String>,
     /// <p>The name of the model.</p>
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema
+    /// draft 4 model.</p>
     pub schema: Option<String>,
 }
 
@@ -3067,7 +4095,8 @@ pub struct UpdateModelRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema
+    /// draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -3092,7 +4121,8 @@ pub struct UpdateModelResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The schema for the model. For application/json models, this should be JSON schema draft 4 model.</p>
+    /// <p>The schema for the model. For application/json models, this should be JSON schema
+    /// draft 4 model.</p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -3103,11 +4133,18 @@ pub struct UpdateModelResponse {
 pub struct UpdateRouteInput {
     /// <p>Specifies whether an API key is required for the route.</p>
     pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this route.</p>
+    /// <p>The authorization scopes supported by this
+    /// route.</p>
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open access, AWS_IAM for using AWS IAM permissions.</p>
+    /// <p>The authorization type for the route. Valid values are NONE for open
+    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
+    /// for using a Lambda
+    /// authorizer.</p>
     pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this route.</p>
+    /// <p>The identifier of the Authorizer resource to be associated with this
+    /// route, if the authorizationType is CUSTOM
+    /// . The authorizer identifier is generated by API Gateway
+    /// when you created the authorizer.</p>
     pub authorizer_id: Option<String>,
     /// <p>The model selection expression for the route.</p>
     pub model_selection_expression: Option<String>,
@@ -3134,15 +4171,22 @@ pub struct UpdateRouteRequest {
     #[serde(rename = "ApiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this route.</p>
+    /// <p>The authorization scopes supported by this
+    /// route.</p>
     #[serde(rename = "AuthorizationScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open access, AWS_IAM for using AWS IAM permissions.</p>
+    /// <p>The authorization type for the route. Valid values are NONE for open
+    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
+    /// for using a Lambda
+    /// authorizer.</p>
     #[serde(rename = "AuthorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this route.</p>
+    /// <p>The identifier of the Authorizer resource to be associated with this
+    /// route, if the authorizationType is CUSTOM
+    /// . The authorizer identifier is generated by API Gateway
+    /// when you created the authorizer.</p>
     #[serde(rename = "AuthorizerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_id: Option<String>,
@@ -3179,7 +4223,73 @@ pub struct UpdateRouteRequest {
     pub target: Option<String>,
 }
 
-/// <p>Represents the input parameters for an UpdateRouteResponse request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRouteResponse {
+    /// <p>Specifies whether an API key is required for this route.</p>
+    #[serde(rename = "ApiKeyRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on a route. The scopes are used with a
+    /// COGNITO_USER_POOLS authorizer to authorize the method invocation. The authorization
+    /// works by matching the route scopes against the scopes parsed from the access token in
+    /// the incoming request. The method invocation is authorized if any route scope matches
+    /// a claimed scope in the access token. Otherwise, the invocation is not authorized.
+    /// When the route scope is configured, the client must provide an access token instead
+    /// of an identity token for authorization purposes.</p>
+    #[serde(rename = "AuthorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
+    /// <p>The authorization type for the route. Valid values are NONE for open
+    /// access, AWS_IAM for using AWS IAM permissions, and CUSTOM
+    /// for using a Lambda
+    /// authorizer</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The identifier of the Authorizer resource to be associated with this
+    /// route, if the authorizationType is CUSTOM
+    /// . The authorizer identifier is generated by API Gateway
+    /// when you created the authorizer.</p>
+    #[serde(rename = "AuthorizerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_id: Option<String>,
+    /// <p>The model selection expression for the route.</p>
+    #[serde(rename = "ModelSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_selection_expression: Option<String>,
+    /// <p>The operation name for the route.</p>
+    #[serde(rename = "OperationName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operation_name: Option<String>,
+    /// <p>The request models for the route.</p>
+    #[serde(rename = "RequestModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_models: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The request parameters for the route.</p>
+    #[serde(rename = "RequestParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
+    /// <p>The route ID.</p>
+    #[serde(rename = "RouteId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_id: Option<String>,
+    /// <p>The route key for the route.</p>
+    #[serde(rename = "RouteKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_key: Option<String>,
+    /// <p>The route response selection expression for the route.</p>
+    #[serde(rename = "RouteResponseSelectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_response_selection_expression: Option<String>,
+    /// <p>The target for the route.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+}
+
+/// <p>Represents the input parameters for an UpdateRouteResponse
+/// request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateRouteResponseInput {
     /// <p>The model selection expression for the route response.</p>
@@ -3246,59 +4356,6 @@ pub struct UpdateRouteResponseResponse {
     pub route_response_key: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
-#[cfg_attr(test, derive(Serialize))]
-pub struct UpdateRouteResult {
-    /// <p>Specifies whether an API key is required for this route.</p>
-    #[serde(rename = "ApiKeyRequired")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub api_key_required: Option<bool>,
-    /// <p>The authorization scopes supported by this route. </p>
-    #[serde(rename = "AuthorizationScopes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_scopes: Option<Vec<String>>,
-    /// <p>The authorization type for the route. Valid values are NONE for open access, AWS_IAM for using AWS IAM permissions.</p>
-    #[serde(rename = "AuthorizationType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorization_type: Option<String>,
-    /// <p>The identifier of the Authorizer resource to be associated with this route.</p>
-    #[serde(rename = "AuthorizerId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub authorizer_id: Option<String>,
-    /// <p>The model selection expression for the route.</p>
-    #[serde(rename = "ModelSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub model_selection_expression: Option<String>,
-    /// <p>The operation name for the route.</p>
-    #[serde(rename = "OperationName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub operation_name: Option<String>,
-    /// <p>The request models for the route.</p>
-    #[serde(rename = "RequestModels")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The request parameters for the route.</p>
-    #[serde(rename = "RequestParameters")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_parameters: Option<::std::collections::HashMap<String, ParameterConstraints>>,
-    /// <p>The route ID.</p>
-    #[serde(rename = "RouteId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_id: Option<String>,
-    /// <p>The route key for the route.</p>
-    #[serde(rename = "RouteKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_key: Option<String>,
-    /// <p>The route response selection expression for the route.</p>
-    #[serde(rename = "RouteResponseSelectionExpression")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub route_response_selection_expression: Option<String>,
-    /// <p>The target for the route.</p>
-    #[serde(rename = "Target")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target: Option<String>,
-}
-
 /// <p>Represents the input parameters for an UpdateStage request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateStageInput {
@@ -3314,7 +4371,9 @@ pub struct UpdateStageInput {
     pub description: Option<String>,
     /// <p>Route settings for the stage.</p>
     pub route_settings: Option<::std::collections::HashMap<String, RouteSettings>>,
-    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a Stage. Variable names
+    /// can have alphanumeric and underscore characters, and the values must match
+    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -3350,7 +4409,9 @@ pub struct UpdateStageRequest {
     /// <p>The stage name.</p>
     #[serde(rename = "StageName")]
     pub stage_name: String,
-    /// <p>A map that defines the stage variables for a Stage. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a Stage. Variable names
+    /// can have alphanumeric and underscore characters, and the values must match
+    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -3375,7 +4436,8 @@ pub struct UpdateStageResponse {
     #[serde(rename = "DefaultRouteSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_route_settings: Option<RouteSettings>,
-    /// <p>The identifier of the Deployment that the Stage is associated with.</p>
+    /// <p>The identifier of the Deployment that the Stage is
+    /// associated with.</p>
     #[serde(rename = "DeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -3395,7 +4457,9 @@ pub struct UpdateStageResponse {
     #[serde(rename = "StageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
-    /// <p>A map that defines the stage variables for a stage resource. Variable names can have alphanumeric and underscore characters, and the values must match [A-Za-z0-9-._~:/?#&=,]+.</p>
+    /// <p>A map that defines the stage variables for a stage resource. Variable names can
+    /// have alphanumeric and underscore characters, and the values must match
+    /// [A-Za-z0-9-._~:/?#&=,]+.</p>
     #[serde(rename = "StageVariables")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
@@ -3404,11 +4468,15 @@ pub struct UpdateStageResponse {
 /// Errors returned by CreateApi
 #[derive(Debug, PartialEq)]
 pub enum CreateApiError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3455,11 +4523,15 @@ impl Error for CreateApiError {
 /// Errors returned by CreateApiMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateApiMappingError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3506,11 +4578,15 @@ impl Error for CreateApiMappingError {
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3557,11 +4633,15 @@ impl Error for CreateAuthorizerError {
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3608,11 +4688,15 @@ impl Error for CreateDeploymentError {
 /// Errors returned by CreateDomainName
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainNameError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3659,11 +4743,15 @@ impl Error for CreateDomainNameError {
 /// Errors returned by CreateIntegration
 #[derive(Debug, PartialEq)]
 pub enum CreateIntegrationError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3710,11 +4798,15 @@ impl Error for CreateIntegrationError {
 /// Errors returned by CreateIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum CreateIntegrationResponseError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3765,11 +4857,15 @@ impl Error for CreateIntegrationResponseError {
 /// Errors returned by CreateModel
 #[derive(Debug, PartialEq)]
 pub enum CreateModelError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3816,11 +4912,15 @@ impl Error for CreateModelError {
 /// Errors returned by CreateRoute
 #[derive(Debug, PartialEq)]
 pub enum CreateRouteError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3867,11 +4967,15 @@ impl Error for CreateRouteError {
 /// Errors returned by CreateRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum CreateRouteResponseError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3918,11 +5022,15 @@ impl Error for CreateRouteResponseError {
 /// Errors returned by CreateStage
 #[derive(Debug, PartialEq)]
 pub enum CreateStageError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -3969,7 +5077,8 @@ impl Error for CreateStageError {
 /// Errors returned by DeleteApi
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4008,9 +5117,11 @@ impl Error for DeleteApiError {
 /// Errors returned by DeleteApiMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiMappingError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4053,7 +5164,8 @@ impl Error for DeleteApiMappingError {
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4092,7 +5204,8 @@ impl Error for DeleteAuthorizerError {
 /// Errors returned by DeleteDeployment
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4131,7 +5244,8 @@ impl Error for DeleteDeploymentError {
 /// Errors returned by DeleteDomainName
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainNameError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4170,7 +5284,8 @@ impl Error for DeleteDomainNameError {
 /// Errors returned by DeleteIntegration
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4209,7 +5324,8 @@ impl Error for DeleteIntegrationError {
 /// Errors returned by DeleteIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationResponseError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4250,7 +5366,8 @@ impl Error for DeleteIntegrationResponseError {
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4289,7 +5406,8 @@ impl Error for DeleteModelError {
 /// Errors returned by DeleteRoute
 #[derive(Debug, PartialEq)]
 pub enum DeleteRouteError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4328,7 +5446,8 @@ impl Error for DeleteRouteError {
 /// Errors returned by DeleteRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteRouteResponseError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4367,7 +5486,8 @@ impl Error for DeleteRouteResponseError {
 /// Errors returned by DeleteStage
 #[derive(Debug, PartialEq)]
 pub enum DeleteStageError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4406,7 +5526,8 @@ impl Error for DeleteStageError {
 /// Errors returned by GetApi
 #[derive(Debug, PartialEq)]
 pub enum GetApiError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4443,9 +5564,11 @@ impl Error for GetApiError {
 /// Errors returned by GetApiMapping
 #[derive(Debug, PartialEq)]
 pub enum GetApiMappingError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4488,9 +5611,11 @@ impl Error for GetApiMappingError {
 /// Errors returned by GetApiMappings
 #[derive(Debug, PartialEq)]
 pub enum GetApiMappingsError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4533,9 +5658,11 @@ impl Error for GetApiMappingsError {
 /// Errors returned by GetApis
 #[derive(Debug, PartialEq)]
 pub enum GetApisError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4578,7 +5705,8 @@ impl Error for GetApisError {
 /// Errors returned by GetAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizerError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4617,9 +5745,11 @@ impl Error for GetAuthorizerError {
 /// Errors returned by GetAuthorizers
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizersError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4662,7 +5792,8 @@ impl Error for GetAuthorizersError {
 /// Errors returned by GetDeployment
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4701,9 +5832,11 @@ impl Error for GetDeploymentError {
 /// Errors returned by GetDeployments
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentsError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4746,7 +5879,8 @@ impl Error for GetDeploymentsError {
 /// Errors returned by GetDomainName
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNameError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4785,9 +5919,11 @@ impl Error for GetDomainNameError {
 /// Errors returned by GetDomainNames
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNamesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4830,7 +5966,8 @@ impl Error for GetDomainNamesError {
 /// Errors returned by GetIntegration
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4869,7 +6006,8 @@ impl Error for GetIntegrationError {
 /// Errors returned by GetIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationResponseError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4910,9 +6048,11 @@ impl Error for GetIntegrationResponseError {
 /// Errors returned by GetIntegrationResponses
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationResponsesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -4957,9 +6097,11 @@ impl Error for GetIntegrationResponsesError {
 /// Errors returned by GetIntegrations
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationsError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5002,7 +6144,8 @@ impl Error for GetIntegrationsError {
 /// Errors returned by GetModel
 #[derive(Debug, PartialEq)]
 pub enum GetModelError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5041,7 +6184,8 @@ impl Error for GetModelError {
 /// Errors returned by GetModelTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetModelTemplateError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5080,9 +6224,11 @@ impl Error for GetModelTemplateError {
 /// Errors returned by GetModels
 #[derive(Debug, PartialEq)]
 pub enum GetModelsError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5125,7 +6271,8 @@ impl Error for GetModelsError {
 /// Errors returned by GetRoute
 #[derive(Debug, PartialEq)]
 pub enum GetRouteError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5164,7 +6311,8 @@ impl Error for GetRouteError {
 /// Errors returned by GetRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum GetRouteResponseError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5203,9 +6351,11 @@ impl Error for GetRouteResponseError {
 /// Errors returned by GetRouteResponses
 #[derive(Debug, PartialEq)]
 pub enum GetRouteResponsesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5248,9 +6398,11 @@ impl Error for GetRouteResponsesError {
 /// Errors returned by GetRoutes
 #[derive(Debug, PartialEq)]
 pub enum GetRoutesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5293,7 +6445,8 @@ impl Error for GetRoutesError {
 /// Errors returned by GetStage
 #[derive(Debug, PartialEq)]
 pub enum GetStageError {
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5332,9 +6485,11 @@ impl Error for GetStageError {
 /// Errors returned by GetStages
 #[derive(Debug, PartialEq)]
 pub enum GetStagesError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5377,11 +6532,15 @@ impl Error for GetStagesError {
 /// Errors returned by UpdateApi
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5428,11 +6587,15 @@ impl Error for UpdateApiError {
 /// Errors returned by UpdateApiMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiMappingError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5479,11 +6642,15 @@ impl Error for UpdateApiMappingError {
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5530,11 +6697,15 @@ impl Error for UpdateAuthorizerError {
 /// Errors returned by UpdateDeployment
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeploymentError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5581,11 +6752,15 @@ impl Error for UpdateDeploymentError {
 /// Errors returned by UpdateDomainName
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainNameError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5632,11 +6807,15 @@ impl Error for UpdateDomainNameError {
 /// Errors returned by UpdateIntegration
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5683,11 +6862,15 @@ impl Error for UpdateIntegrationError {
 /// Errors returned by UpdateIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationResponseError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5738,11 +6921,15 @@ impl Error for UpdateIntegrationResponseError {
 /// Errors returned by UpdateModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateModelError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5789,11 +6976,15 @@ impl Error for UpdateModelError {
 /// Errors returned by UpdateRoute
 #[derive(Debug, PartialEq)]
 pub enum UpdateRouteError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5840,11 +7031,15 @@ impl Error for UpdateRouteError {
 /// Errors returned by UpdateRouteResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateRouteResponseError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5891,11 +7086,15 @@ impl Error for UpdateRouteResponseError {
 /// Errors returned by UpdateStage
 #[derive(Debug, PartialEq)]
 pub enum UpdateStageError {
-    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    /// <p>The request is not valid, for example, the input is incomplete or incorrect. See
+    /// the accompanying error message for details.</p>
     BadRequest(String),
-    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. See the accompanying error message for details.</p>
+    /// <p>The requested operation would cause a conflict with the current state of a service
+    /// resource associated with the request. Resolve the conflict before retrying this
+    /// request. See the accompanying error message for details.</p>
     Conflict(String),
-    /// <p>The resource specified in the request was not found. See the message field for more information.</p>
+    /// <p>The resource specified in the request was not found. See the message
+    /// field for more information.</p>
     NotFound(String),
     /// <p>A limit has been exceeded. See the accompanying error message for details.</p>
     TooManyRequests(String),
@@ -5975,7 +7174,7 @@ pub trait ApiGatewayV2 {
     fn create_integration(
         &self,
         input: CreateIntegrationRequest,
-    ) -> RusotoFuture<CreateIntegrationResult, CreateIntegrationError>;
+    ) -> RusotoFuture<CreateIntegrationResponse, CreateIntegrationError>;
 
     /// <p>Creates an IntegrationResponses.</p>
     fn create_integration_response(
@@ -5993,7 +7192,7 @@ pub trait ApiGatewayV2 {
     fn create_route(
         &self,
         input: CreateRouteRequest,
-    ) -> RusotoFuture<CreateRouteResult, CreateRouteError>;
+    ) -> RusotoFuture<CreateRouteResponse, CreateRouteError>;
 
     /// <p>Creates a RouteResponse for a Route.</p>
     fn create_route_response(
@@ -6119,7 +7318,7 @@ pub trait ApiGatewayV2 {
     fn get_integration(
         &self,
         input: GetIntegrationRequest,
-    ) -> RusotoFuture<GetIntegrationResult, GetIntegrationError>;
+    ) -> RusotoFuture<GetIntegrationResponse, GetIntegrationError>;
 
     /// <p>Gets an IntegrationResponses.</p>
     fn get_integration_response(
@@ -6155,7 +7354,7 @@ pub trait ApiGatewayV2 {
     ) -> RusotoFuture<GetModelsResponse, GetModelsError>;
 
     /// <p>Gets a Route.</p>
-    fn get_route(&self, input: GetRouteRequest) -> RusotoFuture<GetRouteResult, GetRouteError>;
+    fn get_route(&self, input: GetRouteRequest) -> RusotoFuture<GetRouteResponse, GetRouteError>;
 
     /// <p>Gets a RouteResponse.</p>
     fn get_route_response(
@@ -6218,7 +7417,7 @@ pub trait ApiGatewayV2 {
     fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
-    ) -> RusotoFuture<UpdateIntegrationResult, UpdateIntegrationError>;
+    ) -> RusotoFuture<UpdateIntegrationResponse, UpdateIntegrationError>;
 
     /// <p>Updates an IntegrationResponses.</p>
     fn update_integration_response(
@@ -6236,7 +7435,7 @@ pub trait ApiGatewayV2 {
     fn update_route(
         &self,
         input: UpdateRouteRequest,
-    ) -> RusotoFuture<UpdateRouteResult, UpdateRouteError>;
+    ) -> RusotoFuture<UpdateRouteResponse, UpdateRouteError>;
 
     /// <p>Updates a RouteResponse.</p>
     fn update_route_response(
@@ -6454,7 +7653,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     fn create_integration(
         &self,
         input: CreateIntegrationRequest,
-    ) -> RusotoFuture<CreateIntegrationResult, CreateIntegrationError> {
+    ) -> RusotoFuture<CreateIntegrationResponse, CreateIntegrationError> {
         let request_uri = format!("/v2/apis/{api_id}/integrations", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -6467,7 +7666,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateIntegrationResult, _>()?;
+                        .deserialize::<CreateIntegrationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -6551,7 +7750,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     fn create_route(
         &self,
         input: CreateRouteRequest,
-    ) -> RusotoFuture<CreateRouteResult, CreateRouteError> {
+    ) -> RusotoFuture<CreateRouteResponse, CreateRouteError> {
         let request_uri = format!("/v2/apis/{api_id}/routes", api_id = input.api_id);
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -6564,7 +7763,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 201 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<CreateRouteResult, _>()?;
+                        .deserialize::<CreateRouteResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -6684,10 +7883,6 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
-
-        let mut params = Params::new();
-        params.put("apiId", &input.api_id);
-        request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 204 {
@@ -7018,10 +8213,6 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        let mut params = Params::new();
-        params.put("apiId", &input.api_id);
-        request.set_params(params);
-
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
@@ -7333,7 +8524,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     fn get_integration(
         &self,
         input: GetIntegrationRequest,
-    ) -> RusotoFuture<GetIntegrationResult, GetIntegrationError> {
+    ) -> RusotoFuture<GetIntegrationResponse, GetIntegrationError> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}",
             api_id = input.api_id,
@@ -7347,7 +8538,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetIntegrationResult, _>()?;
+                        .deserialize::<GetIntegrationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -7569,7 +8760,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     }
 
     /// <p>Gets a Route.</p>
-    fn get_route(&self, input: GetRouteRequest) -> RusotoFuture<GetRouteResult, GetRouteError> {
+    fn get_route(&self, input: GetRouteRequest) -> RusotoFuture<GetRouteResponse, GetRouteError> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}",
             api_id = input.api_id,
@@ -7583,7 +8774,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<GetRouteResult, _>()?;
+                        .deserialize::<GetRouteResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -7959,7 +9150,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     fn update_integration(
         &self,
         input: UpdateIntegrationRequest,
-    ) -> RusotoFuture<UpdateIntegrationResult, UpdateIntegrationError> {
+    ) -> RusotoFuture<UpdateIntegrationResponse, UpdateIntegrationError> {
         let request_uri = format!(
             "/v2/apis/{api_id}/integrations/{integration_id}",
             api_id = input.api_id,
@@ -7976,7 +9167,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateIntegrationResult, _>()?;
+                        .deserialize::<UpdateIntegrationResponse, _>()?;
 
                     Ok(result)
                 }))
@@ -8060,7 +9251,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
     fn update_route(
         &self,
         input: UpdateRouteRequest,
-    ) -> RusotoFuture<UpdateRouteResult, UpdateRouteError> {
+    ) -> RusotoFuture<UpdateRouteResponse, UpdateRouteError> {
         let request_uri = format!(
             "/v2/apis/{api_id}/routes/{route_id}",
             api_id = input.api_id,
@@ -8077,7 +9268,7 @@ impl ApiGatewayV2 for ApiGatewayV2Client {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     let result = proto::json::ResponsePayload::new(&response)
-                        .deserialize::<UpdateRouteResult, _>()?;
+                        .deserialize::<UpdateRouteResponse, _>()?;
 
                     Ok(result)
                 }))
