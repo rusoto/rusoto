@@ -111,6 +111,7 @@ where
     P: GenerateProtocol,
     E: GenerateErrorTypes,
 {
+    // TODO: `use futures::future;` isn't used by all crates: only include it when needed
     writeln!(
         writer,
         "
@@ -184,7 +185,7 @@ where
             pub fn new(region: region::Region) -> {type_name} {{
                 {type_name} {{
                     client: Client::shared(),
-                    region: region
+                    region
                 }}
             }}
 
@@ -196,7 +197,7 @@ where
             {{
                 {type_name} {{
                     client: Client::new_with(credentials_provider, request_dispatcher),
-                    region: region
+                    region
                 }}
             }}
         }}

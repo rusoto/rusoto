@@ -50,7 +50,7 @@ pub struct ActiveTrustedSigners {
 struct ActiveTrustedSignersDeserializer;
 impl ActiveTrustedSignersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ActiveTrustedSigners, XmlParseError> {
@@ -76,7 +76,7 @@ impl ActiveTrustedSignersDeserializer {
 struct AliasListDeserializer;
 impl AliasListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -123,7 +123,7 @@ pub struct Aliases {
 struct AliasesDeserializer;
 impl AliasesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Aliases, XmlParseError> {
@@ -182,7 +182,7 @@ pub struct AllowedMethods {
 struct AllowedMethodsDeserializer;
 impl AllowedMethodsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AllowedMethods, XmlParseError> {
@@ -237,7 +237,7 @@ impl AllowedMethodsSerializer {
 struct AwsAccountNumberListDeserializer;
 impl AwsAccountNumberListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -275,10 +275,7 @@ impl AwsAccountNumberListSerializer {
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -338,7 +335,7 @@ pub struct CacheBehavior {
 struct CacheBehaviorDeserializer;
 impl CacheBehaviorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheBehavior, XmlParseError> {
@@ -492,7 +489,7 @@ impl CacheBehaviorSerializer {
 struct CacheBehaviorListDeserializer;
 impl CacheBehaviorListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheBehavior>, XmlParseError> {
@@ -542,7 +539,7 @@ pub struct CacheBehaviors {
 struct CacheBehaviorsDeserializer;
 impl CacheBehaviorsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheBehaviors, XmlParseError> {
@@ -600,7 +597,7 @@ pub struct CachedMethods {
 struct CachedMethodsDeserializer;
 impl CachedMethodsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CachedMethods, XmlParseError> {
@@ -657,7 +654,7 @@ pub struct CloudFrontOriginAccessIdentity {
 struct CloudFrontOriginAccessIdentityDeserializer;
 impl CloudFrontOriginAccessIdentityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFrontOriginAccessIdentity, XmlParseError> {
@@ -700,7 +697,7 @@ pub struct CloudFrontOriginAccessIdentityConfig {
 struct CloudFrontOriginAccessIdentityConfigDeserializer;
 impl CloudFrontOriginAccessIdentityConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFrontOriginAccessIdentityConfig, XmlParseError> {
@@ -772,7 +769,7 @@ pub struct CloudFrontOriginAccessIdentityList {
 struct CloudFrontOriginAccessIdentityListDeserializer;
 impl CloudFrontOriginAccessIdentityListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFrontOriginAccessIdentityList, XmlParseError> {
@@ -825,7 +822,7 @@ pub struct CloudFrontOriginAccessIdentitySummary {
 struct CloudFrontOriginAccessIdentitySummaryDeserializer;
 impl CloudFrontOriginAccessIdentitySummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CloudFrontOriginAccessIdentitySummary, XmlParseError> {
@@ -854,7 +851,7 @@ impl CloudFrontOriginAccessIdentitySummaryDeserializer {
 struct CloudFrontOriginAccessIdentitySummaryListDeserializer;
 impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CloudFrontOriginAccessIdentitySummary>, XmlParseError> {
@@ -876,7 +873,7 @@ impl CloudFrontOriginAccessIdentitySummaryListDeserializer {
 struct CookieNameListDeserializer;
 impl CookieNameListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -923,7 +920,7 @@ pub struct CookieNames {
 struct CookieNamesDeserializer;
 impl CookieNamesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CookieNames, XmlParseError> {
@@ -981,7 +978,7 @@ pub struct CookiePreference {
 struct CookiePreferenceDeserializer;
 impl CookiePreferenceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CookiePreference, XmlParseError> {
@@ -1049,7 +1046,7 @@ pub struct CreateCloudFrontOriginAccessIdentityResult {
 struct CreateCloudFrontOriginAccessIdentityResultDeserializer;
 impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCloudFrontOriginAccessIdentityResult, XmlParseError> {
@@ -1085,7 +1082,7 @@ pub struct CreateDistributionResult {
 struct CreateDistributionResultDeserializer;
 impl CreateDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDistributionResult, XmlParseError> {
@@ -1119,7 +1116,7 @@ pub struct CreateDistributionWithTagsResult {
 struct CreateDistributionWithTagsResultDeserializer;
 impl CreateDistributionWithTagsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateDistributionWithTagsResult, XmlParseError> {
@@ -1153,7 +1150,7 @@ pub struct CreateInvalidationResult {
 struct CreateInvalidationResultDeserializer;
 impl CreateInvalidationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateInvalidationResult, XmlParseError> {
@@ -1187,7 +1184,7 @@ pub struct CreateStreamingDistributionResult {
 struct CreateStreamingDistributionResultDeserializer;
 impl CreateStreamingDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStreamingDistributionResult, XmlParseError> {
@@ -1220,7 +1217,7 @@ pub struct CreateStreamingDistributionWithTagsResult {
 struct CreateStreamingDistributionWithTagsResultDeserializer;
 impl CreateStreamingDistributionWithTagsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStreamingDistributionWithTagsResult, XmlParseError> {
@@ -1249,7 +1246,7 @@ pub struct CustomErrorResponse {
 struct CustomErrorResponseDeserializer;
 impl CustomErrorResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomErrorResponse, XmlParseError> {
@@ -1326,7 +1323,7 @@ impl CustomErrorResponseSerializer {
 struct CustomErrorResponseListDeserializer;
 impl CustomErrorResponseListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CustomErrorResponse>, XmlParseError> {
@@ -1376,7 +1373,7 @@ pub struct CustomErrorResponses {
 struct CustomErrorResponsesDeserializer;
 impl CustomErrorResponsesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomErrorResponses, XmlParseError> {
@@ -1434,7 +1431,7 @@ pub struct CustomHeaders {
 struct CustomHeadersDeserializer;
 impl CustomHeadersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomHeaders, XmlParseError> {
@@ -1500,7 +1497,7 @@ pub struct CustomOriginConfig {
 struct CustomOriginConfigDeserializer;
 impl CustomOriginConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CustomOriginConfig, XmlParseError> {
@@ -1626,7 +1623,7 @@ pub struct DefaultCacheBehavior {
 struct DefaultCacheBehaviorDeserializer;
 impl DefaultCacheBehaviorDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DefaultCacheBehavior, XmlParseError> {
@@ -1824,7 +1821,7 @@ pub struct Distribution {
 struct DistributionDeserializer;
 impl DistributionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Distribution, XmlParseError> {
@@ -1904,7 +1901,7 @@ pub struct DistributionConfig {
 struct DistributionConfigDeserializer;
 impl DistributionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DistributionConfig, XmlParseError> {
@@ -2135,7 +2132,7 @@ pub struct DistributionList {
 struct DistributionListDeserializer;
 impl DistributionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DistributionList, XmlParseError> {
@@ -2208,7 +2205,7 @@ pub struct DistributionSummary {
 struct DistributionSummaryDeserializer;
 impl DistributionSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DistributionSummary, XmlParseError> {
@@ -2287,7 +2284,7 @@ impl DistributionSummaryDeserializer {
 struct DistributionSummaryListDeserializer;
 impl DistributionSummaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<DistributionSummary>, XmlParseError> {
@@ -2307,10 +2304,7 @@ impl DistributionSummaryListDeserializer {
 struct EventTypeDeserializer;
 impl EventTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2355,7 +2349,7 @@ pub struct ForwardedValues {
 struct ForwardedValuesDeserializer;
 impl ForwardedValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ForwardedValues, XmlParseError> {
@@ -2427,7 +2421,7 @@ pub struct GeoRestriction {
 struct GeoRestrictionDeserializer;
 impl GeoRestrictionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GeoRestriction, XmlParseError> {
@@ -2486,10 +2480,7 @@ impl GeoRestrictionSerializer {
 struct GeoRestrictionTypeDeserializer;
 impl GeoRestrictionTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2537,7 +2528,7 @@ pub struct GetCloudFrontOriginAccessIdentityConfigResult {
 struct GetCloudFrontOriginAccessIdentityConfigResultDeserializer;
 impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCloudFrontOriginAccessIdentityConfigResult, XmlParseError> {
@@ -2571,7 +2562,7 @@ pub struct GetCloudFrontOriginAccessIdentityResult {
 struct GetCloudFrontOriginAccessIdentityResultDeserializer;
 impl GetCloudFrontOriginAccessIdentityResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetCloudFrontOriginAccessIdentityResult, XmlParseError> {
@@ -2605,7 +2596,7 @@ pub struct GetDistributionConfigResult {
 struct GetDistributionConfigResultDeserializer;
 impl GetDistributionConfigResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionConfigResult, XmlParseError> {
@@ -2637,7 +2628,7 @@ pub struct GetDistributionResult {
 struct GetDistributionResultDeserializer;
 impl GetDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetDistributionResult, XmlParseError> {
@@ -2669,7 +2660,7 @@ pub struct GetInvalidationResult {
 struct GetInvalidationResultDeserializer;
 impl GetInvalidationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetInvalidationResult, XmlParseError> {
@@ -2701,7 +2692,7 @@ pub struct GetStreamingDistributionConfigResult {
 struct GetStreamingDistributionConfigResultDeserializer;
 impl GetStreamingDistributionConfigResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStreamingDistributionConfigResult, XmlParseError> {
@@ -2735,7 +2726,7 @@ pub struct GetStreamingDistributionResult {
 struct GetStreamingDistributionResultDeserializer;
 impl GetStreamingDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStreamingDistributionResult, XmlParseError> {
@@ -2751,7 +2742,7 @@ impl GetStreamingDistributionResultDeserializer {
 struct HeaderListDeserializer;
 impl HeaderListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -2798,7 +2789,7 @@ pub struct Headers {
 struct HeadersDeserializer;
 impl HeadersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Headers, XmlParseError> {
@@ -2847,10 +2838,7 @@ impl HeadersSerializer {
 struct HttpVersionDeserializer;
 impl HttpVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2882,10 +2870,7 @@ impl HttpVersionSerializer {
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2930,7 +2915,7 @@ pub struct Invalidation {
 struct InvalidationDeserializer;
 impl InvalidationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Invalidation, XmlParseError> {
@@ -2967,7 +2952,7 @@ pub struct InvalidationBatch {
 struct InvalidationBatchDeserializer;
 impl InvalidationBatchDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InvalidationBatch, XmlParseError> {
@@ -3030,7 +3015,7 @@ pub struct InvalidationList {
 struct InvalidationListDeserializer;
 impl InvalidationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InvalidationList, XmlParseError> {
@@ -3075,7 +3060,7 @@ pub struct InvalidationSummary {
 struct InvalidationSummaryDeserializer;
 impl InvalidationSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<InvalidationSummary, XmlParseError> {
@@ -3099,7 +3084,7 @@ impl InvalidationSummaryDeserializer {
 struct InvalidationSummaryListDeserializer;
 impl InvalidationSummaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<InvalidationSummary>, XmlParseError> {
@@ -3119,10 +3104,7 @@ impl InvalidationSummaryListDeserializer {
 struct ItemSelectionDeserializer;
 impl ItemSelectionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3154,7 +3136,7 @@ impl ItemSelectionSerializer {
 struct KeyPairIdListDeserializer;
 impl KeyPairIdListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -3180,7 +3162,7 @@ pub struct KeyPairIds {
 struct KeyPairIdsDeserializer;
 impl KeyPairIdsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<KeyPairIds, XmlParseError> {
@@ -3212,7 +3194,7 @@ pub struct LambdaFunctionAssociation {
 struct LambdaFunctionAssociationDeserializer;
 impl LambdaFunctionAssociationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaFunctionAssociation, XmlParseError> {
@@ -3272,7 +3254,7 @@ impl LambdaFunctionAssociationSerializer {
 struct LambdaFunctionAssociationListDeserializer;
 impl LambdaFunctionAssociationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<LambdaFunctionAssociation>, XmlParseError> {
@@ -3326,7 +3308,7 @@ pub struct LambdaFunctionAssociations {
 struct LambdaFunctionAssociationsDeserializer;
 impl LambdaFunctionAssociationsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LambdaFunctionAssociations, XmlParseError> {
@@ -3395,7 +3377,7 @@ pub struct ListCloudFrontOriginAccessIdentitiesResult {
 struct ListCloudFrontOriginAccessIdentitiesResultDeserializer;
 impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, XmlParseError> {
@@ -3431,7 +3413,7 @@ pub struct ListDistributionsByWebACLIdResult {
 struct ListDistributionsByWebACLIdResultDeserializer;
 impl ListDistributionsByWebACLIdResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsByWebACLIdResult, XmlParseError> {
@@ -3463,7 +3445,7 @@ pub struct ListDistributionsResult {
 struct ListDistributionsResultDeserializer;
 impl ListDistributionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListDistributionsResult, XmlParseError> {
@@ -3497,7 +3479,7 @@ pub struct ListInvalidationsResult {
 struct ListInvalidationsResultDeserializer;
 impl ListInvalidationsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListInvalidationsResult, XmlParseError> {
@@ -3529,7 +3511,7 @@ pub struct ListStreamingDistributionsResult {
 struct ListStreamingDistributionsResultDeserializer;
 impl ListStreamingDistributionsResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStreamingDistributionsResult, XmlParseError> {
@@ -3559,7 +3541,7 @@ pub struct ListTagsForResourceResult {
 struct ListTagsForResourceResultDeserializer;
 impl ListTagsForResourceResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResult, XmlParseError> {
@@ -3572,7 +3554,7 @@ impl ListTagsForResourceResultDeserializer {
 struct LocationListDeserializer;
 impl LocationListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -3623,7 +3605,7 @@ pub struct LoggingConfig {
 struct LoggingConfigDeserializer;
 impl LoggingConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<LoggingConfig, XmlParseError> {
@@ -3692,10 +3674,7 @@ impl LoggingConfigSerializer {
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3727,10 +3706,7 @@ impl LongSerializer {
 struct MethodDeserializer;
 impl MethodDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3762,7 +3738,7 @@ impl MethodSerializer {
 struct MethodsListDeserializer;
 impl MethodsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -3800,10 +3776,7 @@ impl MethodsListSerializer {
 struct MinimumProtocolVersionDeserializer;
 impl MinimumProtocolVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3852,10 +3825,7 @@ pub struct Origin {
 struct OriginDeserializer;
 impl OriginDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Origin, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Origin, XmlParseError> {
         deserialize_elements::<_, Origin, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CustomHeaders" => {
@@ -3949,7 +3919,7 @@ pub struct OriginCustomHeader {
 struct OriginCustomHeaderDeserializer;
 impl OriginCustomHeaderDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginCustomHeader, XmlParseError> {
@@ -3999,7 +3969,7 @@ impl OriginCustomHeaderSerializer {
 struct OriginCustomHeadersListDeserializer;
 impl OriginCustomHeadersListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<OriginCustomHeader>, XmlParseError> {
@@ -4040,7 +4010,7 @@ impl OriginCustomHeadersListSerializer {
 struct OriginListDeserializer;
 impl OriginListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Origin>, XmlParseError> {
@@ -4078,10 +4048,7 @@ impl OriginListSerializer {
 struct OriginProtocolPolicyDeserializer;
 impl OriginProtocolPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4122,7 +4089,7 @@ pub struct OriginSslProtocols {
 struct OriginSslProtocolsDeserializer;
 impl OriginSslProtocolsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<OriginSslProtocols, XmlParseError> {
@@ -4177,7 +4144,7 @@ pub struct Origins {
 struct OriginsDeserializer;
 impl OriginsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Origins, XmlParseError> {
@@ -4226,7 +4193,7 @@ impl OriginsSerializer {
 struct PathListDeserializer;
 impl PathListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4273,10 +4240,7 @@ pub struct Paths {
 struct PathsDeserializer;
 impl PathsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Paths, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Paths, XmlParseError> {
         deserialize_elements::<_, Paths, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -4322,10 +4286,7 @@ impl PathsSerializer {
 struct PriceClassDeserializer;
 impl PriceClassDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4365,7 +4326,7 @@ pub struct QueryStringCacheKeys {
 struct QueryStringCacheKeysDeserializer;
 impl QueryStringCacheKeysDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryStringCacheKeys, XmlParseError> {
@@ -4414,7 +4375,7 @@ impl QueryStringCacheKeysSerializer {
 struct QueryStringCacheKeysListDeserializer;
 impl QueryStringCacheKeysListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4478,7 +4439,7 @@ pub struct Restrictions {
 struct RestrictionsDeserializer;
 impl RestrictionsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Restrictions, XmlParseError> {
@@ -4524,7 +4485,7 @@ pub struct S3Origin {
 struct S3OriginDeserializer;
 impl S3OriginDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3Origin, XmlParseError> {
@@ -4582,7 +4543,7 @@ pub struct S3OriginConfig {
 struct S3OriginConfigDeserializer;
 impl S3OriginConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<S3OriginConfig, XmlParseError> {
@@ -4624,10 +4585,7 @@ impl S3OriginConfigSerializer {
 struct SSLSupportMethodDeserializer;
 impl SSLSupportMethodDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4668,10 +4626,7 @@ pub struct Signer {
 struct SignerDeserializer;
 impl SignerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Signer, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Signer, XmlParseError> {
         deserialize_elements::<_, Signer, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "AwsAccountNumber" => {
@@ -4691,7 +4646,7 @@ impl SignerDeserializer {
 struct SignerListDeserializer;
 impl SignerListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Signer>, XmlParseError> {
@@ -4708,10 +4663,7 @@ impl SignerListDeserializer {
 struct SslProtocolDeserializer;
 impl SslProtocolDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4743,7 +4695,7 @@ impl SslProtocolSerializer {
 struct SslProtocolsListDeserializer;
 impl SslProtocolsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4799,7 +4751,7 @@ pub struct StreamingDistribution {
 struct StreamingDistributionDeserializer;
 impl StreamingDistributionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingDistribution, XmlParseError> {
@@ -4866,7 +4818,7 @@ pub struct StreamingDistributionConfig {
 struct StreamingDistributionConfigDeserializer;
 impl StreamingDistributionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingDistributionConfig, XmlParseError> {
@@ -5013,7 +4965,7 @@ pub struct StreamingDistributionList {
 struct StreamingDistributionListDeserializer;
 impl StreamingDistributionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingDistributionList, XmlParseError> {
@@ -5081,7 +5033,7 @@ pub struct StreamingDistributionSummary {
 struct StreamingDistributionSummaryDeserializer;
 impl StreamingDistributionSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingDistributionSummary, XmlParseError> {
@@ -5135,7 +5087,7 @@ impl StreamingDistributionSummaryDeserializer {
 struct StreamingDistributionSummaryListDeserializer;
 impl StreamingDistributionSummaryListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StreamingDistributionSummary>, XmlParseError> {
@@ -5166,7 +5118,7 @@ pub struct StreamingLoggingConfig {
 struct StreamingLoggingConfigDeserializer;
 impl StreamingLoggingConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StreamingLoggingConfig, XmlParseError> {
@@ -5225,10 +5177,7 @@ impl StreamingLoggingConfigSerializer {
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5269,10 +5218,7 @@ pub struct Tag {
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tag, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -5321,10 +5267,7 @@ impl TagSerializer {
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5402,7 +5345,7 @@ impl TagKeysSerializer {
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
@@ -5449,10 +5392,7 @@ pub struct TagResourceRequest {
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5491,10 +5431,7 @@ pub struct Tags {
 struct TagsDeserializer;
 impl TagsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tags, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tags, XmlParseError> {
         deserialize_elements::<_, Tags, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Items" => {
@@ -5531,10 +5468,7 @@ impl TagsSerializer {
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5556,7 +5490,7 @@ pub struct TrustedSigners {
 struct TrustedSignersDeserializer;
 impl TrustedSignersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TrustedSigners, XmlParseError> {
@@ -5643,7 +5577,7 @@ pub struct UpdateCloudFrontOriginAccessIdentityResult {
 struct UpdateCloudFrontOriginAccessIdentityResultDeserializer;
 impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, XmlParseError> {
@@ -5681,7 +5615,7 @@ pub struct UpdateDistributionResult {
 struct UpdateDistributionResultDeserializer;
 impl UpdateDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateDistributionResult, XmlParseError> {
@@ -5717,7 +5651,7 @@ pub struct UpdateStreamingDistributionResult {
 struct UpdateStreamingDistributionResultDeserializer;
 impl UpdateStreamingDistributionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStreamingDistributionResult, XmlParseError> {
@@ -5748,7 +5682,7 @@ pub struct ViewerCertificate {
 struct ViewerCertificateDeserializer;
 impl ViewerCertificateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ViewerCertificate, XmlParseError> {
@@ -5851,10 +5785,7 @@ impl ViewerCertificateSerializer {
 struct ViewerProtocolPolicyDeserializer;
 impl ViewerProtocolPolicyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5908,7 +5839,7 @@ impl CreateCloudFrontOriginAccessIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CloudFrontOriginAccessIdentityAlreadyExists" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(String::from(parsed_error.message))),"InconsistentQuantities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message))),"InvalidArgument" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message))),"MissingBody" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message))),"TooManyCloudFrontOriginAccessIdentities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(String::from(parsed_error.message))),_ => {}
+                                    "CloudFrontOriginAccessIdentityAlreadyExists" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"TooManyCloudFrontOriginAccessIdentities" => return RusotoError::Service(CreateCloudFrontOriginAccessIdentityError::TooManyCloudFrontOriginAccessIdentities(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -6034,252 +5965,234 @@ impl CreateDistributionError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(CreateDistributionError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DistributionAlreadyExists" => {
                         return RusotoError::Service(
-                            CreateDistributionError::DistributionAlreadyExists(String::from(
+                            CreateDistributionError::DistributionAlreadyExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InconsistentQuantities(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::InconsistentQuantities(parsed_error.message),
                         )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(CreateDistributionError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidDefaultRootObject" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidDefaultRootObject(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::InvalidDefaultRootObject(parsed_error.message),
                         )
                     }
                     "InvalidErrorCode" => {
                         return RusotoError::Service(CreateDistributionError::InvalidErrorCode(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidForwardCookies" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidForwardCookies(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::InvalidForwardCookies(parsed_error.message),
                         )
                     }
                     "InvalidGeoRestrictionParameter" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidGeoRestrictionParameter(String::from(
+                            CreateDistributionError::InvalidGeoRestrictionParameter(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidHeadersForS3Origin" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidHeadersForS3Origin(String::from(
+                            CreateDistributionError::InvalidHeadersForS3Origin(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidLambdaFunctionAssociation" => {
                         return RusotoError::Service(
                             CreateDistributionError::InvalidLambdaFunctionAssociation(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidLocationCode" => {
                         return RusotoError::Service(CreateDistributionError::InvalidLocationCode(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidMinimumProtocolVersion" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidMinimumProtocolVersion(String::from(
+                            CreateDistributionError::InvalidMinimumProtocolVersion(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidOrigin" => {
                         return RusotoError::Service(CreateDistributionError::InvalidOrigin(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidOriginAccessIdentity(String::from(
+                            CreateDistributionError::InvalidOriginAccessIdentity(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidOriginKeepaliveTimeout" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
+                            CreateDistributionError::InvalidOriginKeepaliveTimeout(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidOriginReadTimeout" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidOriginReadTimeout(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message),
                         )
                     }
                     "InvalidProtocolSettings" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidProtocolSettings(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::InvalidProtocolSettings(parsed_error.message),
                         )
                     }
                     "InvalidQueryStringParameters" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidQueryStringParameters(String::from(
+                            CreateDistributionError::InvalidQueryStringParameters(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidRelativePath" => {
                         return RusotoError::Service(CreateDistributionError::InvalidRelativePath(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidRequiredProtocol" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidRequiredProtocol(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::InvalidRequiredProtocol(parsed_error.message),
                         )
                     }
                     "InvalidResponseCode" => {
                         return RusotoError::Service(CreateDistributionError::InvalidResponseCode(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidTTLOrder" => {
                         return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidViewerCertificate" => {
                         return RusotoError::Service(
-                            CreateDistributionError::InvalidViewerCertificate(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::InvalidViewerCertificate(parsed_error.message),
                         )
                     }
                     "InvalidWebACLId" => {
                         return RusotoError::Service(CreateDistributionError::InvalidWebACLId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MissingBody" => {
                         return RusotoError::Service(CreateDistributionError::MissingBody(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchOrigin" => {
                         return RusotoError::Service(CreateDistributionError::NoSuchOrigin(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyCacheBehaviors" => {
                         return RusotoError::Service(
-                            CreateDistributionError::TooManyCacheBehaviors(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::TooManyCacheBehaviors(parsed_error.message),
                         )
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(CreateDistributionError::TooManyCertificates(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyCookieNamesInWhiteList" => {
                         return RusotoError::Service(
-                            CreateDistributionError::TooManyCookieNamesInWhiteList(String::from(
+                            CreateDistributionError::TooManyCookieNamesInWhiteList(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyDistributionCNAMEs" => {
                         return RusotoError::Service(
-                            CreateDistributionError::TooManyDistributionCNAMEs(String::from(
+                            CreateDistributionError::TooManyDistributionCNAMEs(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyDistributions" => {
                         return RusotoError::Service(CreateDistributionError::TooManyDistributions(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyDistributionsWithLambdaAssociations" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyDistributionsWithLambdaAssociations(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyHeadersInForwardedValues" => {
                         return RusotoError::Service(
-                            CreateDistributionError::TooManyHeadersInForwardedValues(String::from(
+                            CreateDistributionError::TooManyHeadersInForwardedValues(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyLambdaFunctionAssociations" => {
                         return RusotoError::Service(
                             CreateDistributionError::TooManyLambdaFunctionAssociations(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyOriginCustomHeaders" => {
                         return RusotoError::Service(
-                            CreateDistributionError::TooManyOriginCustomHeaders(String::from(
+                            CreateDistributionError::TooManyOriginCustomHeaders(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyOrigins" => {
                         return RusotoError::Service(CreateDistributionError::TooManyOrigins(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyQueryStringParameters" => {
                         return RusotoError::Service(
-                            CreateDistributionError::TooManyQueryStringParameters(String::from(
+                            CreateDistributionError::TooManyQueryStringParameters(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyTrustedSigners" => {
                         return RusotoError::Service(
-                            CreateDistributionError::TooManyTrustedSigners(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionError::TooManyTrustedSigners(parsed_error.message),
                         )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
-                            CreateDistributionError::TrustedSignerDoesNotExist(String::from(
+                            CreateDistributionError::TrustedSignerDoesNotExist(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -6447,280 +6360,266 @@ impl CreateDistributionWithTagsError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::CNAMEAlreadyExists(String::from(
+                            CreateDistributionWithTagsError::CNAMEAlreadyExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "DistributionAlreadyExists" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::DistributionAlreadyExists(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InconsistentQuantities(String::from(
+                            CreateDistributionWithTagsError::InconsistentQuantities(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidArgument(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionWithTagsError::InvalidArgument(parsed_error.message),
                         )
                     }
                     "InvalidDefaultRootObject" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidDefaultRootObject(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidErrorCode" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidErrorCode(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message),
                         )
                     }
                     "InvalidForwardCookies" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidForwardCookies(String::from(
+                            CreateDistributionWithTagsError::InvalidForwardCookies(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidGeoRestrictionParameter" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidHeadersForS3Origin" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidHeadersForS3Origin(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidLambdaFunctionAssociation" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidLocationCode" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidLocationCode(String::from(
+                            CreateDistributionWithTagsError::InvalidLocationCode(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidMinimumProtocolVersion" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidOrigin" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidOrigin(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message),
                         )
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidOriginAccessIdentity(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidOriginKeepaliveTimeout" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidOriginReadTimeout" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidOriginReadTimeout(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidProtocolSettings" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidProtocolSettings(String::from(
+                            CreateDistributionWithTagsError::InvalidProtocolSettings(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidQueryStringParameters" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidQueryStringParameters(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidRelativePath" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidRelativePath(String::from(
+                            CreateDistributionWithTagsError::InvalidRelativePath(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidRequiredProtocol" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidRequiredProtocol(String::from(
+                            CreateDistributionWithTagsError::InvalidRequiredProtocol(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidResponseCode" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidResponseCode(String::from(
+                            CreateDistributionWithTagsError::InvalidResponseCode(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidTTLOrder" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidTTLOrder(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message),
                         )
                     }
                     "InvalidTagging" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidTagging(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionWithTagsError::InvalidTagging(parsed_error.message),
                         )
                     }
                     "InvalidViewerCertificate" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::InvalidViewerCertificate(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidWebACLId" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::InvalidWebACLId(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message),
                         )
                     }
                     "MissingBody" => {
                         return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchOrigin" => {
                         return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyCacheBehaviors" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::TooManyCacheBehaviors(String::from(
+                            CreateDistributionWithTagsError::TooManyCacheBehaviors(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::TooManyCertificates(String::from(
+                            CreateDistributionWithTagsError::TooManyCertificates(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyCookieNamesInWhiteList" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyDistributionCNAMEs" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyDistributionCNAMEs(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyDistributions" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::TooManyDistributions(String::from(
+                            CreateDistributionWithTagsError::TooManyDistributions(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(
                         CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "TooManyHeadersInForwardedValues" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyLambdaFunctionAssociations" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyOriginCustomHeaders" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyOriginCustomHeaders(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyOrigins" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::TooManyOrigins(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message),
                         )
                     }
                     "TooManyQueryStringParameters" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TooManyQueryStringParameters(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyTrustedSigners" => {
                         return RusotoError::Service(
-                            CreateDistributionWithTagsError::TooManyTrustedSigners(String::from(
+                            CreateDistributionWithTagsError::TooManyTrustedSigners(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
                             CreateDistributionWithTagsError::TrustedSignerDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -6822,41 +6721,39 @@ impl CreateInvalidationError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(CreateInvalidationError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "BatchTooLarge" => {
                         return RusotoError::Service(CreateInvalidationError::BatchTooLarge(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
-                            CreateInvalidationError::InconsistentQuantities(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateInvalidationError::InconsistentQuantities(parsed_error.message),
                         )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(CreateInvalidationError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MissingBody" => {
                         return RusotoError::Service(CreateInvalidationError::MissingBody(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(CreateInvalidationError::NoSuchDistribution(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyInvalidationsInProgress" => {
                         return RusotoError::Service(
-                            CreateInvalidationError::TooManyInvalidationsInProgress(String::from(
+                            CreateInvalidationError::TooManyInvalidationsInProgress(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -6933,83 +6830,77 @@ impl CreateStreamingDistributionError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(
-                            CreateStreamingDistributionError::AccessDenied(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateStreamingDistributionError::AccessDenied(parsed_error.message),
                         )
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(
-                            CreateStreamingDistributionError::CNAMEAlreadyExists(String::from(
+                            CreateStreamingDistributionError::CNAMEAlreadyExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
-                            CreateStreamingDistributionError::InconsistentQuantities(String::from(
+                            CreateStreamingDistributionError::InconsistentQuantities(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(
-                            CreateStreamingDistributionError::InvalidArgument(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateStreamingDistributionError::InvalidArgument(parsed_error.message),
                         )
                     }
                     "InvalidOrigin" => {
                         return RusotoError::Service(
-                            CreateStreamingDistributionError::InvalidOrigin(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateStreamingDistributionError::InvalidOrigin(parsed_error.message),
                         )
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::InvalidOriginAccessIdentity(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "MissingBody" => {
                         return RusotoError::Service(CreateStreamingDistributionError::MissingBody(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StreamingDistributionAlreadyExists" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::StreamingDistributionAlreadyExists(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyStreamingDistributionCNAMEs" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyStreamingDistributions" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::TooManyStreamingDistributions(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyTrustedSigners" => {
                         return RusotoError::Service(
-                            CreateStreamingDistributionError::TooManyTrustedSigners(String::from(
+                            CreateStreamingDistributionError::TooManyTrustedSigners(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
                             CreateStreamingDistributionError::TrustedSignerDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7096,7 +6987,7 @@ impl CreateStreamingDistributionWithTagsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::AccessDenied(String::from(parsed_error.message))),"CNAMEAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(String::from(parsed_error.message))),"InconsistentQuantities" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InconsistentQuantities(String::from(parsed_error.message))),"InvalidArgument" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidArgument(String::from(parsed_error.message))),"InvalidOrigin" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOrigin(String::from(parsed_error.message))),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(String::from(parsed_error.message))),"InvalidTagging" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidTagging(String::from(parsed_error.message))),"MissingBody" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::MissingBody(String::from(parsed_error.message))),"StreamingDistributionAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(String::from(parsed_error.message))),"TooManyStreamingDistributionCNAMEs" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(String::from(parsed_error.message))),"TooManyStreamingDistributions" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(String::from(parsed_error.message))),"TooManyTrustedSigners" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(String::from(parsed_error.message))),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(String::from(parsed_error.message))),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::InvalidTagging(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::MissingBody(parsed_error.message)),"StreamingDistributionAlreadyExists" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::StreamingDistributionAlreadyExists(parsed_error.message)),"TooManyStreamingDistributionCNAMEs" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributionCNAMEs(parsed_error.message)),"TooManyStreamingDistributions" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyStreamingDistributions(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateStreamingDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -7168,7 +7059,7 @@ impl DeleteCloudFrontOriginAccessIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message))),"CloudFrontOriginAccessIdentityInUse" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(String::from(parsed_error.message))),"InvalidIfMatchVersion" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message))),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message))),"PreconditionFailed" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message))),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"CloudFrontOriginAccessIdentityInUse" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::CloudFrontOriginAccessIdentityInUse(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(DeleteCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -7228,31 +7119,27 @@ impl DeleteDistributionError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(DeleteDistributionError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "DistributionNotDisabled" => {
                         return RusotoError::Service(
-                            DeleteDistributionError::DistributionNotDisabled(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteDistributionError::DistributionNotDisabled(parsed_error.message),
                         )
                     }
                     "InvalidIfMatchVersion" => {
                         return RusotoError::Service(
-                            DeleteDistributionError::InvalidIfMatchVersion(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteDistributionError::InvalidIfMatchVersion(parsed_error.message),
                         )
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(DeleteDistributionError::NoSuchDistribution(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "PreconditionFailed" => {
                         return RusotoError::Service(DeleteDistributionError::PreconditionFailed(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7309,22 +7196,22 @@ impl DeleteServiceLinkedRoleError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchResource" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::NoSuchResource(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceInUse" => {
                         return RusotoError::Service(DeleteServiceLinkedRoleError::ResourceInUse(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7384,36 +7271,34 @@ impl DeleteStreamingDistributionError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(
-                            DeleteStreamingDistributionError::AccessDenied(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteStreamingDistributionError::AccessDenied(parsed_error.message),
                         )
                     }
                     "InvalidIfMatchVersion" => {
                         return RusotoError::Service(
-                            DeleteStreamingDistributionError::InvalidIfMatchVersion(String::from(
+                            DeleteStreamingDistributionError::InvalidIfMatchVersion(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoSuchStreamingDistribution" => {
                         return RusotoError::Service(
                             DeleteStreamingDistributionError::NoSuchStreamingDistribution(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "PreconditionFailed" => {
                         return RusotoError::Service(
-                            DeleteStreamingDistributionError::PreconditionFailed(String::from(
+                            DeleteStreamingDistributionError::PreconditionFailed(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "StreamingDistributionNotDisabled" => {
                         return RusotoError::Service(
                             DeleteStreamingDistributionError::StreamingDistributionNotDisabled(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7467,7 +7352,7 @@ impl GetCloudFrontOriginAccessIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message))),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message))),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -7516,7 +7401,7 @@ impl GetCloudFrontOriginAccessIdentityConfigError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(String::from(parsed_error.message))),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message))),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::AccessDenied(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(GetCloudFrontOriginAccessIdentityConfigError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -7565,12 +7450,12 @@ impl GetDistributionError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(GetDistributionError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(GetDistributionError::NoSuchDistribution(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7620,14 +7505,12 @@ impl GetDistributionConfigError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(GetDistributionConfigError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(
-                            GetDistributionConfigError::NoSuchDistribution(String::from(
-                                parsed_error.message,
-                            )),
+                            GetDistributionConfigError::NoSuchDistribution(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -7679,17 +7562,17 @@ impl GetInvalidationError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(GetInvalidationError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(GetInvalidationError::NoSuchDistribution(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchInvalidation" => {
                         return RusotoError::Service(GetInvalidationError::NoSuchInvalidation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7740,13 +7623,13 @@ impl GetStreamingDistributionError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(GetStreamingDistributionError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchStreamingDistribution" => {
                         return RusotoError::Service(
                             GetStreamingDistributionError::NoSuchStreamingDistribution(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7799,15 +7682,13 @@ impl GetStreamingDistributionConfigError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(
-                            GetStreamingDistributionConfigError::AccessDenied(String::from(
-                                parsed_error.message,
-                            )),
+                            GetStreamingDistributionConfigError::AccessDenied(parsed_error.message),
                         )
                     }
                     "NoSuchStreamingDistribution" => {
                         return RusotoError::Service(
                             GetStreamingDistributionConfigError::NoSuchStreamingDistribution(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7859,7 +7740,7 @@ impl ListCloudFrontOriginAccessIdentitiesError {
                     "InvalidArgument" => {
                         return RusotoError::Service(
                             ListCloudFrontOriginAccessIdentitiesError::InvalidArgument(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7907,7 +7788,7 @@ impl ListDistributionsError {
                 match &parsed_error.code[..] {
                     "InvalidArgument" => {
                         return RusotoError::Service(ListDistributionsError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7958,16 +7839,12 @@ impl ListDistributionsByWebACLIdError {
                 match &parsed_error.code[..] {
                     "InvalidArgument" => {
                         return RusotoError::Service(
-                            ListDistributionsByWebACLIdError::InvalidArgument(String::from(
-                                parsed_error.message,
-                            )),
+                            ListDistributionsByWebACLIdError::InvalidArgument(parsed_error.message),
                         )
                     }
                     "InvalidWebACLId" => {
                         return RusotoError::Service(
-                            ListDistributionsByWebACLIdError::InvalidWebACLId(String::from(
-                                parsed_error.message,
-                            )),
+                            ListDistributionsByWebACLIdError::InvalidWebACLId(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -8019,17 +7896,17 @@ impl ListInvalidationsError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(ListInvalidationsError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(ListInvalidationsError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(ListInvalidationsError::NoSuchDistribution(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8080,9 +7957,7 @@ impl ListStreamingDistributionsError {
                 match &parsed_error.code[..] {
                     "InvalidArgument" => {
                         return RusotoError::Service(
-                            ListStreamingDistributionsError::InvalidArgument(String::from(
-                                parsed_error.message,
-                            )),
+                            ListStreamingDistributionsError::InvalidArgument(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -8135,22 +8010,22 @@ impl ListTagsForResourceError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(ListTagsForResourceError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(ListTagsForResourceError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidTagging" => {
                         return RusotoError::Service(ListTagsForResourceError::InvalidTagging(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchResource" => {
                         return RusotoError::Service(ListTagsForResourceError::NoSuchResource(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8205,23 +8080,23 @@ impl TagResourceError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
-                        return RusotoError::Service(TagResourceError::AccessDenied(String::from(
+                        return RusotoError::Service(TagResourceError::AccessDenied(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(TagResourceError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidTagging" => {
                         return RusotoError::Service(TagResourceError::InvalidTagging(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchResource" => {
                         return RusotoError::Service(TagResourceError::NoSuchResource(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8277,22 +8152,22 @@ impl UntagResourceError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(UntagResourceError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(UntagResourceError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidTagging" => {
                         return RusotoError::Service(UntagResourceError::InvalidTagging(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchResource" => {
                         return RusotoError::Service(UntagResourceError::NoSuchResource(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8356,7 +8231,7 @@ impl UpdateCloudFrontOriginAccessIdentityError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::AccessDenied(String::from(parsed_error.message))),"IllegalUpdate" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(String::from(parsed_error.message))),"InconsistentQuantities" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(String::from(parsed_error.message))),"InvalidArgument" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(String::from(parsed_error.message))),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(String::from(parsed_error.message))),"MissingBody" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::MissingBody(String::from(parsed_error.message))),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(String::from(parsed_error.message))),"PreconditionFailed" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(String::from(parsed_error.message))),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::AccessDenied(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidArgument(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::InvalidIfMatchVersion(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::MissingBody(parsed_error.message)),"NoSuchCloudFrontOriginAccessIdentity" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::NoSuchCloudFrontOriginAccessIdentity(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateCloudFrontOriginAccessIdentityError::PreconditionFailed(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -8487,250 +8362,232 @@ impl UpdateDistributionError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(UpdateDistributionError::AccessDenied(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "IllegalUpdate" => {
                         return RusotoError::Service(UpdateDistributionError::IllegalUpdate(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InconsistentQuantities(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::InconsistentQuantities(parsed_error.message),
                         )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidArgument(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidDefaultRootObject" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidDefaultRootObject(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message),
                         )
                     }
                     "InvalidErrorCode" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidForwardCookies" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidForwardCookies(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::InvalidForwardCookies(parsed_error.message),
                         )
                     }
                     "InvalidGeoRestrictionParameter" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidGeoRestrictionParameter(String::from(
+                            UpdateDistributionError::InvalidGeoRestrictionParameter(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidHeadersForS3Origin" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidHeadersForS3Origin(String::from(
+                            UpdateDistributionError::InvalidHeadersForS3Origin(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidIfMatchVersion" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidIfMatchVersion(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message),
                         )
                     }
                     "InvalidLambdaFunctionAssociation" => {
                         return RusotoError::Service(
                             UpdateDistributionError::InvalidLambdaFunctionAssociation(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidLocationCode" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidMinimumProtocolVersion" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidMinimumProtocolVersion(String::from(
+                            UpdateDistributionError::InvalidMinimumProtocolVersion(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidOriginAccessIdentity(String::from(
+                            UpdateDistributionError::InvalidOriginAccessIdentity(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidOriginKeepaliveTimeout" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidOriginKeepaliveTimeout(String::from(
+                            UpdateDistributionError::InvalidOriginKeepaliveTimeout(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidOriginReadTimeout" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidOriginReadTimeout(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message),
                         )
                     }
                     "InvalidQueryStringParameters" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidQueryStringParameters(String::from(
+                            UpdateDistributionError::InvalidQueryStringParameters(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidRelativePath" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidRequiredProtocol" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidRequiredProtocol(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message),
                         )
                     }
                     "InvalidResponseCode" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidTTLOrder" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidViewerCertificate" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::InvalidViewerCertificate(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::InvalidViewerCertificate(parsed_error.message),
                         )
                     }
                     "InvalidWebACLId" => {
                         return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MissingBody" => {
                         return RusotoError::Service(UpdateDistributionError::MissingBody(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchDistribution" => {
                         return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchOrigin" => {
                         return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "PreconditionFailed" => {
                         return RusotoError::Service(UpdateDistributionError::PreconditionFailed(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyCacheBehaviors" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::TooManyCacheBehaviors(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message),
                         )
                     }
                     "TooManyCertificates" => {
                         return RusotoError::Service(UpdateDistributionError::TooManyCertificates(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyCookieNamesInWhiteList" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::TooManyCookieNamesInWhiteList(String::from(
+                            UpdateDistributionError::TooManyCookieNamesInWhiteList(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyDistributionCNAMEs" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::TooManyDistributionCNAMEs(String::from(
+                            UpdateDistributionError::TooManyDistributionCNAMEs(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyDistributionsWithLambdaAssociations" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyHeadersInForwardedValues" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::TooManyHeadersInForwardedValues(String::from(
+                            UpdateDistributionError::TooManyHeadersInForwardedValues(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyLambdaFunctionAssociations" => {
                         return RusotoError::Service(
                             UpdateDistributionError::TooManyLambdaFunctionAssociations(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyOriginCustomHeaders" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::TooManyOriginCustomHeaders(String::from(
+                            UpdateDistributionError::TooManyOriginCustomHeaders(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyOrigins" => {
                         return RusotoError::Service(UpdateDistributionError::TooManyOrigins(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TooManyQueryStringParameters" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::TooManyQueryStringParameters(String::from(
+                            UpdateDistributionError::TooManyQueryStringParameters(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyTrustedSigners" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::TooManyTrustedSigners(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateDistributionError::TooManyTrustedSigners(parsed_error.message),
                         )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
-                            UpdateDistributionError::TrustedSignerDoesNotExist(String::from(
+                            UpdateDistributionError::TrustedSignerDoesNotExist(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -8842,90 +8699,84 @@ impl UpdateStreamingDistributionError {
                 match &parsed_error.code[..] {
                     "AccessDenied" => {
                         return RusotoError::Service(
-                            UpdateStreamingDistributionError::AccessDenied(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateStreamingDistributionError::AccessDenied(parsed_error.message),
                         )
                     }
                     "CNAMEAlreadyExists" => {
                         return RusotoError::Service(
-                            UpdateStreamingDistributionError::CNAMEAlreadyExists(String::from(
+                            UpdateStreamingDistributionError::CNAMEAlreadyExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "IllegalUpdate" => {
                         return RusotoError::Service(
-                            UpdateStreamingDistributionError::IllegalUpdate(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateStreamingDistributionError::IllegalUpdate(parsed_error.message),
                         )
                     }
                     "InconsistentQuantities" => {
                         return RusotoError::Service(
-                            UpdateStreamingDistributionError::InconsistentQuantities(String::from(
+                            UpdateStreamingDistributionError::InconsistentQuantities(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidArgument" => {
                         return RusotoError::Service(
-                            UpdateStreamingDistributionError::InvalidArgument(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateStreamingDistributionError::InvalidArgument(parsed_error.message),
                         )
                     }
                     "InvalidIfMatchVersion" => {
                         return RusotoError::Service(
-                            UpdateStreamingDistributionError::InvalidIfMatchVersion(String::from(
+                            UpdateStreamingDistributionError::InvalidIfMatchVersion(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidOriginAccessIdentity" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::InvalidOriginAccessIdentity(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "MissingBody" => {
                         return RusotoError::Service(UpdateStreamingDistributionError::MissingBody(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NoSuchStreamingDistribution" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::NoSuchStreamingDistribution(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "PreconditionFailed" => {
                         return RusotoError::Service(
-                            UpdateStreamingDistributionError::PreconditionFailed(String::from(
+                            UpdateStreamingDistributionError::PreconditionFailed(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TooManyStreamingDistributionCNAMEs" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::TooManyStreamingDistributionCNAMEs(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "TooManyTrustedSigners" => {
                         return RusotoError::Service(
-                            UpdateStreamingDistributionError::TooManyTrustedSigners(String::from(
+                            UpdateStreamingDistributionError::TooManyTrustedSigners(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TrustedSignerDoesNotExist" => {
                         return RusotoError::Service(
                             UpdateStreamingDistributionError::TrustedSignerDoesNotExist(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9162,7 +9013,7 @@ impl CloudFrontClient {
     pub fn new(region: region::Region) -> CloudFrontClient {
         CloudFrontClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -9179,7 +9030,7 @@ impl CloudFrontClient {
     {
         CloudFrontClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

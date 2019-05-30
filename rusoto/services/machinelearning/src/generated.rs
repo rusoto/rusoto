@@ -3101,7 +3101,7 @@ impl MachineLearningClient {
     pub fn new(region: region::Region) -> MachineLearningClient {
         MachineLearningClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3118,7 +3118,7 @@ impl MachineLearningClient {
     {
         MachineLearningClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

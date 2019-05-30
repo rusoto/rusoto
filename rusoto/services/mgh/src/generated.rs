@@ -1832,7 +1832,7 @@ impl MigrationHubClient {
     pub fn new(region: region::Region) -> MigrationHubClient {
         MigrationHubClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1849,7 +1849,7 @@ impl MigrationHubClient {
     {
         MigrationHubClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -429,7 +429,7 @@ impl IotDataClient {
     pub fn new(region: region::Region) -> IotDataClient {
         IotDataClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -446,7 +446,7 @@ impl IotDataClient {
     {
         IotDataClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

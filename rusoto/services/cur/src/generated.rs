@@ -265,7 +265,7 @@ impl CostAndUsageReportClient {
     pub fn new(region: region::Region) -> CostAndUsageReportClient {
         CostAndUsageReportClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -282,7 +282,7 @@ impl CostAndUsageReportClient {
     {
         CostAndUsageReportClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -1225,7 +1225,7 @@ impl ApplicationAutoScalingClient {
     pub fn new(region: region::Region) -> ApplicationAutoScalingClient {
         ApplicationAutoScalingClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1242,7 +1242,7 @@ impl ApplicationAutoScalingClient {
     {
         ApplicationAutoScalingClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

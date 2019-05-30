@@ -135,7 +135,7 @@ impl SageMakerRuntimeClient {
     pub fn new(region: region::Region) -> SageMakerRuntimeClient {
         SageMakerRuntimeClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -152,7 +152,7 @@ impl SageMakerRuntimeClient {
     {
         SageMakerRuntimeClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

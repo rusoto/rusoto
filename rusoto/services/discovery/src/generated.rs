@@ -2711,7 +2711,7 @@ impl DiscoveryClient {
     pub fn new(region: region::Region) -> DiscoveryClient {
         DiscoveryClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2728,7 +2728,7 @@ impl DiscoveryClient {
     {
         DiscoveryClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

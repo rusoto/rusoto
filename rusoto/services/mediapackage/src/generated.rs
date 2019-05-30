@@ -2132,7 +2132,7 @@ impl MediaPackageClient {
     pub fn new(region: region::Region) -> MediaPackageClient {
         MediaPackageClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2149,7 +2149,7 @@ impl MediaPackageClient {
     {
         MediaPackageClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

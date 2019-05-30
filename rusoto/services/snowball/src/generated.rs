@@ -1769,7 +1769,7 @@ impl SnowballClient {
     pub fn new(region: region::Region) -> SnowballClient {
         SnowballClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1786,7 +1786,7 @@ impl SnowballClient {
     {
         SnowballClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

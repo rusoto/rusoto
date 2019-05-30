@@ -3076,7 +3076,7 @@ impl ServerMigrationServiceClient {
     pub fn new(region: region::Region) -> ServerMigrationServiceClient {
         ServerMigrationServiceClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3093,7 +3093,7 @@ impl ServerMigrationServiceClient {
     {
         ServerMigrationServiceClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -135,6 +135,7 @@ where
     }
 }
 
+#[allow(clippy::large_enum_variant)]
 enum SignAndDispatchState<P: ProvideAwsCredentials, D: DispatchSignedRequest> {
     Lazy {
         request: SignedRequest,

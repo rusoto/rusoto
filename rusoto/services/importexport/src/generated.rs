@@ -44,7 +44,7 @@ pub struct Artifact {
 struct ArtifactDeserializer;
 impl ArtifactDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Artifact, XmlParseError> {
@@ -66,7 +66,7 @@ impl ArtifactDeserializer {
 struct ArtifactListDeserializer;
 impl ArtifactListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Artifact>, XmlParseError> {
@@ -112,7 +112,7 @@ pub struct CancelJobOutput {
 struct CancelJobOutputDeserializer;
 impl CancelJobOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CancelJobOutput, XmlParseError> {
@@ -130,10 +130,7 @@ impl CancelJobOutputDeserializer {
 struct CarrierDeserializer;
 impl CarrierDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -186,7 +183,7 @@ pub struct CreateJobOutput {
 struct CreateJobOutputDeserializer;
 impl CreateJobOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateJobOutput, XmlParseError> {
@@ -228,10 +225,7 @@ impl CreateJobOutputDeserializer {
 struct CreationDateDeserializer;
 impl CreationDateDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -242,10 +236,7 @@ impl CreationDateDeserializer {
 struct CurrentManifestDeserializer;
 impl CurrentManifestDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -256,10 +247,7 @@ impl CurrentManifestDeserializer {
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -270,10 +258,7 @@ impl DescriptionDeserializer {
 struct ErrorCountDeserializer;
 impl ErrorCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -284,10 +269,7 @@ impl ErrorCountDeserializer {
 struct GenericStringDeserializer;
 impl GenericStringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -366,7 +348,7 @@ pub struct GetShippingLabelOutput {
 struct GetShippingLabelOutputDeserializer;
 impl GetShippingLabelOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetShippingLabelOutput, XmlParseError> {
@@ -434,7 +416,7 @@ pub struct GetStatusOutput {
 struct GetStatusOutputDeserializer;
 impl GetStatusOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStatusOutput, XmlParseError> {
@@ -524,10 +506,7 @@ impl GetStatusOutputDeserializer {
 struct IsCanceledDeserializer;
 impl IsCanceledDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -538,10 +517,7 @@ impl IsCanceledDeserializer {
 struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -561,10 +537,7 @@ pub struct Job {
 struct JobDeserializer;
 impl JobDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Job, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Job, XmlParseError> {
         deserialize_elements::<_, Job, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "CreationDate" => {
@@ -592,10 +565,7 @@ impl JobDeserializer {
 struct JobIdDeserializer;
 impl JobIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -618,10 +588,7 @@ impl JobIdListSerializer {
 struct JobTypeDeserializer;
 impl JobTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -632,7 +599,7 @@ impl JobTypeDeserializer {
 struct JobsListDeserializer;
 impl JobsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Job>, XmlParseError> {
@@ -685,7 +652,7 @@ pub struct ListJobsOutput {
 struct ListJobsOutputDeserializer;
 impl ListJobsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListJobsOutput, XmlParseError> {
@@ -709,10 +676,7 @@ impl ListJobsOutputDeserializer {
 struct LocationCodeDeserializer;
 impl LocationCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -723,10 +687,7 @@ impl LocationCodeDeserializer {
 struct LocationMessageDeserializer;
 impl LocationMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -737,10 +698,7 @@ impl LocationMessageDeserializer {
 struct LogBucketDeserializer;
 impl LogBucketDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -751,10 +709,7 @@ impl LogBucketDeserializer {
 struct LogKeyDeserializer;
 impl LogKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -765,10 +720,7 @@ impl LogKeyDeserializer {
 struct ProgressCodeDeserializer;
 impl ProgressCodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -779,10 +731,7 @@ impl ProgressCodeDeserializer {
 struct ProgressMessageDeserializer;
 impl ProgressMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -793,10 +742,7 @@ impl ProgressMessageDeserializer {
 struct SignatureDeserializer;
 impl SignatureDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -807,10 +753,7 @@ impl SignatureDeserializer {
 struct SignatureFileContentsDeserializer;
 impl SignatureFileContentsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -821,10 +764,7 @@ impl SignatureFileContentsDeserializer {
 struct SuccessDeserializer;
 impl SuccessDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -835,10 +775,7 @@ impl SuccessDeserializer {
 struct TrackingNumberDeserializer;
 impl TrackingNumberDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -849,10 +786,7 @@ impl TrackingNumberDeserializer {
 struct URLDeserializer;
 impl URLDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -900,7 +834,7 @@ pub struct UpdateJobOutput {
 struct UpdateJobOutputDeserializer;
 impl UpdateJobOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateJobOutput, XmlParseError> {
@@ -929,10 +863,7 @@ impl UpdateJobOutputDeserializer {
 struct WarningMessageDeserializer;
 impl WarningMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -966,33 +897,33 @@ impl CancelJobError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CanceledJobIdException" => {
-                        return RusotoError::Service(CancelJobError::CanceledJobId(String::from(
+                        return RusotoError::Service(CancelJobError::CanceledJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "ExpiredJobIdException" => {
-                        return RusotoError::Service(CancelJobError::ExpiredJobId(String::from(
+                        return RusotoError::Service(CancelJobError::ExpiredJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(CancelJobError::InvalidAccessKeyId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidJobIdException" => {
-                        return RusotoError::Service(CancelJobError::InvalidJobId(String::from(
+                        return RusotoError::Service(CancelJobError::InvalidJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidVersionException" => {
-                        return RusotoError::Service(CancelJobError::InvalidVersion(String::from(
+                        return RusotoError::Service(CancelJobError::InvalidVersion(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "UnableToCancelJobIdException" => {
                         return RusotoError::Service(CancelJobError::UnableToCancelJobId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -1074,83 +1005,83 @@ impl CreateJobError {
                 match &parsed_error.code[..] {
                     "BucketPermissionException" => {
                         return RusotoError::Service(CreateJobError::BucketPermission(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "CreateJobQuotaExceededException" => {
                         return RusotoError::Service(CreateJobError::CreateJobQuotaExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(CreateJobError::InvalidAccessKeyId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidAddressException" => {
-                        return RusotoError::Service(CreateJobError::InvalidAddress(String::from(
+                        return RusotoError::Service(CreateJobError::InvalidAddress(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidCustomsException" => {
-                        return RusotoError::Service(CreateJobError::InvalidCustoms(String::from(
+                        return RusotoError::Service(CreateJobError::InvalidCustoms(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidFileSystemException" => {
                         return RusotoError::Service(CreateJobError::InvalidFileSystem(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidJobIdException" => {
-                        return RusotoError::Service(CreateJobError::InvalidJobId(String::from(
+                        return RusotoError::Service(CreateJobError::InvalidJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidManifestFieldException" => {
                         return RusotoError::Service(CreateJobError::InvalidManifestField(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameterException" => {
                         return RusotoError::Service(CreateJobError::InvalidParameter(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidVersionException" => {
-                        return RusotoError::Service(CreateJobError::InvalidVersion(String::from(
+                        return RusotoError::Service(CreateJobError::InvalidVersion(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "MalformedManifestException" => {
                         return RusotoError::Service(CreateJobError::MalformedManifest(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MissingCustomsException" => {
-                        return RusotoError::Service(CreateJobError::MissingCustoms(String::from(
+                        return RusotoError::Service(CreateJobError::MissingCustoms(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "MissingManifestFieldException" => {
                         return RusotoError::Service(CreateJobError::MissingManifestField(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MissingParameterException" => {
                         return RusotoError::Service(CreateJobError::MissingParameter(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MultipleRegionsException" => {
-                        return RusotoError::Service(CreateJobError::MultipleRegions(String::from(
+                        return RusotoError::Service(CreateJobError::MultipleRegions(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "NoSuchBucketException" => {
-                        return RusotoError::Service(CreateJobError::NoSuchBucket(String::from(
+                        return RusotoError::Service(CreateJobError::NoSuchBucket(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -1223,37 +1154,37 @@ impl GetShippingLabelError {
                 match &parsed_error.code[..] {
                     "CanceledJobIdException" => {
                         return RusotoError::Service(GetShippingLabelError::CanceledJobId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ExpiredJobIdException" => {
                         return RusotoError::Service(GetShippingLabelError::ExpiredJobId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidAccessKeyId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidAddressException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidAddress(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidJobIdException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidJobId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameterException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidParameter(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidVersionException" => {
                         return RusotoError::Service(GetShippingLabelError::InvalidVersion(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -1313,29 +1244,29 @@ impl GetStatusError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "CanceledJobIdException" => {
-                        return RusotoError::Service(GetStatusError::CanceledJobId(String::from(
+                        return RusotoError::Service(GetStatusError::CanceledJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "ExpiredJobIdException" => {
-                        return RusotoError::Service(GetStatusError::ExpiredJobId(String::from(
+                        return RusotoError::Service(GetStatusError::ExpiredJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(GetStatusError::InvalidAccessKeyId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidJobIdException" => {
-                        return RusotoError::Service(GetStatusError::InvalidJobId(String::from(
+                        return RusotoError::Service(GetStatusError::InvalidJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidVersionException" => {
-                        return RusotoError::Service(GetStatusError::InvalidVersion(String::from(
+                        return RusotoError::Service(GetStatusError::InvalidVersion(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -1389,18 +1320,18 @@ impl ListJobsError {
                 match &parsed_error.code[..] {
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(ListJobsError::InvalidAccessKeyId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameterException" => {
-                        return RusotoError::Service(ListJobsError::InvalidParameter(String::from(
+                        return RusotoError::Service(ListJobsError::InvalidParameter(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidVersionException" => {
-                        return RusotoError::Service(ListJobsError::InvalidVersion(String::from(
+                        return RusotoError::Service(ListJobsError::InvalidVersion(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -1482,92 +1413,92 @@ impl UpdateJobError {
                 match &parsed_error.code[..] {
                     "BucketPermissionException" => {
                         return RusotoError::Service(UpdateJobError::BucketPermission(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "CanceledJobIdException" => {
-                        return RusotoError::Service(UpdateJobError::CanceledJobId(String::from(
+                        return RusotoError::Service(UpdateJobError::CanceledJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "ExpiredJobIdException" => {
-                        return RusotoError::Service(UpdateJobError::ExpiredJobId(String::from(
+                        return RusotoError::Service(UpdateJobError::ExpiredJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidAccessKeyIdException" => {
                         return RusotoError::Service(UpdateJobError::InvalidAccessKeyId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidAddressException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidAddress(String::from(
+                        return RusotoError::Service(UpdateJobError::InvalidAddress(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidCustomsException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidCustoms(String::from(
+                        return RusotoError::Service(UpdateJobError::InvalidCustoms(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidFileSystemException" => {
                         return RusotoError::Service(UpdateJobError::InvalidFileSystem(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidJobIdException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidJobId(String::from(
+                        return RusotoError::Service(UpdateJobError::InvalidJobId(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InvalidManifestFieldException" => {
                         return RusotoError::Service(UpdateJobError::InvalidManifestField(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameterException" => {
                         return RusotoError::Service(UpdateJobError::InvalidParameter(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidVersionException" => {
-                        return RusotoError::Service(UpdateJobError::InvalidVersion(String::from(
+                        return RusotoError::Service(UpdateJobError::InvalidVersion(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "MalformedManifestException" => {
                         return RusotoError::Service(UpdateJobError::MalformedManifest(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MissingCustomsException" => {
-                        return RusotoError::Service(UpdateJobError::MissingCustoms(String::from(
+                        return RusotoError::Service(UpdateJobError::MissingCustoms(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "MissingManifestFieldException" => {
                         return RusotoError::Service(UpdateJobError::MissingManifestField(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MissingParameterException" => {
                         return RusotoError::Service(UpdateJobError::MissingParameter(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "MultipleRegionsException" => {
-                        return RusotoError::Service(UpdateJobError::MultipleRegions(String::from(
+                        return RusotoError::Service(UpdateJobError::MultipleRegions(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "NoSuchBucketException" => {
-                        return RusotoError::Service(UpdateJobError::NoSuchBucket(String::from(
+                        return RusotoError::Service(UpdateJobError::NoSuchBucket(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "UnableToUpdateJobIdException" => {
                         return RusotoError::Service(UpdateJobError::UnableToUpdateJobId(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -1651,7 +1582,7 @@ impl ImportExportClient {
     pub fn new(region: region::Region) -> ImportExportClient {
         ImportExportClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -1668,7 +1599,7 @@ impl ImportExportClient {
     {
         ImportExportClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

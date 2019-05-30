@@ -2505,7 +2505,7 @@ impl DynamodbAcceleratorClient {
     pub fn new(region: region::Region) -> DynamodbAcceleratorClient {
         DynamodbAcceleratorClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2522,7 +2522,7 @@ impl DynamodbAcceleratorClient {
     {
         DynamodbAcceleratorClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -4861,7 +4861,7 @@ impl OrganizationsClient {
     pub fn new(region: region::Region) -> OrganizationsClient {
         OrganizationsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -4878,7 +4878,7 @@ impl OrganizationsClient {
     {
         OrganizationsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

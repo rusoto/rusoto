@@ -3633,7 +3633,7 @@ impl GuardDutyClient {
     pub fn new(region: region::Region) -> GuardDutyClient {
         GuardDutyClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3650,7 +3650,7 @@ impl GuardDutyClient {
     {
         GuardDutyClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

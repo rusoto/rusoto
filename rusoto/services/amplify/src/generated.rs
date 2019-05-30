@@ -2174,7 +2174,7 @@ impl AmplifyClient {
     pub fn new(region: region::Region) -> AmplifyClient {
         AmplifyClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2191,7 +2191,7 @@ impl AmplifyClient {
     {
         AmplifyClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

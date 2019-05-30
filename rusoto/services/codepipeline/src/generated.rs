@@ -3748,7 +3748,7 @@ impl CodePipelineClient {
     pub fn new(region: region::Region) -> CodePipelineClient {
         CodePipelineClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3765,7 +3765,7 @@ impl CodePipelineClient {
     {
         CodePipelineClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

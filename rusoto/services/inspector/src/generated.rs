@@ -3819,7 +3819,7 @@ impl InspectorClient {
     pub fn new(region: region::Region) -> InspectorClient {
         InspectorClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3836,7 +3836,7 @@ impl InspectorClient {
     {
         InspectorClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

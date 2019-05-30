@@ -369,7 +369,7 @@ impl PerformanceInsightsClient {
     pub fn new(region: region::Region) -> PerformanceInsightsClient {
         PerformanceInsightsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -386,7 +386,7 @@ impl PerformanceInsightsClient {
     {
         PerformanceInsightsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

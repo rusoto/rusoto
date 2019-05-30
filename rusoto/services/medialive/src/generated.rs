@@ -7210,7 +7210,7 @@ impl MediaLiveClient {
     pub fn new(region: region::Region) -> MediaLiveClient {
         MediaLiveClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -7227,7 +7227,7 @@ impl MediaLiveClient {
     {
         MediaLiveClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

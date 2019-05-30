@@ -4027,7 +4027,7 @@ impl LexModelsClient {
     pub fn new(region: region::Region) -> LexModelsClient {
         LexModelsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -4044,7 +4044,7 @@ impl LexModelsClient {
     {
         LexModelsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -3413,7 +3413,7 @@ impl WorkmailClient {
     pub fn new(region: region::Region) -> WorkmailClient {
         WorkmailClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -3430,7 +3430,7 @@ impl WorkmailClient {
     {
         WorkmailClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

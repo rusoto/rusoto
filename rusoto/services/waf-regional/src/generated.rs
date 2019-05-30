@@ -7406,7 +7406,7 @@ impl WAFRegionalClient {
     pub fn new(region: region::Region) -> WAFRegionalClient {
         WAFRegionalClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -7423,7 +7423,7 @@ impl WAFRegionalClient {
     {
         WAFRegionalClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

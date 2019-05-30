@@ -7658,7 +7658,7 @@ impl ServiceCatalogClient {
     pub fn new(region: region::Region) -> ServiceCatalogClient {
         ServiceCatalogClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -7675,7 +7675,7 @@ impl ServiceCatalogClient {
     {
         ServiceCatalogClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

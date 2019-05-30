@@ -392,6 +392,13 @@ impl HttpConfig {
     }
 }
 
+impl Default for HttpConfig {
+    /// Create a new HttpConfig. Same as HttpConfig::new().
+    fn default() -> HttpConfig {
+        HttpConfig::new()
+    }
+}
+
 impl<C> DispatchSignedRequest for HttpClient<C>
 where
     C: Connect + 'static,

@@ -376,7 +376,7 @@ impl PricingClient {
     pub fn new(region: region::Region) -> PricingClient {
         PricingClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -393,7 +393,7 @@ impl PricingClient {
     {
         PricingClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -60,10 +60,7 @@ impl AddTagsToResourceMessageSerializer {
 struct AllowedNodeGroupIdDeserializer;
 impl AllowedNodeGroupIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -81,7 +78,7 @@ pub struct AllowedNodeTypeModificationsMessage {
 struct AllowedNodeTypeModificationsMessageDeserializer;
 impl AllowedNodeTypeModificationsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AllowedNodeTypeModificationsMessage, XmlParseError> {
@@ -145,7 +142,7 @@ pub struct AuthorizeCacheSecurityGroupIngressResult {
 struct AuthorizeCacheSecurityGroupIngressResultDeserializer;
 impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AuthorizeCacheSecurityGroupIngressResult, XmlParseError> {
@@ -171,10 +168,7 @@ impl AuthorizeCacheSecurityGroupIngressResultDeserializer {
 struct AutomaticFailoverStatusDeserializer;
 impl AutomaticFailoverStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -192,7 +186,7 @@ pub struct AvailabilityZone {
 struct AvailabilityZoneDeserializer;
 impl AvailabilityZoneDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AvailabilityZone, XmlParseError> {
@@ -210,7 +204,7 @@ impl AvailabilityZoneDeserializer {
 struct AvailabilityZonesListDeserializer;
 impl AvailabilityZonesListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -239,10 +233,7 @@ impl AvailabilityZonesListSerializer {
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -253,10 +244,7 @@ impl BooleanDeserializer {
 struct BooleanOptionalDeserializer;
 impl BooleanOptionalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -321,7 +309,7 @@ pub struct CacheCluster {
 struct CacheClusterDeserializer;
 impl CacheClusterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheCluster, XmlParseError> {
@@ -481,7 +469,7 @@ impl CacheClusterDeserializer {
 struct CacheClusterListDeserializer;
 impl CacheClusterListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheCluster>, XmlParseError> {
@@ -510,7 +498,7 @@ pub struct CacheClusterMessage {
 struct CacheClusterMessageDeserializer;
 impl CacheClusterMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheClusterMessage, XmlParseError> {
@@ -548,7 +536,7 @@ pub struct CacheEngineVersion {
 struct CacheEngineVersionDeserializer;
 impl CacheEngineVersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheEngineVersion, XmlParseError> {
@@ -588,7 +576,7 @@ impl CacheEngineVersionDeserializer {
 struct CacheEngineVersionListDeserializer;
 impl CacheEngineVersionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheEngineVersion>, XmlParseError> {
@@ -617,7 +605,7 @@ pub struct CacheEngineVersionMessage {
 struct CacheEngineVersionMessageDeserializer;
 impl CacheEngineVersionMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheEngineVersionMessage, XmlParseError> {
@@ -666,7 +654,7 @@ pub struct CacheNode {
 struct CacheNodeDeserializer;
 impl CacheNodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheNode, XmlParseError> {
@@ -714,7 +702,7 @@ impl CacheNodeDeserializer {
 struct CacheNodeIdsListDeserializer;
 impl CacheNodeIdsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -743,7 +731,7 @@ impl CacheNodeIdsListSerializer {
 struct CacheNodeListDeserializer;
 impl CacheNodeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheNode>, XmlParseError> {
@@ -783,7 +771,7 @@ pub struct CacheNodeTypeSpecificParameter {
 struct CacheNodeTypeSpecificParameterDeserializer;
 impl CacheNodeTypeSpecificParameterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheNodeTypeSpecificParameter, XmlParseError> {
@@ -842,7 +830,7 @@ impl CacheNodeTypeSpecificParameterDeserializer {
 struct CacheNodeTypeSpecificParametersListDeserializer;
 impl CacheNodeTypeSpecificParametersListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheNodeTypeSpecificParameter>, XmlParseError> {
@@ -871,7 +859,7 @@ pub struct CacheNodeTypeSpecificValue {
 struct CacheNodeTypeSpecificValueDeserializer;
 impl CacheNodeTypeSpecificValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheNodeTypeSpecificValue, XmlParseError> {
@@ -897,7 +885,7 @@ impl CacheNodeTypeSpecificValueDeserializer {
 struct CacheNodeTypeSpecificValueListDeserializer;
 impl CacheNodeTypeSpecificValueListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheNodeTypeSpecificValue>, XmlParseError> {
@@ -928,7 +916,7 @@ pub struct CacheParameterGroup {
 struct CacheParameterGroupDeserializer;
 impl CacheParameterGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroup, XmlParseError> {
@@ -969,7 +957,7 @@ pub struct CacheParameterGroupDetails {
 struct CacheParameterGroupDetailsDeserializer;
 impl CacheParameterGroupDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroupDetails, XmlParseError> {
@@ -1006,7 +994,7 @@ impl CacheParameterGroupDetailsDeserializer {
 struct CacheParameterGroupListDeserializer;
 impl CacheParameterGroupListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheParameterGroup>, XmlParseError> {
@@ -1033,7 +1021,7 @@ pub struct CacheParameterGroupNameMessage {
 struct CacheParameterGroupNameMessageDeserializer;
 impl CacheParameterGroupNameMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroupNameMessage, XmlParseError> {
@@ -1069,7 +1057,7 @@ pub struct CacheParameterGroupStatus {
 struct CacheParameterGroupStatusDeserializer;
 impl CacheParameterGroupStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroupStatus, XmlParseError> {
@@ -1117,7 +1105,7 @@ pub struct CacheParameterGroupsMessage {
 struct CacheParameterGroupsMessageDeserializer;
 impl CacheParameterGroupsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheParameterGroupsMessage, XmlParseError> {
@@ -1160,7 +1148,7 @@ pub struct CacheSecurityGroup {
 struct CacheSecurityGroupDeserializer;
 impl CacheSecurityGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSecurityGroup, XmlParseError> {
@@ -1201,7 +1189,7 @@ pub struct CacheSecurityGroupMembership {
 struct CacheSecurityGroupMembershipDeserializer;
 impl CacheSecurityGroupMembershipDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSecurityGroupMembership, XmlParseError> {
@@ -1229,7 +1217,7 @@ impl CacheSecurityGroupMembershipDeserializer {
 struct CacheSecurityGroupMembershipListDeserializer;
 impl CacheSecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheSecurityGroupMembership>, XmlParseError> {
@@ -1258,7 +1246,7 @@ pub struct CacheSecurityGroupMessage {
 struct CacheSecurityGroupMessageDeserializer;
 impl CacheSecurityGroupMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSecurityGroupMessage, XmlParseError> {
@@ -1300,7 +1288,7 @@ impl CacheSecurityGroupNameListSerializer {
 struct CacheSecurityGroupsDeserializer;
 impl CacheSecurityGroupsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheSecurityGroup>, XmlParseError> {
@@ -1333,7 +1321,7 @@ pub struct CacheSubnetGroup {
 struct CacheSubnetGroupDeserializer;
 impl CacheSubnetGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSubnetGroup, XmlParseError> {
@@ -1377,7 +1365,7 @@ pub struct CacheSubnetGroupMessage {
 struct CacheSubnetGroupMessageDeserializer;
 impl CacheSubnetGroupMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CacheSubnetGroupMessage, XmlParseError> {
@@ -1404,7 +1392,7 @@ impl CacheSubnetGroupMessageDeserializer {
 struct CacheSubnetGroupsDeserializer;
 impl CacheSubnetGroupsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<CacheSubnetGroup>, XmlParseError> {
@@ -1424,10 +1412,7 @@ impl CacheSubnetGroupsDeserializer {
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1438,7 +1423,7 @@ impl ChangeTypeDeserializer {
 struct ClusterIdListDeserializer;
 impl ClusterIdListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -1529,7 +1514,7 @@ pub struct CopySnapshotResult {
 struct CopySnapshotResultDeserializer;
 impl CopySnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CopySnapshotResult, XmlParseError> {
@@ -1722,7 +1707,7 @@ pub struct CreateCacheClusterResult {
 struct CreateCacheClusterResultDeserializer;
 impl CreateCacheClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCacheClusterResult, XmlParseError> {
@@ -1784,7 +1769,7 @@ pub struct CreateCacheParameterGroupResult {
 struct CreateCacheParameterGroupResultDeserializer;
 impl CreateCacheParameterGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCacheParameterGroupResult, XmlParseError> {
@@ -1841,7 +1826,7 @@ pub struct CreateCacheSecurityGroupResult {
 struct CreateCacheSecurityGroupResultDeserializer;
 impl CreateCacheSecurityGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCacheSecurityGroupResult, XmlParseError> {
@@ -1908,7 +1893,7 @@ pub struct CreateCacheSubnetGroupResult {
 struct CreateCacheSubnetGroupResultDeserializer;
 impl CreateCacheSubnetGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateCacheSubnetGroupResult, XmlParseError> {
@@ -2147,7 +2132,7 @@ pub struct CreateReplicationGroupResult {
 struct CreateReplicationGroupResultDeserializer;
 impl CreateReplicationGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateReplicationGroupResult, XmlParseError> {
@@ -2207,7 +2192,7 @@ pub struct CreateSnapshotResult {
 struct CreateSnapshotResultDeserializer;
 impl CreateSnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateSnapshotResult, XmlParseError> {
@@ -2281,7 +2266,7 @@ pub struct DecreaseReplicaCountResult {
 struct DecreaseReplicaCountResultDeserializer;
 impl DecreaseReplicaCountResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DecreaseReplicaCountResult, XmlParseError> {
@@ -2342,7 +2327,7 @@ pub struct DeleteCacheClusterResult {
 struct DeleteCacheClusterResultDeserializer;
 impl DeleteCacheClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteCacheClusterResult, XmlParseError> {
@@ -2480,7 +2465,7 @@ pub struct DeleteReplicationGroupResult {
 struct DeleteReplicationGroupResultDeserializer;
 impl DeleteReplicationGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteReplicationGroupResult, XmlParseError> {
@@ -2530,7 +2515,7 @@ pub struct DeleteSnapshotResult {
 struct DeleteSnapshotResultDeserializer;
 impl DeleteSnapshotResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteSnapshotResult, XmlParseError> {
@@ -2824,7 +2809,7 @@ pub struct DescribeEngineDefaultParametersResult {
 struct DescribeEngineDefaultParametersResultDeserializer;
 impl DescribeEngineDefaultParametersResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeEngineDefaultParametersResult, XmlParseError> {
@@ -3064,7 +3049,7 @@ pub struct DescribeSnapshotsListMessage {
 struct DescribeSnapshotsListMessageDeserializer;
 impl DescribeSnapshotsListMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeSnapshotsListMessage, XmlParseError> {
@@ -3146,10 +3131,7 @@ impl DescribeSnapshotsMessageSerializer {
 struct DoubleDeserializer;
 impl DoubleDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<f64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<f64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = f64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3171,7 +3153,7 @@ pub struct EC2SecurityGroup {
 struct EC2SecurityGroupDeserializer;
 impl EC2SecurityGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EC2SecurityGroup, XmlParseError> {
@@ -3201,7 +3183,7 @@ impl EC2SecurityGroupDeserializer {
 struct EC2SecurityGroupListDeserializer;
 impl EC2SecurityGroupListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<EC2SecurityGroup>, XmlParseError> {
@@ -3230,7 +3212,7 @@ pub struct Endpoint {
 struct EndpointDeserializer;
 impl EndpointDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Endpoint, XmlParseError> {
@@ -3264,7 +3246,7 @@ pub struct EngineDefaults {
 struct EngineDefaultsDeserializer;
 impl EngineDefaultsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EngineDefaults, XmlParseError> {
@@ -3316,10 +3298,7 @@ pub struct Event {
 struct EventDeserializer;
 impl EventDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Event, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Event, XmlParseError> {
         deserialize_elements::<_, Event, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Date" => {
@@ -3345,7 +3324,7 @@ impl EventDeserializer {
 struct EventListDeserializer;
 impl EventListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Event>, XmlParseError> {
@@ -3371,7 +3350,7 @@ pub struct EventsMessage {
 struct EventsMessageDeserializer;
 impl EventsMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EventsMessage, XmlParseError> {
@@ -3441,7 +3420,7 @@ pub struct IncreaseReplicaCountResult {
 struct IncreaseReplicaCountResultDeserializer;
 impl IncreaseReplicaCountResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<IncreaseReplicaCountResult, XmlParseError> {
@@ -3466,10 +3445,7 @@ impl IncreaseReplicaCountResultDeserializer {
 struct IntegerDeserializer;
 impl IntegerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3480,10 +3456,7 @@ impl IntegerDeserializer {
 struct IntegerOptionalDeserializer;
 impl IntegerOptionalDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3695,7 +3668,7 @@ pub struct ModifyCacheClusterResult {
 struct ModifyCacheClusterResultDeserializer;
 impl ModifyCacheClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyCacheClusterResult, XmlParseError> {
@@ -3795,7 +3768,7 @@ pub struct ModifyCacheSubnetGroupResult {
 struct ModifyCacheSubnetGroupResultDeserializer;
 impl ModifyCacheSubnetGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyCacheSubnetGroupResult, XmlParseError> {
@@ -3964,7 +3937,7 @@ pub struct ModifyReplicationGroupResult {
 struct ModifyReplicationGroupResultDeserializer;
 impl ModifyReplicationGroupResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyReplicationGroupResult, XmlParseError> {
@@ -4060,7 +4033,7 @@ pub struct ModifyReplicationGroupShardConfigurationResult {
 struct ModifyReplicationGroupShardConfigurationResultDeserializer;
 impl ModifyReplicationGroupShardConfigurationResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyReplicationGroupShardConfigurationResult, XmlParseError> {
@@ -4100,7 +4073,7 @@ pub struct NodeGroup {
 struct NodeGroupDeserializer;
 impl NodeGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeGroup, XmlParseError> {
@@ -4149,7 +4122,7 @@ pub struct NodeGroupConfiguration {
 struct NodeGroupConfigurationDeserializer;
 impl NodeGroupConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeGroupConfiguration, XmlParseError> {
@@ -4239,7 +4212,7 @@ impl NodeGroupConfigurationListSerializer {
 struct NodeGroupListDeserializer;
 impl NodeGroupListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NodeGroup>, XmlParseError> {
@@ -4271,7 +4244,7 @@ pub struct NodeGroupMember {
 struct NodeGroupMemberDeserializer;
 impl NodeGroupMemberDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeGroupMember, XmlParseError> {
@@ -4307,7 +4280,7 @@ impl NodeGroupMemberDeserializer {
 struct NodeGroupMemberListDeserializer;
 impl NodeGroupMemberListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NodeGroupMember>, XmlParseError> {
@@ -4369,7 +4342,7 @@ pub struct NodeSnapshot {
 struct NodeSnapshotDeserializer;
 impl NodeSnapshotDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NodeSnapshot, XmlParseError> {
@@ -4418,7 +4391,7 @@ impl NodeSnapshotDeserializer {
 struct NodeSnapshotListDeserializer;
 impl NodeSnapshotListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<NodeSnapshot>, XmlParseError> {
@@ -4438,7 +4411,7 @@ impl NodeSnapshotListDeserializer {
 struct NodeTypeListDeserializer;
 impl NodeTypeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4464,7 +4437,7 @@ pub struct NotificationConfiguration {
 struct NotificationConfigurationDeserializer;
 impl NotificationConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<NotificationConfiguration, XmlParseError> {
@@ -4513,7 +4486,7 @@ pub struct Parameter {
 struct ParameterDeserializer;
 impl ParameterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Parameter, XmlParseError> {
@@ -4601,7 +4574,7 @@ impl ParameterNameValueListSerializer {
 struct ParametersListDeserializer;
 impl ParametersListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Parameter>, XmlParseError> {
@@ -4618,10 +4591,7 @@ impl ParametersListDeserializer {
 struct PendingAutomaticFailoverStatusDeserializer;
 impl PendingAutomaticFailoverStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4645,7 +4615,7 @@ pub struct PendingModifiedValues {
 struct PendingModifiedValuesDeserializer;
 impl PendingModifiedValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PendingModifiedValues, XmlParseError> {
@@ -4732,7 +4702,7 @@ pub struct PurchaseReservedCacheNodesOfferingResult {
 struct PurchaseReservedCacheNodesOfferingResultDeserializer;
 impl PurchaseReservedCacheNodesOfferingResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PurchaseReservedCacheNodesOfferingResult, XmlParseError> {
@@ -4792,7 +4762,7 @@ pub struct RebootCacheClusterResult {
 struct RebootCacheClusterResultDeserializer;
 impl RebootCacheClusterResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RebootCacheClusterResult, XmlParseError> {
@@ -4826,7 +4796,7 @@ pub struct RecurringCharge {
 struct RecurringChargeDeserializer;
 impl RecurringChargeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RecurringCharge, XmlParseError> {
@@ -4853,7 +4823,7 @@ impl RecurringChargeDeserializer {
 struct RecurringChargeListDeserializer;
 impl RecurringChargeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RecurringCharge>, XmlParseError> {
@@ -4956,7 +4926,7 @@ pub struct ReplicationGroup {
 struct ReplicationGroupDeserializer;
 impl ReplicationGroupDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationGroup, XmlParseError> {
@@ -5058,7 +5028,7 @@ impl ReplicationGroupDeserializer {
 struct ReplicationGroupListDeserializer;
 impl ReplicationGroupListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReplicationGroup>, XmlParseError> {
@@ -5087,7 +5057,7 @@ pub struct ReplicationGroupMessage {
 struct ReplicationGroupMessageDeserializer;
 impl ReplicationGroupMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationGroupMessage, XmlParseError> {
@@ -5128,7 +5098,7 @@ pub struct ReplicationGroupPendingModifiedValues {
 struct ReplicationGroupPendingModifiedValuesDeserializer;
 impl ReplicationGroupPendingModifiedValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReplicationGroupPendingModifiedValues, XmlParseError> {
@@ -5195,7 +5165,7 @@ pub struct ReservedCacheNode {
 struct ReservedCacheNodeDeserializer;
 impl ReservedCacheNodeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedCacheNode, XmlParseError> {
@@ -5264,7 +5234,7 @@ impl ReservedCacheNodeDeserializer {
 struct ReservedCacheNodeListDeserializer;
 impl ReservedCacheNodeListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedCacheNode>, XmlParseError> {
@@ -5293,7 +5263,7 @@ pub struct ReservedCacheNodeMessage {
 struct ReservedCacheNodeMessageDeserializer;
 impl ReservedCacheNodeMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedCacheNodeMessage, XmlParseError> {
@@ -5344,7 +5314,7 @@ pub struct ReservedCacheNodesOffering {
 struct ReservedCacheNodesOfferingDeserializer;
 impl ReservedCacheNodesOfferingDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedCacheNodesOffering, XmlParseError> {
@@ -5401,7 +5371,7 @@ impl ReservedCacheNodesOfferingDeserializer {
 struct ReservedCacheNodesOfferingListDeserializer;
 impl ReservedCacheNodesOfferingListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ReservedCacheNodesOffering>, XmlParseError> {
@@ -5430,7 +5400,7 @@ pub struct ReservedCacheNodesOfferingMessage {
 struct ReservedCacheNodesOfferingMessageDeserializer;
 impl ReservedCacheNodesOfferingMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReservedCacheNodesOfferingMessage, XmlParseError> {
@@ -5546,7 +5516,7 @@ pub struct ReshardingStatus {
 struct ReshardingStatusDeserializer;
 impl ReshardingStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ReshardingStatus, XmlParseError> {
@@ -5607,7 +5577,7 @@ pub struct RevokeCacheSecurityGroupIngressResult {
 struct RevokeCacheSecurityGroupIngressResultDeserializer;
 impl RevokeCacheSecurityGroupIngressResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RevokeCacheSecurityGroupIngressResult, XmlParseError> {
@@ -5654,7 +5624,7 @@ pub struct SecurityGroupMembership {
 struct SecurityGroupMembershipDeserializer;
 impl SecurityGroupMembershipDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SecurityGroupMembership, XmlParseError> {
@@ -5680,7 +5650,7 @@ impl SecurityGroupMembershipDeserializer {
 struct SecurityGroupMembershipListDeserializer;
 impl SecurityGroupMembershipListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<SecurityGroupMembership>, XmlParseError> {
@@ -5706,7 +5676,7 @@ pub struct SlotMigration {
 struct SlotMigrationDeserializer;
 impl SlotMigrationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SlotMigration, XmlParseError> {
@@ -5780,7 +5750,7 @@ pub struct Snapshot {
 struct SnapshotDeserializer;
 impl SnapshotDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Snapshot, XmlParseError> {
@@ -5925,7 +5895,7 @@ impl SnapshotArnsListSerializer {
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Snapshot>, XmlParseError> {
@@ -5942,10 +5912,7 @@ impl SnapshotListDeserializer {
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5956,10 +5923,7 @@ impl SourceTypeDeserializer {
 struct StringDeserializer;
 impl StringDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5979,10 +5943,7 @@ pub struct Subnet {
 struct SubnetDeserializer;
 impl SubnetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Subnet, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Subnet, XmlParseError> {
         deserialize_elements::<_, Subnet, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "SubnetAvailabilityZone" => {
@@ -6016,7 +5977,7 @@ impl SubnetIdentifierListSerializer {
 struct SubnetListDeserializer;
 impl SubnetListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Subnet>, XmlParseError> {
@@ -6033,10 +5994,7 @@ impl SubnetListDeserializer {
 struct TStampDeserializer;
 impl TStampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6056,10 +6014,7 @@ pub struct Tag {
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tag, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -6096,7 +6051,7 @@ impl TagSerializer {
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
@@ -6132,7 +6087,7 @@ pub struct TagListMessage {
 struct TagListMessageDeserializer;
 impl TagListMessageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagListMessage, XmlParseError> {
@@ -6182,7 +6137,7 @@ pub struct TestFailoverResult {
 struct TestFailoverResultDeserializer;
 impl TestFailoverResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TestFailoverResult, XmlParseError> {
@@ -6223,26 +6178,24 @@ impl AddTagsToResourceError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            AddTagsToResourceError::CacheClusterNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            AddTagsToResourceError::CacheClusterNotFoundFault(parsed_error.message),
                         )
                     }
                     "InvalidARN" => {
                         return RusotoError::Service(AddTagsToResourceError::InvalidARNFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SnapshotNotFoundFault" => {
                         return RusotoError::Service(AddTagsToResourceError::SnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TagQuotaPerResourceExceeded" => {
                         return RusotoError::Service(
-                            AddTagsToResourceError::TagQuotaPerResourceExceeded(String::from(
+                            AddTagsToResourceError::TagQuotaPerResourceExceeded(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -6300,7 +6253,7 @@ impl AuthorizeCacheSecurityGroupIngressError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(String::from(parsed_error.message))),"CacheSecurityGroupNotFound" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message))),"InvalidCacheSecurityGroupState" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(String::from(parsed_error.message))),"InvalidParameterCombination" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(String::from(parsed_error.message))),"InvalidParameterValue" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(String::from(parsed_error.message))),_ => {}
+                                    "AuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::AuthorizationAlreadyExistsFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"InvalidCacheSecurityGroupState" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(AuthorizeCacheSecurityGroupIngressError::InvalidParameterValue(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -6366,34 +6319,32 @@ impl CopySnapshotError {
                 match &parsed_error.code[..] {
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            CopySnapshotError::InvalidParameterCombination(String::from(
-                                parsed_error.message,
-                            )),
+                            CopySnapshotError::InvalidParameterCombination(parsed_error.message),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(CopySnapshotError::InvalidParameterValue(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidSnapshotState" => {
                         return RusotoError::Service(CopySnapshotError::InvalidSnapshotStateFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(CopySnapshotError::SnapshotAlreadyExistsFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SnapshotNotFoundFault" => {
                         return RusotoError::Service(CopySnapshotError::SnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SnapshotQuotaExceededFault" => {
                         return RusotoError::Service(CopySnapshotError::SnapshotQuotaExceededFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -6471,100 +6422,98 @@ impl CreateCacheClusterError {
                 match &parsed_error.code[..] {
                     "CacheClusterAlreadyExists" => {
                         return RusotoError::Service(
-                            CreateCacheClusterError::CacheClusterAlreadyExistsFault(String::from(
+                            CreateCacheClusterError::CacheClusterAlreadyExistsFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "CacheParameterGroupNotFound" => {
                         return RusotoError::Service(
                             CreateCacheClusterError::CacheParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "CacheSecurityGroupNotFound" => {
                         return RusotoError::Service(
-                            CreateCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(
+                            CreateCacheClusterError::CacheSecurityGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "CacheSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            CreateCacheClusterError::CacheSubnetGroupNotFoundFault(String::from(
+                            CreateCacheClusterError::CacheSubnetGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "ClusterQuotaForCustomerExceeded" => {
                         return RusotoError::Service(
                             CreateCacheClusterError::ClusterQuotaForCustomerExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InsufficientCacheClusterCapacity" => {
                         return RusotoError::Service(
                             CreateCacheClusterError::InsufficientCacheClusterCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            CreateCacheClusterError::InvalidParameterCombination(String::from(
+                            CreateCacheClusterError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            CreateCacheClusterError::InvalidParameterValue(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateCacheClusterError::InvalidParameterValue(parsed_error.message),
                         )
                     }
                     "InvalidReplicationGroupState" => {
                         return RusotoError::Service(
                             CreateCacheClusterError::InvalidReplicationGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            CreateCacheClusterError::InvalidVPCNetworkStateFault(String::from(
+                            CreateCacheClusterError::InvalidVPCNetworkStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NodeQuotaForClusterExceeded" => {
                         return RusotoError::Service(
                             CreateCacheClusterError::NodeQuotaForClusterExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "NodeQuotaForCustomerExceeded" => {
                         return RusotoError::Service(
                             CreateCacheClusterError::NodeQuotaForCustomerExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            CreateCacheClusterError::ReplicationGroupNotFoundFault(String::from(
+                            CreateCacheClusterError::ReplicationGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TagQuotaPerResourceExceeded" => {
                         return RusotoError::Service(
-                            CreateCacheClusterError::TagQuotaPerResourceExceeded(String::from(
+                            CreateCacheClusterError::TagQuotaPerResourceExceeded(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -6633,36 +6582,36 @@ impl CreateCacheParameterGroupError {
                     "CacheParameterGroupAlreadyExists" => {
                         return RusotoError::Service(
                             CreateCacheParameterGroupError::CacheParameterGroupAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "CacheParameterGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateCacheParameterGroupError::CacheParameterGroupQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheParameterGroupState" => {
                         return RusotoError::Service(
                             CreateCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             CreateCacheParameterGroupError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            CreateCacheParameterGroupError::InvalidParameterValue(String::from(
+                            CreateCacheParameterGroupError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -6726,29 +6675,29 @@ impl CreateCacheSecurityGroupError {
                     "CacheSecurityGroupAlreadyExists" => {
                         return RusotoError::Service(
                             CreateCacheSecurityGroupError::CacheSecurityGroupAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "QuotaExceeded.CacheSecurityGroup" => {
                         return RusotoError::Service(
                             CreateCacheSecurityGroupError::CacheSecurityGroupQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             CreateCacheSecurityGroupError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            CreateCacheSecurityGroupError::InvalidParameterValue(String::from(
+                            CreateCacheSecurityGroupError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -6805,27 +6754,27 @@ impl CreateCacheSubnetGroupError {
                     "CacheSubnetGroupAlreadyExists" => {
                         return RusotoError::Service(
                             CreateCacheSubnetGroupError::CacheSubnetGroupAlreadyExistsFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "CacheSubnetGroupQuotaExceeded" => {
                         return RusotoError::Service(
                             CreateCacheSubnetGroupError::CacheSubnetGroupQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "CacheSubnetQuotaExceededFault" => {
                         return RusotoError::Service(
                             CreateCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(CreateCacheSubnetGroupError::InvalidSubnet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -6901,7 +6850,7 @@ impl CreateReplicationGroupError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "CacheClusterNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheClusterNotFoundFault(String::from(parsed_error.message))),"CacheParameterGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheParameterGroupNotFoundFault(String::from(parsed_error.message))),"CacheSecurityGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(String::from(parsed_error.message))),"CacheSubnetGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(String::from(parsed_error.message))),"ClusterQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(String::from(parsed_error.message))),"InsufficientCacheClusterCapacity" => return RusotoError::Service(CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message))),"InvalidCacheClusterState" => return RusotoError::Service(CreateReplicationGroupError::InvalidCacheClusterStateFault(String::from(parsed_error.message))),"InvalidParameterCombination" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterCombination(String::from(parsed_error.message))),"InvalidParameterValue" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterValue(String::from(parsed_error.message))),"InvalidVPCNetworkStateFault" => return RusotoError::Service(CreateReplicationGroupError::InvalidVPCNetworkStateFault(String::from(parsed_error.message))),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message))),"NodeQuotaForClusterExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForClusterExceededFault(String::from(parsed_error.message))),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message))),"ReplicationGroupAlreadyExists" => return RusotoError::Service(CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(String::from(parsed_error.message))),"TagQuotaPerResourceExceeded" => return RusotoError::Service(CreateReplicationGroupError::TagQuotaPerResourceExceeded(String::from(parsed_error.message))),_ => {}
+                                    "CacheClusterNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheClusterNotFoundFault(parsed_error.message)),"CacheParameterGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheParameterGroupNotFoundFault(parsed_error.message)),"CacheSecurityGroupNotFound" => return RusotoError::Service(CreateReplicationGroupError::CacheSecurityGroupNotFoundFault(parsed_error.message)),"CacheSubnetGroupNotFoundFault" => return RusotoError::Service(CreateReplicationGroupError::CacheSubnetGroupNotFoundFault(parsed_error.message)),"ClusterQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::ClusterQuotaForCustomerExceededFault(parsed_error.message)),"InsufficientCacheClusterCapacity" => return RusotoError::Service(CreateReplicationGroupError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(CreateReplicationGroupError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(CreateReplicationGroupError::InvalidParameterValue(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(CreateReplicationGroupError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForClusterExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForClusterExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(CreateReplicationGroupError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupAlreadyExists" => return RusotoError::Service(CreateReplicationGroupError::ReplicationGroupAlreadyExistsFault(parsed_error.message)),"TagQuotaPerResourceExceeded" => return RusotoError::Service(CreateReplicationGroupError::TagQuotaPerResourceExceeded(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -6977,63 +6926,55 @@ impl CreateSnapshotError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            CreateSnapshotError::CacheClusterNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateSnapshotError::CacheClusterNotFoundFault(parsed_error.message),
                         )
                     }
                     "InvalidCacheClusterState" => {
                         return RusotoError::Service(
-                            CreateSnapshotError::InvalidCacheClusterStateFault(String::from(
+                            CreateSnapshotError::InvalidCacheClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            CreateSnapshotError::InvalidParameterCombination(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateSnapshotError::InvalidParameterCombination(parsed_error.message),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(CreateSnapshotError::InvalidParameterValue(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidReplicationGroupState" => {
                         return RusotoError::Service(
-                            CreateSnapshotError::InvalidReplicationGroupStateFault(String::from(
+                            CreateSnapshotError::InvalidReplicationGroupStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            CreateSnapshotError::ReplicationGroupNotFoundFault(String::from(
+                            CreateSnapshotError::ReplicationGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(
-                            CreateSnapshotError::SnapshotAlreadyExistsFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateSnapshotError::SnapshotAlreadyExistsFault(parsed_error.message),
                         )
                     }
                     "SnapshotFeatureNotSupportedFault" => {
                         return RusotoError::Service(
-                            CreateSnapshotError::SnapshotFeatureNotSupportedFault(String::from(
+                            CreateSnapshotError::SnapshotFeatureNotSupportedFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SnapshotQuotaExceededFault" => {
                         return RusotoError::Service(
-                            CreateSnapshotError::SnapshotQuotaExceededFault(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateSnapshotError::SnapshotQuotaExceededFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -7111,80 +7052,78 @@ impl DecreaseReplicaCountError {
                     "ClusterQuotaForCustomerExceeded" => {
                         return RusotoError::Service(
                             DecreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InsufficientCacheClusterCapacity" => {
                         return RusotoError::Service(
                             DecreaseReplicaCountError::InsufficientCacheClusterCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheClusterState" => {
                         return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidCacheClusterStateFault(String::from(
+                            DecreaseReplicaCountError::InvalidCacheClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidParameterCombination(String::from(
+                            DecreaseReplicaCountError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidParameterValue(String::from(
-                                parsed_error.message,
-                            )),
+                            DecreaseReplicaCountError::InvalidParameterValue(parsed_error.message),
                         )
                     }
                     "InvalidReplicationGroupState" => {
                         return RusotoError::Service(
                             DecreaseReplicaCountError::InvalidReplicationGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            DecreaseReplicaCountError::InvalidVPCNetworkStateFault(String::from(
+                            DecreaseReplicaCountError::InvalidVPCNetworkStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoOperationFault" => {
                         return RusotoError::Service(DecreaseReplicaCountError::NoOperationFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(
                         DecreaseReplicaCountError::NodeGroupsPerReplicationGroupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "NodeQuotaForCustomerExceeded" => {
                         return RusotoError::Service(
                             DecreaseReplicaCountError::NodeQuotaForCustomerExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            DecreaseReplicaCountError::ReplicationGroupNotFoundFault(String::from(
+                            DecreaseReplicaCountError::ReplicationGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "ServiceLinkedRoleNotFoundFault" => {
                         return RusotoError::Service(
                             DecreaseReplicaCountError::ServiceLinkedRoleNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7257,51 +7196,49 @@ impl DeleteCacheClusterError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            DeleteCacheClusterError::CacheClusterNotFoundFault(String::from(
+                            DeleteCacheClusterError::CacheClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidCacheClusterState" => {
                         return RusotoError::Service(
-                            DeleteCacheClusterError::InvalidCacheClusterStateFault(String::from(
+                            DeleteCacheClusterError::InvalidCacheClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            DeleteCacheClusterError::InvalidParameterCombination(String::from(
+                            DeleteCacheClusterError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DeleteCacheClusterError::InvalidParameterValue(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteCacheClusterError::InvalidParameterValue(parsed_error.message),
                         )
                     }
                     "SnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(
-                            DeleteCacheClusterError::SnapshotAlreadyExistsFault(String::from(
+                            DeleteCacheClusterError::SnapshotAlreadyExistsFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SnapshotFeatureNotSupportedFault" => {
                         return RusotoError::Service(
                             DeleteCacheClusterError::SnapshotFeatureNotSupportedFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SnapshotQuotaExceededFault" => {
                         return RusotoError::Service(
-                            DeleteCacheClusterError::SnapshotQuotaExceededFault(String::from(
+                            DeleteCacheClusterError::SnapshotQuotaExceededFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -7361,29 +7298,29 @@ impl DeleteCacheParameterGroupError {
                     "CacheParameterGroupNotFound" => {
                         return RusotoError::Service(
                             DeleteCacheParameterGroupError::CacheParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheParameterGroupState" => {
                         return RusotoError::Service(
                             DeleteCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             DeleteCacheParameterGroupError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DeleteCacheParameterGroupError::InvalidParameterValue(String::from(
+                            DeleteCacheParameterGroupError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -7442,29 +7379,29 @@ impl DeleteCacheSecurityGroupError {
                     "CacheSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             DeleteCacheSecurityGroupError::CacheSecurityGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheSecurityGroupState" => {
                         return RusotoError::Service(
                             DeleteCacheSecurityGroupError::InvalidCacheSecurityGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             DeleteCacheSecurityGroupError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DeleteCacheSecurityGroupError::InvalidParameterValue(String::from(
+                            DeleteCacheSecurityGroupError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -7516,15 +7453,15 @@ impl DeleteCacheSubnetGroupError {
                 match &parsed_error.code[..] {
                     "CacheSubnetGroupInUse" => {
                         return RusotoError::Service(
-                            DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(String::from(
+                            DeleteCacheSubnetGroupError::CacheSubnetGroupInUse(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "CacheSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             DeleteCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -7585,51 +7522,51 @@ impl DeleteReplicationGroupError {
                 match &parsed_error.code[..] {
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            DeleteReplicationGroupError::InvalidParameterCombination(String::from(
+                            DeleteReplicationGroupError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DeleteReplicationGroupError::InvalidParameterValue(String::from(
+                            DeleteReplicationGroupError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidReplicationGroupState" => {
                         return RusotoError::Service(
                             DeleteReplicationGroupError::InvalidReplicationGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
                             DeleteReplicationGroupError::ReplicationGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SnapshotAlreadyExistsFault" => {
                         return RusotoError::Service(
-                            DeleteReplicationGroupError::SnapshotAlreadyExistsFault(String::from(
+                            DeleteReplicationGroupError::SnapshotAlreadyExistsFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "SnapshotFeatureNotSupportedFault" => {
                         return RusotoError::Service(
                             DeleteReplicationGroupError::SnapshotFeatureNotSupportedFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "SnapshotQuotaExceededFault" => {
                         return RusotoError::Service(
-                            DeleteReplicationGroupError::SnapshotQuotaExceededFault(String::from(
+                            DeleteReplicationGroupError::SnapshotQuotaExceededFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -7688,26 +7625,22 @@ impl DeleteSnapshotError {
                 match &parsed_error.code[..] {
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            DeleteSnapshotError::InvalidParameterCombination(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteSnapshotError::InvalidParameterCombination(parsed_error.message),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(DeleteSnapshotError::InvalidParameterValue(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidSnapshotState" => {
                         return RusotoError::Service(
-                            DeleteSnapshotError::InvalidSnapshotStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteSnapshotError::InvalidSnapshotStateFault(parsed_error.message),
                         )
                     }
                     "SnapshotNotFoundFault" => {
                         return RusotoError::Service(DeleteSnapshotError::SnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7761,23 +7694,21 @@ impl DescribeCacheClustersError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            DescribeCacheClustersError::CacheClusterNotFoundFault(String::from(
+                            DescribeCacheClustersError::CacheClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            DescribeCacheClustersError::InvalidParameterCombination(String::from(
+                            DescribeCacheClustersError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DescribeCacheClustersError::InvalidParameterValue(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeCacheClustersError::InvalidParameterValue(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -7872,22 +7803,22 @@ impl DescribeCacheParameterGroupsError {
                     "CacheParameterGroupNotFound" => {
                         return RusotoError::Service(
                             DescribeCacheParameterGroupsError::CacheParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             DescribeCacheParameterGroupsError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DescribeCacheParameterGroupsError::InvalidParameterValue(String::from(
+                            DescribeCacheParameterGroupsError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -7941,22 +7872,22 @@ impl DescribeCacheParametersError {
                     "CacheParameterGroupNotFound" => {
                         return RusotoError::Service(
                             DescribeCacheParametersError::CacheParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             DescribeCacheParametersError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DescribeCacheParametersError::InvalidParameterValue(String::from(
+                            DescribeCacheParametersError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -8012,22 +7943,22 @@ impl DescribeCacheSecurityGroupsError {
                     "CacheSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             DescribeCacheSecurityGroupsError::CacheSecurityGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             DescribeCacheSecurityGroupsError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DescribeCacheSecurityGroupsError::InvalidParameterValue(String::from(
+                            DescribeCacheSecurityGroupsError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -8077,7 +8008,7 @@ impl DescribeCacheSubnetGroupsError {
                     "CacheSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             DescribeCacheSubnetGroupsError::CacheSubnetGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8130,14 +8061,14 @@ impl DescribeEngineDefaultParametersError {
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             DescribeEngineDefaultParametersError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
                             DescribeEngineDefaultParametersError::InvalidParameterValue(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8188,14 +8119,12 @@ impl DescribeEventsError {
                 match &parsed_error.code[..] {
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            DescribeEventsError::InvalidParameterCombination(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeEventsError::InvalidParameterCombination(parsed_error.message),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(DescribeEventsError::InvalidParameterValue(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8248,21 +8177,21 @@ impl DescribeReplicationGroupsError {
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             DescribeReplicationGroupsError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DescribeReplicationGroupsError::InvalidParameterValue(String::from(
+                            DescribeReplicationGroupsError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
                             DescribeReplicationGroupsError::ReplicationGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8319,21 +8248,21 @@ impl DescribeReservedCacheNodesError {
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             DescribeReservedCacheNodesError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            DescribeReservedCacheNodesError::InvalidParameterValue(String::from(
+                            DescribeReservedCacheNodesError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "ReservedCacheNodeNotFound" => {
                         return RusotoError::Service(
                             DescribeReservedCacheNodesError::ReservedCacheNodeNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8387,7 +8316,7 @@ impl DescribeReservedCacheNodesOfferingsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombination" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(String::from(parsed_error.message))),"InvalidParameterValue" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(String::from(parsed_error.message))),"ReservedCacheNodesOfferingNotFound" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message))),_ => {}
+                                    "InvalidParameterCombination" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::InvalidParameterValue(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => return RusotoError::Service(DescribeReservedCacheNodesOfferingsError::ReservedCacheNodesOfferingNotFoundFault(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -8443,26 +8372,24 @@ impl DescribeSnapshotsError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            DescribeSnapshotsError::CacheClusterNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeSnapshotsError::CacheClusterNotFoundFault(parsed_error.message),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            DescribeSnapshotsError::InvalidParameterCombination(String::from(
+                            DescribeSnapshotsError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(DescribeSnapshotsError::InvalidParameterValue(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SnapshotNotFoundFault" => {
                         return RusotoError::Service(DescribeSnapshotsError::SnapshotNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8533,74 +8460,72 @@ impl IncreaseReplicaCountError {
                     "ClusterQuotaForCustomerExceeded" => {
                         return RusotoError::Service(
                             IncreaseReplicaCountError::ClusterQuotaForCustomerExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InsufficientCacheClusterCapacity" => {
                         return RusotoError::Service(
                             IncreaseReplicaCountError::InsufficientCacheClusterCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheClusterState" => {
                         return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidCacheClusterStateFault(String::from(
+                            IncreaseReplicaCountError::InvalidCacheClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidParameterCombination(String::from(
+                            IncreaseReplicaCountError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidParameterValue(String::from(
-                                parsed_error.message,
-                            )),
+                            IncreaseReplicaCountError::InvalidParameterValue(parsed_error.message),
                         )
                     }
                     "InvalidReplicationGroupState" => {
                         return RusotoError::Service(
                             IncreaseReplicaCountError::InvalidReplicationGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            IncreaseReplicaCountError::InvalidVPCNetworkStateFault(String::from(
+                            IncreaseReplicaCountError::InvalidVPCNetworkStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NoOperationFault" => {
                         return RusotoError::Service(IncreaseReplicaCountError::NoOperationFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(
                         IncreaseReplicaCountError::NodeGroupsPerReplicationGroupQuotaExceededFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "NodeQuotaForCustomerExceeded" => {
                         return RusotoError::Service(
                             IncreaseReplicaCountError::NodeQuotaForCustomerExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            IncreaseReplicaCountError::ReplicationGroupNotFoundFault(String::from(
+                            IncreaseReplicaCountError::ReplicationGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -8668,28 +8593,28 @@ impl ListAllowedNodeTypeModificationsError {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
                             ListAllowedNodeTypeModificationsError::CacheClusterNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             ListAllowedNodeTypeModificationsError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
                             ListAllowedNodeTypeModificationsError::InvalidParameterValue(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
                             ListAllowedNodeTypeModificationsError::ReplicationGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8746,21 +8671,19 @@ impl ListTagsForResourceError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            ListTagsForResourceError::CacheClusterNotFoundFault(String::from(
+                            ListTagsForResourceError::CacheClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidARN" => {
                         return RusotoError::Service(ListTagsForResourceError::InvalidARNFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SnapshotNotFoundFault" => {
                         return RusotoError::Service(
-                            ListTagsForResourceError::SnapshotNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ListTagsForResourceError::SnapshotNotFoundFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -8829,78 +8752,76 @@ impl ModifyCacheClusterError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            ModifyCacheClusterError::CacheClusterNotFoundFault(String::from(
+                            ModifyCacheClusterError::CacheClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "CacheParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyCacheClusterError::CacheParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "CacheSecurityGroupNotFound" => {
                         return RusotoError::Service(
-                            ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(String::from(
+                            ModifyCacheClusterError::CacheSecurityGroupNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InsufficientCacheClusterCapacity" => {
                         return RusotoError::Service(
                             ModifyCacheClusterError::InsufficientCacheClusterCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheClusterState" => {
                         return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidCacheClusterStateFault(String::from(
+                            ModifyCacheClusterError::InvalidCacheClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidCacheSecurityGroupState" => {
                         return RusotoError::Service(
                             ModifyCacheClusterError::InvalidCacheSecurityGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidParameterCombination(String::from(
+                            ModifyCacheClusterError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidParameterValue(String::from(
-                                parsed_error.message,
-                            )),
+                            ModifyCacheClusterError::InvalidParameterValue(parsed_error.message),
                         )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            ModifyCacheClusterError::InvalidVPCNetworkStateFault(String::from(
+                            ModifyCacheClusterError::InvalidVPCNetworkStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NodeQuotaForClusterExceeded" => {
                         return RusotoError::Service(
                             ModifyCacheClusterError::NodeQuotaForClusterExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "NodeQuotaForCustomerExceeded" => {
                         return RusotoError::Service(
                             ModifyCacheClusterError::NodeQuotaForCustomerExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -8965,29 +8886,29 @@ impl ModifyCacheParameterGroupError {
                     "CacheParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyCacheParameterGroupError::CacheParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheParameterGroupState" => {
                         return RusotoError::Service(
                             ModifyCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             ModifyCacheParameterGroupError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            ModifyCacheParameterGroupError::InvalidParameterValue(String::from(
+                            ModifyCacheParameterGroupError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9046,25 +8967,25 @@ impl ModifyCacheSubnetGroupError {
                     "CacheSubnetGroupNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyCacheSubnetGroupError::CacheSubnetGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "CacheSubnetQuotaExceededFault" => {
                         return RusotoError::Service(
                             ModifyCacheSubnetGroupError::CacheSubnetQuotaExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidSubnet" => {
                         return RusotoError::Service(ModifyCacheSubnetGroupError::InvalidSubnet(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SubnetInUse" => {
                         return RusotoError::Service(ModifyCacheSubnetGroupError::SubnetInUse(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9138,92 +9059,92 @@ impl ModifyReplicationGroupError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            ModifyReplicationGroupError::CacheClusterNotFoundFault(String::from(
+                            ModifyReplicationGroupError::CacheClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "CacheParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::CacheParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "CacheSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::CacheSecurityGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InsufficientCacheClusterCapacity" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::InsufficientCacheClusterCapacityFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheClusterState" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::InvalidCacheClusterStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheSecurityGroupState" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::InvalidCacheSecurityGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidParameterCombination(String::from(
+                            ModifyReplicationGroupError::InvalidParameterCombination(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidParameterValue(String::from(
+                            ModifyReplicationGroupError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidReplicationGroupState" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::InvalidReplicationGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidVPCNetworkStateFault" => {
                         return RusotoError::Service(
-                            ModifyReplicationGroupError::InvalidVPCNetworkStateFault(String::from(
+                            ModifyReplicationGroupError::InvalidVPCNetworkStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NodeQuotaForClusterExceeded" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::NodeQuotaForClusterExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "NodeQuotaForCustomerExceeded" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::NodeQuotaForCustomerExceededFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
                             ModifyReplicationGroupError::ReplicationGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9299,7 +9220,7 @@ impl ModifyReplicationGroupShardConfigurationError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "InsufficientCacheClusterCapacity" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(String::from(parsed_error.message))),"InvalidCacheClusterState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(String::from(parsed_error.message))),"InvalidParameterCombination" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(String::from(parsed_error.message))),"InvalidParameterValue" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(String::from(parsed_error.message))),"InvalidReplicationGroupState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(String::from(parsed_error.message))),"InvalidVPCNetworkStateFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(String::from(parsed_error.message))),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(String::from(parsed_error.message))),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(String::from(parsed_error.message))),"ReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(String::from(parsed_error.message))),_ => {}
+                                    "InsufficientCacheClusterCapacity" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InsufficientCacheClusterCapacityFault(parsed_error.message)),"InvalidCacheClusterState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidCacheClusterStateFault(parsed_error.message)),"InvalidParameterCombination" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidParameterValue(parsed_error.message)),"InvalidReplicationGroupState" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidReplicationGroupStateFault(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::InvalidVPCNetworkStateFault(parsed_error.message)),"NodeGroupsPerReplicationGroupQuotaExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeGroupsPerReplicationGroupQuotaExceededFault(parsed_error.message)),"NodeQuotaForCustomerExceeded" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::NodeQuotaForCustomerExceededFault(parsed_error.message)),"ReplicationGroupNotFoundFault" => return RusotoError::Service(ModifyReplicationGroupShardConfigurationError::ReplicationGroupNotFoundFault(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -9359,7 +9280,7 @@ impl PurchaseReservedCacheNodesOfferingError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "InvalidParameterCombination" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(String::from(parsed_error.message))),"InvalidParameterValue" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(String::from(parsed_error.message))),"ReservedCacheNodeAlreadyExists" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(String::from(parsed_error.message))),"ReservedCacheNodeQuotaExceeded" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(String::from(parsed_error.message))),"ReservedCacheNodesOfferingNotFound" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(String::from(parsed_error.message))),_ => {}
+                                    "InvalidParameterCombination" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::InvalidParameterCombination(parsed_error.message)),"InvalidParameterValue" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::InvalidParameterValue(parsed_error.message)),"ReservedCacheNodeAlreadyExists" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeAlreadyExistsFault(parsed_error.message)),"ReservedCacheNodeQuotaExceeded" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodeQuotaExceededFault(parsed_error.message)),"ReservedCacheNodesOfferingNotFound" => return RusotoError::Service(PurchaseReservedCacheNodesOfferingError::ReservedCacheNodesOfferingNotFoundFault(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -9417,16 +9338,16 @@ impl RebootCacheClusterError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            RebootCacheClusterError::CacheClusterNotFoundFault(String::from(
+                            RebootCacheClusterError::CacheClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidCacheClusterState" => {
                         return RusotoError::Service(
-                            RebootCacheClusterError::InvalidCacheClusterStateFault(String::from(
+                            RebootCacheClusterError::InvalidCacheClusterStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9480,26 +9401,26 @@ impl RemoveTagsFromResourceError {
                 match &parsed_error.code[..] {
                     "CacheClusterNotFound" => {
                         return RusotoError::Service(
-                            RemoveTagsFromResourceError::CacheClusterNotFoundFault(String::from(
+                            RemoveTagsFromResourceError::CacheClusterNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidARN" => {
                         return RusotoError::Service(RemoveTagsFromResourceError::InvalidARNFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "SnapshotNotFoundFault" => {
                         return RusotoError::Service(
-                            RemoveTagsFromResourceError::SnapshotNotFoundFault(String::from(
+                            RemoveTagsFromResourceError::SnapshotNotFoundFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "TagNotFound" => {
                         return RusotoError::Service(RemoveTagsFromResourceError::TagNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9556,29 +9477,29 @@ impl ResetCacheParameterGroupError {
                     "CacheParameterGroupNotFound" => {
                         return RusotoError::Service(
                             ResetCacheParameterGroupError::CacheParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheParameterGroupState" => {
                         return RusotoError::Service(
                             ResetCacheParameterGroupError::InvalidCacheParameterGroupStateFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             ResetCacheParameterGroupError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            ResetCacheParameterGroupError::InvalidParameterValue(String::from(
+                            ResetCacheParameterGroupError::InvalidParameterValue(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9639,33 +9560,33 @@ impl RevokeCacheSecurityGroupIngressError {
                     "AuthorizationNotFound" => {
                         return RusotoError::Service(
                             RevokeCacheSecurityGroupIngressError::AuthorizationNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "CacheSecurityGroupNotFound" => {
                         return RusotoError::Service(
                             RevokeCacheSecurityGroupIngressError::CacheSecurityGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidCacheSecurityGroupState" => return RusotoError::Service(
                         RevokeCacheSecurityGroupIngressError::InvalidCacheSecurityGroupStateFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
                             RevokeCacheSecurityGroupIngressError::InvalidParameterCombination(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
                             RevokeCacheSecurityGroupIngressError::InvalidParameterValue(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -9735,54 +9656,46 @@ impl TestFailoverError {
                 match &parsed_error.code[..] {
                     "APICallRateForCustomerExceeded" => {
                         return RusotoError::Service(
-                            TestFailoverError::APICallRateForCustomerExceededFault(String::from(
+                            TestFailoverError::APICallRateForCustomerExceededFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InvalidCacheClusterState" => {
                         return RusotoError::Service(
-                            TestFailoverError::InvalidCacheClusterStateFault(String::from(
-                                parsed_error.message,
-                            )),
+                            TestFailoverError::InvalidCacheClusterStateFault(parsed_error.message),
                         )
                     }
                     "InvalidParameterCombination" => {
                         return RusotoError::Service(
-                            TestFailoverError::InvalidParameterCombination(String::from(
-                                parsed_error.message,
-                            )),
+                            TestFailoverError::InvalidParameterCombination(parsed_error.message),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(TestFailoverError::InvalidParameterValue(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidReplicationGroupState" => {
                         return RusotoError::Service(
-                            TestFailoverError::InvalidReplicationGroupStateFault(String::from(
+                            TestFailoverError::InvalidReplicationGroupStateFault(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "NodeGroupNotFoundFault" => {
                         return RusotoError::Service(TestFailoverError::NodeGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ReplicationGroupNotFoundFault" => {
                         return RusotoError::Service(
-                            TestFailoverError::ReplicationGroupNotFoundFault(String::from(
-                                parsed_error.message,
-                            )),
+                            TestFailoverError::ReplicationGroupNotFoundFault(parsed_error.message),
                         )
                     }
                     "TestFailoverNotAvailableFault" => {
                         return RusotoError::Service(
-                            TestFailoverError::TestFailoverNotAvailableFault(String::from(
-                                parsed_error.message,
-                            )),
+                            TestFailoverError::TestFailoverNotAvailableFault(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -10096,7 +10009,7 @@ impl ElastiCacheClient {
     pub fn new(region: region::Region) -> ElastiCacheClient {
         ElastiCacheClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -10113,7 +10026,7 @@ impl ElastiCacheClient {
     {
         ElastiCacheClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

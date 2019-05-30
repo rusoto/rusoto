@@ -981,7 +981,7 @@ impl MobileClient {
     pub fn new(region: region::Region) -> MobileClient {
         MobileClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -998,7 +998,7 @@ impl MobileClient {
     {
         MobileClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

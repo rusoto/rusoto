@@ -111,7 +111,7 @@ impl ApiGatewayManagementApiClient {
     pub fn new(region: region::Region) -> ApiGatewayManagementApiClient {
         ApiGatewayManagementApiClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -128,7 +128,7 @@ impl ApiGatewayManagementApiClient {
     {
         ApiGatewayManagementApiClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -5651,7 +5651,7 @@ impl EcsClient {
     pub fn new(region: region::Region) -> EcsClient {
         EcsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -5668,7 +5668,7 @@ impl EcsClient {
     {
         EcsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

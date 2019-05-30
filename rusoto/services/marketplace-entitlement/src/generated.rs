@@ -175,7 +175,7 @@ impl MarketplaceEntitlementClient {
     pub fn new(region: region::Region) -> MarketplaceEntitlementClient {
         MarketplaceEntitlementClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -192,7 +192,7 @@ impl MarketplaceEntitlementClient {
     {
         MarketplaceEntitlementClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

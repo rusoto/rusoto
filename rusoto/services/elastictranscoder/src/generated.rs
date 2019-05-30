@@ -2441,7 +2441,7 @@ impl EtsClient {
     pub fn new(region: region::Region) -> EtsClient {
         EtsClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2458,7 +2458,7 @@ impl EtsClient {
     {
         EtsClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

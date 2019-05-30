@@ -5206,7 +5206,7 @@ impl ComprehendClient {
     pub fn new(region: region::Region) -> ComprehendClient {
         ComprehendClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -5223,7 +5223,7 @@ impl ComprehendClient {
     {
         ComprehendClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

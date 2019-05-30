@@ -1985,7 +1985,7 @@ impl AcmPcaClient {
     pub fn new(region: region::Region) -> AcmPcaClient {
         AcmPcaClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2002,7 +2002,7 @@ impl AcmPcaClient {
     {
         AcmPcaClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

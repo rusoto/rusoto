@@ -7063,7 +7063,7 @@ impl CodeCommitClient {
     pub fn new(region: region::Region) -> CodeCommitClient {
         CodeCommitClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -7080,7 +7080,7 @@ impl CodeCommitClient {
     {
         CodeCommitClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

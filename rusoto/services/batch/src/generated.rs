@@ -2003,7 +2003,7 @@ impl BatchClient {
     pub fn new(region: region::Region) -> BatchClient {
         BatchClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -2020,7 +2020,7 @@ impl BatchClient {
     {
         BatchClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -7110,7 +7110,7 @@ impl GreenGrassClient {
     pub fn new(region: region::Region) -> GreenGrassClient {
         GreenGrassClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -7127,7 +7127,7 @@ impl GreenGrassClient {
     {
         GreenGrassClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

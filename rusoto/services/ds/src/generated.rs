@@ -5161,7 +5161,7 @@ impl DirectoryServiceClient {
     pub fn new(region: region::Region) -> DirectoryServiceClient {
         DirectoryServiceClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -5178,7 +5178,7 @@ impl DirectoryServiceClient {
     {
         DirectoryServiceClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

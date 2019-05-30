@@ -10187,7 +10187,7 @@ impl GlueClient {
     pub fn new(region: region::Region) -> GlueClient {
         GlueClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -10204,7 +10204,7 @@ impl GlueClient {
     {
         GlueClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }

@@ -37,10 +37,7 @@ use xml::EventReader;
 struct AccountDeserializer;
 impl AccountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -60,7 +57,7 @@ pub struct AccountGateResult {
 struct AccountGateResultDeserializer;
 impl AccountGateResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountGateResult, XmlParseError> {
@@ -84,10 +81,7 @@ impl AccountGateResultDeserializer {
 struct AccountGateStatusDeserializer;
 impl AccountGateStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -98,10 +92,7 @@ impl AccountGateStatusDeserializer {
 struct AccountGateStatusReasonDeserializer;
 impl AccountGateStatusReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -121,7 +112,7 @@ pub struct AccountLimit {
 struct AccountLimitDeserializer;
 impl AccountLimitDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<AccountLimit, XmlParseError> {
@@ -142,7 +133,7 @@ impl AccountLimitDeserializer {
 struct AccountLimitListDeserializer;
 impl AccountLimitListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<AccountLimit>, XmlParseError> {
@@ -171,10 +162,7 @@ impl AccountListSerializer {
 struct AllowedValueDeserializer;
 impl AllowedValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -185,7 +173,7 @@ impl AllowedValueDeserializer {
 struct AllowedValuesDeserializer;
 impl AllowedValuesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -202,10 +190,7 @@ impl AllowedValuesDeserializer {
 struct ArnDeserializer;
 impl ArnDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -216,10 +201,7 @@ impl ArnDeserializer {
 struct BoxedIntegerDeserializer;
 impl BoxedIntegerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -255,7 +237,7 @@ impl CancelUpdateStackInputSerializer {
 struct CapabilitiesDeserializer;
 impl CapabilitiesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -284,10 +266,7 @@ impl CapabilitiesSerializer {
 struct CapabilitiesReasonDeserializer;
 impl CapabilitiesReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -298,10 +277,7 @@ impl CapabilitiesReasonDeserializer {
 struct CapabilityDeserializer;
 impl CapabilityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -312,10 +288,7 @@ impl CapabilityDeserializer {
 struct CausingEntityDeserializer;
 impl CausingEntityDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -335,10 +308,7 @@ pub struct Change {
 struct ChangeDeserializer;
 impl ChangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Change, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Change, XmlParseError> {
         deserialize_elements::<_, Change, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ResourceChange" => {
@@ -359,10 +329,7 @@ impl ChangeDeserializer {
 struct ChangeActionDeserializer;
 impl ChangeActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -373,10 +340,7 @@ impl ChangeActionDeserializer {
 struct ChangeSetIdDeserializer;
 impl ChangeSetIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -387,10 +351,7 @@ impl ChangeSetIdDeserializer {
 struct ChangeSetNameDeserializer;
 impl ChangeSetNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -401,10 +362,7 @@ impl ChangeSetNameDeserializer {
 struct ChangeSetStatusDeserializer;
 impl ChangeSetStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -415,10 +373,7 @@ impl ChangeSetStatusDeserializer {
 struct ChangeSetStatusReasonDeserializer;
 impl ChangeSetStatusReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -429,7 +384,7 @@ impl ChangeSetStatusReasonDeserializer {
 struct ChangeSetSummariesDeserializer;
 impl ChangeSetSummariesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ChangeSetSummary>, XmlParseError> {
@@ -469,7 +424,7 @@ pub struct ChangeSetSummary {
 struct ChangeSetSummaryDeserializer;
 impl ChangeSetSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ChangeSetSummary, XmlParseError> {
@@ -525,10 +480,7 @@ impl ChangeSetSummaryDeserializer {
 struct ChangeSourceDeserializer;
 impl ChangeSourceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -539,10 +491,7 @@ impl ChangeSourceDeserializer {
 struct ChangeTypeDeserializer;
 impl ChangeTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -553,7 +502,7 @@ impl ChangeTypeDeserializer {
 struct ChangesDeserializer;
 impl ChangesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Change>, XmlParseError> {
@@ -570,10 +519,7 @@ impl ChangesDeserializer {
 struct ClientRequestTokenDeserializer;
 impl ClientRequestTokenDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -627,7 +573,7 @@ pub struct ContinueUpdateRollbackOutput {}
 struct ContinueUpdateRollbackOutputDeserializer;
 impl ContinueUpdateRollbackOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ContinueUpdateRollbackOutput, XmlParseError> {
@@ -766,7 +712,7 @@ pub struct CreateChangeSetOutput {
 struct CreateChangeSetOutputDeserializer;
 impl CreateChangeSetOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateChangeSetOutput, XmlParseError> {
@@ -971,7 +917,7 @@ pub struct CreateStackInstancesOutput {
 struct CreateStackInstancesOutputDeserializer;
 impl CreateStackInstancesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStackInstancesOutput, XmlParseError> {
@@ -1003,7 +949,7 @@ pub struct CreateStackOutput {
 struct CreateStackOutputDeserializer;
 impl CreateStackOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStackOutput, XmlParseError> {
@@ -1105,7 +1051,7 @@ pub struct CreateStackSetOutput {
 struct CreateStackSetOutputDeserializer;
 impl CreateStackSetOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<CreateStackSetOutput, XmlParseError> {
@@ -1124,10 +1070,7 @@ impl CreateStackSetOutputDeserializer {
 struct CreationTimeDeserializer;
 impl CreationTimeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1170,7 +1113,7 @@ pub struct DeleteChangeSetOutput {}
 struct DeleteChangeSetOutputDeserializer;
 impl DeleteChangeSetOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteChangeSetOutput, XmlParseError> {
@@ -1280,7 +1223,7 @@ pub struct DeleteStackInstancesOutput {
 struct DeleteStackInstancesOutputDeserializer;
 impl DeleteStackInstancesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteStackInstancesOutput, XmlParseError> {
@@ -1330,7 +1273,7 @@ pub struct DeleteStackSetOutput {}
 struct DeleteStackSetOutputDeserializer;
 impl DeleteStackSetOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DeleteStackSetOutput, XmlParseError> {
@@ -1346,10 +1289,7 @@ impl DeleteStackSetOutputDeserializer {
 struct DeletionTimeDeserializer;
 impl DeletionTimeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -1391,7 +1331,7 @@ pub struct DescribeAccountLimitsOutput {
 struct DescribeAccountLimitsOutputDeserializer;
 impl DescribeAccountLimitsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeAccountLimitsOutput, XmlParseError> {
@@ -1489,7 +1429,7 @@ pub struct DescribeChangeSetOutput {
 struct DescribeChangeSetOutputDeserializer;
 impl DescribeChangeSetOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeChangeSetOutput, XmlParseError> {
@@ -1627,7 +1567,7 @@ pub struct DescribeStackDriftDetectionStatusOutput {
 struct DescribeStackDriftDetectionStatusOutputDeserializer;
 impl DescribeStackDriftDetectionStatusOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackDriftDetectionStatusOutput, XmlParseError> {
@@ -1721,7 +1661,7 @@ pub struct DescribeStackEventsOutput {
 struct DescribeStackEventsOutputDeserializer;
 impl DescribeStackEventsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackEventsOutput, XmlParseError> {
@@ -1789,7 +1729,7 @@ pub struct DescribeStackInstanceOutput {
 struct DescribeStackInstanceOutputDeserializer;
 impl DescribeStackInstanceOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackInstanceOutput, XmlParseError> {
@@ -1860,7 +1800,7 @@ pub struct DescribeStackResourceDriftsOutput {
 struct DescribeStackResourceDriftsOutputDeserializer;
 impl DescribeStackResourceDriftsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackResourceDriftsOutput, XmlParseError> {
@@ -1924,7 +1864,7 @@ pub struct DescribeStackResourceOutput {
 struct DescribeStackResourceOutputDeserializer;
 impl DescribeStackResourceOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackResourceOutput, XmlParseError> {
@@ -1989,7 +1929,7 @@ pub struct DescribeStackResourcesOutput {
 struct DescribeStackResourcesOutputDeserializer;
 impl DescribeStackResourcesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackResourcesOutput, XmlParseError> {
@@ -2066,7 +2006,7 @@ pub struct DescribeStackSetOperationOutput {
 struct DescribeStackSetOperationOutputDeserializer;
 impl DescribeStackSetOperationOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackSetOperationOutput, XmlParseError> {
@@ -2097,7 +2037,7 @@ pub struct DescribeStackSetOutput {
 struct DescribeStackSetOutputDeserializer;
 impl DescribeStackSetOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStackSetOutput, XmlParseError> {
@@ -2151,7 +2091,7 @@ pub struct DescribeStacksOutput {
 struct DescribeStacksOutputDeserializer;
 impl DescribeStacksOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DescribeStacksOutput, XmlParseError> {
@@ -2174,10 +2114,7 @@ impl DescribeStacksOutputDeserializer {
 struct DescriptionDeserializer;
 impl DescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2222,7 +2159,7 @@ pub struct DetectStackDriftOutput {
 struct DetectStackDriftOutputDeserializer;
 impl DetectStackDriftOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DetectStackDriftOutput, XmlParseError> {
@@ -2274,7 +2211,7 @@ pub struct DetectStackResourceDriftOutput {
 struct DetectStackResourceDriftOutputDeserializer;
 impl DetectStackResourceDriftOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DetectStackResourceDriftOutput, XmlParseError> {
@@ -2299,10 +2236,7 @@ impl DetectStackResourceDriftOutputDeserializer {
 struct DifferenceTypeDeserializer;
 impl DifferenceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2313,10 +2247,7 @@ impl DifferenceTypeDeserializer {
 struct DisableRollbackDeserializer;
 impl DisableRollbackDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2327,10 +2258,7 @@ impl DisableRollbackDeserializer {
 struct EnableTerminationProtectionDeserializer;
 impl EnableTerminationProtectionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2384,7 +2312,7 @@ pub struct EstimateTemplateCostOutput {
 struct EstimateTemplateCostOutputDeserializer;
 impl EstimateTemplateCostOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EstimateTemplateCostOutput, XmlParseError> {
@@ -2406,10 +2334,7 @@ impl EstimateTemplateCostOutputDeserializer {
 struct EvaluationTypeDeserializer;
 impl EvaluationTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2420,10 +2345,7 @@ impl EvaluationTypeDeserializer {
 struct EventIdDeserializer;
 impl EventIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2471,7 +2393,7 @@ pub struct ExecuteChangeSetOutput {}
 struct ExecuteChangeSetOutputDeserializer;
 impl ExecuteChangeSetOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ExecuteChangeSetOutput, XmlParseError> {
@@ -2487,10 +2409,7 @@ impl ExecuteChangeSetOutputDeserializer {
 struct ExecutionRoleNameDeserializer;
 impl ExecutionRoleNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2501,10 +2420,7 @@ impl ExecutionRoleNameDeserializer {
 struct ExecutionStatusDeserializer;
 impl ExecutionStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2526,10 +2442,7 @@ pub struct Export {
 struct ExportDeserializer;
 impl ExportDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Export, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Export, XmlParseError> {
         deserialize_elements::<_, Export, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "ExportingStackId" => {
@@ -2551,10 +2464,7 @@ impl ExportDeserializer {
 struct ExportNameDeserializer;
 impl ExportNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2565,10 +2475,7 @@ impl ExportNameDeserializer {
 struct ExportValueDeserializer;
 impl ExportValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2579,7 +2486,7 @@ impl ExportValueDeserializer {
 struct ExportsDeserializer;
 impl ExportsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Export>, XmlParseError> {
@@ -2596,10 +2503,7 @@ impl ExportsDeserializer {
 struct FailureToleranceCountDeserializer;
 impl FailureToleranceCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2610,10 +2514,7 @@ impl FailureToleranceCountDeserializer {
 struct FailureTolerancePercentageDeserializer;
 impl FailureTolerancePercentageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2651,7 +2552,7 @@ pub struct GetStackPolicyOutput {
 struct GetStackPolicyOutputDeserializer;
 impl GetStackPolicyOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetStackPolicyOutput, XmlParseError> {
@@ -2713,7 +2614,7 @@ pub struct GetTemplateOutput {
 struct GetTemplateOutputDeserializer;
 impl GetTemplateOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTemplateOutput, XmlParseError> {
@@ -2797,7 +2698,7 @@ pub struct GetTemplateSummaryOutput {
 struct GetTemplateSummaryOutputDeserializer;
 impl GetTemplateSummaryOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetTemplateSummaryOutput, XmlParseError> {
@@ -2853,7 +2754,7 @@ impl GetTemplateSummaryOutputDeserializer {
 struct ImportsDeserializer;
 impl ImportsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -2870,10 +2771,7 @@ impl ImportsDeserializer {
 struct KeyDeserializer;
 impl KeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2884,10 +2782,7 @@ impl KeyDeserializer {
 struct LastUpdatedTimeDeserializer;
 impl LastUpdatedTimeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2898,10 +2793,7 @@ impl LastUpdatedTimeDeserializer {
 struct LimitNameDeserializer;
 impl LimitNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2912,10 +2804,7 @@ impl LimitNameDeserializer {
 struct LimitValueDeserializer;
 impl LimitValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2960,7 +2849,7 @@ pub struct ListChangeSetsOutput {
 struct ListChangeSetsOutputDeserializer;
 impl ListChangeSetsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListChangeSetsOutput, XmlParseError> {
@@ -3012,7 +2901,7 @@ pub struct ListExportsOutput {
 struct ListExportsOutputDeserializer;
 impl ListExportsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListExportsOutput, XmlParseError> {
@@ -3067,7 +2956,7 @@ pub struct ListImportsOutput {
 struct ListImportsOutputDeserializer;
 impl ListImportsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListImportsOutput, XmlParseError> {
@@ -3146,7 +3035,7 @@ pub struct ListStackInstancesOutput {
 struct ListStackInstancesOutputDeserializer;
 impl ListStackInstancesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackInstancesOutput, XmlParseError> {
@@ -3208,7 +3097,7 @@ pub struct ListStackResourcesOutput {
 struct ListStackResourcesOutputDeserializer;
 impl ListStackResourcesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackResourcesOutput, XmlParseError> {
@@ -3282,7 +3171,7 @@ pub struct ListStackSetOperationResultsOutput {
 struct ListStackSetOperationResultsOutputDeserializer;
 impl ListStackSetOperationResultsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackSetOperationResultsOutput, XmlParseError> {
@@ -3353,7 +3242,7 @@ pub struct ListStackSetOperationsOutput {
 struct ListStackSetOperationsOutputDeserializer;
 impl ListStackSetOperationsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackSetOperationsOutput, XmlParseError> {
@@ -3423,7 +3312,7 @@ pub struct ListStackSetsOutput {
 struct ListStackSetsOutputDeserializer;
 impl ListStackSetsOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStackSetsOutput, XmlParseError> {
@@ -3486,7 +3375,7 @@ pub struct ListStacksOutput {
 struct ListStacksOutputDeserializer;
 impl ListStacksOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListStacksOutput, XmlParseError> {
@@ -3509,10 +3398,7 @@ impl ListStacksOutputDeserializer {
 struct LogicalResourceIdDeserializer;
 impl LogicalResourceIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3535,10 +3421,7 @@ impl LogicalResourceIdsSerializer {
 struct MaxConcurrentCountDeserializer;
 impl MaxConcurrentCountDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3549,10 +3432,7 @@ impl MaxConcurrentCountDeserializer {
 struct MaxConcurrentPercentageDeserializer;
 impl MaxConcurrentPercentageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3563,10 +3443,7 @@ impl MaxConcurrentPercentageDeserializer {
 struct MetadataDeserializer;
 impl MetadataDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3577,10 +3454,7 @@ impl MetadataDeserializer {
 struct MonitoringTimeInMinutesDeserializer;
 impl MonitoringTimeInMinutesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3591,10 +3465,7 @@ impl MonitoringTimeInMinutesDeserializer {
 struct NextTokenDeserializer;
 impl NextTokenDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3605,10 +3476,7 @@ impl NextTokenDeserializer {
 struct NoEchoDeserializer;
 impl NoEchoDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -3619,10 +3487,7 @@ impl NoEchoDeserializer {
 struct NotificationARNDeserializer;
 impl NotificationARNDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3633,7 +3498,7 @@ impl NotificationARNDeserializer {
 struct NotificationARNsDeserializer;
 impl NotificationARNsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -3675,10 +3540,7 @@ pub struct Output {
 struct OutputDeserializer;
 impl OutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Output, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Output, XmlParseError> {
         deserialize_elements::<_, Output, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Description" => {
@@ -3705,10 +3567,7 @@ impl OutputDeserializer {
 struct OutputKeyDeserializer;
 impl OutputKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3719,10 +3578,7 @@ impl OutputKeyDeserializer {
 struct OutputValueDeserializer;
 impl OutputValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3733,7 +3589,7 @@ impl OutputValueDeserializer {
 struct OutputsDeserializer;
 impl OutputsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Output>, XmlParseError> {
@@ -3763,7 +3619,7 @@ pub struct Parameter {
 struct ParameterDeserializer;
 impl ParameterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Parameter, XmlParseError> {
@@ -3834,7 +3690,7 @@ pub struct ParameterConstraints {
 struct ParameterConstraintsDeserializer;
 impl ParameterConstraintsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ParameterConstraints, XmlParseError> {
@@ -3871,7 +3727,7 @@ pub struct ParameterDeclaration {
 struct ParameterDeclarationDeserializer;
 impl ParameterDeclarationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ParameterDeclaration, XmlParseError> {
@@ -3918,7 +3774,7 @@ impl ParameterDeclarationDeserializer {
 struct ParameterDeclarationsDeserializer;
 impl ParameterDeclarationsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ParameterDeclaration>, XmlParseError> {
@@ -3937,10 +3793,7 @@ impl ParameterDeclarationsDeserializer {
 struct ParameterKeyDeserializer;
 impl ParameterKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3951,10 +3804,7 @@ impl ParameterKeyDeserializer {
 struct ParameterTypeDeserializer;
 impl ParameterTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3965,10 +3815,7 @@ impl ParameterTypeDeserializer {
 struct ParameterValueDeserializer;
 impl ParameterValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3979,7 +3826,7 @@ impl ParameterValueDeserializer {
 struct ParametersDeserializer;
 impl ParametersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Parameter>, XmlParseError> {
@@ -4008,10 +3855,7 @@ impl ParametersSerializer {
 struct PhysicalResourceIdDeserializer;
 impl PhysicalResourceIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4022,7 +3866,7 @@ impl PhysicalResourceIdDeserializer {
 struct PhysicalResourceIdContextDeserializer;
 impl PhysicalResourceIdContextDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PhysicalResourceIdContextKeyValuePair>, XmlParseError> {
@@ -4052,7 +3896,7 @@ pub struct PhysicalResourceIdContextKeyValuePair {
 struct PhysicalResourceIdContextKeyValuePairDeserializer;
 impl PhysicalResourceIdContextKeyValuePairDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PhysicalResourceIdContextKeyValuePair, XmlParseError> {
@@ -4077,10 +3921,7 @@ impl PhysicalResourceIdContextKeyValuePairDeserializer {
 struct PropertiesDeserializer;
 impl PropertiesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4104,7 +3945,7 @@ pub struct PropertyDifference {
 struct PropertyDifferenceDeserializer;
 impl PropertyDifferenceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PropertyDifference, XmlParseError> {
@@ -4135,7 +3976,7 @@ impl PropertyDifferenceDeserializer {
 struct PropertyDifferencesDeserializer;
 impl PropertyDifferencesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<PropertyDifference>, XmlParseError> {
@@ -4154,10 +3995,7 @@ impl PropertyDifferencesDeserializer {
 struct PropertyNameDeserializer;
 impl PropertyNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4168,10 +4006,7 @@ impl PropertyNameDeserializer {
 struct PropertyPathDeserializer;
 impl PropertyPathDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4182,10 +4017,7 @@ impl PropertyPathDeserializer {
 struct PropertyValueDeserializer;
 impl PropertyValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4196,10 +4028,7 @@ impl PropertyValueDeserializer {
 struct ReasonDeserializer;
 impl ReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4210,10 +4039,7 @@ impl ReasonDeserializer {
 struct RegionDeserializer;
 impl RegionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4224,7 +4050,7 @@ impl RegionDeserializer {
 struct RegionListDeserializer;
 impl RegionListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4253,10 +4079,7 @@ impl RegionListSerializer {
 struct ReplacementDeserializer;
 impl ReplacementDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4267,10 +4090,7 @@ impl ReplacementDeserializer {
 struct RequiresRecreationDeserializer;
 impl RequiresRecreationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4281,10 +4101,7 @@ impl RequiresRecreationDeserializer {
 struct ResourceAttributeDeserializer;
 impl ResourceAttributeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4314,7 +4131,7 @@ pub struct ResourceChange {
 struct ResourceChangeDeserializer;
 impl ResourceChangeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceChange, XmlParseError> {
@@ -4377,7 +4194,7 @@ pub struct ResourceChangeDetail {
 struct ResourceChangeDetailDeserializer;
 impl ResourceChangeDetailDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceChangeDetail, XmlParseError> {
@@ -4415,7 +4232,7 @@ impl ResourceChangeDetailDeserializer {
 struct ResourceChangeDetailsDeserializer;
 impl ResourceChangeDetailsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<ResourceChangeDetail>, XmlParseError> {
@@ -4434,10 +4251,7 @@ impl ResourceChangeDetailsDeserializer {
 struct ResourcePropertiesDeserializer;
 impl ResourcePropertiesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4448,10 +4262,7 @@ impl ResourcePropertiesDeserializer {
 struct ResourceStatusDeserializer;
 impl ResourceStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4462,10 +4273,7 @@ impl ResourceStatusDeserializer {
 struct ResourceStatusReasonDeserializer;
 impl ResourceStatusReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4487,7 +4295,7 @@ pub struct ResourceTargetDefinition {
 struct ResourceTargetDefinitionDeserializer;
 impl ResourceTargetDefinitionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResourceTargetDefinition, XmlParseError> {
@@ -4522,10 +4330,7 @@ impl ResourceTargetDefinitionDeserializer {
 struct ResourceTypeDeserializer;
 impl ResourceTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4536,7 +4341,7 @@ impl ResourceTypeDeserializer {
 struct ResourceTypesDeserializer;
 impl ResourceTypesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4587,10 +4392,7 @@ impl RetainResourcesSerializer {
 struct RetainStacksNullableDeserializer;
 impl RetainStacksNullableDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -4601,10 +4403,7 @@ impl RetainStacksNullableDeserializer {
 struct RoleARNDeserializer;
 impl RoleARNDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -4624,7 +4423,7 @@ pub struct RollbackConfiguration {
 struct RollbackConfigurationDeserializer;
 impl RollbackConfigurationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RollbackConfiguration, XmlParseError> {
@@ -4686,7 +4485,7 @@ pub struct RollbackTrigger {
 struct RollbackTriggerDeserializer;
 impl RollbackTriggerDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<RollbackTrigger, XmlParseError> {
@@ -4722,7 +4521,7 @@ impl RollbackTriggerSerializer {
 struct RollbackTriggersDeserializer;
 impl RollbackTriggersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<RollbackTrigger>, XmlParseError> {
@@ -4751,7 +4550,7 @@ impl RollbackTriggersSerializer {
 struct ScopeDeserializer;
 impl ScopeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -4879,10 +4678,7 @@ pub struct Stack {
 struct StackDeserializer;
 impl StackDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Stack, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Stack, XmlParseError> {
         deserialize_elements::<_, Stack, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Capabilities" => {
@@ -4999,10 +4795,7 @@ impl StackDeserializer {
 struct StackDriftDetectionIdDeserializer;
 impl StackDriftDetectionIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5013,10 +4806,7 @@ impl StackDriftDetectionIdDeserializer {
 struct StackDriftDetectionStatusDeserializer;
 impl StackDriftDetectionStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5027,10 +4817,7 @@ impl StackDriftDetectionStatusDeserializer {
 struct StackDriftDetectionStatusReasonDeserializer;
 impl StackDriftDetectionStatusReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5050,7 +4837,7 @@ pub struct StackDriftInformation {
 struct StackDriftInformationDeserializer;
 impl StackDriftInformationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackDriftInformation, XmlParseError> {
@@ -5084,7 +4871,7 @@ pub struct StackDriftInformationSummary {
 struct StackDriftInformationSummaryDeserializer;
 impl StackDriftInformationSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackDriftInformationSummary, XmlParseError> {
@@ -5113,10 +4900,7 @@ impl StackDriftInformationSummaryDeserializer {
 struct StackDriftStatusDeserializer;
 impl StackDriftStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5154,7 +4938,7 @@ pub struct StackEvent {
 struct StackEventDeserializer;
 impl StackEventDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackEvent, XmlParseError> {
@@ -5224,7 +5008,7 @@ impl StackEventDeserializer {
 struct StackEventsDeserializer;
 impl StackEventsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackEvent>, XmlParseError> {
@@ -5241,10 +5025,7 @@ impl StackEventsDeserializer {
 struct StackIdDeserializer;
 impl StackIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5274,7 +5055,7 @@ pub struct StackInstance {
 struct StackInstanceDeserializer;
 impl StackInstanceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackInstance, XmlParseError> {
@@ -5316,10 +5097,7 @@ impl StackInstanceDeserializer {
 struct StackInstanceStatusDeserializer;
 impl StackInstanceStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5330,7 +5108,7 @@ impl StackInstanceStatusDeserializer {
 struct StackInstanceSummariesDeserializer;
 impl StackInstanceSummariesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackInstanceSummary>, XmlParseError> {
@@ -5366,7 +5144,7 @@ pub struct StackInstanceSummary {
 struct StackInstanceSummaryDeserializer;
 impl StackInstanceSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackInstanceSummary, XmlParseError> {
@@ -5403,10 +5181,7 @@ impl StackInstanceSummaryDeserializer {
 struct StackNameDeserializer;
 impl StackNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5417,10 +5192,7 @@ impl StackNameDeserializer {
 struct StackPolicyBodyDeserializer;
 impl StackPolicyBodyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5456,7 +5228,7 @@ pub struct StackResource {
 struct StackResourceDeserializer;
 impl StackResourceDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResource, XmlParseError> {
@@ -5543,7 +5315,7 @@ pub struct StackResourceDetail {
 struct StackResourceDetailDeserializer;
 impl StackResourceDetailDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResourceDetail, XmlParseError> {
@@ -5632,7 +5404,7 @@ pub struct StackResourceDrift {
 struct StackResourceDriftDeserializer;
 impl StackResourceDriftDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResourceDrift, XmlParseError> {
@@ -5708,7 +5480,7 @@ pub struct StackResourceDriftInformation {
 struct StackResourceDriftInformationDeserializer;
 impl StackResourceDriftInformationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResourceDriftInformation, XmlParseError> {
@@ -5749,7 +5521,7 @@ pub struct StackResourceDriftInformationSummary {
 struct StackResourceDriftInformationSummaryDeserializer;
 impl StackResourceDriftInformationSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResourceDriftInformationSummary, XmlParseError> {
@@ -5781,10 +5553,7 @@ impl StackResourceDriftInformationSummaryDeserializer {
 struct StackResourceDriftStatusDeserializer;
 impl StackResourceDriftStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -5807,7 +5576,7 @@ impl StackResourceDriftStatusFiltersSerializer {
 struct StackResourceDriftsDeserializer;
 impl StackResourceDriftsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackResourceDrift>, XmlParseError> {
@@ -5826,7 +5595,7 @@ impl StackResourceDriftsDeserializer {
 struct StackResourceSummariesDeserializer;
 impl StackResourceSummariesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackResourceSummary>, XmlParseError> {
@@ -5864,7 +5633,7 @@ pub struct StackResourceSummary {
 struct StackResourceSummaryDeserializer;
 impl StackResourceSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackResourceSummary, XmlParseError> {
@@ -5916,7 +5685,7 @@ impl StackResourceSummaryDeserializer {
 struct StackResourcesDeserializer;
 impl StackResourcesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackResource>, XmlParseError> {
@@ -5960,7 +5729,7 @@ pub struct StackSet {
 struct StackSetDeserializer;
 impl StackSetDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSet, XmlParseError> {
@@ -6029,10 +5798,7 @@ impl StackSetDeserializer {
 struct StackSetARNDeserializer;
 impl StackSetARNDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6043,10 +5809,7 @@ impl StackSetARNDeserializer {
 struct StackSetIdDeserializer;
 impl StackSetIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6057,10 +5820,7 @@ impl StackSetIdDeserializer {
 struct StackSetNameDeserializer;
 impl StackSetNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6096,7 +5856,7 @@ pub struct StackSetOperation {
 struct StackSetOperationDeserializer;
 impl StackSetOperationDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetOperation, XmlParseError> {
@@ -6166,10 +5926,7 @@ impl StackSetOperationDeserializer {
 struct StackSetOperationActionDeserializer;
 impl StackSetOperationActionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6195,7 +5952,7 @@ pub struct StackSetOperationPreferences {
 struct StackSetOperationPreferencesDeserializer;
 impl StackSetOperationPreferencesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetOperationPreferences, XmlParseError> {
@@ -6288,10 +6045,7 @@ impl StackSetOperationPreferencesSerializer {
 struct StackSetOperationResultStatusDeserializer;
 impl StackSetOperationResultStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6302,7 +6056,7 @@ impl StackSetOperationResultStatusDeserializer {
 struct StackSetOperationResultSummariesDeserializer;
 impl StackSetOperationResultSummariesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackSetOperationResultSummary>, XmlParseError> {
@@ -6336,7 +6090,7 @@ pub struct StackSetOperationResultSummary {
 struct StackSetOperationResultSummaryDeserializer;
 impl StackSetOperationResultSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetOperationResultSummary, XmlParseError> {
@@ -6376,10 +6130,7 @@ impl StackSetOperationResultSummaryDeserializer {
 struct StackSetOperationStatusDeserializer;
 impl StackSetOperationStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6390,7 +6141,7 @@ impl StackSetOperationStatusDeserializer {
 struct StackSetOperationSummariesDeserializer;
 impl StackSetOperationSummariesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackSetOperationSummary>, XmlParseError> {
@@ -6424,7 +6175,7 @@ pub struct StackSetOperationSummary {
 struct StackSetOperationSummaryDeserializer;
 impl StackSetOperationSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetOperationSummary, XmlParseError> {
@@ -6469,10 +6220,7 @@ impl StackSetOperationSummaryDeserializer {
 struct StackSetStatusDeserializer;
 impl StackSetStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6483,7 +6231,7 @@ impl StackSetStatusDeserializer {
 struct StackSetSummariesDeserializer;
 impl StackSetSummariesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackSetSummary>, XmlParseError> {
@@ -6513,7 +6261,7 @@ pub struct StackSetSummary {
 struct StackSetSummaryDeserializer;
 impl StackSetSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSetSummary, XmlParseError> {
@@ -6545,10 +6293,7 @@ impl StackSetSummaryDeserializer {
 struct StackStatusDeserializer;
 impl StackStatusDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6571,10 +6316,7 @@ impl StackStatusFilterSerializer {
 struct StackStatusReasonDeserializer;
 impl StackStatusReasonDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6585,7 +6327,7 @@ impl StackStatusReasonDeserializer {
 struct StackSummariesDeserializer;
 impl StackSummariesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<StackSummary>, XmlParseError> {
@@ -6629,7 +6371,7 @@ pub struct StackSummary {
 struct StackSummaryDeserializer;
 impl StackSummaryDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StackSummary, XmlParseError> {
@@ -6694,7 +6436,7 @@ impl StackSummaryDeserializer {
 struct StacksDeserializer;
 impl StacksDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Stack>, XmlParseError> {
@@ -6711,7 +6453,7 @@ impl StacksDeserializer {
 struct StageListDeserializer;
 impl StageListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -6756,7 +6498,7 @@ pub struct StopStackSetOperationOutput {}
 struct StopStackSetOperationOutputDeserializer;
 impl StopStackSetOperationOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<StopStackSetOperationOutput, XmlParseError> {
@@ -6781,10 +6523,7 @@ pub struct Tag {
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tag, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -6817,10 +6556,7 @@ impl TagSerializer {
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6831,10 +6567,7 @@ impl TagKeyDeserializer {
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6845,7 +6578,7 @@ impl TagValueDeserializer {
 struct TagsDeserializer;
 impl TagsDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
@@ -6874,10 +6607,7 @@ impl TagsSerializer {
 struct TemplateBodyDeserializer;
 impl TemplateBodyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6888,10 +6618,7 @@ impl TemplateBodyDeserializer {
 struct TemplateDescriptionDeserializer;
 impl TemplateDescriptionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6915,7 +6642,7 @@ pub struct TemplateParameter {
 struct TemplateParameterDeserializer;
 impl TemplateParameterDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TemplateParameter, XmlParseError> {
@@ -6949,7 +6676,7 @@ impl TemplateParameterDeserializer {
 struct TemplateParametersDeserializer;
 impl TemplateParametersDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<TemplateParameter>, XmlParseError> {
@@ -6966,10 +6693,7 @@ impl TemplateParametersDeserializer {
 struct TemplateStageDeserializer;
 impl TemplateStageDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -6980,10 +6704,7 @@ impl TemplateStageDeserializer {
 struct TimeoutMinutesDeserializer;
 impl TimeoutMinutesDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<i64, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -6994,10 +6715,7 @@ impl TimeoutMinutesDeserializer {
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7008,10 +6726,7 @@ impl TimestampDeserializer {
 struct TransformNameDeserializer;
 impl TransformNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7022,7 +6737,7 @@ impl TransformNameDeserializer {
 struct TransformsListDeserializer;
 impl TransformsListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<String>, XmlParseError> {
@@ -7039,10 +6754,7 @@ impl TransformsListDeserializer {
 struct TypeDeserializer;
 impl TypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7238,7 +6950,7 @@ pub struct UpdateStackInstancesOutput {
 struct UpdateStackInstancesOutputDeserializer;
 impl UpdateStackInstancesOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStackInstancesOutput, XmlParseError> {
@@ -7270,7 +6982,7 @@ pub struct UpdateStackOutput {
 struct UpdateStackOutputDeserializer;
 impl UpdateStackOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStackOutput, XmlParseError> {
@@ -7407,7 +7119,7 @@ pub struct UpdateStackSetOutput {
 struct UpdateStackSetOutputDeserializer;
 impl UpdateStackSetOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateStackSetOutput, XmlParseError> {
@@ -7459,7 +7171,7 @@ pub struct UpdateTerminationProtectionOutput {
 struct UpdateTerminationProtectionOutputDeserializer;
 impl UpdateTerminationProtectionOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UpdateTerminationProtectionOutput, XmlParseError> {
@@ -7481,10 +7193,7 @@ impl UpdateTerminationProtectionOutputDeserializer {
 struct UrlDeserializer;
 impl UrlDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7495,10 +7204,7 @@ impl UrlDeserializer {
 struct UsePreviousValueDeserializer;
 impl UsePreviousValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -7551,7 +7257,7 @@ pub struct ValidateTemplateOutput {
 struct ValidateTemplateOutputDeserializer;
 impl ValidateTemplateOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ValidateTemplateOutput, XmlParseError> {
@@ -7591,10 +7297,7 @@ impl ValidateTemplateOutputDeserializer {
 struct ValueDeserializer;
 impl ValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7605,10 +7308,7 @@ impl ValueDeserializer {
 struct VersionDeserializer;
 impl VersionDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -7633,7 +7333,7 @@ impl CancelUpdateStackError {
                 match &parsed_error.code[..] {
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(CancelUpdateStackError::TokenAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7680,9 +7380,7 @@ impl ContinueUpdateRollbackError {
                 match &parsed_error.code[..] {
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(
-                            ContinueUpdateRollbackError::TokenAlreadyExists(String::from(
-                                parsed_error.message,
-                            )),
+                            ContinueUpdateRollbackError::TokenAlreadyExists(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -7733,19 +7431,17 @@ impl CreateChangeSetError {
                 match &parsed_error.code[..] {
                     "AlreadyExistsException" => {
                         return RusotoError::Service(CreateChangeSetError::AlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InsufficientCapabilitiesException" => {
                         return RusotoError::Service(
-                            CreateChangeSetError::InsufficientCapabilities(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateChangeSetError::InsufficientCapabilities(parsed_error.message),
                         )
                     }
                     "LimitExceededException" => {
                         return RusotoError::Service(CreateChangeSetError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7799,23 +7495,23 @@ impl CreateStackError {
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
                     "AlreadyExistsException" => {
-                        return RusotoError::Service(CreateStackError::AlreadyExists(String::from(
+                        return RusotoError::Service(CreateStackError::AlreadyExists(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "InsufficientCapabilitiesException" => {
                         return RusotoError::Service(CreateStackError::InsufficientCapabilities(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceededException" => {
-                        return RusotoError::Service(CreateStackError::LimitExceeded(String::from(
+                        return RusotoError::Service(CreateStackError::LimitExceeded(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(CreateStackError::TokenAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7875,36 +7571,34 @@ impl CreateStackInstancesError {
                 match &parsed_error.code[..] {
                     "InvalidOperationException" => {
                         return RusotoError::Service(CreateStackInstancesError::InvalidOperation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceededException" => {
                         return RusotoError::Service(CreateStackInstancesError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "OperationIdAlreadyExistsException" => {
                         return RusotoError::Service(
-                            CreateStackInstancesError::OperationIdAlreadyExists(String::from(
+                            CreateStackInstancesError::OperationIdAlreadyExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "OperationInProgressException" => {
                         return RusotoError::Service(
-                            CreateStackInstancesError::OperationInProgress(String::from(
-                                parsed_error.message,
-                            )),
+                            CreateStackInstancesError::OperationInProgress(parsed_error.message),
                         )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(CreateStackInstancesError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StaleRequestException" => {
                         return RusotoError::Service(CreateStackInstancesError::StaleRequest(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -7960,17 +7654,17 @@ impl CreateStackSetError {
                 match &parsed_error.code[..] {
                     "CreatedButModifiedException" => {
                         return RusotoError::Service(CreateStackSetError::CreatedButModified(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "LimitExceededException" => {
                         return RusotoError::Service(CreateStackSetError::LimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "NameAlreadyExistsException" => {
                         return RusotoError::Service(CreateStackSetError::NameAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8019,7 +7713,7 @@ impl DeleteChangeSetError {
                 match &parsed_error.code[..] {
                     "InvalidChangeSetStatus" => {
                         return RusotoError::Service(DeleteChangeSetError::InvalidChangeSetStatus(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8066,7 +7760,7 @@ impl DeleteStackError {
                 match &parsed_error.code[..] {
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(DeleteStackError::TokenAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8121,31 +7815,29 @@ impl DeleteStackInstancesError {
                 match &parsed_error.code[..] {
                     "InvalidOperationException" => {
                         return RusotoError::Service(DeleteStackInstancesError::InvalidOperation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "OperationIdAlreadyExistsException" => {
                         return RusotoError::Service(
-                            DeleteStackInstancesError::OperationIdAlreadyExists(String::from(
+                            DeleteStackInstancesError::OperationIdAlreadyExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "OperationInProgressException" => {
                         return RusotoError::Service(
-                            DeleteStackInstancesError::OperationInProgress(String::from(
-                                parsed_error.message,
-                            )),
+                            DeleteStackInstancesError::OperationInProgress(parsed_error.message),
                         )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(DeleteStackInstancesError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StaleRequestException" => {
                         return RusotoError::Service(DeleteStackInstancesError::StaleRequest(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8198,12 +7890,12 @@ impl DeleteStackSetError {
                 match &parsed_error.code[..] {
                     "OperationInProgressException" => {
                         return RusotoError::Service(DeleteStackSetError::OperationInProgress(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StackSetNotEmptyException" => {
                         return RusotoError::Service(DeleteStackSetError::StackSetNotEmpty(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8288,7 +7980,7 @@ impl DescribeChangeSetError {
                 match &parsed_error.code[..] {
                     "ChangeSetNotFound" => {
                         return RusotoError::Service(DescribeChangeSetError::ChangeSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8413,14 +8105,12 @@ impl DescribeStackInstanceError {
                 match &parsed_error.code[..] {
                     "StackInstanceNotFoundException" => {
                         return RusotoError::Service(
-                            DescribeStackInstanceError::StackInstanceNotFound(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeStackInstanceError::StackInstanceNotFound(parsed_error.message),
                         )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(DescribeStackInstanceError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8581,7 +8271,7 @@ impl DescribeStackSetError {
                 match &parsed_error.code[..] {
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(DescribeStackSetError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8630,16 +8320,12 @@ impl DescribeStackSetOperationError {
                 match &parsed_error.code[..] {
                     "OperationNotFoundException" => {
                         return RusotoError::Service(
-                            DescribeStackSetOperationError::OperationNotFound(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeStackSetOperationError::OperationNotFound(parsed_error.message),
                         )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(
-                            DescribeStackSetOperationError::StackSetNotFound(String::from(
-                                parsed_error.message,
-                            )),
+                            DescribeStackSetOperationError::StackSetNotFound(parsed_error.message),
                         )
                     }
                     _ => {}
@@ -8841,24 +8527,22 @@ impl ExecuteChangeSetError {
                 match &parsed_error.code[..] {
                     "ChangeSetNotFound" => {
                         return RusotoError::Service(ExecuteChangeSetError::ChangeSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InsufficientCapabilitiesException" => {
                         return RusotoError::Service(
-                            ExecuteChangeSetError::InsufficientCapabilities(String::from(
-                                parsed_error.message,
-                            )),
+                            ExecuteChangeSetError::InsufficientCapabilities(parsed_error.message),
                         )
                     }
                     "InvalidChangeSetStatus" => {
                         return RusotoError::Service(ExecuteChangeSetError::InvalidChangeSetStatus(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(ExecuteChangeSetError::TokenAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8945,7 +8629,7 @@ impl GetTemplateError {
                 match &parsed_error.code[..] {
                     "ChangeSetNotFound" => {
                         return RusotoError::Service(GetTemplateError::ChangeSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -8992,7 +8676,7 @@ impl GetTemplateSummaryError {
                 match &parsed_error.code[..] {
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(GetTemplateSummaryError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9150,7 +8834,7 @@ impl ListStackInstancesError {
                 match &parsed_error.code[..] {
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(ListStackInstancesError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9238,16 +8922,16 @@ impl ListStackSetOperationResultsError {
                 match &parsed_error.code[..] {
                     "OperationNotFoundException" => {
                         return RusotoError::Service(
-                            ListStackSetOperationResultsError::OperationNotFound(String::from(
+                            ListStackSetOperationResultsError::OperationNotFound(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(
-                            ListStackSetOperationResultsError::StackSetNotFound(String::from(
+                            ListStackSetOperationResultsError::StackSetNotFound(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}
@@ -9295,7 +8979,7 @@ impl ListStackSetOperationsError {
                 match &parsed_error.code[..] {
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(ListStackSetOperationsError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9494,17 +9178,17 @@ impl StopStackSetOperationError {
                 match &parsed_error.code[..] {
                     "InvalidOperationException" => {
                         return RusotoError::Service(StopStackSetOperationError::InvalidOperation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "OperationNotFoundException" => {
                         return RusotoError::Service(StopStackSetOperationError::OperationNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(StopStackSetOperationError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9555,12 +9239,12 @@ impl UpdateStackError {
                 match &parsed_error.code[..] {
                     "InsufficientCapabilitiesException" => {
                         return RusotoError::Service(UpdateStackError::InsufficientCapabilities(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TokenAlreadyExistsException" => {
                         return RusotoError::Service(UpdateStackError::TokenAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9618,38 +9302,34 @@ impl UpdateStackInstancesError {
                 match &parsed_error.code[..] {
                     "InvalidOperationException" => {
                         return RusotoError::Service(UpdateStackInstancesError::InvalidOperation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "OperationIdAlreadyExistsException" => {
                         return RusotoError::Service(
-                            UpdateStackInstancesError::OperationIdAlreadyExists(String::from(
+                            UpdateStackInstancesError::OperationIdAlreadyExists(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "OperationInProgressException" => {
                         return RusotoError::Service(
-                            UpdateStackInstancesError::OperationInProgress(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateStackInstancesError::OperationInProgress(parsed_error.message),
                         )
                     }
                     "StackInstanceNotFoundException" => {
                         return RusotoError::Service(
-                            UpdateStackInstancesError::StackInstanceNotFound(String::from(
-                                parsed_error.message,
-                            )),
+                            UpdateStackInstancesError::StackInstanceNotFound(parsed_error.message),
                         )
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(UpdateStackInstancesError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StaleRequestException" => {
                         return RusotoError::Service(UpdateStackInstancesError::StaleRequest(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -9711,32 +9391,32 @@ impl UpdateStackSetError {
                 match &parsed_error.code[..] {
                     "InvalidOperationException" => {
                         return RusotoError::Service(UpdateStackSetError::InvalidOperation(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "OperationIdAlreadyExistsException" => {
                         return RusotoError::Service(UpdateStackSetError::OperationIdAlreadyExists(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "OperationInProgressException" => {
                         return RusotoError::Service(UpdateStackSetError::OperationInProgress(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StackInstanceNotFoundException" => {
                         return RusotoError::Service(UpdateStackSetError::StackInstanceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StackSetNotFoundException" => {
                         return RusotoError::Service(UpdateStackSetError::StackSetNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StaleRequestException" => {
                         return RusotoError::Service(UpdateStackSetError::StaleRequest(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -10125,7 +9805,7 @@ impl CloudFormationClient {
     pub fn new(region: region::Region) -> CloudFormationClient {
         CloudFormationClient {
             client: Client::shared(),
-            region: region,
+            region,
         }
     }
 
@@ -10142,7 +9822,7 @@ impl CloudFormationClient {
     {
         CloudFormationClient {
             client: Client::new_with(credentials_provider, request_dispatcher),
-            region: region,
+            region,
         }
     }
 }
