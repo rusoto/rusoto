@@ -377,7 +377,6 @@ pub struct HttpConfig {
     read_buf_size: Option<usize>,
 }
 
-#[allow(clippy::new_without_default)]
 impl HttpConfig {
     /// Create a new HttpConfig
     pub fn new() -> HttpConfig {
@@ -390,6 +389,13 @@ impl HttpConfig {
     /// by requiring fewer copies out of the socket buffer.
     pub fn read_buf_size(&mut self, sz: usize) {
         self.read_buf_size = Some(sz);
+    }
+}
+
+impl Default for HttpConfig {
+    /// Create a new HttpConfig. Same as HttpConfig::new().
+    fn default() -> HttpConfig {
+        HttpConfig::new()
     }
 }
 
