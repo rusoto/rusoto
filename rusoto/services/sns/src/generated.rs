@@ -1162,7 +1162,7 @@ pub struct ListTagsForResourceResponse {
 struct ListTagsForResourceResponseDeserializer;
 impl ListTagsForResourceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceResponse, XmlParseError> {
@@ -1946,10 +1946,7 @@ pub struct Tag {
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tag, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -1982,10 +1979,7 @@ impl TagSerializer {
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2008,7 +2002,7 @@ impl TagKeyListSerializer {
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
@@ -2062,7 +2056,7 @@ pub struct TagResourceResponse {}
 struct TagResourceResponseDeserializer;
 impl TagResourceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagResourceResponse, XmlParseError> {
@@ -2078,10 +2072,7 @@ impl TagResourceResponseDeserializer {
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2230,7 +2221,7 @@ pub struct UntagResourceResponse {}
 struct UntagResourceResponseDeserializer;
 impl UntagResourceResponseDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UntagResourceResponse, XmlParseError> {
@@ -2423,9 +2414,9 @@ impl ConfirmSubscriptionError {
                     }
                     "FilterPolicyLimitExceeded" => {
                         return RusotoError::Service(
-                            ConfirmSubscriptionError::FilterPolicyLimitExceeded(String::from(
+                            ConfirmSubscriptionError::FilterPolicyLimitExceeded(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     "InternalError" => {
@@ -2656,7 +2647,7 @@ impl CreateTopicError {
                     }
                     "ConcurrentAccess" => {
                         return RusotoError::Service(CreateTopicError::ConcurrentAccess(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalError" => {
@@ -2675,19 +2666,19 @@ impl CreateTopicError {
                         ))
                     }
                     "StaleTag" => {
-                        return RusotoError::Service(CreateTopicError::StaleTag(String::from(
+                        return RusotoError::Service(CreateTopicError::StaleTag(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "TagLimitExceeded" => {
                         return RusotoError::Service(CreateTopicError::TagLimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TagPolicy" => {
-                        return RusotoError::Service(CreateTopicError::TagPolicy(String::from(
+                        return RusotoError::Service(CreateTopicError::TagPolicy(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "TopicLimitExceeded" => {
                         return RusotoError::Service(CreateTopicError::TopicLimitExceeded(
@@ -2891,7 +2882,7 @@ impl DeleteTopicError {
                     }
                     "ConcurrentAccess" => {
                         return RusotoError::Service(DeleteTopicError::ConcurrentAccess(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalError" => {
@@ -2910,14 +2901,14 @@ impl DeleteTopicError {
                         ))
                     }
                     "StaleTag" => {
-                        return RusotoError::Service(DeleteTopicError::StaleTag(String::from(
+                        return RusotoError::Service(DeleteTopicError::StaleTag(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "TagPolicy" => {
-                        return RusotoError::Service(DeleteTopicError::TagPolicy(String::from(
+                        return RusotoError::Service(DeleteTopicError::TagPolicy(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -3697,27 +3688,27 @@ impl ListTagsForResourceError {
                 match &parsed_error.code[..] {
                     "AuthorizationError" => {
                         return RusotoError::Service(ListTagsForResourceError::AuthorizationError(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ConcurrentAccess" => {
                         return RusotoError::Service(ListTagsForResourceError::ConcurrentAccess(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TagPolicy" => {
                         return RusotoError::Service(ListTagsForResourceError::TagPolicy(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4610,38 +4601,38 @@ impl TagResourceError {
                 match &parsed_error.code[..] {
                     "AuthorizationError" => {
                         return RusotoError::Service(TagResourceError::AuthorizationError(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ConcurrentAccess" => {
                         return RusotoError::Service(TagResourceError::ConcurrentAccess(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(TagResourceError::InvalidParameter(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(TagResourceError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StaleTag" => {
-                        return RusotoError::Service(TagResourceError::StaleTag(String::from(
+                        return RusotoError::Service(TagResourceError::StaleTag(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "TagLimitExceeded" => {
                         return RusotoError::Service(TagResourceError::TagLimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TagPolicy" => {
-                        return RusotoError::Service(TagResourceError::TagPolicy(String::from(
+                        return RusotoError::Service(TagResourceError::TagPolicy(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }
@@ -4784,38 +4775,38 @@ impl UntagResourceError {
                 match &parsed_error.code[..] {
                     "AuthorizationError" => {
                         return RusotoError::Service(UntagResourceError::AuthorizationError(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ConcurrentAccess" => {
                         return RusotoError::Service(UntagResourceError::ConcurrentAccess(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameter" => {
                         return RusotoError::Service(UntagResourceError::InvalidParameter(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFound" => {
                         return RusotoError::Service(UntagResourceError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "StaleTag" => {
-                        return RusotoError::Service(UntagResourceError::StaleTag(String::from(
+                        return RusotoError::Service(UntagResourceError::StaleTag(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     "TagLimitExceeded" => {
                         return RusotoError::Service(UntagResourceError::TagLimitExceeded(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "TagPolicy" => {
-                        return RusotoError::Service(UntagResourceError::TagPolicy(String::from(
+                        return RusotoError::Service(UntagResourceError::TagPolicy(
                             parsed_error.message,
-                        )))
+                        ))
                     }
                     _ => {}
                 }

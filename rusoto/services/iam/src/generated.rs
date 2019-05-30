@@ -6649,20 +6649,6 @@ impl ManagedPolicyDetailListTypeDeserializer {
         })
     }
 }
-<<<<<<< HEAD
-=======
-struct MarkerTypeDeserializer;
-impl MarkerTypeDeserializer {
-    #[allow(unused_variables)]
-    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
-        start_element(tag_name, stack)?;
-        let obj = characters(stack)?;
-        end_element(tag_name, stack)?;
-
-        Ok(obj)
-    }
-}
->>>>>>> Regenerate crates.
 struct MaxPasswordAgeTypeDeserializer;
 impl MaxPasswordAgeTypeDeserializer {
     #[allow(unused_variables)]
@@ -8000,10 +7986,7 @@ impl ResourceSpecificResultListTypeDeserializer {
 struct ResponseMarkerTypeDeserializer;
 impl ResponseMarkerTypeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -17942,9 +17925,9 @@ impl SetSecurityTokenServicePreferencesError {
                 match &parsed_error.code[..] {
                     "ServiceFailure" => {
                         return RusotoError::Service(
-                            SetSecurityTokenServicePreferencesError::ServiceFailure(String::from(
+                            SetSecurityTokenServicePreferencesError::ServiceFailure(
                                 parsed_error.message,
-                            )),
+                            ),
                         )
                     }
                     _ => {}

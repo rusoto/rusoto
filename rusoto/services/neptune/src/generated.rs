@@ -11988,7 +11988,7 @@ impl RestoreDBClusterFromSnapshotError {
                     "DBClusterParameterGroupNotFound" => {
                         return RusotoError::Service(
                             RestoreDBClusterFromSnapshotError::DBClusterParameterGroupNotFoundFault(
-                                String::from(parsed_error.message),
+                                parsed_error.message,
                             ),
                         )
                     }
@@ -12201,7 +12201,7 @@ impl RestoreDBClusterToPointInTimeError {
                     }
                     "DBClusterParameterGroupNotFound" => return RusotoError::Service(
                         RestoreDBClusterToPointInTimeError::DBClusterParameterGroupNotFoundFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ),
                     ),
                     "DBClusterQuotaExceededFault" => {

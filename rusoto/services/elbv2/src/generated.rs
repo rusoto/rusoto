@@ -945,10 +945,7 @@ impl AuthenticateOidcActionTokenEndpointDeserializer {
 struct AuthenticateOidcActionUseExistingClientSecretDeserializer;
 impl AuthenticateOidcActionUseExistingClientSecretDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<bool, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<bool, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
         end_element(tag_name, stack)?;
@@ -2702,7 +2699,7 @@ pub struct HostHeaderConditionConfig {
 struct HostHeaderConditionConfigDeserializer;
 impl HostHeaderConditionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HostHeaderConditionConfig, XmlParseError> {
@@ -2763,7 +2760,7 @@ pub struct HttpHeaderConditionConfig {
 struct HttpHeaderConditionConfigDeserializer;
 impl HttpHeaderConditionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HttpHeaderConditionConfig, XmlParseError> {
@@ -2817,10 +2814,7 @@ impl HttpHeaderConditionConfigSerializer {
 struct HttpHeaderConditionNameDeserializer;
 impl HttpHeaderConditionNameDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2836,7 +2830,7 @@ pub struct HttpRequestMethodConditionConfig {
 struct HttpRequestMethodConditionConfigDeserializer;
 impl HttpRequestMethodConditionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<HttpRequestMethodConditionConfig, XmlParseError> {
@@ -3950,7 +3944,7 @@ pub struct PathPatternConditionConfig {
 struct PathPatternConditionConfigDeserializer;
 impl PathPatternConditionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<PathPatternConditionConfig, XmlParseError> {
@@ -4021,7 +4015,7 @@ pub struct QueryStringConditionConfig {
 struct QueryStringConditionConfigDeserializer;
 impl QueryStringConditionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryStringConditionConfig, XmlParseError> {
@@ -4071,7 +4065,7 @@ pub struct QueryStringKeyValuePair {
 struct QueryStringKeyValuePairDeserializer;
 impl QueryStringKeyValuePairDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<QueryStringKeyValuePair, XmlParseError> {
@@ -4115,7 +4109,7 @@ impl QueryStringKeyValuePairSerializer {
 struct QueryStringKeyValuePairListDeserializer;
 impl QueryStringKeyValuePairListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<QueryStringKeyValuePair>, XmlParseError> {
@@ -5028,7 +5022,7 @@ pub struct SourceIpConditionConfig {
 struct SourceIpConditionConfigDeserializer;
 impl SourceIpConditionConfigDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<SourceIpConditionConfig, XmlParseError> {

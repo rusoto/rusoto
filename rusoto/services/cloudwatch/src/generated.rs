@@ -1537,7 +1537,7 @@ pub struct ListTagsForResourceOutput {
 struct ListTagsForResourceOutputDeserializer;
 impl ListTagsForResourceOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ListTagsForResourceOutput, XmlParseError> {
@@ -2790,10 +2790,7 @@ pub struct Tag {
 struct TagDeserializer;
 impl TagDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Tag, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<Tag, XmlParseError> {
         deserialize_elements::<_, Tag, _>(tag_name, stack, |name, stack, obj| {
             match name {
                 "Key" => {
@@ -2826,10 +2823,7 @@ impl TagSerializer {
 struct TagKeyDeserializer;
 impl TagKeyDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -2852,7 +2846,7 @@ impl TagKeyListSerializer {
 struct TagListDeserializer;
 impl TagListDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<Vec<Tag>, XmlParseError> {
@@ -2906,7 +2900,7 @@ pub struct TagResourceOutput {}
 struct TagResourceOutputDeserializer;
 impl TagResourceOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<TagResourceOutput, XmlParseError> {
@@ -2922,10 +2916,7 @@ impl TagResourceOutputDeserializer {
 struct TagValueDeserializer;
 impl TagValueDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -3011,7 +3002,7 @@ pub struct UntagResourceOutput {}
 struct UntagResourceOutputDeserializer;
 impl UntagResourceOutputDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<UntagResourceOutput, XmlParseError> {
@@ -3704,21 +3695,17 @@ impl ListTagsForResourceError {
                 match &parsed_error.code[..] {
                     "InternalServiceError" => {
                         return RusotoError::Service(
-                            ListTagsForResourceError::InternalServiceFault(String::from(
-                                parsed_error.message,
-                            )),
+                            ListTagsForResourceError::InternalServiceFault(parsed_error.message),
                         )
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(
-                            ListTagsForResourceError::InvalidParameterValue(String::from(
-                                parsed_error.message,
-                            )),
+                            ListTagsForResourceError::InvalidParameterValue(parsed_error.message),
                         )
                     }
                     "ResourceNotFoundException" => {
                         return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4001,22 +3988,22 @@ impl TagResourceError {
                 match &parsed_error.code[..] {
                     "ConcurrentModificationException" => {
                         return RusotoError::Service(TagResourceError::ConcurrentModification(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalServiceError" => {
                         return RusotoError::Service(TagResourceError::InternalServiceFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(TagResourceError::InvalidParameterValue(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFoundException" => {
                         return RusotoError::Service(TagResourceError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}
@@ -4072,22 +4059,22 @@ impl UntagResourceError {
                 match &parsed_error.code[..] {
                     "ConcurrentModificationException" => {
                         return RusotoError::Service(UntagResourceError::ConcurrentModification(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InternalServiceError" => {
                         return RusotoError::Service(UntagResourceError::InternalServiceFault(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "InvalidParameterValue" => {
                         return RusotoError::Service(UntagResourceError::InvalidParameterValue(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     "ResourceNotFoundException" => {
                         return RusotoError::Service(UntagResourceError::ResourceNotFound(
-                            String::from(parsed_error.message),
+                            parsed_error.message,
                         ))
                     }
                     _ => {}

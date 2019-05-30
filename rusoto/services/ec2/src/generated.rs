@@ -19590,7 +19590,7 @@ pub struct DisableEbsEncryptionByDefaultResult {
 struct DisableEbsEncryptionByDefaultResultDeserializer;
 impl DisableEbsEncryptionByDefaultResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<DisableEbsEncryptionByDefaultResult, XmlParseError> {
@@ -21151,7 +21151,7 @@ pub struct EnableEbsEncryptionByDefaultResult {
 struct EnableEbsEncryptionByDefaultResultDeserializer;
 impl EnableEbsEncryptionByDefaultResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<EnableEbsEncryptionByDefaultResult, XmlParseError> {
@@ -23075,7 +23075,7 @@ pub struct GetEbsDefaultKmsKeyIdResult {
 struct GetEbsDefaultKmsKeyIdResultDeserializer;
 impl GetEbsDefaultKmsKeyIdResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetEbsDefaultKmsKeyIdResult, XmlParseError> {
@@ -23124,7 +23124,7 @@ pub struct GetEbsEncryptionByDefaultResult {
 struct GetEbsEncryptionByDefaultResultDeserializer;
 impl GetEbsEncryptionByDefaultResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<GetEbsEncryptionByDefaultResult, XmlParseError> {
@@ -26863,10 +26863,7 @@ impl InstanceCreditSpecificationRequestSerializer {
 struct InstanceEventIdDeserializer;
 impl InstanceEventIdDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -31234,10 +31231,7 @@ impl MarketTypeDeserializer {
 struct MillisecondDateTimeDeserializer;
 impl MillisecondDateTimeDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<String, XmlParseError> {
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         start_element(tag_name, stack)?;
         let obj = characters(stack)?;
         end_element(tag_name, stack)?;
@@ -31434,7 +31428,7 @@ pub struct ModifyEbsDefaultKmsKeyIdResult {
 struct ModifyEbsDefaultKmsKeyIdResultDeserializer;
 impl ModifyEbsDefaultKmsKeyIdResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyEbsDefaultKmsKeyIdResult, XmlParseError> {
@@ -32145,7 +32139,7 @@ pub struct ModifyInstanceEventStartTimeResult {
 struct ModifyInstanceEventStartTimeResultDeserializer;
 impl ModifyInstanceEventStartTimeResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyInstanceEventStartTimeResult, XmlParseError> {
@@ -33400,7 +33394,7 @@ pub struct ModifyVpnConnectionResult {
 struct ModifyVpnConnectionResultDeserializer;
 impl ModifyVpnConnectionResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ModifyVpnConnectionResult, XmlParseError> {
@@ -39103,7 +39097,7 @@ pub struct ResetEbsDefaultKmsKeyIdResult {
 struct ResetEbsDefaultKmsKeyIdResultDeserializer;
 impl ResetEbsDefaultKmsKeyIdResultDeserializer {
     #[allow(unused_variables)]
-    fn deserialize<'a, T: Peek + Next>(
+    fn deserialize<T: Peek + Next>(
         tag_name: &str,
         stack: &mut T,
     ) -> Result<ResetEbsDefaultKmsKeyIdResult, XmlParseError> {
