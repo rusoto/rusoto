@@ -24,8 +24,5 @@ fn should_list_distributions() {
     assert_eq!(first_item.status, "Deployed");
     assert_eq!(first_item.domain_name, "d111111abcdef8.cloudfront.net");
     assert_eq!(first_item.origins.quantity, 2);
-    match first_item.origins.items {
-        Some(ref i) => assert_eq!(i[1].domain_name, "example.com"),
-        None => panic!("Should have items"),
-    }
+    assert!(first_item.origins.items.iter().any(|x| x.domain_name == "example.com"));
 }
