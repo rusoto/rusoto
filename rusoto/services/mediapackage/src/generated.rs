@@ -49,33 +49,6 @@ pub struct Channel {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Configuration parameters for a new Channel.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ChannelCreateParameters {
-    /// <p>A short text description of the Channel.</p>
-    pub description: Option<String>,
-    /// <p>The ID of the Channel. The ID must be unique within the region and it
-    /// cannot be changed after a Channel is created.</p>
-    pub id: String,
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
-/// <p>A collection of Channel records.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ChannelList {
-    /// <p>A list of Channel records.</p>
-    pub channels: Option<Vec<Channel>>,
-    /// <p>A token that can be used to resume pagination from the end of the collection.</p>
-    pub next_token: Option<String>,
-}
-
-/// <p>Configuration parameters for updating an existing Channel.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ChannelUpdateParameters {
-    /// <p>A short text description of the Channel.</p>
-    pub description: Option<String>,
-}
-
 /// <p>A Common Media Application Format (CMAF) encryption configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CmafEncryption {
@@ -825,64 +798,6 @@ pub struct OriginEndpoint {
     pub whitelist: Option<Vec<String>>,
 }
 
-/// <p>Configuration parameters for a new OriginEndpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct OriginEndpointCreateParameters {
-    /// <p>The ID of the Channel that the OriginEndpoint will be associated with.
-    /// This cannot be changed after the OriginEndpoint is created.</p>
-    pub channel_id: String,
-    pub cmaf_package: Option<CmafPackageCreateOrUpdateParameters>,
-    pub dash_package: Option<DashPackage>,
-    /// <p>A short text description of the OriginEndpoint.</p>
-    pub description: Option<String>,
-    pub hls_package: Option<HlsPackage>,
-    /// <p>The ID of the OriginEndpoint.  The ID must be unique within the region
-    /// and it cannot be changed after the OriginEndpoint is created.</p>
-    pub id: String,
-    /// <p>A short string that will be used as the filename of the OriginEndpoint URL (defaults to &quot;index&quot;).</p>
-    pub manifest_name: Option<String>,
-    pub mss_package: Option<MssPackage>,
-    /// <p>Maximum duration (seconds) of content to retain for startover playback.
-    /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
-    pub startover_window_seconds: Option<i64>,
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Amount of delay (seconds) to enforce on the playback of live content.
-    /// If not specified, there will be no time delay in effect for the OriginEndpoint.</p>
-    pub time_delay_seconds: Option<i64>,
-    /// <p>A list of source IP CIDR blocks that will be allowed to access the OriginEndpoint.</p>
-    pub whitelist: Option<Vec<String>>,
-}
-
-/// <p>A collection of OriginEndpoint records.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct OriginEndpointList {
-    /// <p>A token that can be used to resume pagination from the end of the collection.</p>
-    pub next_token: Option<String>,
-    /// <p>A list of OriginEndpoint records.</p>
-    pub origin_endpoints: Option<Vec<OriginEndpoint>>,
-}
-
-/// <p>Configuration parameters for updating an existing OriginEndpoint.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct OriginEndpointUpdateParameters {
-    pub cmaf_package: Option<CmafPackageCreateOrUpdateParameters>,
-    pub dash_package: Option<DashPackage>,
-    /// <p>A short text description of the OriginEndpoint.</p>
-    pub description: Option<String>,
-    pub hls_package: Option<HlsPackage>,
-    /// <p>A short string that will be appended to the end of the Endpoint URL.</p>
-    pub manifest_name: Option<String>,
-    pub mss_package: Option<MssPackage>,
-    /// <p>Maximum duration (in seconds) of content to retain for startover playback.
-    /// If not specified, startover playback will be disabled for the OriginEndpoint.</p>
-    pub startover_window_seconds: Option<i64>,
-    /// <p>Amount of delay (in seconds) to enforce on the playback of live content.
-    /// If not specified, there will be no time delay in effect for the OriginEndpoint.</p>
-    pub time_delay_seconds: Option<i64>,
-    /// <p>A list of source IP CIDR blocks that will be allowed to access the OriginEndpoint.</p>
-    pub whitelist: Option<Vec<String>>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RotateChannelCredentialsRequest {
     /// <p>The ID of the channel to update.</p>
@@ -992,11 +907,6 @@ pub struct TagResourceRequest {
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     #[serde(rename = "Tags")]
-    pub tags: ::std::collections::HashMap<String, String>,
-}
-
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagsModel {
     pub tags: ::std::collections::HashMap<String, String>,
 }
 

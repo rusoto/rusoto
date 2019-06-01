@@ -1306,11 +1306,6 @@ pub struct EsamSignalProcessingNotification {
     pub scc_xml: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ExceptionBody {
-    pub message: Option<String>,
-}
-
 /// <p>Settings for F4v container</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct F4vSettings {

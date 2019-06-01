@@ -513,15 +513,6 @@ pub struct DnsRequestAction {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DomainDetails {}
 
-/// <p>Error response object.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ErrorResponse {
-    /// <p>The error message.</p>
-    pub message: Option<String>,
-    /// <p>The error type.</p>
-    pub type_: Option<String>,
-}
-
 /// <p>Representation of a abnormal or suspicious activity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]

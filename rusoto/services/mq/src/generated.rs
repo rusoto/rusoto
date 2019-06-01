@@ -49,17 +49,6 @@ pub struct BrokerEngineType {
     pub engine_versions: Option<Vec<EngineVersion>>,
 }
 
-/// <p>Returns a list of broker engine type.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct BrokerEngineTypeOutput {
-    /// <p>List of available engine types and versions.</p>
-    pub broker_engine_types: Option<Vec<BrokerEngineType>>,
-    /// <p>Required. The maximum number of engine types that can be returned per page (20 by default). This value must be an integer from 5 to 100.</p>
-    pub max_results: Option<i64>,
-    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
-    pub next_token: Option<String>,
-}
-
 /// <p>Returns information about all brokers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -98,17 +87,6 @@ pub struct BrokerInstanceOption {
     #[serde(rename = "SupportedEngineVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_engine_versions: Option<Vec<String>>,
-}
-
-/// <p>Returns a list of broker instance options.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct BrokerInstanceOptionsOutput {
-    /// <p>List of available broker instance options.</p>
-    pub broker_instance_options: Option<Vec<BrokerInstanceOption>>,
-    /// <p>Required. The maximum number of instance options that can be returned per page (20 by default). This value must be an integer from 5 to 100.</p>
-    pub max_results: Option<i64>,
-    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
-    pub next_token: Option<String>,
 }
 
 /// <p>The Amazon Resource Name (ARN) of the broker.</p>
@@ -236,50 +214,6 @@ pub struct Configurations {
     pub pending: Option<ConfigurationId>,
 }
 
-/// <p>Required. The time period during which Amazon MQ applies pending updates or patches to the broker.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateBrokerInput {
-    /// <p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
-    pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>Required. The name of the broker. This value must be unique in your AWS account, 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain whitespaces, brackets, wildcard characters, or special characters.</p>
-    pub broker_name: Option<String>,
-    /// <p>A list of information about the configuration.</p>
-    pub configuration: Option<ConfigurationId>,
-    /// <p>The unique ID that the requester receives for the created broker. Amazon MQ passes your ID with the API action. Note: We recommend using a Universally Unique Identifier (UUID) for the creatorRequestId. You may omit the creatorRequestId if your application doesn&#39;t require idempotency.</p>
-    pub creator_request_id: Option<String>,
-    /// <p>Required. The deployment mode of the broker.</p>
-    pub deployment_mode: Option<String>,
-    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
-    pub engine_type: Option<String>,
-    /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
-    pub engine_version: Option<String>,
-    /// <p>Required. The broker&#39;s instance type.</p>
-    pub host_instance_type: Option<String>,
-    /// <p>Enables Amazon CloudWatch logging for brokers.</p>
-    pub logs: Option<Logs>,
-    /// <p>The parameters that determine the WeeklyStartTime.</p>
-    pub maintenance_window_start_time: Option<WeeklyStartTime>,
-    /// <p>Required. Enables connections from applications outside of the VPC that hosts the broker&#39;s subnets.</p>
-    pub publicly_accessible: Option<bool>,
-    /// <p>The list of rules (1 minimum, 125 maximum) that authorize connections to brokers.</p>
-    pub security_groups: Option<Vec<String>>,
-    /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
-    pub subnet_ids: Option<Vec<String>>,
-    /// <p>Create tags when creating the broker.</p>
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Required. The list of ActiveMQ users (persons or applications) who can access queues and topics. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
-    pub users: Option<Vec<User>>,
-}
-
-/// <p>Returns information about the created broker.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateBrokerOutput {
-    /// <p>The Amazon Resource Name (ARN) of the broker.</p>
-    pub broker_arn: Option<String>,
-    /// <p>The unique ID that Amazon MQ generates for the broker.</p>
-    pub broker_id: Option<String>,
-}
-
 /// <p>Creates a broker using the specified properties.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBrokerRequest {
@@ -359,34 +293,6 @@ pub struct CreateBrokerResponse {
 }
 
 /// <p>Creates a new configuration for the specified configuration name. Amazon MQ uses the default configuration (the engine type and version).</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateConfigurationInput {
-    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
-    pub engine_type: Option<String>,
-    /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
-    pub engine_version: Option<String>,
-    /// <p>Required. The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.</p>
-    pub name: Option<String>,
-    /// <p>Create tags when creating the configuration.</p>
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
-/// <p>Returns information about the created configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateConfigurationOutput {
-    /// <p>Required. The Amazon Resource Name (ARN) of the configuration.</p>
-    pub arn: Option<String>,
-    /// <p>Required. The date and time of the configuration.</p>
-    pub created: Option<f64>,
-    /// <p>Required. The unique ID that Amazon MQ generates for the configuration.</p>
-    pub id: Option<String>,
-    /// <p>The latest revision of the configuration.</p>
-    pub latest_revision: Option<ConfigurationRevision>,
-    /// <p>Required. The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.</p>
-    pub name: Option<String>,
-}
-
-/// <p>Creates a new configuration for the specified configuration name. Amazon MQ uses the default configuration (the engine type and version).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateConfigurationRequest {
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
@@ -445,17 +351,6 @@ pub struct CreateTagsRequest {
 }
 
 /// <p>Creates a new ActiveMQ user.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateUserInput {
-    /// <p>Enables access to the the ActiveMQ Web Console for the ActiveMQ user.</p>
-    pub console_access: Option<bool>,
-    /// <p>The list of groups (20 maximum) to which the ActiveMQ user belongs. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
-    pub groups: Option<Vec<String>>,
-    /// <p>Required. The password of the user. This value must be at least 12 characters long, must contain at least 4 unique characters, and must not contain commas.</p>
-    pub password: Option<String>,
-}
-
-/// <p>Creates a new ActiveMQ user.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserRequest {
     /// <p>The unique ID that Amazon MQ generates for the broker.</p>
@@ -481,13 +376,6 @@ pub struct CreateUserRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateUserResponse {}
-
-/// <p>Returns information about the deleted broker.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeleteBrokerOutput {
-    /// <p>The unique ID that Amazon MQ generates for the broker.</p>
-    pub broker_id: Option<String>,
-}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBrokerRequest {
@@ -597,51 +485,6 @@ pub struct DescribeBrokerInstanceOptionsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-}
-
-/// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeBrokerOutput {
-    /// <p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
-    pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the broker.</p>
-    pub broker_arn: Option<String>,
-    /// <p>The unique ID that Amazon MQ generates for the broker.</p>
-    pub broker_id: Option<String>,
-    /// <p>A list of information about allocated brokers.</p>
-    pub broker_instances: Option<Vec<BrokerInstance>>,
-    /// <p>The name of the broker. This value must be unique in your AWS account, 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain whitespaces, brackets, wildcard characters, or special characters.</p>
-    pub broker_name: Option<String>,
-    /// <p>The status of the broker.</p>
-    pub broker_state: Option<String>,
-    /// <p>The list of all revisions for the specified configuration.</p>
-    pub configurations: Option<Configurations>,
-    /// <p>The time when the broker was created.</p>
-    pub created: Option<f64>,
-    /// <p>Required. The deployment mode of the broker.</p>
-    pub deployment_mode: Option<String>,
-    /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
-    pub engine_type: Option<String>,
-    /// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
-    pub engine_version: Option<String>,
-    /// <p>The broker&#39;s instance type.</p>
-    pub host_instance_type: Option<String>,
-    /// <p>The list of information about logs currently enabled and pending to be deployed for the specified broker.</p>
-    pub logs: Option<LogsSummary>,
-    /// <p>The parameters that determine the WeeklyStartTime.</p>
-    pub maintenance_window_start_time: Option<WeeklyStartTime>,
-    /// <p>The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
-    pub pending_engine_version: Option<String>,
-    /// <p>Required. Enables connections from applications outside of the VPC that hosts the broker&#39;s subnets.</p>
-    pub publicly_accessible: Option<bool>,
-    /// <p>Required. The list of rules (1 minimum, 125 maximum) that authorize connections to brokers.</p>
-    pub security_groups: Option<Vec<String>>,
-    /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
-    pub subnet_ids: Option<Vec<String>>,
-    /// <p>The list of all tags associated with this broker.</p>
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The list of all ActiveMQ usernames for the specified broker.</p>
-    pub users: Option<Vec<UserSummary>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -784,19 +627,6 @@ pub struct DescribeConfigurationResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Returns the specified configuration revision for the specified configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeConfigurationRevisionOutput {
-    /// <p>Required. The unique ID that Amazon MQ generates for the configuration.</p>
-    pub configuration_id: Option<String>,
-    /// <p>Required. The date and time of the configuration.</p>
-    pub created: Option<f64>,
-    /// <p>Required. The base64-encoded XML configuration.</p>
-    pub data: Option<String>,
-    /// <p>The description of the configuration.</p>
-    pub description: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeConfigurationRevisionRequest {
     /// <p>The unique ID that Amazon MQ generates for the configuration.</p>
@@ -826,21 +656,6 @@ pub struct DescribeConfigurationRevisionResponse {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-}
-
-/// <p>Returns information about an ActiveMQ user.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DescribeUserOutput {
-    /// <p>Required. The unique ID that Amazon MQ generates for the broker.</p>
-    pub broker_id: Option<String>,
-    /// <p>Enables access to the the ActiveMQ Web Console for the ActiveMQ user.</p>
-    pub console_access: Option<bool>,
-    /// <p>The list of groups (20 maximum) to which the ActiveMQ user belongs. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
-    pub groups: Option<Vec<String>>,
-    /// <p>The status of the changes pending for the ActiveMQ user.</p>
-    pub pending: Option<UserPendingChanges>,
-    /// <p>Required. The username of the ActiveMQ user. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
-    pub username: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -888,24 +703,6 @@ pub struct EngineVersion {
     pub name: Option<String>,
 }
 
-/// <p>Returns information about an error.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct MQError {
-    /// <p>The attribute which caused the error.</p>
-    pub error_attribute: Option<String>,
-    /// <p>The explanation of the error.</p>
-    pub message: Option<String>,
-}
-
-/// <p>A list of information about all brokers.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListBrokersOutput {
-    /// <p>A list of information about all brokers.</p>
-    pub broker_summaries: Option<Vec<BrokerSummary>>,
-    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
-    pub next_token: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBrokersRequest {
     /// <p>The maximum number of brokers that Amazon MQ can return per page (20 by default). This value must be an integer from 5 to 100.</p>
@@ -929,19 +726,6 @@ pub struct ListBrokersResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-}
-
-/// <p>Returns a list of all revisions for the specified configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListConfigurationRevisionsOutput {
-    /// <p>The unique ID that Amazon MQ generates for the configuration.</p>
-    pub configuration_id: Option<String>,
-    /// <p>The maximum number of configuration revisions that can be returned per page (20 by default). This value must be an integer from 5 to 100.</p>
-    pub max_results: Option<i64>,
-    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
-    pub next_token: Option<String>,
-    /// <p>The list of all revisions for the specified configuration.</p>
-    pub revisions: Option<Vec<ConfigurationRevision>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -978,17 +762,6 @@ pub struct ListConfigurationRevisionsResponse {
     #[serde(rename = "Revisions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revisions: Option<Vec<ConfigurationRevision>>,
-}
-
-/// <p>Returns a list of all configurations.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListConfigurationsOutput {
-    /// <p>The list of all revisions for the specified configuration.</p>
-    pub configurations: Option<Vec<Configuration>>,
-    /// <p>The maximum number of configurations that Amazon MQ can return per page (20 by default). This value must be an integer from 5 to 100.</p>
-    pub max_results: Option<i64>,
-    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
-    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1034,19 +807,6 @@ pub struct ListTagsResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
-/// <p>Returns a list of all ActiveMQ users.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListUsersOutput {
-    /// <p>Required. The unique ID that Amazon MQ generates for the broker.</p>
-    pub broker_id: Option<String>,
-    /// <p>Required. The maximum number of ActiveMQ users that can be returned per page (20 by default). This value must be an integer from 5 to 100.</p>
-    pub max_results: Option<i64>,
-    /// <p>The token that specifies the next page of results Amazon MQ should return. To request the first page, leave nextToken empty.</p>
-    pub next_token: Option<String>,
-    /// <p>Required. The list of all ActiveMQ usernames for the specified broker.</p>
-    pub users: Option<Vec<UserSummary>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1167,41 +927,6 @@ pub struct SanitizationWarning {
     pub reason: Option<String>,
 }
 
-/// <p>A map of the key-value pairs for the resource tag.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct Tags {
-    /// <p>The key-value pair for the resource tag.</p>
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
-/// <p>Updates the broker using the specified properties.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateBrokerInput {
-    /// <p>Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
-    pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>A list of information about the configuration.</p>
-    pub configuration: Option<ConfigurationId>,
-    /// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
-    pub engine_version: Option<String>,
-    /// <p>Enables Amazon CloudWatch logging for brokers.</p>
-    pub logs: Option<Logs>,
-}
-
-/// <p>Returns information about the updated broker.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateBrokerOutput {
-    /// <p>The new value of automatic upgrades to new minor version for brokers.</p>
-    pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>Required. The unique ID that Amazon MQ generates for the broker.</p>
-    pub broker_id: Option<String>,
-    /// <p>The ID of the updated configuration.</p>
-    pub configuration: Option<ConfigurationId>,
-    /// <p>The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
-    pub engine_version: Option<String>,
-    /// <p>The list of information about logs to be enabled for the specified broker.</p>
-    pub logs: Option<Logs>,
-}
-
 /// <p>Updates the broker using the specified properties.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateBrokerRequest {
@@ -1252,32 +977,6 @@ pub struct UpdateBrokerResponse {
 }
 
 /// <p>Updates the specified configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateConfigurationInput {
-    /// <p>Required. The base64-encoded XML configuration.</p>
-    pub data: Option<String>,
-    /// <p>The description of the configuration.</p>
-    pub description: Option<String>,
-}
-
-/// <p>Returns information about the updated configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateConfigurationOutput {
-    /// <p>Required. The Amazon Resource Name (ARN) of the configuration.</p>
-    pub arn: Option<String>,
-    /// <p>Required. The date and time of the configuration.</p>
-    pub created: Option<f64>,
-    /// <p>Required. The unique ID that Amazon MQ generates for the configuration.</p>
-    pub id: Option<String>,
-    /// <p>The latest revision of the configuration.</p>
-    pub latest_revision: Option<ConfigurationRevision>,
-    /// <p>Required. The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.</p>
-    pub name: Option<String>,
-    /// <p>The list of the first 20 warnings about the configuration XML elements or attributes that were sanitized.</p>
-    pub warnings: Option<Vec<SanitizationWarning>>,
-}
-
-/// <p>Updates the specified configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateConfigurationRequest {
     /// <p>The unique ID that Amazon MQ generates for the configuration.</p>
@@ -1320,17 +1019,6 @@ pub struct UpdateConfigurationResponse {
     #[serde(rename = "Warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<SanitizationWarning>>,
-}
-
-/// <p>Updates the information for an ActiveMQ user.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateUserInput {
-    /// <p>Enables access to the the ActiveMQ Web Console for the ActiveMQ user.</p>
-    pub console_access: Option<bool>,
-    /// <p>The list of groups (20 maximum) to which the ActiveMQ user belongs. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
-    pub groups: Option<Vec<String>>,
-    /// <p>The password of the user. This value must be at least 12 characters long, must contain at least 4 unique characters, and must not contain commas.</p>
-    pub password: Option<String>,
 }
 
 /// <p>Updates the information for an ActiveMQ user.</p>
