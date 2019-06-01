@@ -1,3 +1,4 @@
+use std::collections::BTreeSet;
 use std::fs::File;
 use std::io::{BufWriter, Write};
 
@@ -315,13 +316,36 @@ pub fn mutate_type_name_for_streaming(type_name: &str) -> String {
     format!("Streaming{}", type_name)
 }
 
+fn find_shapes_to_generate(service: &Service<'_>) -> BTreeSet<String> {
+    let mut shapes_to_generate = BTreeSet::<String>::new();
+    let mut visitor = |shape_name: &str, _shape: &Shape| {
+        shapes_to_generate.insert(shape_name.to_owned())
+    };
+    for (_, operation) in service.operations() {
+        if let Some(ref input) = operation.input {
+            service.visit_shapes(&input.shape, &mut visitor);
+        }
+        if let Some(ref output) = operation.output {
+            service.visit_shapes(&output.shape, &mut visitor);
+        }
+        if let Some(ref errors) = operation.errors {
+            for error in errors {
+                service.visit_shapes(&error.shape, &mut visitor);
+            }
+        }
+    }
+    return shapes_to_generate;
+} 
+
 fn generate_types<P>(writer: &mut FileWriter, service: &Service<'_>, protocol_generator: &P) -> IoResult
 where
     P: GenerateProtocol,
 {
     let (serialized_types, deserialized_types) = filter_types(service);
 
-    for (name, shape) in service.shapes().iter() {
+    for name in find_shapes_to_generate(service).iter() {
+        let shape = service.get_shape(name).unwrap();
+
         // We generate enums for error types, so no need to create model objects for them
         // Kinesis is a special case in that some operations return
         // responses whose struct fields refer to expecific error shapes
