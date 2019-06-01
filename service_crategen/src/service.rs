@@ -205,4 +205,35 @@ impl<'b> Service<'b> {
 
         dev_dependencies
     }
+
+    pub fn visit_shapes<F>(&self, shape_name: &str, visitor: &mut F)
+    where
+        F: FnMut(&str, &Shape) -> bool
+    {
+        let shape = self
+            .get_shape(shape_name)
+            .expect("Shape missing from service definition");
+
+        if !visitor(shape_name, shape) {
+            return;
+        }
+
+        match shape.shape_type {
+            ShapeType::Structure => {
+                if let Some(ref members) = shape.members {
+                    for member in members.values() {
+                        self.visit_shapes(&member.shape, visitor);
+                    }
+                }
+            }
+            ShapeType::Map => {
+                self.visit_shapes(shape.key_type(), visitor);
+                self.visit_shapes(shape.value_type(), visitor);
+            }
+            ShapeType::List => {
+                self.visit_shapes(shape.member_type(), visitor);
+            }
+            _ => {}
+        }
+    }
 }

@@ -101,12 +101,6 @@ pub struct Ac3Settings {
     pub metadata_control: Option<String>,
 }
 
-/// <p>Placeholder documentation for AccessDenied</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct AccessDenied {
-    pub message: Option<String>,
-}
-
 /// <p>Archive Container Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArchiveContainerSettings {
@@ -414,15 +408,6 @@ pub struct BatchUpdateScheduleResponse {
     pub deletes: Option<BatchScheduleActionDeleteResult>,
 }
 
-/// <p>Results of a batch schedule update.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct BatchUpdateScheduleResult {
-    /// <p>Schedule actions created in the schedule.</p>
-    pub creates: Option<BatchScheduleActionCreateResult>,
-    /// <p>Schedule actions deleted from the schedule.</p>
-    pub deletes: Option<BatchScheduleActionDeleteResult>,
-}
-
 /// <p>Blackout Slate</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BlackoutSlate {
@@ -699,14 +684,6 @@ pub struct Channel {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Placeholder documentation for ChannelConfigurationValidationError</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ChannelConfigurationValidationError {
-    pub message: Option<String>,
-    /// <p>A collection of validation error responses.</p>
-    pub validation_errors: Option<Vec<ValidationError>>,
-}
-
 /// <p>Placeholder documentation for ChannelEgressEndpoint</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -775,30 +752,6 @@ pub struct ChannelSummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Placeholder documentation for CreateChannel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateChannel {
-    /// <p>The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.</p>
-    pub channel_class: Option<String>,
-    pub destinations: Option<Vec<OutputDestination>>,
-    pub encoder_settings: Option<EncoderSettings>,
-    /// <p>List of input attachments for channel.</p>
-    pub input_attachments: Option<Vec<InputAttachment>>,
-    /// <p>Specification of input for this channel (max. bitrate, resolution, codec, etc.)</p>
-    pub input_specification: Option<InputSpecification>,
-    /// <p>The log level to write to CloudWatch Logs.</p>
-    pub log_level: Option<String>,
-    /// <p>Name of channel.</p>
-    pub name: Option<String>,
-    /// <p>Unique request ID to be specified. This is needed to prevent retries from
-    /// creating multiple resources.</p>
-    pub request_id: Option<String>,
-    /// <p>An optional Amazon Resource Name (ARN) of the role to assume when running the Channel.</p>
-    pub role_arn: Option<String>,
-    /// <p>A collection of key-value pairs.</p>
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
 /// <p>A request to create a channel</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateChannelRequest {
@@ -850,40 +803,6 @@ pub struct CreateChannelResponse {
     #[serde(rename = "Channel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel: Option<Channel>,
-}
-
-/// <p>Placeholder documentation for CreateChannelResultModel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateChannelResultModel {
-    pub channel: Option<Channel>,
-}
-
-/// <p>Placeholder documentation for CreateInput</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateInput {
-    /// <p>Destination settings for PUSH type inputs.</p>
-    pub destinations: Option<Vec<InputDestinationRequest>>,
-    /// <p>A list of security groups referenced by IDs to attach to the input.</p>
-    pub input_security_groups: Option<Vec<String>>,
-    /// <p>A list of the MediaConnect Flows that you want to use in this input. You can specify as few as one
-    /// Flow and presently, as many as two. The only requirement is when you have more than one is that each Flow is in a
-    /// separate Availability Zone as this ensures your EML input is redundant to AZ issues.</p>
-    pub media_connect_flows: Option<Vec<MediaConnectFlowRequest>>,
-    /// <p>Name of the input.</p>
-    pub name: Option<String>,
-    /// <p>Unique identifier of the request to ensure the request is handled
-    /// exactly once in case of retries.</p>
-    pub request_id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the role this input assumes during and after creation.</p>
-    pub role_arn: Option<String>,
-    /// <p>The source URLs for a PULL-type input. Every PULL type input needs
-    /// exactly two source URLs for redundancy.
-    /// Only specify sources for PULL type Inputs. Leave Destinations empty.</p>
-    pub sources: Option<Vec<InputSourceRequest>>,
-    /// <p>A collection of key-value pairs.</p>
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-    pub type_: Option<String>,
-    pub vpc: Option<InputVpcRequest>,
 }
 
 /// <p>The name of the input</p>
@@ -943,12 +862,6 @@ pub struct CreateInputResponse {
     pub input: Option<Input>,
 }
 
-/// <p>Placeholder documentation for CreateInputResultModel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateInputResultModel {
-    pub input: Option<Input>,
-}
-
 /// <p>The IPv4 CIDRs to whitelist for this Input Security Group</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateInputSecurityGroupRequest {
@@ -968,12 +881,6 @@ pub struct CreateInputSecurityGroupRequest {
 pub struct CreateInputSecurityGroupResponse {
     #[serde(rename = "SecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub security_group: Option<InputSecurityGroup>,
-}
-
-/// <p>Placeholder documentation for CreateInputSecurityGroupResultModel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateInputSecurityGroupResultModel {
     pub security_group: Option<InputSecurityGroup>,
 }
 
@@ -1775,10 +1682,6 @@ pub struct EmbeddedSourceSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_608_track_number: Option<i64>,
 }
-
-/// <p>Placeholder documentation for Empty</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct Empty {}
 
 /// <p>Encoder Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -2629,15 +2532,6 @@ pub struct InputSecurityGroup {
     pub whitelist_rules: Option<Vec<InputWhitelistRule>>,
 }
 
-/// <p>Request of IPv4 CIDR addresses to whitelist in a security group.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct InputSecurityGroupWhitelistRequest {
-    /// <p>A collection of key-value pairs.</p>
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>List of IPv4 CIDR addresses to whitelist</p>
-    pub whitelist_rules: Option<Vec<InputWhitelistRuleCidr>>,
-}
-
 /// <p>Live Event input parameters. There can be multiple inputs in a single Live Event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputSettings {
@@ -2780,30 +2674,12 @@ pub struct InputWhitelistRuleCidr {
     pub cidr: Option<String>,
 }
 
-/// <p>Placeholder documentation for InternalServiceError</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct InternalServiceError {
-    pub message: Option<String>,
-}
-
-/// <p>Placeholder documentation for InvalidRequest</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct InvalidRequest {
-    pub message: Option<String>,
-}
-
 /// <p>Key Provider Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeyProviderSettings {
     #[serde(rename = "StaticKeySettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_key_settings: Option<StaticKeySettings>,
-}
-
-/// <p>Placeholder documentation for LimitExceeded</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct LimitExceeded {
-    pub message: Option<String>,
 }
 
 /// <p>Placeholder documentation for ListChannelsRequest</p>
@@ -2826,13 +2702,6 @@ pub struct ListChannelsResponse {
     pub channels: Option<Vec<ChannelSummary>>,
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-/// <p>Placeholder documentation for ListChannelsResultModel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListChannelsResultModel {
-    pub channels: Option<Vec<ChannelSummary>>,
     pub next_token: Option<String>,
 }
 
@@ -2860,14 +2729,6 @@ pub struct ListInputSecurityGroupsResponse {
     pub next_token: Option<String>,
 }
 
-/// <p>Result of input security group list request</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListInputSecurityGroupsResultModel {
-    /// <p>List of input security groups</p>
-    pub input_security_groups: Option<Vec<InputSecurityGroup>>,
-    pub next_token: Option<String>,
-}
-
 /// <p>Placeholder documentation for ListInputsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListInputsRequest {
@@ -2888,13 +2749,6 @@ pub struct ListInputsResponse {
     pub inputs: Option<Vec<Input>>,
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-/// <p>Placeholder documentation for ListInputsResultModel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListInputsResultModel {
-    pub inputs: Option<Vec<Input>>,
     pub next_token: Option<String>,
 }
 
@@ -2959,15 +2813,6 @@ pub struct ListOfferingsResponse {
     pub offerings: Option<Vec<Offering>>,
 }
 
-/// <p>ListOfferings response</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListOfferingsResultModel {
-    /// <p>Token to retrieve the next page of results</p>
-    pub next_token: Option<String>,
-    /// <p>List of offerings</p>
-    pub offerings: Option<Vec<Offering>>,
-}
-
 /// <p>Placeholder documentation for ListReservationsRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListReservationsRequest {
@@ -3022,15 +2867,6 @@ pub struct ListReservationsResponse {
     /// <p>List of reservations</p>
     #[serde(rename = "Reservations")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reservations: Option<Vec<Reservation>>,
-}
-
-/// <p>ListReservations response</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListReservationsResultModel {
-    /// <p>Token to retrieve the next page of results</p>
-    pub next_token: Option<String>,
-    /// <p>List of reservations</p>
     pub reservations: Option<Vec<Reservation>>,
 }
 
@@ -3686,21 +3522,6 @@ pub struct PipelinePauseStateSettings {
     pub pipeline_id: String,
 }
 
-/// <p>PurchaseOffering request</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct PurchaseOffering {
-    /// <p>Number of resources</p>
-    pub count: i64,
-    /// <p>Name for the new reservation</p>
-    pub name: Option<String>,
-    /// <p>Unique request ID to be specified. This is needed to prevent retries from creating multiple resources.</p>
-    pub request_id: Option<String>,
-    /// <p>Requested reservation start time (UTC) in ISO-8601 format. The specified time must be between the first day of the current month and one year from now. If no value is given, the default is now.</p>
-    pub start: Option<String>,
-    /// <p>A collection of key-value pairs</p>
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
 /// <p>Placeholder documentation for PurchaseOfferingRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PurchaseOfferingRequest {
@@ -3734,12 +3555,6 @@ pub struct PurchaseOfferingRequest {
 pub struct PurchaseOfferingResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reservation: Option<Reservation>,
-}
-
-/// <p>PurchaseOffering response</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct PurchaseOfferingResultModel {
     pub reservation: Option<Reservation>,
 }
 
@@ -3876,18 +3691,6 @@ pub struct ReservationResourceSpecification {
     pub video_quality: Option<String>,
 }
 
-/// <p>Placeholder documentation for ResourceConflict</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResourceConflict {
-    pub message: Option<String>,
-}
-
-/// <p>Placeholder documentation for ResourceNotFound</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ResourceNotFound {
-    pub message: Option<String>,
-}
-
 /// <p>Rtmp Caption Info Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RtmpCaptionInfoDestinationSettings {}
@@ -4008,19 +3811,6 @@ pub struct ScheduleActionStartSettings {
     #[serde(rename = "FollowModeScheduleActionStartSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub follow_mode_schedule_action_start_settings: Option<FollowModeScheduleActionStartSettings>,
-}
-
-/// <p>Result of a schedule deletion.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ScheduleDeleteResultModel {}
-
-/// <p>Results of a schedule describe.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ScheduleDescribeResultModel {
-    /// <p>The next token; for use in pagination.</p>
-    pub next_token: Option<String>,
-    /// <p>The list of actions in the schedule.</p>
-    pub schedule_actions: Vec<ScheduleAction>,
 }
 
 /// <p>Scte20 Plus Embedded Destination Settings</p>
@@ -4421,12 +4211,6 @@ pub struct StopChannelResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Placeholder documentation for TagsModel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagsModel {
-    pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
 /// <p>Teletext Destination Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TeletextDestinationSettings {}
@@ -4507,33 +4291,6 @@ pub struct UdpOutputSettings {
     pub fec_output_settings: Option<FecOutputSettings>,
 }
 
-/// <p>Placeholder documentation for UpdateChannel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateChannel {
-    /// <p>A list of output destinations for this channel.</p>
-    pub destinations: Option<Vec<OutputDestination>>,
-    /// <p>The encoder settings for this channel.</p>
-    pub encoder_settings: Option<EncoderSettings>,
-    pub input_attachments: Option<Vec<InputAttachment>>,
-    /// <p>Specification of input for this channel (max. bitrate, resolution, codec, etc.)</p>
-    pub input_specification: Option<InputSpecification>,
-    /// <p>The log level to write to CloudWatch Logs.</p>
-    pub log_level: Option<String>,
-    /// <p>The name of the channel.</p>
-    pub name: Option<String>,
-    /// <p>An optional Amazon Resource Name (ARN) of the role to assume when running the Channel. If you do not specify this on an update call but the role was previously set that role will be removed.</p>
-    pub role_arn: Option<String>,
-}
-
-/// <p>Placeholder documentation for UpdateChannelClass</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateChannelClass {
-    /// <p>The channel class that you wish to update this channel to use.</p>
-    pub channel_class: String,
-    /// <p>A list of output destinations for this channel.</p>
-    pub destinations: Option<Vec<OutputDestination>>,
-}
-
 /// <p>Channel class that the channel should be updated to.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateChannelClassRequest {
@@ -4602,33 +4359,6 @@ pub struct UpdateChannelResponse {
     pub channel: Option<Channel>,
 }
 
-/// <p>The updated channel&#39;s description.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateChannelResultModel {
-    pub channel: Option<Channel>,
-}
-
-/// <p>Placeholder documentation for UpdateInput</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateInput {
-    /// <p>Destination settings for PUSH type inputs.</p>
-    pub destinations: Option<Vec<InputDestinationRequest>>,
-    /// <p>A list of security groups referenced by IDs to attach to the input.</p>
-    pub input_security_groups: Option<Vec<String>>,
-    /// <p>A list of the MediaConnect Flow ARNs that you want to use as the source of the input. You can specify as few as one
-    /// Flow and presently, as many as two. The only requirement is when you have more than one is that each Flow is in a
-    /// separate Availability Zone as this ensures your EML input is redundant to AZ issues.</p>
-    pub media_connect_flows: Option<Vec<MediaConnectFlowRequest>>,
-    /// <p>Name of the input.</p>
-    pub name: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the role this input assumes during and after creation.</p>
-    pub role_arn: Option<String>,
-    /// <p>The source URLs for a PULL-type input. Every PULL type input needs
-    /// exactly two source URLs for redundancy.
-    /// Only specify sources for PULL type Inputs. Leave Destinations empty.</p>
-    pub sources: Option<Vec<InputSourceRequest>>,
-}
-
 /// <p>A request to update an input.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateInputRequest {
@@ -4674,12 +4404,6 @@ pub struct UpdateInputResponse {
     pub input: Option<Input>,
 }
 
-/// <p>Placeholder documentation for UpdateInputResultModel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateInputResultModel {
-    pub input: Option<Input>,
-}
-
 /// <p>The request to update some combination of the Input Security Group name and the IPv4 CIDRs the Input Security Group should allow.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateInputSecurityGroupRequest {
@@ -4705,19 +4429,6 @@ pub struct UpdateInputSecurityGroupResponse {
     pub security_group: Option<InputSecurityGroup>,
 }
 
-/// <p>Placeholder documentation for UpdateInputSecurityGroupResultModel</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateInputSecurityGroupResultModel {
-    pub security_group: Option<InputSecurityGroup>,
-}
-
-/// <p>UpdateReservation request</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateReservation {
-    /// <p>Name of the reservation</p>
-    pub name: Option<String>,
-}
-
 /// <p>Request to update a reservation</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateReservationRequest {
@@ -4736,12 +4447,6 @@ pub struct UpdateReservationRequest {
 pub struct UpdateReservationResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub reservation: Option<Reservation>,
-}
-
-/// <p>UpdateReservation response</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateReservationResultModel {
     pub reservation: Option<Reservation>,
 }
 

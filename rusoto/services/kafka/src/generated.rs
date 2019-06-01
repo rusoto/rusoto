@@ -426,15 +426,6 @@ pub struct EncryptionInfo {
     pub encryption_at_rest: Option<EncryptionAtRest>,
 }
 
-/// <p>Returns information about an error.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct KafkaError {
-    /// <p>The parameter that caused the error.</p>
-    pub invalid_parameter: Option<String>,
-    /// <p>The description of the error.</p>
-    pub message: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetBootstrapBrokersRequest {
     /// <p>The Amazon Resource Name (ARN) that uniquely identifies the cluster.</p>

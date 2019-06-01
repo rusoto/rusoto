@@ -25,42 +25,6 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 use serde_json;
-/// <p>Details about the application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct Application {
-    /// <p>The application Amazon Resource Name (ARN).</p>
-    pub application_id: String,
-    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
-    pub author: String,
-    /// <p>The date and time this resource was created.</p>
-    pub creation_time: Option<String>,
-    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
-    pub description: String,
-    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
-    pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
-    pub labels: Option<Vec<String>>,
-    /// <p>A link to a license file of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p>
-    pub license_url: Option<String>,
-    /// <p>The name of the application.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
-    pub name: String,
-    /// <p>A link to the readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
-    pub readme_url: Option<String>,
-    /// <p>A valid identifier from https://spdx.org/licenses/.</p>
-    pub spdx_license_id: Option<String>,
-    /// <p>Version information about the application.</p>
-    pub version: Option<Version>,
-}
-
-/// <p>A list of application summaries nested in the application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationDependencyPage {
-    /// <p>An array of application summaries nested in the application.</p>
-    pub dependencies: Vec<ApplicationDependencySummary>,
-    /// <p>The token to request the next page of results.</p>
-    pub next_token: Option<String>,
-}
-
 /// <p>A nested application summary.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -71,22 +35,6 @@ pub struct ApplicationDependencySummary {
     /// <p>The semantic version of the nested application.</p>
     #[serde(rename = "SemanticVersion")]
     pub semantic_version: String,
-}
-
-/// <p>A list of application details.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationPage {
-    /// <p>An array of application summaries.</p>
-    pub applications: Vec<ApplicationSummary>,
-    /// <p>The token to request the next page of results.</p>
-    pub next_token: Option<String>,
-}
-
-/// <p>Policy statements applied to the application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationPolicy {
-    /// <p>An array of policy statements applied to the application.</p>
-    pub statements: Vec<ApplicationPolicyStatement>,
 }
 
 /// <p>Policy statement applied to the application.</p>
@@ -137,70 +85,6 @@ pub struct ApplicationSummary {
     #[serde(rename = "SpdxLicenseId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spdx_license_id: Option<String>,
-}
-
-/// <p>A list of version summaries for the application.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ApplicationVersionPage {
-    /// <p>The token to request the next page of results.</p>
-    pub next_token: Option<String>,
-    /// <p>An array of version summaries for the application.</p>
-    pub versions: Vec<VersionSummary>,
-}
-
-/// <p>Details of the change set.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ChangeSetDetails {
-    /// <p>The application Amazon Resource Name (ARN).</p>
-    pub application_id: String,
-    /// <p>The Amazon Resource Name (ARN) of the change set.</p><p>Length constraints: Minimum length of 1.</p><p>Pattern: ARN:[-a-zA-Z0-9:/]*</p>
-    pub change_set_id: String,
-    /// <p>The semantic version of the application:</p><p>
-    /// <a href="https://semver.org/">https://semver.org/</a>
-    /// </p>
-    pub semantic_version: String,
-    /// <p>The unique ID of the stack.</p>
-    pub stack_id: String,
-}
-
-/// <p>Create an application request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateApplicationInput {
-    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
-    pub author: String,
-    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
-    pub description: String,
-    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
-    pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
-    pub labels: Option<Vec<String>>,
-    /// <p>A local text file that contains the license of the app that matches the spdxLicenseID value of your application.
-    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>You can specify only one of licenseBody and licenseUrl; otherwise, an error results.</p>
-    pub license_body: Option<String>,
-    /// <p>A link to the S3 object that contains the license of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p><p>You can specify only one of licenseBody and licenseUrl; otherwise, an error results.</p>
-    pub license_url: Option<String>,
-    /// <p>The name of the application that you want to publish.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
-    pub name: String,
-    /// <p>A local text readme file in Markdown language that contains a more detailed description of the application and how it works.
-    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>You can specify only one of readmeBody and readmeUrl; otherwise, an error results.</p>
-    pub readme_body: Option<String>,
-    /// <p>A link to the S3 object in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p><p>You can specify only one of readmeBody and readmeUrl; otherwise, an error results.</p>
-    pub readme_url: Option<String>,
-    /// <p>The semantic version of the application:</p><p>
-    /// <a href="https://semver.org/">https://semver.org/</a>
-    /// </p>
-    pub semantic_version: Option<String>,
-    /// <p>A link to the S3 object that contains the ZIP archive of the source code for this version of your application.</p><p>Maximum size 50 MB</p>
-    pub source_code_archive_url: Option<String>,
-    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
-    pub source_code_url: Option<String>,
-    /// <p>A valid identifier from <a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a>.</p>
-    pub spdx_license_id: Option<String>,
-    /// <p>The local raw packaged AWS SAM template file of your application.
-    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>You can specify only one of templateBody and templateUrl; otherwise an error results.</p>
-    pub template_body: Option<String>,
-    /// <p>A link to the S3 object containing the packaged AWS SAM template of your application.</p><p>You can specify only one of templateBody and templateUrl; otherwise an error results.</p>
-    pub template_url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -318,19 +202,6 @@ pub struct CreateApplicationResponse {
     pub version: Option<Version>,
 }
 
-/// <p>Create a version request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateApplicationVersionInput {
-    /// <p>A link to the S3 object that contains the ZIP archive of the source code for this version of your application.</p><p>Maximum size 50 MB</p>
-    pub source_code_archive_url: Option<String>,
-    /// <p>A link to a public repository for the source code of your application, for example the URL of a specific GitHub commit.</p>
-    pub source_code_url: Option<String>,
-    /// <p>The raw packaged AWS SAM template of your application.</p>
-    pub template_body: Option<String>,
-    /// <p>A link to the packaged AWS SAM template of your application.</p>
-    pub template_url: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateApplicationVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
@@ -421,67 +292,6 @@ pub struct CreateApplicationVersionResponse {
     #[serde(rename = "TemplateUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_url: Option<String>,
-}
-
-/// <p>Create an application change set request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct CreateCloudFormationChangeSetInput {
-    /// <p>A list of values that you must specify before you can deploy certain applications.
-    /// Some applications might include resources that can affect permissions in your AWS
-    /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
-    /// For those applications, you must explicitly acknowledge their capabilities by
-    /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
-    /// CAPABILITY_RESOURCE_POLICY, and CAPABILITY_AUTO_EXPAND.</p><p>The following resources require you to specify CAPABILITY_IAM or
-    /// CAPABILITY_NAMED_IAM:
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM::Policy</a>, and
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html">AWS::IAM::Role</a>.
-    /// If the application contains IAM resources, you can specify either CAPABILITY_IAM
-    /// or CAPABILITY_NAMED_IAM. If the application contains IAM resources
-    /// with custom names, you must specify CAPABILITY_NAMED_IAM.</p><p>The following resources require you to specify CAPABILITY_RESOURCE_POLICY:
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html">AWS::Lambda::Permission</a>,
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM:Policy</a>,
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
-    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS:TopicPolicy</a>.</p><p>Applications that contain one or more nested applications require you to specify
-    /// CAPABILITY_AUTO_EXPAND.</p><p>If your application template contains any of the above resources, we recommend that you review
-    /// all permissions associated with the application before deploying. If you don't specify
-    /// this parameter for an application that requires capabilities, the call will fail.</p>
-    pub capabilities: Option<Vec<String>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
-    /// </i> API.</p>
-    pub change_set_name: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
-    /// </i> API.</p>
-    pub client_token: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
-    /// </i> API.</p>
-    pub description: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
-    /// </i> API.</p>
-    pub notification_arns: Option<Vec<String>>,
-    /// <p>A list of parameter values for the parameters of the application.</p>
-    pub parameter_overrides: Option<Vec<ParameterValue>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
-    /// </i> API.</p>
-    pub resource_types: Option<Vec<String>>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
-    /// </i> API.</p>
-    pub rollback_configuration: Option<RollbackConfiguration>,
-    /// <p>The semantic version of the application:</p><p>
-    /// <a href="https://semver.org/">https://semver.org/</a>
-    /// </p>
-    pub semantic_version: Option<String>,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
-    /// </i> API.</p>
-    pub stack_name: String,
-    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a>
-    /// </i> API.</p>
-    pub tags: Option<Vec<Tag>>,
-    /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
-    pub template_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1008,47 +818,6 @@ pub struct Tag {
     /// Data Type.</p>
     #[serde(rename = "Value")]
     pub value: String,
-}
-
-/// <p>Details of the template.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TemplateDetails {
-    /// <p>The application Amazon Resource Name (ARN).</p>
-    pub application_id: String,
-    /// <p>The date and time this resource was created.</p>
-    pub creation_time: String,
-    /// <p>The date and time this template expires. Templates
-    /// expire 1 hour after creation.</p>
-    pub expiration_time: String,
-    /// <p>The semantic version of the application:</p><p>
-    /// <a href="https://semver.org/">https://semver.org/</a>
-    /// </p>
-    pub semantic_version: String,
-    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED
-    /// </p>
-    pub status: String,
-    /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
-    pub template_id: String,
-    /// <p>A link to the template that can be used to deploy the application using
-    /// AWS CloudFormation.</p>
-    pub template_url: String,
-}
-
-/// <p>Update the application request.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct UpdateApplicationInput {
-    /// <p>The name of the author publishing the app.</p><p>Minimum length=1. Maximum length=127.</p><p>Pattern "^[a-z0-9](([a-z0-9]|-(?!-))*[a-z0-9])?$";</p>
-    pub author: Option<String>,
-    /// <p>The description of the application.</p><p>Minimum length=1. Maximum length=256</p>
-    pub description: Option<String>,
-    /// <p>A URL with more information about the application, for example the location of your GitHub repository for the application.</p>
-    pub home_page_url: Option<String>,
-    /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
-    pub labels: Option<Vec<String>>,
-    /// <p>A text readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
-    pub readme_body: Option<String>,
-    /// <p>A link to the readme file in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p>
-    pub readme_url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

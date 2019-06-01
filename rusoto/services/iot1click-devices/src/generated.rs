@@ -83,12 +83,6 @@ pub struct Device {
     pub type_: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeviceClaimResponse {
-    /// <p>The device's final claim state.</p>
-    pub state: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeviceDescription {
@@ -137,15 +131,6 @@ pub struct DeviceEvent {
     pub std_event: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct DeviceEventsResponse {
-    /// <p>An array of zero or more elements describing the event(s) associated with the
-    /// device.</p>
-    pub events: Option<Vec<DeviceEvent>>,
-    /// <p>The token to retrieve the next set of results.</p>
-    pub next_token: Option<String>,
-}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DeviceMethod {
     /// <p>The type of the device, such as "button".</p>
@@ -157,10 +142,6 @@ pub struct DeviceMethod {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method_name: Option<String>,
 }
-
-/// <p>On success, an empty object is returned.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct Empty {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct FinalizeDeviceClaimRequest {

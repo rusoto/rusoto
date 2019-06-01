@@ -80,9 +80,6 @@ pub struct DeletePlaybackConfigurationRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeletePlaybackConfigurationResponse {}
 
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct Empty {}
-
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetPlaybackConfigurationRequest {
     /// <p>The identifier for the playback configuration.</p>
@@ -354,18 +351,6 @@ pub struct TagResourceRequest {
     /// }
     /// </p>
     #[serde(rename = "Tags")]
-    pub tags: ::std::collections::HashMap<String, String>,
-}
-
-/// <p>A set of tags assigned to a resource. </p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct TagsModel {
-    /// <p>A comma-separated list of tag key:value pairs. For example:
-    /// {
-    /// "Key1": "Value1",
-    /// "Key2": "Value2"
-    /// }
-    /// </p>
     pub tags: ::std::collections::HashMap<String, String>,
 }
 

@@ -1260,10 +1260,6 @@ pub struct DisassociateServiceRoleFromAccountResponse {
     pub disassociated_at: Option<String>,
 }
 
-/// <p>Empty</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct Empty {}
-
 /// <p>Details about the error.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1403,15 +1399,6 @@ pub struct FunctionRunAsConfig {
     #[serde(rename = "Uid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uid: Option<i64>,
-}
-
-/// <p>General error information.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GeneralError {
-    /// <p>Details about the error.</p>
-    pub error_details: Option<Vec<ErrorDetail>>,
-    /// <p>A message containing information about the error.</p>
-    pub message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2278,17 +2265,6 @@ pub struct GroupCertificateAuthorityProperties {
     pub group_certificate_authority_id: Option<String>,
 }
 
-/// <p>Information about a group certificate configuration.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct GroupCertificateConfiguration {
-    /// <p>The amount of time remaining before the certificate authority expires, in milliseconds.</p>
-    pub certificate_authority_expiry_in_milliseconds: Option<String>,
-    /// <p>The amount of time remaining before the certificate expires, in milliseconds.</p>
-    pub certificate_expiry_in_milliseconds: Option<String>,
-    /// <p>The ID of the group certificate configuration.</p>
-    pub group_id: Option<String>,
-}
-
 /// <p>Information about a group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2525,15 +2501,6 @@ pub struct ListCoreDefinitionsResponse {
     /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub next_token: Option<String>,
-}
-
-/// <p>A list of definitions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListDefinitionsResponse {
-    /// <p>Information about a definition.</p>
-    pub definitions: Option<Vec<DefinitionInformation>>,
-    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
     pub next_token: Option<String>,
 }
 
@@ -2913,15 +2880,6 @@ pub struct ListTagsForResourceResponse {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-}
-
-/// <p>A list of versions.</p>
-#[derive(Default, Debug, Clone, PartialEq)]
-pub struct ListVersionsResponse {
-    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
-    pub next_token: Option<String>,
-    /// <p>Information about a version.</p>
-    pub versions: Option<Vec<VersionInformation>>,
 }
 
 /// <p>Attributes that define a local device resource.</p>
