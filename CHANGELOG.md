@@ -1,7 +1,7 @@
 # Rusoto changes
 
 ## [Unreleased]
-(Please put notes here)
+- Exclude `test_resources` in cargo manifest
 
 ## [0.39.0] - 2019-05-19
 

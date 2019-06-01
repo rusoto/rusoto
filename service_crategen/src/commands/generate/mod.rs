@@ -133,7 +133,8 @@ pub fn generate_services(
                 repository: Some("https://github.com/rusoto/rusoto".into()),
                 version: service_config.version.clone(),
                 homepage: Some("https://www.rusoto.org/".into()),
-                edition: "2018".into()
+                edition: "2018".into(),
+                exclude: Some(vec!["test_resources/*".into()])
             },
             features: Some(features),
             dependencies: service_dependencies,
@@ -166,7 +167,7 @@ You may be looking for:
 ## Requirements
 
 Rust stable or beta are required to use Rusoto. Nightly is tested, but not guaranteed to be supported. Older
-versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project 
+versions _may_ be supported. The currently supported Rust versions can be found in the Rusoto project
 [`travis.yml`](https://github.com/rusoto/rusoto/blob/master/.travis.yml).
 
 On Linux, OpenSSL is required.
