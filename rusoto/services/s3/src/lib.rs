@@ -23,7 +23,6 @@ extern crate xml;
 #[cfg(nightly)]
 extern crate test;
 
-
 mod generated;
 mod custom;
 

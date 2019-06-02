@@ -53,4 +53,4 @@ time_credentials:
 
 .PHONY: bench_s3
 bench_s3:
-	(cd rusoto/services/s3 && cargo +$$RUST_VERSION bench)
+	(cd rusoto/services/s3 && cargo +nightly bench)
