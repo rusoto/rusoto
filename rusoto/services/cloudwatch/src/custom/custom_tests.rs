@@ -1,6 +1,6 @@
 extern crate rusoto_mock;
 
-use crate::generated::{CloudWatch, CloudWatchClient, PutMetricDataInput, Dimension, MetricDatum};
+use crate::generated::{CloudWatch, CloudWatchClient, PutMetricDataRequest, Dimension, MetricDatum};
 
 use rusoto_core::Region;
 use rusoto_core::signature::SignedRequest;
@@ -47,7 +47,7 @@ fn should_serialize_complex_metric_data_params() {
                                 value: Some(1.0),
                                 ..Default::default()
                             }];
-    let request = PutMetricDataInput {
+    let request = PutMetricDataRequest {
         namespace: "TestNamespace".to_string(),
         metric_data: metric_data,
     };
