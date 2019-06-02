@@ -14004,8 +14004,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAdjustmentTypesRequest::default();
-        let result = client.describe_adjustment_types(request).sync();
+
+        let result = client.describe_adjustment_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14046,10 +14046,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeAutoScalingNotificationTypesRequest::default();
-        let result = client
-            .describe_auto_scaling_notification_types(request)
-            .sync();
+
+        let result = client.describe_auto_scaling_notification_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14076,8 +14074,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeMetricCollectionTypesRequest::default();
-        let result = client.describe_metric_collection_types(request).sync();
+
+        let result = client.describe_metric_collection_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14132,8 +14130,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeScalingProcessTypesRequest::default();
-        let result = client.describe_scaling_process_types(request).sync();
+
+        let result = client.describe_scaling_process_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -14174,8 +14172,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             AutoscalingClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = DescribeTerminationPolicyTypesRequest::default();
-        let result = client.describe_termination_policy_types(request).sync();
+
+        let result = client.describe_termination_policy_types().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

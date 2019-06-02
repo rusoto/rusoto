@@ -15382,8 +15382,8 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetSendQuotaRequest::default();
-        let result = client.get_send_quota(request).sync();
+
+        let result = client.get_send_quota().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15395,8 +15395,8 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SesClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetSendStatisticsRequest::default();
-        let result = client.get_send_statistics(request).sync();
+
+        let result = client.get_send_statistics().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 

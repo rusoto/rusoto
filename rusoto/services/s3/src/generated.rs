@@ -26363,8 +26363,8 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = S3Client::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListBucketsRequest::default();
-        let result = client.list_buckets(request).sync();
+
+        let result = client.list_buckets().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 

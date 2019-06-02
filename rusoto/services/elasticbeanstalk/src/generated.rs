@@ -13688,8 +13688,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = CreateStorageLocationRequest::default();
-        let result = client.create_storage_location(request).sync();
+
+        let result = client.create_storage_location().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -13786,8 +13786,8 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client =
             ElasticBeanstalkClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = ListAvailableSolutionStacksRequest::default();
-        let result = client.list_available_solution_stacks(request).sync();
+
+        let result = client.list_available_solution_stacks().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 

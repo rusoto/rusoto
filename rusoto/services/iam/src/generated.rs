@@ -29639,8 +29639,8 @@ mod protocol_tests {
         );
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = IamClient::new_with(mock, MockCredentialsProvider, rusoto_region::UsEast1);
-        let request = GetAccountSummaryRequest::default();
-        let result = client.get_account_summary(request).sync();
+
+        let result = client.get_account_summary().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
