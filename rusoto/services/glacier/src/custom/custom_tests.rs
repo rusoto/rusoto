@@ -12,7 +12,7 @@ fn test_initiate_multipart_part_response() {
         .with_header("x-amz-multipart-upload-id", "OW2fM5iVylEpFEMM9_HpKowRapC3vn5sSL39_396UW9zLFUWVrnRHaPjUJddQ5OxSHVXjYtrN47NBZ-khxOjyEXAMPLE");
     let client = GlacierClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
 
-    let initiate_multipart_upload_req = InitiateMultipartUploadInput {
+    let initiate_multipart_upload_req = InitiateMultipartUploadRequest {
         account_id: "111122223333".to_owned(),
         vault_name: "examplevault".to_owned(),
         ..Default::default()
@@ -30,7 +30,7 @@ fn test_upload_multipart_part_response() {
     let mock = MockRequestDispatcher::with_status(204).with_header("x-amz-sha256-tree-hash", "42");
     let client = GlacierClient::new_with(mock, MockCredentialsProvider, Region::UsEast1);
 
-    let upload_part_copy_req = UploadMultipartPartInput {
+    let upload_part_copy_req = UploadMultipartPartRequest {
         account_id: "foo".to_owned(),
         upload_id: "bar".to_owned(),
         vault_name: "baz".to_owned(),
