@@ -57,6 +57,8 @@ pub mod region;
 pub mod request;
 pub mod signature;
 
+pub mod v2;
+
 #[doc(hidden)]
 pub use crate::client::Client;
 #[doc(hidden)]

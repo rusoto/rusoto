@@ -4,8 +4,8 @@ extern crate rusoto_cognito_identity;
 extern crate rusoto_core;
 
 use rusoto_cognito_identity::{
-    CognitoIdentity, CognitoIdentityClient, ListIdentitiesInput,
-    ListIdentityPoolsInput,
+    CognitoIdentity, CognitoIdentityClient, ListIdentitiesRequest,
+    ListIdentityPoolsRequest,
 };
 use rusoto_core::{Region, RusotoError};
 
@@ -13,7 +13,7 @@ use rusoto_core::{Region, RusotoError};
 fn should_list_identity_pools() {
     let client = CognitoIdentityClient::new(Region::UsEast1);
 
-    let mut request = ListIdentityPoolsInput::default();
+    let mut request = ListIdentityPoolsRequest::default();
     request.max_results = 10;
 
     client.list_identity_pools(request).sync().unwrap();
@@ -23,7 +23,7 @@ fn should_list_identity_pools() {
 fn should_handle_validation_errors_gracefully() {
     let client = CognitoIdentityClient::new(Region::UsEast1);
 
-    let mut request = ListIdentitiesInput::default();
+    let mut request = ListIdentitiesRequest::default();
     request.max_results = 10;
     request.identity_pool_id = "invalid".to_string();
 

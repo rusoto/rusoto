@@ -5,7 +5,7 @@ extern crate rusoto_machinelearning;
 
 use rusoto_core::Region;
 use rusoto_machinelearning::{
-    DescribeBatchPredictionsInput, DescribeDataSourcesInput, DescribeEvaluationsInput,
+    DescribeBatchPredictionsRequest, DescribeDataSourcesRequest, DescribeEvaluationsRequest,
     MachineLearning, MachineLearningClient,
 };
 
@@ -15,7 +15,7 @@ use rusoto_machinelearning::{
 #[test]
 fn should_describe_batch_predictions() {
     let client = MachineLearningClient::new(Region::UsEast1);
-    let request = DescribeBatchPredictionsInput::default();
+    let request = DescribeBatchPredictionsRequest::default();
 
     match client.describe_batch_predictions(request).sync() {
         Ok(_) => (),
@@ -25,7 +25,7 @@ fn should_describe_batch_predictions() {
 #[test]
 fn should_describe_data_sources() {
     let client = MachineLearningClient::new(Region::UsEast1);
-    let request = DescribeDataSourcesInput::default();
+    let request = DescribeDataSourcesRequest::default();
 
     match client.describe_data_sources(request).sync() {
         Ok(_) => (),
@@ -35,7 +35,7 @@ fn should_describe_data_sources() {
 #[test]
 fn should_describe_evaluations() {
     let client = MachineLearningClient::new(Region::UsEast1);
-    let request = DescribeEvaluationsInput::default();
+    let request = DescribeEvaluationsRequest::default();
 
     match client.describe_evaluations(request).sync() {
         Ok(_) => (),

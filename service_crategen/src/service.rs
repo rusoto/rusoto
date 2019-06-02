@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use crate::botocore::{Member, Operation, ServiceDefinition, Shape, ShapeType, Value};
+use crate::botocore::{Member, Operation, ServiceDefinition, Shape, ShapeType, Value, Input, Output};
 use crate::cargo;
 use crate::config::ServiceConfig;
 
@@ -236,4 +236,32 @@ impl<'b> Service<'b> {
             _ => {}
         }
     }
+
+    pub fn has_non_empty_input_shape(&self, operation: &Operation) -> bool {
+        operation.input.is_some()
+            && self
+                .get_shape(operation.input_shape())
+                .as_ref()
+                .map(|s| s.is_non_empty())
+                .unwrap_or(false)
+    }
+
+    pub fn normalize_input_output_shapes(&mut self) {
+        let empty_shape = Shape { shape_type: ShapeType::Structure, ..Default::default() };
+
+        for (ref operation_name, ref mut operation) in self.definition.operations.iter_mut() {
+            let input_type_name = format!("{}Request", operation_name);
+            let output_type_name = format!("{}Response", operation_name);
+
+            let input = operation.input.get_or_insert(Input::default());
+            let input_shape = self.definition.shapes.get(&input.shape).cloned().unwrap_or_else(|| empty_shape.clone());
+            self.definition.shapes.insert(input_type_name.clone(), input_shape);
+            input.shape = input_type_name;
+
+            let output = operation.output.get_or_insert(Output::default());
+            let output_shape = self.definition.shapes.get(&output.shape).cloned().unwrap_or_else(|| empty_shape.clone());
+            self.definition.shapes.insert(output_type_name.clone(), output_shape);
+            output.shape = output_type_name;
+        }
+    } 
 }

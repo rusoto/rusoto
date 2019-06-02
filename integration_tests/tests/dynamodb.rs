@@ -4,14 +4,14 @@ extern crate rusoto_core;
 extern crate rusoto_dynamodb;
 
 use rusoto_core::{Region, RusotoError};
-use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
+use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesRequest};
 
 #[test]
 fn should_parse_error_type() {
     let client = DynamoDbClient::new(Region::UsEast1);
 
     // limit of -1 should generate a validation error
-    let request = ListTablesInput {
+    let request = ListTablesRequest {
         limit: Some(-1),
         ..Default::default()
     };
@@ -29,7 +29,7 @@ fn should_parse_error_type() {
 #[test]
 fn should_list_tables() {
     let client = DynamoDbClient::new(Region::UsEast1);
-    let request = ListTablesInput::default();
+    let request = ListTablesRequest::default();
 
     client.list_tables(request).sync().unwrap();
 }

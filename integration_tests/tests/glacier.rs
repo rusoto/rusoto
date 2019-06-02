@@ -5,7 +5,7 @@ extern crate rusoto_core;
 extern crate rusoto_glacier;
 
 use rusoto_core::Region;
-use rusoto_glacier::{Glacier, GlacierClient, ListVaultsInput};
+use rusoto_glacier::{Glacier, GlacierClient, ListVaultsRequest};
 
 #[test]
 fn should_list_vaults() {
@@ -13,7 +13,7 @@ fn should_list_vaults() {
     let client = GlacierClient::new(Region::UsWest2);
     // account id can be provided or use the account that signed the request with `-`.
     // http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html
-    let request = ListVaultsInput {
+    let request = ListVaultsRequest {
         account_id: "-".to_string(),
         ..Default::default()
     };

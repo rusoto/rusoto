@@ -4,7 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_lambda;
 
 use rusoto_core::{Region, RusotoError};
-use rusoto_lambda::{InvocationRequest, InvokeError, Lambda, LambdaClient, ListFunctionsRequest};
+use rusoto_lambda::{InvokeRequest, InvokeError, Lambda, LambdaClient, ListFunctionsRequest};
 
 #[test]
 fn should_list_functions() {
@@ -19,7 +19,7 @@ fn should_list_functions() {
 fn should_function_not_found() {
     let client = LambdaClient::new(Region::UsEast1);
     {
-        let request = InvocationRequest {
+        let request = InvokeRequest {
             function_name: "no-such-a-function".to_string(),
             invocation_type: Some("RequestResponse".to_string()),
             ..Default::default()
@@ -42,7 +42,7 @@ fn should_function_not_found() {
     }
     {
         // ARN with colons
-        let request = InvocationRequest {
+        let request = InvokeRequest {
             function_name: "function:no-such-a-function".to_string(),
             ..Default::default()
         };
