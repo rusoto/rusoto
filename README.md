@@ -66,13 +66,13 @@ extern crate rusoto_core;
 extern crate rusoto_dynamodb;
 
 use rusoto_core::Region;
-use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
+use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesRequest};
 
 fn main() {
     let client = DynamoDbClient::new(Region::UsEast1);
-    let list_tables_input: ListTablesInput = Default::default();
+    let list_tables_req: ListTablesRequest = Default::default();
 
-    match client.list_tables(list_tables_input).sync() {
+    match client.list_tables(list_tables_req).sync() {
         Ok(output) => {
             match output.table_names {
                 Some(table_name_list) => {
