@@ -7,7 +7,6 @@ use futures::{Future, Stream};
 use rusoto_core::{Region, RusotoError};
 use rusoto_core::signature::SignedRequest;
 use self::rusoto_mock::*;
-use test::Bencher;
 
 #[test]
 fn test_multipart_upload_copy_response() {
@@ -265,8 +264,10 @@ fn list_multipart_uploads_no_uploads() {
 }
 
 
+#[cfg(nightly)]
 #[bench]
 fn bench_parse_list_buckets_response(b: &mut Bencher) {
+    use test::Bencher;
     let mock = MockRequestDispatcher::with_status(200)
         .with_body(r#"
         <?xml version="1.0" encoding="UTF-8"?>

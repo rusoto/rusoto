@@ -20,7 +20,7 @@ extern crate bytes;
 extern crate futures;
 extern crate rusoto_core;
 extern crate xml;
-#![feature(test)]
+#[cfg(nightly)]
 extern crate test;
 
 

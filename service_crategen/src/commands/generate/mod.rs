@@ -103,7 +103,7 @@ pub fn generate_services(
         }).collect::<Vec<String>>().join("\n");
         // S3 needs the external test crate for benchmark tests
         if service.full_name() == "Amazon Simple Storage Service" {
-            extern_crates.push_str("\n#![feature(test)]\nextern crate test;\n");
+            extern_crates.push_str("\n#[cfg(nightly)]\nextern crate test;\n");
         }
 
         let mut cargo_manifest = BufWriter::new(
